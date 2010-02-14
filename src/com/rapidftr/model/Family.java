@@ -1,6 +1,8 @@
 package com.rapidftr.model;
 
-public class Family {
+import net.rim.device.api.util.Persistable;
+
+public class Family implements Persistable {	
 	private Relative mother;
 	private Relative father;
 	private Relative[] siblings;

@@ -1,6 +1,8 @@
 package com.rapidftr.model;
 
-public class Caregiver {
+import net.rim.device.api.util.Persistable;
+
+public class Caregiver implements Persistable {	
 	private String name;
 	private String profession;
 	private String relationshipToChild;

@@ -19,8 +19,8 @@ import com.rapidftr.services.ServiceException;
 import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
 
-public class SearchScreen extends MainScreen {
-
+public class SearchScreen extends MainScreen implements Page {
+	
 	private BorderedEditField searchField;
 	private RecordList recordList;
 	private ChildRecordItem model[];
@@ -38,6 +38,10 @@ public class SearchScreen extends MainScreen {
 				onGo();
 			}
 		});
+	}
+
+	
+	public void setUserInfo(Object userInfo) {
 	}
 
 	private MenuItem _go = new MenuItem("Go", 110, 10) {
@@ -73,7 +77,11 @@ public class SearchScreen extends MainScreen {
 			Dialog.alert("Service Exception: " + se);
 		}
 
+		System.out.println("mod len " +model.length);
+		
 		recordList.setModel(model);
+		
+		this.invalidate();
 	}
 
 	private void onOpen() {
@@ -88,7 +96,9 @@ public class SearchScreen extends MainScreen {
 			Dialog.alert("Service Exception: " + se);
 		}
 
-		RecordEditScreen screen = new RecordEditScreen(record);
+		RecordEditScreen screen = new RecordEditScreen();
+		
+		screen.setUserInfo(record);
 		
 		this.getUiEngine().pushScreen(screen);
 	}
@@ -99,6 +109,8 @@ public class SearchScreen extends MainScreen {
 		return true;
 	}
 
+
+	
 	/**
 	 * Layout Manager
 	 * 

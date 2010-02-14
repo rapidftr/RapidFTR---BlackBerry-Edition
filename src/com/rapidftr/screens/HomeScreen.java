@@ -1,7 +1,9 @@
 package com.rapidftr.screens;
 
-import net.rim.device.api.system.Bitmap;
+import java.util.Hashtable;
+
 import net.rim.device.api.system.Display;
+import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
@@ -11,16 +13,15 @@ import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.Main;
-import com.rapidftr.ScreenManager;
+import com.rapidftr.NavigationController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.controls.ImageButton;
 import com.rapidftr.layouts.BorderManager;
-import com.rapidftr.services.PhotoService;
 import com.rapidftr.services.ServiceException;
 import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
 
-public class HomeScreen extends MainScreen {
+public class HomeScreen extends MainScreen implements Page {
 	private static final String DEFAULT_IMAGE_NAME = "img/head.png";
 
 	private String user;
@@ -62,6 +63,9 @@ public class HomeScreen extends MainScreen {
 		add(manager);
 	}
 
+	public void setUserInfo(Object userInfo) {
+	}
+	
 	private MenuItem _takePhoto = new MenuItem("Take Photo", 110, 10) {
 		public void run() {
 			onTakePhoto();
@@ -94,7 +98,7 @@ public class HomeScreen extends MainScreen {
 	}
 
 	private void onTakePhoto() {
-		Bitmap photo = (new PhotoService()).getPhoto();
+		EncodedImage photo = ServiceManager.getPhotoService().getPhoto();
 
 		String recordId = null;
 
@@ -104,27 +108,34 @@ public class HomeScreen extends MainScreen {
 			System.out.println("Service Exception " + se);
 		}
 
-		RecordCreationScreen screen = new RecordCreationScreen(photo, recordId,
-				user);
+//		RecordCreationScreen screen = new RecordCreationScreen(photo, recordId, user);
+//
+//		final HomeScreen thisScreen = this;
+//
+//		screen.addScreenManager(new ScreenManager() {
+//			public void closeScreen(int status, Object userInfo) {
+//				String recordId = (String) userInfo;
+//
+//				manager.headerField.setText("Status: saved record " + recordId);
+//
+//				thisScreen.invalidate();
+//			}
+//		});
 
-		final HomeScreen thisScreen = this;
-
-		screen.addScreenManager(new ScreenManager() {
-			public void closeScreen(int status, Object userInfo) {
-				String recordId = (String) userInfo;
-
-				manager.headerField.setText("Status: saved record " + recordId);
-
-				thisScreen.invalidate();
-			}
-		});
-
-		this.getUiEngine().pushScreen(screen);
+		NavigationController controller = NavigationController.getInstance(this.getUiEngine());
+		
+		Hashtable userInfo = new Hashtable();
+		
+		userInfo.put("photo", photo);
+		userInfo.put("id", recordId);
+		userInfo.put("user", user);
+		
+		controller.pushScreen(NavigationController.HOME_SCREEN, 1, userInfo);
 	}
 
 	private void onSearchAndEdit() {
-		SearchScreen screen = new SearchScreen();
-
-		this.getUiEngine().pushScreen(screen);
+		NavigationController controller = NavigationController.getInstance(this.getUiEngine());
+		
+		controller.pushScreen(NavigationController.HOME_SCREEN, 2, null);
 	}
 }

@@ -1,6 +1,8 @@
 package com.rapidftr.model;
 
-public class ProtectionConcerns {
+import net.rim.device.api.util.Persistable;
+
+public class ProtectionConcerns implements Persistable {	
 	private boolean isUnaccompanied;
 	private boolean isRefugee;
 	private boolean isInternallyDisplaced;

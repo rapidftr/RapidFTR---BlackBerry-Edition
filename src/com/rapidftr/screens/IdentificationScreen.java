@@ -13,20 +13,28 @@ import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.controls.BorderedEditField;
 import com.rapidftr.layouts.HeaderLayoutManager;
+import com.rapidftr.model.Identification;
 import com.rapidftr.utilities.Styles;
 
-public class IdentificationScreen extends MainScreen {
+public class IdentificationScreen extends MainScreen implements Page {
 	private static final String[] separationDates = { "1 - 2 Weeks",
 		"2 - 4 Weeks", "1 - 6 Months", "6 Months - 1 Year", "> 1 Year" };
 
-	
-	public IdentificationScreen(String id) {
+	private Controller controller;
+
+	public void setUserInfo(Object userInfo) {
+		String id = (String)userInfo;
+		
 		add (new HeaderLayoutManager("1. Identification", id) );
 		add( new SeparatorField() );
 
 		add( new LayoutManager() );
 	}
-
+	
+	public void addController(Controller controller) {
+		this.controller = controller;
+	}
+	
 	private MenuItem _cancel = new MenuItem("Cancel", 110, 10) {
 		public void run() {
 			onClose();
@@ -45,6 +53,17 @@ public class IdentificationScreen extends MainScreen {
 	}
 	
 	public boolean onSave() {
+		Identification data = new Identification();
+		
+		data.setAge(8);
+		data.setDateOfSeparation(Identification.SEP_1_6_MTHS);
+		data.setExactAge(true);
+		data.setLastKnownLocation("Far City");
+		data.setOrigin("Home Town");
+		data.setSex(false);
+		
+		controller.handleSave(data);
+		
 		this.getUiEngine().popScreen(this);
 		
 		return true;		

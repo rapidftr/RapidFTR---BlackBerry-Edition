@@ -19,15 +19,25 @@ public class Utilities {
 		return getScaledBitmap(getEncodedImageFromBytes(bytes), height);
 	}
 	
-	public static Bitmap getScaledBitmap(EncodedImage encodedImage, int height) {
+	public static EncodedImage getScaledImage(String name, int height) {
+		EncodedImage ei = EncodedImage.getEncodedImageResource(name);
+		
+		return getScaledImage(ei, height);
+	}
+	
+	public static EncodedImage getScaledImage(EncodedImage encodedImage, int height) {
 		int numerator = Fixed32.toFP(encodedImage.getHeight());
 		int denominator = Fixed32.toFP(height);
 		int heightScale = Fixed32.div(numerator, denominator);
 
-		EncodedImage newEi = encodedImage.scaleImage32(heightScale, heightScale);
-		Bitmap bitmap = newEi.getBitmap();
-
-		return bitmap;
+	
+		return encodedImage.scaleImage32(heightScale, heightScale);
+	}
+	
+	public static Bitmap getScaledBitmap(EncodedImage encodedImage, int height) {
+		EncodedImage newEi = getScaledImage(encodedImage, height);
+		
+		return newEi.getBitmap();
 	}
 
 	
@@ -82,5 +92,13 @@ public class Utilities {
 
 	public static Bitmap getBitmapFromBytes(byte[] bytes) {
 		return (getEncodedImageFromBytes(bytes)).getBitmap();
+	}
+	
+	public static byte[] getImageAsBytes(String imageName) {
+		// Creates an EncodedImage from provided name resource
+		EncodedImage image = EncodedImage.getEncodedImageResource(imageName);
+		
+		// Returns a byte array containing the encoded data for this EncodedImage
+		return image.getData();
 	}
 }

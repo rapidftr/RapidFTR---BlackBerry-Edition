@@ -1,6 +1,8 @@
 package com.rapidftr.screens;
 
-import net.rim.device.api.system.Bitmap;
+import java.util.Hashtable;
+
+import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
@@ -17,16 +19,25 @@ import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.ScreenManager;
 import com.rapidftr.layouts.BorderManager;
+import com.rapidftr.model.ChildRecord;
 import com.rapidftr.utilities.Styles;
 import com.rapidftr.utilities.Utilities;
 
-public class RecordCreationScreen extends MainScreen {
+public class RecordCreationScreen extends MainScreen implements Page {
 
 	private String id;
+	private EncodedImage photo;
 	private ScreenManager screenManager;
 	
-	public RecordCreationScreen(Bitmap photo, String id, String user) {
+	public void setUserInfo(Object userInfo) {
+		Hashtable hashTable = (Hashtable)userInfo;
+		
+		EncodedImage photo = (EncodedImage)hashTable.get("photo");
+		String id = (String)hashTable.get("id");
+		String user = (String)hashTable.get("user");
+		
 		this.id = id;
+		this.photo = photo;
 
 		String headerText = "logged in: " + user;
 
@@ -41,7 +52,7 @@ public class RecordCreationScreen extends MainScreen {
 
 		footerField.setFont(footerFont);
 
-		BitmapField imageField = new BitmapField(photo);
+		BitmapField imageField = new BitmapField(photo.getBitmap());
 
 		BorderManager manager = new BorderManager(headerText, imageField,
 				footerField, true);
@@ -66,10 +77,6 @@ public class RecordCreationScreen extends MainScreen {
 				});
 
 		add(manager);
-	}
-
-	public RecordCreationScreen(final UiApplication application, String user) {
-		this(null, null, user);
 	}
 
 	public void addScreenManager(ScreenManager screenManager) {
@@ -119,7 +126,12 @@ public class RecordCreationScreen extends MainScreen {
 	}
 
 	private void onEnterNewInfo() {
-		final NavigatorScreen screen = new NavigatorScreen(id, NavigatorScreen.TYPE_NEW);
+		ChildRecord record = new ChildRecord();
+		
+		record.setRecordId(id);
+		record.setPhoto( photo.getData());
+		
+		final NavigatorScreen screen = new NavigatorScreen(record, NavigatorScreen.TYPE_NEW);
 		
 		final UiEngine engine = this.getUiEngine();
 		

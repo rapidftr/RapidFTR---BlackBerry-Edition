@@ -1,6 +1,8 @@
 package com.rapidftr.model;
 
-public class Relative {
+import net.rim.device.api.util.Persistable;
+
+public class Relative implements Persistable {	
 
 	public static final int MOTHER = 100;
 	public static final int FATHER = 200;

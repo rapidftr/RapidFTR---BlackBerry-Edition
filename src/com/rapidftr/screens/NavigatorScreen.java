@@ -6,18 +6,24 @@ import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.FontFamily;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.component.BitmapField;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.MainScreen;
+import net.rim.device.api.util.Persistable;
 
 import com.rapidftr.ScreenManager;
 import com.rapidftr.controls.Button;
 import com.rapidftr.layouts.HeaderLayoutManager;
+import com.rapidftr.model.ChildRecord;
+import com.rapidftr.model.Identification;
+import com.rapidftr.utilities.Utilities;
 
-public class NavigatorScreen extends MainScreen {
-	private String id;
+public class NavigatorScreen extends MainScreen implements Controller, Page {
 	private int type;
 	
 	private ScreenManager screenManager;
+	
 	
 	public static int TYPE_NEW = 1;
 	public static int TYPE_EDIT = 2;
@@ -30,22 +36,24 @@ public class NavigatorScreen extends MainScreen {
 	public static final int DISCARD = 5;
 	
 	private static final String buttonNames[] = {
-		"(1) Add/Edit Identification Details",
+		"(1) Add/Edit Id. Details",
 		"(2) Add/Edit Family Details", "(3) Add/Edit Other Details",
 		"(4) Set Options", "Save", "Discard" };
 
 	private static final String editButtonNames[] = {
-		"(1) Edit Identification Details",
+		"(1) Edit Id. Details",
 		"(2) Edit Family Details", "(3) Edit Other Details",
 		"(4) Set Options", "Save", "Discard" };
 	
-	public NavigatorScreen(String id, int type) {
-		this.id = id;
+	private ChildRecord record;
+	
+	public NavigatorScreen(ChildRecord childRecord, int type) {
+		this.record = childRecord;
 		this.type = type;
 
 		String headerText = (type == TYPE_NEW) ? "Add New Info" : "Edit Info";
 		
-		add(new HeaderLayoutManager(headerText, id));
+		add(new HeaderLayoutManager(headerText, record.getRecordId()));
 
 		LayoutManager manager = new LayoutManager();
 
@@ -73,8 +81,23 @@ public class NavigatorScreen extends MainScreen {
 						});
 	}
 
+	public void setUserInfo(Object userInfo) {
+	}
+	
 	public void addScreenManager(ScreenManager screenManager) {
 		this.screenManager = screenManager;
+	}
+	
+	public void handleSave(Persistable data) {
+		if ( data instanceof Identification ) {
+			record.setName("Any New");
+			
+			Identification identification = (Identification)data;
+			
+			record.setIdentification(identification);
+		}
+		
+		Dialog.alert("Added Identification Data");
 	}
 	
 	private MenuItem _identification = new MenuItem("Add/Edit Ident. Details",
@@ -96,17 +119,25 @@ public class NavigatorScreen extends MainScreen {
 	}
 
 	public boolean onClose() {
-		screenManager.closeScreen(ScreenManager.STATUS_CLOSE, id);
+		screenManager.closeScreen(ScreenManager.STATUS_CLOSE, record.getRecordId());
 	
 		return true;
 	}
 
 	private void onIdentification() {
-		this.getUiEngine().pushScreen(new IdentificationScreen(id));
+		IdentificationScreen screen = new IdentificationScreen();
+		
+		screen.setUserInfo(record.getRecordId());
+		
+		screen.addController(this);
+		
+		this.getUiEngine().pushScreen(screen);
 	}
 	
 	private void onSaveRecord() {
-		RecordReviewScreen reviewScreen = new RecordReviewScreen(id);
+		RecordReviewScreen reviewScreen = new RecordReviewScreen();
+		
+		reviewScreen.setUserInfo(record);
 		
 		reviewScreen.addScreenManager( new ScreenManager() {
 
@@ -125,6 +156,8 @@ public class NavigatorScreen extends MainScreen {
 		private Font defaultFont;
 
 		public Button buttons[];
+		public BitmapField ticks[];
+		private BitmapField imageField;
 
 		public LayoutManager() {
 			super(0);
@@ -137,25 +170,54 @@ public class NavigatorScreen extends MainScreen {
 			
 			buttons = new Button[names.length];
 
-			int limit = 250;
+			ticks = new BitmapField[names.length - 2];
+			
+			int limit = 180;
 
+			imageField = new BitmapField(Utilities.getScaledBitmapFromBytes(
+					record.getPhoto(), 80));
+			
+			add(imageField);
+			
 			for (int i = 0; i < buttons.length; i++) {
+				limit = (i >= (buttons.length -2)) ? 100 : limit;
+				
 				buttons[i] = new Button(names[i], limit);
 
 				buttons[i].setFont(defaultFont);
 	     
 				add(buttons[i]);
+				
+				if ( i < (buttons.length -2)) {
+					ticks[i] = new BitmapField(Utilities.getScaledBitmap("img/checkmark.gif", 10));
+					
+					add(ticks[i]);
+				}
 			}
 		}
 
 		protected void sublayout(int width, int height) {
-
-			for (int i = 0; i < buttons.length; i++) {
+			for (int i = 0; i < buttons.length - 2; i++) {
 				layoutChild(buttons[i], width, 30);
 
-				setPositionChild(buttons[i], 20, 20 + (i * 30));
+				layoutChild(ticks[i], 40, 40);
+				
+				setPositionChild(buttons[i], 30, 10 + (i * 30));
+				setPositionChild(ticks[i], 10, 20 + (i * 30));
 			}
+			
+			layoutChild(buttons[buttons.length - 2], width/2, 30);
+			layoutChild(buttons[buttons.length - 1], width/2, 30);
 
+			int y = 10 + ((buttons.length - 1) * 30);
+			
+			setPositionChild(buttons[buttons.length - 2], 20, y);
+			setPositionChild(buttons[buttons.length - 1], (width - 130), y);
+
+			layoutChild(imageField, width/2, 70);
+
+			setPositionChild(imageField, (width - 80), 10);
+			
 			setExtent(width, 200);
 		}
 

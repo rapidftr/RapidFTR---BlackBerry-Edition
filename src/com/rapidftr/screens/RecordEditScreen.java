@@ -17,15 +17,17 @@ import com.rapidftr.model.Identification;
 import com.rapidftr.utilities.Styles;
 import com.rapidftr.utilities.Utilities;
 
-public class RecordEditScreen extends MainScreen {
+public class RecordEditScreen extends MainScreen implements Page {
 	private ChildRecord record;
 	private String recordId;
 	private LabelField fields[];
 
-	public RecordEditScreen(ChildRecord record) {
+	public RecordEditScreen() {
 		super(Manager.VERTICAL_SCROLL | Manager.VERTICAL_SCROLLBAR);
+	}
 
-		this.record = record;
+	public void setUserInfo(Object userInfo) {
+		this.record = (ChildRecord)userInfo;
 
 		this.recordId = record.getRecordId();
 
@@ -36,8 +38,6 @@ public class RecordEditScreen extends MainScreen {
 		int limit = 140;
 
 		fields = new LabelField[32];
-
-		Identification identification = record.getIdentification();
 
 		fields[0] = new LabelField("IDENTIFICATION DETAILS");
 
@@ -79,16 +79,6 @@ public class RecordEditScreen extends MainScreen {
 
 		add(new SeparatorField());
 
-		// for (int i = 7; i < 13; i++) {
-		// fields[i].setFont(defaultFont);
-		//
-		// add(fields[i]);
-		//
-		// if ((i == 8) || (i == 10)) {
-		// add(new SeparatorField());
-		// }
-		// }
-
 		HorizontalFieldManager buttonManager = new HorizontalFieldManager();
 
 		buttonManager.add(editButton);
@@ -100,11 +90,10 @@ public class RecordEditScreen extends MainScreen {
 				onEdit();
 			}
 		});
-
 	}
-
+	
 	private void onEdit() {
-		NavigatorScreen screen = new NavigatorScreen(recordId,
+		NavigatorScreen screen = new NavigatorScreen(record,
 				NavigatorScreen.TYPE_EDIT);
 
 		this.getUiEngine().pushScreen(screen);

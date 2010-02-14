@@ -1,6 +1,8 @@
 package com.rapidftr.model;
 
-public class ChildRecordItem {
+import net.rim.device.api.util.Persistable;
+
+public class ChildRecordItem implements Persistable {	
 	protected String recordId;
 	protected String name;
 	protected byte[] photo;

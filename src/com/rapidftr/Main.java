@@ -1,13 +1,17 @@
 package com.rapidftr;
 
-import com.rapidftr.screens.LoginScreen;
-
 import net.rim.device.api.ui.UiApplication;
+
+import com.rapidftr.model.ChildRecord;
+import com.rapidftr.screens.LoginScreen;
+import com.rapidftr.utilities.LocalStore;
+import com.rapidftr.utilities.TestRecordUtil;
+import com.rapidftr.utilities.impl.LocalStoreImpl;
 
 public class Main extends UiApplication {
 
-	public static final String APPLICATION_NAME = "RapidFTR";
-	
+	public static final String APPLICATION_NAME = "Rapid FTR";
+
 	/**
 	 * Entry point for application.
 	 */
@@ -28,6 +32,17 @@ public class Main extends UiApplication {
 	 * the application's root screen onto the UI stack.
 	 */
 	public Main() {
-		pushScreen( new LoginScreen());
+		// create some test data
+		persistToStore();
+		
+		pushScreen(new LoginScreen());
+	}
+
+	private void persistToStore() {
+		ChildRecord[] testRecords = TestRecordUtil.createTestRecords(); 
+		
+		LocalStore localStore = LocalStoreImpl.getInstance();
+
+		localStore.persist(testRecords);
 	}
 }

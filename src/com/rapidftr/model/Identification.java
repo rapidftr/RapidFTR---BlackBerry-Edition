@@ -1,8 +1,8 @@
 package com.rapidftr.model;
 
-import net.rim.device.api.collection.List;
+import net.rim.device.api.util.Persistable;
 
-public class Identification {
+public class Identification implements Persistable {	
 	public static final int SEP_1_2_WKS = 0;
 	public static final int SEP_2_4_WKS = 1;
 	public static final int SEP_1_6_MTHS = 2;
