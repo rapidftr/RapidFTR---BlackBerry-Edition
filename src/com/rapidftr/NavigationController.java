@@ -2,10 +2,12 @@ package com.rapidftr;
 
 import java.util.Vector;
 
+import net.rim.device.api.ui.Screen;
 import net.rim.device.api.ui.UiEngine;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.container.MainScreen;
 
+import com.rapidftr.screens.DisplayPage;
 import com.rapidftr.screens.Page;
 import com.rapidftr.utilities.NavigationAction;
 import com.rapidftr.utilities.NavigationConfig;
@@ -40,23 +42,41 @@ public class NavigationController {
 		try {
 			navigationConfig = NavigationConfig.getInstance()
 					.getConfiguration();
-
-			System.out.println("Nav Info " + navigationConfig);
 		} catch (Exception e) {
 			Dialog.alert("Failed to load config data");
 		}
 	}
 
-	public void pushScreen(int screenId, int action, Object userInfo) {
-		MainScreen screen = getPushScreen(screenId, action);
+	public void pushScreen(Screen screen, int actionId, Object userInfo) {
+		pushScreen(getScreenId(screen), actionId, userInfo);
+	}
+	
+	private void pushScreen(int screenId, int actionId, Object userInfo) {
+		MainScreen screen = getPushScreen(screenId, actionId);
 
-		((Page)screen).setUserInfo(userInfo);
-		
+		((Page) screen).initializePage(userInfo);
+
 		engine.pushScreen(screen);
 	}
 
-	public void popScreen(int screenId, int status, Object userInfo) {
+	public void popScreen(int actionId, Object userInfo) {
+		Screen screen = engine.getActiveScreen();
 
+		int popToScreenId = getPopToScreen(screen, actionId);
+
+		DisplayPage parentPage;
+
+		if (popToScreenId != -1) {
+			Screen popToScreen = popToScreen(screen, popToScreenId);
+
+			parentPage = (DisplayPage) (popToScreen);
+		} else {
+			engine.popScreen(screen);
+
+			parentPage = (DisplayPage) (engine.getActiveScreen());
+		}
+
+		parentPage.updatePage(userInfo);
 	}
 
 	private MainScreen getPushScreen(int screenId, int action) {
@@ -73,35 +93,15 @@ public class NavigationController {
 		return screen;
 	}
 
-	private Class getPushScreenClass(int screenId, int action) {
-		int nextScreenId = -1;
+	private Class getPushScreenClass(int screenId, int actionId) {
+		NavigationInfo screenInfo = getNavigationInfo(screenId);
 
-		for (int i = 0; i < navigationConfig.size(); i++) {
-			NavigationInfo screenInfo = (NavigationInfo) navigationConfig
-					.elementAt(i);
-
-			if (screenInfo.getScreenId() == screenId) {
-				NavigationAction actions[] = screenInfo.getActions();
-
-				for (int j = 0; j < actions.length; j++) {
-					NavigationAction nextAction = actions[j];
-
-					if (nextAction.isPush()) {
-						if (nextAction.getId() == action) {
-							nextScreenId = nextAction.getScreenId();
-							break;
-						}
-					}
-				}
-
-				break;
-			}
-		}
+		int pushScreenId = getScreenIdForAction(screenInfo, actionId);
 
 		Class clazz = null;
 
-		if (nextScreenId != -1) {
-			String name = "com.rapidftr.screens." + getScreenName(nextScreenId);
+		if (pushScreenId != -1) {
+			String name = "com.rapidftr.screens." + getScreenName(pushScreenId);
 
 			try {
 				clazz = Class.forName(name);
@@ -112,19 +112,83 @@ public class NavigationController {
 		return clazz;
 	}
 
+	private int getPopToScreen(Screen screen, int actionId) {
+		int screenId = getScreenId(screen);
+
+		NavigationInfo screenInfo = getNavigationInfo(screenId);
+
+		return getScreenIdForAction(screenInfo, actionId);
+	}
+
+	private int getScreenIdForAction(NavigationInfo screenInfo, int actionId) {
+		int screenId = -1;
+		NavigationAction actions[] = screenInfo.getActions();
+
+		for (int j = 0; j < actions.length; j++) {
+			if (actions[j].getId() == actionId) {
+				screenId = actions[j].getScreenId();
+				break;
+			}
+		}
+		
+		return screenId;
+	}
+	
 	private String getScreenName(int screenId) {
-		String screenName = null;
+		NavigationInfo screenInfo = getNavigationInfo(screenId);
+
+		return screenInfo.getScreenName();
+	}
+
+	private int getScreenId(Screen screen) {
+		int id = -1;
+		String name = screen.getClass().getName();
+
+		for (int i = 0; i < navigationConfig.size(); i++) {
+			NavigationInfo info = (NavigationInfo) navigationConfig
+					.elementAt(i);
+
+			if (name.indexOf(info.getScreenName()) != -1) {
+				id = info.getScreenId();
+				break;
+			}
+		}
+
+		return id;
+	}
+
+	public Screen popToScreen(Screen screen, int screenId) {
+		String screenName = getScreenName(screenId);
+
+		Screen nextScreen = screen;
+		Screen parentScreen;
+
+		while ((parentScreen = nextScreen.getScreenBelow()) != null) {
+			if (nextScreen.getClass().getName().indexOf(screenName) == -1) {
+				engine.popScreen(nextScreen);
+
+				nextScreen = parentScreen;
+			} else {
+				break;
+			}
+		}
+
+		return nextScreen;
+	}
+
+	private NavigationInfo getNavigationInfo(int screenId) {
+		NavigationInfo navigationInfo = null;
 
 		for (int i = 0; i < navigationConfig.size(); i++) {
 			NavigationInfo screenInfo = (NavigationInfo) navigationConfig
 					.elementAt(i);
 
 			if (screenInfo.getScreenId() == screenId) {
-				screenName = screenInfo.getScreenName();
+				navigationInfo = screenInfo;
 				break;
 			}
 		}
 
-		return screenName;
+		return navigationInfo;
 	}
 }

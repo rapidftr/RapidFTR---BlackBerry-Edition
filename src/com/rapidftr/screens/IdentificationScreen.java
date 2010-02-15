@@ -9,30 +9,27 @@ import net.rim.device.api.ui.component.NumericChoiceField;
 import net.rim.device.api.ui.component.RadioButtonField;
 import net.rim.device.api.ui.component.RadioButtonGroup;
 import net.rim.device.api.ui.component.SeparatorField;
-import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.controls.BorderedEditField;
 import com.rapidftr.layouts.HeaderLayoutManager;
 import com.rapidftr.model.Identification;
 import com.rapidftr.utilities.Styles;
 
-public class IdentificationScreen extends MainScreen implements Page {
+public class IdentificationScreen extends DisplayPage {
 	private static final String[] separationDates = { "1 - 2 Weeks",
-		"2 - 4 Weeks", "1 - 6 Months", "6 Months - 1 Year", "> 1 Year" };
+			"2 - 4 Weeks", "1 - 6 Months", "6 Months - 1 Year", "> 1 Year" };
 
-	private Controller controller;
+	private LayoutManager layoutManager;
 
-	public void setUserInfo(Object userInfo) {
-		String id = (String)userInfo;
-		
-		add (new HeaderLayoutManager("1. Identification", id) );
-		add( new SeparatorField() );
+	public void initializePage(Object userInfo) {
+		String id = (String) userInfo;
 
-		add( new LayoutManager() );
-	}
-	
-	public void addController(Controller controller) {
-		this.controller = controller;
+		add(new HeaderLayoutManager("1. Identification", id));
+		add(new SeparatorField());
+
+		layoutManager = new LayoutManager();
+
+		add(layoutManager);
 	}
 	
 	private MenuItem _cancel = new MenuItem("Cancel", 110, 10) {
@@ -40,59 +37,64 @@ public class IdentificationScreen extends MainScreen implements Page {
 			onClose();
 		}
 	};
-	
+
 	private MenuItem _save = new MenuItem("Save", 110, 10) {
 		public void run() {
 			onSave();
 		}
 	};
-	
+
 	protected void makeMenu(Menu menu, int instance) {
 		menu.add(_cancel);
 		menu.add(_save);
 	}
-	
+
 	public boolean onSave() {
 		Identification data = new Identification();
+
+		data.setName(layoutManager.nameField.getText());
+
+		data.setAge(layoutManager.ageField.getSelectedValue());
+		data.setDateOfSeparation(layoutManager.separationDateGroup.getSelectedIndex());
+		data.setExactAge(layoutManager.ageAccuracyGroup.getSelectedIndex() == 0);
+		data.setLastKnownLocation(layoutManager.lastKnownLocField.getText());
+		data.setOrigin(layoutManager.originField.getText());
 		
-		data.setAge(8);
-		data.setDateOfSeparation(Identification.SEP_1_6_MTHS);
-		data.setExactAge(true);
-		data.setLastKnownLocation("Far City");
-		data.setOrigin("Home Town");
-		data.setSex(false);
-		
-		controller.handleSave(data);
-		
-		this.getUiEngine().popScreen(this);
-		
-		return true;		
-	}
-	
-	public boolean onClose() {
-		this.getUiEngine().popScreen(this);
-		
+		data.setSex(layoutManager.gendersGroup.getSelectedIndex() == 0);
+
+		popScreen(1, data);
 		return true;
 	}
-	
+
+	public boolean onClose() {
+		popScreen(1, null);
+
+		return true;
+	}
+
 	/**
 	 * Layout Manager
 	 */
-	
+
 	private class LayoutManager extends Manager {
 		private Font defaultFont;
 
-		private BorderedEditField nameField;
+		public BorderedEditField nameField;
+		public NumericChoiceField ageField;
+		public BorderedEditField originField;
+		public BorderedEditField lastKnownLocField;
+		public final RadioButtonGroup gendersGroup;
+		public final RadioButtonGroup ageAccuracyGroup;
+		public final RadioButtonGroup separationDateGroup;
+
 		private LabelField sexField;
 		private RadioButtonField genderMale;
-		private RadioButtonField genderFemale; 
-		private NumericChoiceField ageField;
+		private RadioButtonField genderFemale;
+
 		private RadioButtonField ageExact;
-		private RadioButtonField ageApprox; 
-		private BorderedEditField originField;
-		private BorderedEditField lastKnownLocField;
+		private RadioButtonField ageApprox;
+
 		private LabelField sepDateField;
-		
 
 		private RadioButtonField separationDateFields[] = new RadioButtonField[separationDates.length];
 
@@ -100,11 +102,10 @@ public class IdentificationScreen extends MainScreen implements Page {
 			super(0);
 
 			defaultFont = Styles.getDefaultFont();
-			
+
 			final Font secondaryFont = Styles.getSecondaryFont();
 
-			nameField = new BorderedEditField("Name: ", "",
-					defaultFont);
+			nameField = new BorderedEditField("Name: ", "", defaultFont);
 
 			nameField.setFont(defaultFont);
 
@@ -112,40 +113,35 @@ public class IdentificationScreen extends MainScreen implements Page {
 
 			sexField.setFont(defaultFont);
 
-			final RadioButtonGroup gendersGroup = new RadioButtonGroup();
+			gendersGroup = new RadioButtonGroup();
 
-			genderMale = new RadioButtonField(" Male",
-					gendersGroup, false);
+			genderMale = new RadioButtonField(" Male", gendersGroup, false);
 
 			genderMale.setFont(secondaryFont);
 
-			genderFemale = new RadioButtonField(" Female",
-					gendersGroup, false);
+			genderFemale = new RadioButtonField(" Female", gendersGroup, false);
 
 			genderFemale.setFont(secondaryFont);
 
 			ageField = new NumericChoiceField("Age: ", 0, 20, 1);
 
 			ageField.setFont(defaultFont);
-			
-			final RadioButtonGroup ageAccuracyGroup = new RadioButtonGroup();
 
-			ageExact = new RadioButtonField(" Exact",
-					ageAccuracyGroup, false);
+			ageAccuracyGroup = new RadioButtonGroup();
 
-			ageApprox = new RadioButtonField(" Approx.",
-					ageAccuracyGroup, true);
+			ageExact = new RadioButtonField(" Exact", ageAccuracyGroup, false);
+
+			ageApprox = new RadioButtonField(" Approx.", ageAccuracyGroup, true);
 
 			ageExact.setFont(secondaryFont);
 			ageApprox.setFont(secondaryFont);
 
-			originField = new BorderedEditField("Origin: ", "",
-					defaultFont);
+			originField = new BorderedEditField("Origin: ", "", defaultFont);
 
 			originField.setFont(defaultFont);
 
-			lastKnownLocField = new BorderedEditField(
-					"Last Known Loc.: ", "", defaultFont, 15);
+			lastKnownLocField = new BorderedEditField("Last Known Loc.: ", "",
+					defaultFont, 15);
 
 			lastKnownLocField.setFont(defaultFont);
 
@@ -153,32 +149,31 @@ public class IdentificationScreen extends MainScreen implements Page {
 
 			sepDateField.setFont(defaultFont);
 
-			final RadioButtonGroup separationDateGroup = new RadioButtonGroup();
+			separationDateGroup = new RadioButtonGroup();
 
 			for (int i = 0; i < separationDates.length; i++) {
-				separationDateFields[i] = new RadioButtonField(separationDates[i],
-						separationDateGroup, false);
+				separationDateFields[i] = new RadioButtonField(
+						separationDates[i], separationDateGroup, false);
 
 				separationDateFields[i].setFont(secondaryFont);
 			}
-			
-			
+
 			add(nameField);
 			add(sexField);
-			
+
 			add(genderMale);
 			add(genderFemale);
-			
+
 			add(ageField);
 			add(ageExact);
 			add(ageApprox);
-			
+
 			add(originField);
 			add(lastKnownLocField);
-			
+
 			add(sepDateField);
-			
-			for ( int i=0; i<separationDates.length; i++ ) {
+
+			for (int i = 0; i < separationDates.length; i++) {
 				add(separationDateFields[i]);
 			}
 		}
@@ -186,19 +181,19 @@ public class IdentificationScreen extends MainScreen implements Page {
 		protected void sublayout(int width, int height) {
 			layoutChild(nameField, width, 30);
 			layoutChild(sexField, width, 30);
-			layoutChild(genderMale, width/4, 30);
-			layoutChild(genderFemale, width/4, 30);
+			layoutChild(genderMale, width / 4, 30);
+			layoutChild(genderFemale, width / 4, 30);
 			layoutChild(ageField, 50, 30);
-			layoutChild(ageExact, width/4, 30);
-			layoutChild(ageApprox, width/4, 30);
+			layoutChild(ageExact, width / 4, 30);
+			layoutChild(ageApprox, width / 4, 30);
 			layoutChild(originField, width, 30);
 			layoutChild(lastKnownLocField, width, 30);
 			layoutChild(sepDateField, width, 30);
 
-			for ( int i=0; i<separationDateFields.length; i++ ) {
-				layoutChild(separationDateFields[i], width/2, 30);
+			for (int i = 0; i < separationDateFields.length; i++) {
+				layoutChild(separationDateFields[i], width / 2, 30);
 			}
-			
+
 			setPositionChild(nameField, 10, 0);
 			setPositionChild(sexField, 10, 20);
 			setPositionChild(genderMale, 50, 20);
@@ -210,13 +205,13 @@ public class IdentificationScreen extends MainScreen implements Page {
 			setPositionChild(lastKnownLocField, 10, 90);
 			setPositionChild(sepDateField, 10, 110);
 
-			for ( int i=0; i<separationDateFields.length; i++ ) {
+			for (int i = 0; i < separationDateFields.length; i++) {
 				setPositionChild(separationDateFields[i], 50, 120 + (15 * i));
 			}
-			
+
 			int actualHeight = 220;
 
 			setExtent(width, actualHeight);
-		}	
+		}
 	}
 }

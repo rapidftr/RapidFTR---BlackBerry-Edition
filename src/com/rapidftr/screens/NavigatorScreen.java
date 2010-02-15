@@ -1,5 +1,7 @@
 package com.rapidftr.screens;
 
+import java.util.Hashtable;
+
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
@@ -9,53 +11,54 @@ import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.util.Persistable;
 
-import com.rapidftr.ScreenManager;
+import com.rapidftr.NavigationController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.layouts.HeaderLayoutManager;
 import com.rapidftr.model.ChildRecord;
+import com.rapidftr.model.Family;
 import com.rapidftr.model.Identification;
+import com.rapidftr.model.Relative;
 import com.rapidftr.utilities.Utilities;
 
-public class NavigatorScreen extends MainScreen implements Controller, Page {
+public class NavigatorScreen extends DisplayPage {
 	private int type;
-	
-	private ScreenManager screenManager;
-	
-	
+
+	private LayoutManager manager;
+
 	public static int TYPE_NEW = 1;
 	public static int TYPE_EDIT = 2;
-	
+
 	public static final int IDENTIFICATION = 0;
 	public static final int FAMILY = 1;
 	public static final int OTHER = 2;
 	public static final int OPTIONS = 3;
 	public static final int SAVE = 4;
 	public static final int DISCARD = 5;
-	
-	private static final String buttonNames[] = {
-		"(1) Add/Edit Id. Details",
-		"(2) Add/Edit Family Details", "(3) Add/Edit Other Details",
-		"(4) Set Options", "Save", "Discard" };
 
-	private static final String editButtonNames[] = {
-		"(1) Edit Id. Details",
-		"(2) Edit Family Details", "(3) Edit Other Details",
-		"(4) Set Options", "Save", "Discard" };
-	
+	private static final String buttonNames[] = { "(1) Add/Edit Id. Details",
+			"(2) Add/Edit Family Details", "(3) Add/Edit Other Details",
+			"(4) Set Options", "Save", "Discard" };
+
+	private static final String editButtonNames[] = { "(1) Edit Id. Details",
+			"(2) Edit Family Details", "(3) Edit Other Details",
+			"(4) Set Options", "Save", "Discard" };
+
 	private ChildRecord record;
-	
-	public NavigatorScreen(ChildRecord childRecord, int type) {
-		this.record = childRecord;
-		this.type = type;
+
+	public void initializePage(Object userInfo) {
+		Hashtable data = (Hashtable) userInfo;
+
+		this.record = (ChildRecord) (data.get("record"));
+
+		this.type = Integer.parseInt((String) data.get("type"));
 
 		String headerText = (type == TYPE_NEW) ? "Add New Info" : "Edit Info";
-		
+
 		add(new HeaderLayoutManager(headerText, record.getRecordId()));
 
-		LayoutManager manager = new LayoutManager();
+		manager = new LayoutManager();
 
 		add(manager);
 
@@ -65,41 +68,44 @@ public class NavigatorScreen extends MainScreen implements Controller, Page {
 						onIdentification();
 					}
 				});
-		
-		manager.buttons[SAVE]
-						.setChangeListener(new FieldChangeListener() {
-							public void fieldChanged(Field field, int context) {
-								onSaveRecord();
-							}
-						});
-		
-		manager.buttons[DISCARD]
-						.setChangeListener(new FieldChangeListener() {
-							public void fieldChanged(Field field, int context) {
-								onClose();
-							}
-						});
+
+		manager.buttons[SAVE].setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				onSaveRecord();
+			}
+		});
+
+		manager.buttons[DISCARD].setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				onClose();
+			}
+		});
 	}
 
-	public void setUserInfo(Object userInfo) {
-	}
-	
-	public void addScreenManager(ScreenManager screenManager) {
-		this.screenManager = screenManager;
-	}
-	
-	public void handleSave(Persistable data) {
-		if ( data instanceof Identification ) {
-			record.setName("Any New");
-			
-			Identification identification = (Identification)data;
-			
-			record.setIdentification(identification);
+	public void updatePage(Object userInfo) {
+		if (userInfo != null) {
+			handleSave((Persistable) userInfo);
 		}
-		
+	}
+
+	public void handleSave(Persistable data) {
+		if (data instanceof Identification) {
+			Identification identification = (Identification) data;
+
+			record.setName(identification.getName());
+
+			record.setIdentification(identification);
+
+			manager.ticks[0].setBitmap(Utilities.getScaledBitmap(
+					"img/checkmark.gif", 10));
+		}
+
+		// test family data
+		record.setFamily(getFamilyData());
+
 		Dialog.alert("Added Identification Data");
 	}
-	
+
 	private MenuItem _identification = new MenuItem("Add/Edit Ident. Details",
 			110, 10) {
 		public void run() {
@@ -119,36 +125,43 @@ public class NavigatorScreen extends MainScreen implements Controller, Page {
 	}
 
 	public boolean onClose() {
-		screenManager.closeScreen(ScreenManager.STATUS_CLOSE, record.getRecordId());
-	
+		NavigationController.getInstance(this.getUiEngine()).popScreen(2,
+				record.getRecordId());
+
 		return true;
 	}
 
 	private void onIdentification() {
-		IdentificationScreen screen = new IdentificationScreen();
-		
-		screen.setUserInfo(record.getRecordId());
-		
-		screen.addController(this);
-		
-		this.getUiEngine().pushScreen(screen);
+		pushScreen(3, record.getRecordId());
 	}
-	
-	private void onSaveRecord() {
-		RecordReviewScreen reviewScreen = new RecordReviewScreen();
-		
-		reviewScreen.setUserInfo(record);
-		
-		reviewScreen.addScreenManager( new ScreenManager() {
 
-			public void closeScreen(int status, Object userInfo) {
-				screenManager.closeScreen(status, userInfo);
-			}
-		});
-		
-		this.getUiEngine().pushScreen(reviewScreen);
+	private void onSaveRecord() {
+		pushScreen(1, record);
 	}
-	
+
+	private Family getFamilyData() {
+		Family family = new Family();
+
+		Relative mother = new Relative(Relative.MOTHER, "Martha Doe", true,
+				true);
+
+		Relative father = new Relative(Relative.FATHER, "John Doe", false,
+				false);
+
+		Relative[] siblings = new Relative[2];
+
+		siblings[0] = new Relative(Relative.SIBLING, "Wendy", true, true);
+		siblings[1] = new Relative(Relative.SIBLING, "Lisa", true, true);
+
+		family.setMother(mother);
+		family.setFather(father);
+		family.setSiblings(siblings);
+
+		family.setMarried(false);
+
+		return family;
+	}
+
 	/**
 	 * Layout Manager
 	 */
@@ -167,30 +180,31 @@ public class NavigatorScreen extends MainScreen implements Controller, Page {
 			defaultFont = fontFamily[0].getFont(FontFamily.TRUE_TYPE_FONT, 14);
 
 			String names[] = (type == TYPE_NEW) ? buttonNames : editButtonNames;
-			
+
 			buttons = new Button[names.length];
 
 			ticks = new BitmapField[names.length - 2];
-			
+
 			int limit = 180;
 
 			imageField = new BitmapField(Utilities.getScaledBitmapFromBytes(
 					record.getPhoto(), 80));
-			
+
 			add(imageField);
-			
+
 			for (int i = 0; i < buttons.length; i++) {
-				limit = (i >= (buttons.length -2)) ? 100 : limit;
-				
+				limit = (i >= (buttons.length - 2)) ? 100 : limit;
+
 				buttons[i] = new Button(names[i], limit);
 
 				buttons[i].setFont(defaultFont);
-	     
+
 				add(buttons[i]);
-				
-				if ( i < (buttons.length -2)) {
-					ticks[i] = new BitmapField(Utilities.getScaledBitmap("img/checkmark.gif", 10));
-					
+
+				if (i < (buttons.length - 2)) {
+					ticks[i] = new BitmapField(); // Utilities.getScaledBitmap("img/checkmark.gif",
+					// 10));
+
 					add(ticks[i]);
 				}
 			}
@@ -201,23 +215,23 @@ public class NavigatorScreen extends MainScreen implements Controller, Page {
 				layoutChild(buttons[i], width, 30);
 
 				layoutChild(ticks[i], 40, 40);
-				
+
 				setPositionChild(buttons[i], 30, 10 + (i * 30));
 				setPositionChild(ticks[i], 10, 20 + (i * 30));
 			}
-			
-			layoutChild(buttons[buttons.length - 2], width/2, 30);
-			layoutChild(buttons[buttons.length - 1], width/2, 30);
+
+			layoutChild(buttons[buttons.length - 2], width / 2, 30);
+			layoutChild(buttons[buttons.length - 1], width / 2, 30);
 
 			int y = 10 + ((buttons.length - 1) * 30);
-			
+
 			setPositionChild(buttons[buttons.length - 2], 20, y);
 			setPositionChild(buttons[buttons.length - 1], (width - 130), y);
 
-			layoutChild(imageField, width/2, 70);
+			layoutChild(imageField, width / 2, 70);
 
 			setPositionChild(imageField, (width - 80), 10);
-			
+
 			setExtent(width, 200);
 		}
 

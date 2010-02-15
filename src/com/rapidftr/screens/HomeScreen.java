@@ -10,10 +10,8 @@ import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.Main;
-import com.rapidftr.NavigationController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.controls.ImageButton;
 import com.rapidftr.layouts.BorderManager;
@@ -21,7 +19,7 @@ import com.rapidftr.services.ServiceException;
 import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
 
-public class HomeScreen extends MainScreen implements Page {
+public class HomeScreen extends DisplayPage {
 	private static final String DEFAULT_IMAGE_NAME = "img/head.png";
 
 	private String user;
@@ -61,11 +59,17 @@ public class HomeScreen extends MainScreen implements Page {
 		manager = new BorderManager(headerText, imageButton, footerButton);
 
 		add(manager);
+
 	}
 
-	public void setUserInfo(Object userInfo) {
+	public void updatePage(Object userInfo) {
+		String recordId = (String) userInfo;
+
+		manager.headerField.setText("Status: saved record " + recordId);
+
+		invalidate();
 	}
-	
+
 	private MenuItem _takePhoto = new MenuItem("Take Photo", 110, 10) {
 		public void run() {
 			onTakePhoto();
@@ -108,34 +112,16 @@ public class HomeScreen extends MainScreen implements Page {
 			System.out.println("Service Exception " + se);
 		}
 
-//		RecordCreationScreen screen = new RecordCreationScreen(photo, recordId, user);
-//
-//		final HomeScreen thisScreen = this;
-//
-//		screen.addScreenManager(new ScreenManager() {
-//			public void closeScreen(int status, Object userInfo) {
-//				String recordId = (String) userInfo;
-//
-//				manager.headerField.setText("Status: saved record " + recordId);
-//
-//				thisScreen.invalidate();
-//			}
-//		});
-
-		NavigationController controller = NavigationController.getInstance(this.getUiEngine());
-		
 		Hashtable userInfo = new Hashtable();
-		
+
 		userInfo.put("photo", photo);
 		userInfo.put("id", recordId);
 		userInfo.put("user", user);
-		
-		controller.pushScreen(NavigationController.HOME_SCREEN, 1, userInfo);
+
+		pushScreen(1, userInfo);
 	}
 
 	private void onSearchAndEdit() {
-		NavigationController controller = NavigationController.getInstance(this.getUiEngine());
-		
-		controller.pushScreen(NavigationController.HOME_SCREEN, 2, null);
+		pushScreen(2, null);
 	}
 }

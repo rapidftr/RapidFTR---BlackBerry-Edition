@@ -33,16 +33,19 @@ public class Main extends UiApplication {
 	 */
 	public Main() {
 		// create some test data
-		persistToStore();
+		//persistToStore();
+
 		
 		pushScreen(new LoginScreen());
 	}
 
 	private void persistToStore() {
-		ChildRecord[] testRecords = TestRecordUtil.createTestRecords(); 
-		
 		LocalStore localStore = LocalStoreImpl.getInstance();
 
-		localStore.persist(testRecords);
+		if (localStore.countStoredRecords() == 0) {
+			ChildRecord[] testRecords = TestRecordUtil.createTestRecords();
+
+			localStore.persist(testRecords);
+		}
 	}
 }

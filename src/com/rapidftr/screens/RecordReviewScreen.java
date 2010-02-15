@@ -1,178 +1,379 @@
 package com.rapidftr.screens;
 
+import java.util.Vector;
+
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.component.BitmapField;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.component.SeparatorField;
+import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
-import net.rim.device.api.ui.container.MainScreen;
 
-import com.rapidftr.ScreenManager;
 import com.rapidftr.controls.Button;
 import com.rapidftr.layouts.HeaderLayoutManager;
 import com.rapidftr.model.ChildRecord;
 import com.rapidftr.model.Identification;
+import com.rapidftr.model.Relative;
+import com.rapidftr.services.ServiceException;
+import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
 import com.rapidftr.utilities.Utilities;
 
-public class RecordReviewScreen extends MainScreen implements Page {
-	private ScreenManager screenManager;
+public class RecordReviewScreen extends DisplayPage {
+	// private ScreenManager screenManager;
 	private ChildRecord record;
 	private String recordId;
-	
+
 	public RecordReviewScreen() {
 		super(Manager.VERTICAL_SCROLL | Manager.VERTICAL_SCROLLBAR);
 	}
-	
-	public void setUserInfo(Object userInfo) {
-		this.record = (ChildRecord)userInfo;
+
+	public void initializePage(Object userInfo) {
+		this.record = (ChildRecord) userInfo;
 		this.recordId = record.getRecordId();
-		
+
 		add(new HeaderLayoutManager("Review Record", recordId));
 
+		add(new IdentificationLayoutManager());
+
+		add(new FamilyLayoutManager());
+
+		add(new OtherDetailsLayoutManager());
+
+		add(new OptionsLayoutManager());
+
 		Font defaultFont = Styles.getDefaultFont();
-		
-		int limit = 140;
 
-		LabelField fields[] = new LabelField[32]; 
-		
-		fields[0] = new LabelField("IDENTIFICATION DETAILS");
+		int limit = 60;
 
-		fields[6] = new LabelField("Date of Separation: 2 - 4 weeks ago");
-		fields[7] = new LabelField("FAMILY DETAILS");
-		fields[8] = new LabelField("Mother's Name: Martha Doe Alive: Yes Reunite: Yes");
-		fields[9] = new LabelField("Father's Name: John Doe Alive: No Reunite: -");
-		fields[10] = new LabelField("Siblings: Bob, Lisa (2) Reunite: Yes");
-		fields[11] = new LabelField("Uncles: - Reunite: -");
-		fields[12] = new LabelField("Aunts: - Reunite: -");
-		fields[13] = new LabelField("Cousins: - Reunite: -");
-		fields[14] = new LabelField("Neighbors: - Reunite: -");
-		fields[15] = new LabelField("Others: - Reunite: -");
-		fields[16] = new LabelField("Married: No");
-		fields[17] = new LabelField("Partner/Spouse Name: -");
-		fields[18] = new LabelField("Children: -");
-		fields[19] = new LabelField("OTHER DETAILS");
-		fields[20] = new LabelField("Caregiver Details:");
-		fields[21] = new LabelField("Name: Susan Goode");
-		fields[22] = new LabelField("Profession: Aid Worker");
-		fields[23] = new LabelField("R'ship to Child: ...");
-		fields[24] = new LabelField("Protection Concerns:");
-		fields[25] = new LabelField("   UNACCOMPANIED");
-		fields[26] = new LabelField("   REFUGEE");
-		fields[27] = new LabelField("   IN INTERIM CARE");
-		fields[28] = new LabelField("   SICK/INJURED");
-		fields[29] = new LabelField("OPTIONS");
-		fields[30] = new LabelField("   REUNIFICATION");
-		fields[31] = new LabelField("   FOLLOW-UP");
-	
-		
-		Button editButton = new Button("Edit Record", limit);
-		Button submitButton = new Button("Submit Record", limit);
+		Button editButton = new Button("Edit", limit);
+		editButton.setFont(defaultFont);
+		Button submitButton = new Button("Submit", limit);
+		submitButton.setFont(defaultFont);
 
-		add( new LayoutManager() );
-		
-		for ( int i=6; i<13; i++ ) {
-			fields[i].setFont(defaultFont);
-			
-			add( fields[i]);
-			
-			if ( ( i == 6) || (i == 8) || (i == 10) ) {
-				add( new SeparatorField());
-			}
-		}
-		
 		HorizontalFieldManager buttonManager = new HorizontalFieldManager();
-		
+
 		buttonManager.add(editButton);
 		buttonManager.add(submitButton);
 
 		add(buttonManager);
-		
+
 		editButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onEdit();
 			}
 		});
-		
+
 		submitButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onSubmit();
 			}
 		});
 	}
-	
-	public void addScreenManager(ScreenManager screenManager) {
-		this.screenManager = screenManager;
-	}
-	
-	private void onEdit() {
-		this.getUiEngine().popScreen(this);
-	}
-	
-	private void onSubmit() {
-		this.getUiEngine().popScreen(this);
-		screenManager.closeScreen(ScreenManager.STATUS_SAVE, recordId);
-	}
-	
-	private class LayoutManager extends Manager {
-		private LabelField idFields[];
-		private BitmapField imageField;
 
-		public LayoutManager() {
+	private void onEdit() {
+		popScreen(3, null);
+	}
+
+	private void onSubmit() {
+		try {
+			ServiceManager.getRecordService().save(record);
+		} catch (ServiceException se) {
+			Dialog.alert("Failed to save record " + recordId + ": " + se);
+		}
+
+		popScreen(2, recordId);
+	}
+
+	private class IdentificationLayoutManager extends Manager {
+		private RichTextField items[];
+		private BitmapField imageField;
+		private LabelField header;
+
+		public IdentificationLayoutManager() {
 			super(0);
 
 			Identification identification = record.getIdentification();
 
+			header = new LabelField("IDENTIFICATION DETAILS");
+
 			imageField = new BitmapField(Utilities.getScaledBitmapFromBytes(
 					record.getPhoto(), 80));
 
-			idFields = new LabelField[6];
+			items = new RichTextField[6];
 
-			idFields[0] = new LabelField("Name: " + record.getName());
+			items[0] = new RichTextField("Name: " + record.getName(),
+					Field.READONLY);
 
 			String sex = identification.isSex() ? "Male" : "Female";
 
-			idFields[1] = new LabelField("Sex: " + sex);
+			items[1] = new RichTextField("Sex: " + sex, Field.READONLY);
 
 			String approxOrExact = identification.isExactAge() ? ""
 					: " (approx.)";
 
-			idFields[2] = new LabelField("Age: " + identification.getAge()
-					+ approxOrExact);
-			idFields[3] = new LabelField("Origin: "
-					+ identification.getOrigin());
-			idFields[4] = new LabelField("Last Known Location: "
-					+ identification.getLastKnownLocation());
+			items[2] = new RichTextField("Age: " + identification.getAge()
+					+ approxOrExact, Field.READONLY);
+			items[3] = new RichTextField("Origin: "
+					+ identification.getOrigin(), Field.READONLY);
+			items[4] = new RichTextField("Last Known Location: "
+					+ identification.getLastKnownLocation(), Field.READONLY);
 
-			idFields[5] = new LabelField("Date of Separation: "
+			items[5] = new RichTextField("Date of Separation: "
 					+ Identification.getFormattedSeparationDate(identification
-							.getDateOfSeparation()));
+							.getDateOfSeparation()), Field.READONLY);
 
 			Font defaultFont = Styles.getDefaultFont();
 
+			add(header);
+			header.setFont(Styles.getHeaderFont());
+
 			add(imageField);
 
-			for (int i = 0; i < idFields.length; i++) {
-				idFields[i].setFont(defaultFont);
+			for (int i = 0; i < items.length; i++) {
+				items[i].setFont(defaultFont);
 
-				add(idFields[i]);
+				add(items[i]);
 			}
 		}
 
 		protected void sublayout(int width, int height) {
-			layoutChild(imageField, width/2, 80);
-			setPositionChild(imageField, (width - 85), 5);
-			
-			for (int i = 0; i < idFields.length; i++) {
-				layoutChild(idFields[i], width, 25);
+			layoutChild(header, width, 20);
+			setPositionChild(header, 5, 5);
 
-				setPositionChild(idFields[i], 10, 5 + (i * 15));
+			layoutChild(imageField, width / 2, 100);
+			setPositionChild(imageField, (width - 85), 25);
+
+			for (int i = 0; i < items.length; i++) {
+				layoutChild(items[i], width, 45);
+
+				setPositionChild(items[i], 10, 25 + (i * 15));
 			}
 
-			setExtent(width, 130);
+			// setExtent(width, 140);
+			setExtent(width, (items.length * 25) + 5);
+		}
+	}
+
+	private class FamilyLayoutManager extends Manager {
+		private LabelField header;
+		private RichTextField items[];
+		private LabelField tableHeaders[];
+		private RichTextField relName[];
+		private LabelField relRship[];
+		private LabelField relIsAlive[];
+		private LabelField relReunite[];
+
+		public FamilyLayoutManager() {
+			super(0);
+
+			items = new RichTextField[3];
+
+			header = new LabelField("FAMILY DETAILS", Field.READONLY);
+			header.setFont(Styles.getHeaderFont());
+
+			tableHeaders = new LabelField[4];
+
+			String headerTexts[] = { "Name", "R'ship", "Is Alive", "Reunite" };
+
+			for (int i = 0; i < headerTexts.length; i++) {
+				tableHeaders[i] = new LabelField(headerTexts[i]);
+
+				tableHeaders[i].setFont(Styles.getSecondaryFont());
+			}
+
+			Vector relatives = record.getFamily().getAllRelatives();
+
+			relName = new RichTextField[relatives.size()];
+			relRship = new LabelField[relatives.size()];
+			relIsAlive = new LabelField[relatives.size()];
+			relReunite = new LabelField[relatives.size()];
+
+			Font defaultFont = Styles.getDefaultFont();
+
+			for (int i = 0; i < relatives.size(); i++) {
+				Relative relative = (Relative) relatives.elementAt(i);
+
+				relName[i] = new RichTextField(relative.getName(),
+						Field.READONLY);
+				relName[i].setFont(defaultFont);
+
+				relRship[i] = new LabelField(relative.getRelationship(),
+						Field.READONLY);
+				relRship[i].setFont(defaultFont);
+
+				relIsAlive[i] = new LabelField(String.valueOf(relative
+						.isAlive()), Field.READONLY);
+				relIsAlive[i].setFont(defaultFont);
+
+				relReunite[i] = new LabelField(String.valueOf(relative
+						.isShouldReunite()), Field.READONLY);
+				relReunite[i].setFont(defaultFont);
+			}
+
+			String married = "no";
+			String partnerName = "-";
+			int children = record.getFamily().getNumberChildren();
+
+			if (record.getFamily().isMarried()) {
+				married = "yes";
+
+				partnerName = record.getFamily().getPartnerName();
+			}
+
+			items[0] = new RichTextField("Married: " + married, Field.READONLY);
+			items[1] = new RichTextField("Partner/Spouse Name: " + partnerName,
+					Field.READONLY);
+			items[2] = new RichTextField("Children: " + children,
+					Field.READONLY);
+
+			add(header);
+
+			for (int i = 0; i < relatives.size(); i++) {
+				add(relName[i]);
+				add(relRship[i]);
+				add(relIsAlive[i]);
+				add(relReunite[i]);
+			}
+
+			for (int i = 0; i < tableHeaders.length; i++) {
+				add(tableHeaders[i]);
+			}
+
+			for (int i = 0; i < items.length; i++) {
+				items[i].setFont(defaultFont);
+
+				add(items[i]);
+			}
+		}
+
+		protected void sublayout(int width, int height) {
+			layoutChild(header, width, 20);
+			setPositionChild(header, 5, 5);
+
+			int x[] = new int[] { 5, 125, 175, 225 };
+
+			for (int i = 0; i < tableHeaders.length; i++) {
+				layoutChild(tableHeaders[i], width / 3, 20);
+				setPositionChild(tableHeaders[i], x[i], 25);
+			}
+
+			Vector relatives = record.getFamily().getAllRelatives();
+
+			for (int i = 0; i < relatives.size(); i++) {
+				layoutChild(relName[i], width / 4, 20);
+				layoutChild(relRship[i], width / 4, 20);
+				layoutChild(relIsAlive[i], width / 4, 20);
+				layoutChild(relReunite[i], width / 4, 20);
+
+				setPositionChild(relName[i], x[0], 40 + (20 * i));
+				setPositionChild(relRship[i], x[1], 40 + (20 * i));
+				setPositionChild(relIsAlive[i], x[2], 40 + (20 * i));
+				setPositionChild(relReunite[i], x[3], 40 + (20 * i));
+			}
+
+			int offset = (relatives.size() * 20) + 40;
+
+			for (int i = 0; i < items.length; i++) {
+				layoutChild(items[i], width, 20);
+
+				setPositionChild(items[i], 10, offset + (i * 15));
+			}
+
+			setExtent(width, 180);
+		}
+
+	}
+
+	private class OtherDetailsLayoutManager extends Manager {
+		private LabelField header;
+		private RichTextField items[];
+
+		public OtherDetailsLayoutManager() {
+			super(0);
+
+			items = new RichTextField[9];
+
+			header = new LabelField("OTHER DETAILS");
+			header.setFont(Styles.getHeaderFont());
+
+			items[0] = new RichTextField("Caregiver Details:", Field.READONLY);
+			items[1] = new RichTextField("Name: Susan Goode", Field.READONLY);
+			items[2] = new RichTextField("Profession: Aid Worker",
+					Field.READONLY);
+			items[3] = new RichTextField("R'ship to Child: ...", Field.READONLY);
+			items[4] = new RichTextField("Protection Concerns:", Field.READONLY);
+			items[5] = new RichTextField("   UNACCOMPANIED", Field.READONLY);
+			items[6] = new RichTextField("   REFUGEE", Field.READONLY);
+			items[7] = new RichTextField("   IN INTERIM CARE", Field.READONLY);
+			items[8] = new RichTextField("   SICK/INJURED", Field.READONLY);
+
+			Font defaultFont = Styles.getDefaultFont();
+
+			add(header);
+
+			for (int i = 0; i < items.length; i++) {
+				items[i].setFont(defaultFont);
+
+				add(items[i]);
+			}
+		}
+
+		protected void sublayout(int width, int height) {
+			layoutChild(header, width, 20);
+			setPositionChild(header, 5, 5);
+
+			for (int i = 0; i < items.length; i++) {
+				layoutChild(items[i], width, 20);
+
+				setPositionChild(items[i], 10, 25 + (i * 15));
+			}
+
+			setExtent(width, 170);
+		}
+
+	}
+
+	private class OptionsLayoutManager extends Manager {
+		private LabelField header;
+		private RichTextField items[];
+
+		public OptionsLayoutManager() {
+			super(0);
+
+			items = new RichTextField[2];
+
+			header = new LabelField("OPTIONS");
+			header.setFont(Styles.getHeaderFont());
+
+			items[0] = new RichTextField("   REUNIFICATION", Field.READONLY);
+			items[1] = new RichTextField("   FOLLOW-UP", Field.READONLY);
+
+			add(header);
+
+			Font defaultFont = Styles.getDefaultFont();
+
+			for (int i = 0; i < items.length; i++) {
+				items[i].setFont(defaultFont);
+
+				add(items[i]);
+			}
+		}
+
+		protected void sublayout(int width, int height) {
+			layoutChild(header, width, 20);
+			setPositionChild(header, 5, 5);
+
+			for (int i = 0; i < items.length; i++) {
+				layoutChild(items[i], width, 20);
+
+				setPositionChild(items[i], 10, 25 + (i * 15));
+			}
+
+			setExtent(width, (items.length * 25) + 5);
 		}
 	}
 }

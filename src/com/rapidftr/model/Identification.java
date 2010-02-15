@@ -18,13 +18,22 @@ public class Identification implements Persistable {
 	};
 	
 
-	
+	private String name;
 	private boolean sex;
 	private int age;
 	private boolean isExactAge;
 	private String origin;
 	private String lastKnownLocation;
 	private int dateOfSeparation;
+
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public boolean isSex() {
 		return sex;

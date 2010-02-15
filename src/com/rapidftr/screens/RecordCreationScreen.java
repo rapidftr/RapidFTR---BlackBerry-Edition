@@ -9,33 +9,27 @@ import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.MenuItem;
-import net.rim.device.api.ui.UiApplication;
-import net.rim.device.api.ui.UiEngine;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.container.MainScreen;
 
-import com.rapidftr.ScreenManager;
 import com.rapidftr.layouts.BorderManager;
 import com.rapidftr.model.ChildRecord;
 import com.rapidftr.utilities.Styles;
-import com.rapidftr.utilities.Utilities;
 
-public class RecordCreationScreen extends MainScreen implements Page {
+public class RecordCreationScreen extends DisplayPage {
 
 	private String id;
 	private EncodedImage photo;
-	private ScreenManager screenManager;
-	
-	public void setUserInfo(Object userInfo) {
-		Hashtable hashTable = (Hashtable)userInfo;
-		
-		EncodedImage photo = (EncodedImage)hashTable.get("photo");
-		String id = (String)hashTable.get("id");
-		String user = (String)hashTable.get("user");
-		
+
+	public void initializePage(Object userInfo) {
+		Hashtable hashTable = (Hashtable) userInfo;
+
+		EncodedImage photo = (EncodedImage) hashTable.get("photo");
+		String id = (String) hashTable.get("id");
+		String user = (String) hashTable.get("user");
+
 		this.id = id;
 		this.photo = photo;
 
@@ -79,10 +73,6 @@ public class RecordCreationScreen extends MainScreen implements Page {
 		add(manager);
 	}
 
-	public void addScreenManager(ScreenManager screenManager) {
-		this.screenManager = screenManager;
-	}
-
 	private MenuItem _retakePhoto = new MenuItem("Retake Photo", 110, 10) {
 		public void run() {
 			onRetake();
@@ -115,7 +105,8 @@ public class RecordCreationScreen extends MainScreen implements Page {
 	}
 
 	public boolean onClose() {
-		this.getUiEngine().popScreen(this);
+		popScreen(2, null);
+
 		return true;
 	}
 
@@ -127,23 +118,16 @@ public class RecordCreationScreen extends MainScreen implements Page {
 
 	private void onEnterNewInfo() {
 		ChildRecord record = new ChildRecord();
-		
+
 		record.setRecordId(id);
-		record.setPhoto( photo.getData());
-		
-		final NavigatorScreen screen = new NavigatorScreen(record, NavigatorScreen.TYPE_NEW);
-		
-		final UiEngine engine = this.getUiEngine();
-		
-		screen.addScreenManager( new ScreenManager() {
-			public void closeScreen(int status, Object userInfo) {
-				if ( (status == ScreenManager.STATUS_CLOSE) || (status == ScreenManager.STATUS_SAVE) ) { 
-					Utilities.popToHomeScreen(screen); 
-				}
-			}	
-		});
-		
-		engine.pushScreen(screen);
+		record.setPhoto(photo.getData());
+
+		Hashtable userInfo = new Hashtable();
+
+		userInfo.put("record", record);
+		userInfo.put("type", String.valueOf(NavigatorScreen.TYPE_NEW));
+
+		pushScreen(1, userInfo);
 	}
 
 	private void onSearchAndEdit() {

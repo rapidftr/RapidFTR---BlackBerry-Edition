@@ -4,15 +4,26 @@ import net.rim.device.api.util.Persistable;
 
 public class Relative implements Persistable {	
 
-	public static final int MOTHER = 100;
-	public static final int FATHER = 200;
-	public static final int SIBLING = 300;
-	public static final int UNCLE = 400;
-	public static final int AUNT = 500;
-	public static final int COUSIN = 600;
-	public static final int NEIGHBOR = 700;
-	public static final int OTHER = 800;
+	public static final int MOTHER = 0;
+	public static final int FATHER = 1;
+	public static final int SIBLING = 2;
+	public static final int UNCLE = 3;
+	public static final int AUNT = 4;
+	public static final int COUSIN = 5;
+	public static final int NEIGHBOR = 6;
+	public static final int OTHER = 7;
 
+	private static final String relationships[] = {
+		"Mother",
+		"Father",
+		"Sibling",
+		"Uncle",
+		"Aunt",
+		"Cousin",
+		"Neighbor",
+		"Other"
+	};
+	
 	private int type;
 	private String name;
 	private boolean isAlive;
@@ -58,5 +69,7 @@ public class Relative implements Persistable {
 		this.shouldReunite = shouldReunite;
 	}
 	
-	
+	public String getRelationship() {
+		return relationships[getType()];
+	}
 }

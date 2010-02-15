@@ -1,5 +1,7 @@
 package com.rapidftr.screens;
 
+import java.util.Hashtable;
+
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
@@ -8,7 +10,6 @@ import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
-import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.controls.Button;
 import com.rapidftr.layouts.HeaderLayoutManager;
@@ -17,7 +18,7 @@ import com.rapidftr.model.Identification;
 import com.rapidftr.utilities.Styles;
 import com.rapidftr.utilities.Utilities;
 
-public class RecordEditScreen extends MainScreen implements Page {
+public class RecordEditScreen extends DisplayPage {
 	private ChildRecord record;
 	private String recordId;
 	private LabelField fields[];
@@ -26,7 +27,7 @@ public class RecordEditScreen extends MainScreen implements Page {
 		super(Manager.VERTICAL_SCROLL | Manager.VERTICAL_SCROLLBAR);
 	}
 
-	public void setUserInfo(Object userInfo) {
+	public void initializePage(Object userInfo) {
 		this.record = (ChildRecord)userInfo;
 
 		this.recordId = record.getRecordId();
@@ -93,10 +94,12 @@ public class RecordEditScreen extends MainScreen implements Page {
 	}
 	
 	private void onEdit() {
-		NavigatorScreen screen = new NavigatorScreen(record,
-				NavigatorScreen.TYPE_EDIT);
-
-		this.getUiEngine().pushScreen(screen);
+		Hashtable userInfo = new Hashtable();
+		
+		userInfo.put("record", record);
+		userInfo.put("type", String.valueOf(NavigatorScreen.TYPE_EDIT));
+		
+		pushScreen(1, userInfo);
 	}
 
 	private class LayoutManager extends Manager {

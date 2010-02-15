@@ -11,10 +11,8 @@ import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.Main;
-import com.rapidftr.NavigationController;
 import com.rapidftr.controls.BorderedEditField;
 import com.rapidftr.controls.BorderedPasswordField;
 import com.rapidftr.controls.Button;
@@ -22,13 +20,14 @@ import com.rapidftr.services.ServiceException;
 import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
 
-public class LoginScreen extends MainScreen implements Page {
+public class LoginScreen extends DisplayPage {
 	private LayoutManager layoutManager;
 
 	public LoginScreen() {
+		super();
+			
 		int limit = 50;
-
-		
+	
 		Button okButton = new Button("OK", limit);
 		Button closeButton = new Button("Close", limit);
 
@@ -51,9 +50,6 @@ public class LoginScreen extends MainScreen implements Page {
 		};
 
 		okButton.setChangeListener(okListener);
-	}
-
-	public void setUserInfo(Object userInfo) {
 	}
 	
 	private MenuItem _next = new MenuItem("Next", 110, 10) {
@@ -84,9 +80,7 @@ public class LoginScreen extends MainScreen implements Page {
 					userName, password);
 
 			if (loginResult) {
-				NavigationController controller = NavigationController.getInstance(this.getUiEngine());
-				
-				controller.pushScreen(NavigationController.LOGIN_SCREEN, 1, null);
+				pushScreen(1, null);	
 			} else {
 				Dialog.alert("Invalid login.\nTry again.");
 			}

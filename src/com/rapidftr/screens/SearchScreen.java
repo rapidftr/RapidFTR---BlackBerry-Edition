@@ -8,7 +8,6 @@ import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.controls.BorderedEditField;
 import com.rapidftr.controls.Button;
@@ -19,7 +18,7 @@ import com.rapidftr.services.ServiceException;
 import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
 
-public class SearchScreen extends MainScreen implements Page {
+public class SearchScreen extends DisplayPage {
 	
 	private BorderedEditField searchField;
 	private RecordList recordList;
@@ -41,9 +40,6 @@ public class SearchScreen extends MainScreen implements Page {
 	}
 
 	
-	public void setUserInfo(Object userInfo) {
-	}
-
 	private MenuItem _go = new MenuItem("Go", 110, 10) {
 		public void run() {
 			onGo();
@@ -77,8 +73,6 @@ public class SearchScreen extends MainScreen implements Page {
 			Dialog.alert("Service Exception: " + se);
 		}
 
-		System.out.println("mod len " +model.length);
-		
 		recordList.setModel(model);
 		
 		this.invalidate();
@@ -96,15 +90,11 @@ public class SearchScreen extends MainScreen implements Page {
 			Dialog.alert("Service Exception: " + se);
 		}
 
-		RecordEditScreen screen = new RecordEditScreen();
-		
-		screen.setUserInfo(record);
-		
-		this.getUiEngine().pushScreen(screen);
+		pushScreen(1, record);
 	}
 
 	public boolean onClose() {
-		this.getUiEngine().popScreen(this);
+		popScreen(2, null);
 
 		return true;
 	}
