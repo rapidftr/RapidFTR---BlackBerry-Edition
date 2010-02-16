@@ -22,6 +22,7 @@ public class NavigationController {
 	public static final int RECORD_EDIT_SCREEN = 5;
 	public static final int RECORD_REVIEW_SCREEN = 6;
 	public static final int SEARCH_SCREEN = 7;
+	public static final int ADD_FAMILY_SCREEN = 8;
 
 	private static NavigationController instance;
 
@@ -76,7 +77,7 @@ public class NavigationController {
 			parentPage = (DisplayPage) (engine.getActiveScreen());
 		}
 
-		parentPage.updatePage(userInfo);
+		parentPage.updatePage(userInfo, (DisplayPage)screen);
 	}
 
 	private MainScreen getPushScreen(int screenId, int action) {

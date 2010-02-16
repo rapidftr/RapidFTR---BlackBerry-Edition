@@ -2,78 +2,62 @@ package com.rapidftr.model;
 
 import net.rim.device.api.util.Persistable;
 
-public class ProtectionConcerns implements Persistable {	
-	private boolean isUnaccompanied;
-	private boolean isRefugee;
-	private boolean isInternallyDisplaced;
-	private boolean isTraffickedChild;
-	private boolean isOrphan;
-	private boolean isInInterimCare;
-	private boolean isInChildHeadedHousehold;
-	private boolean isSickInjured;
-	private boolean isPhysicallySexuallyAbused;
-	private boolean isDisabled;
+public class ProtectionConcerns implements Persistable {
+	public static final String[] NAMES = { "Unaccompanied", "Refugee",
+			"Internally Displaced", "Trafficked Child", "Orphan",
+			"In Interim Care", "Child-headed Household", "Sick/Injured",
+			"Physical/Sexual Abuse", "Disability" };
+
+	public static final int UNACCOMPANIED = 0;
+	public static final int REFUGEE = 1;
+	public static final int INTERNALLY_DISPL = 2;
+	public static final int TRAFFICKED = 3;
+	public static final int ORPHAN = 4;
+	public static final int INTERIM_CARE = 5;
+	public static final int CHILD_HEADED_HSE = 6;
+	public static final int SICK_INJURED = 7;
+	public static final int PHYS_SEXUAL_ABUSE = 8;
+	public static final int DISABILITY = 9;
 	
-	public boolean isUnaccompanied() {
-		return isUnaccompanied;
-	}
-	public void setUnaccompanied(boolean isUnaccompanied) {
-		this.isUnaccompanied = isUnaccompanied;
-	}
-	public boolean isRefugee() {
-		return isRefugee;
-	}
-	public void setRefugee(boolean isRefugee) {
-		this.isRefugee = isRefugee;
-	}
-	public boolean isInternallyDisplaced() {
-		return isInternallyDisplaced;
-	}
-	public void setInternallyDisplaced(boolean isInternallyDisplaced) {
-		this.isInternallyDisplaced = isInternallyDisplaced;
-	}
-	public boolean isTraffickedChild() {
-		return isTraffickedChild;
-	}
-	public void setTraffickedChild(boolean isTraffickedChild) {
-		this.isTraffickedChild = isTraffickedChild;
-	}
-	public boolean isOrphan() {
-		return isOrphan;
-	}
-	public void setOrphan(boolean isOrphan) {
-		this.isOrphan = isOrphan;
-	}
-	public boolean isInInterimCare() {
-		return isInInterimCare;
-	}
-	public void setInInterimCare(boolean isInInterimCare) {
-		this.isInInterimCare = isInInterimCare;
-	}
-	public boolean isInChildHeadedHousehold() {
-		return isInChildHeadedHousehold;
-	}
-	public void setInChildHeadedHousehold(boolean isInChildHeadedHousehold) {
-		this.isInChildHeadedHousehold = isInChildHeadedHousehold;
-	}
-	public boolean isSickInjured() {
-		return isSickInjured;
-	}
-	public void setSickInjured(boolean isSickInjured) {
-		this.isSickInjured = isSickInjured;
-	}
-	public boolean isPhysicallySexuallyAbused() {
-		return isPhysicallySexuallyAbused;
-	}
-	public void setPhysicallySexuallyAbused(boolean isPhysicallySexuallyAbused) {
-		this.isPhysicallySexuallyAbused = isPhysicallySexuallyAbused;
-	}
-	public boolean isDisabled() {
-		return isDisabled;
-	}
-	public void setDisabled(boolean isDisabled) {
-		this.isDisabled = isDisabled;
+	private ProtectionConcern concerns[] = new ProtectionConcern[NAMES.length];
+
+	public ProtectionConcerns() {
+		for ( int i=0; i<concerns.length; i++ ) {
+			concerns[i] = new ProtectionConcern();
+			concerns[i].setName(NAMES[i]);
+		}
 	}
 	
-	
+	public ProtectionConcern[] getConcerns() {
+		return concerns;
+	}
+
+	public void setConcerns(ProtectionConcern[] concerns) {
+		this.concerns = concerns;
+	}
+
+	public void setConcern(int index, boolean status) {
+		concerns[index].status = status;
+	}
+
+	public class ProtectionConcern implements Persistable {
+		private boolean status;
+		private String name;
+
+		public boolean isStatus() {
+			return status;
+		}
+
+		public void setStatus(boolean status) {
+			this.status = status;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
 }

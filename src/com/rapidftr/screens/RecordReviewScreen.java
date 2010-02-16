@@ -11,12 +11,16 @@ import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.util.Arrays;
 
 import com.rapidftr.controls.Button;
 import com.rapidftr.layouts.HeaderLayoutManager;
+import com.rapidftr.model.Caregiver;
 import com.rapidftr.model.ChildRecord;
 import com.rapidftr.model.Identification;
+import com.rapidftr.model.ProtectionConcerns;
 import com.rapidftr.model.Relative;
+import com.rapidftr.model.ProtectionConcerns.ProtectionConcern;
 import com.rapidftr.services.ServiceException;
 import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
@@ -108,7 +112,7 @@ public class RecordReviewScreen extends DisplayPage {
 			items[0] = new RichTextField("Name: " + record.getName(),
 					Field.READONLY);
 
-			String sex = identification.isSex() ? "Male" : "Female";
+			String sex = identification.isMale() ? "Male" : "Female";
 
 			items[1] = new RichTextField("Sex: " + sex, Field.READONLY);
 
@@ -291,25 +295,35 @@ public class RecordReviewScreen extends DisplayPage {
 	private class OtherDetailsLayoutManager extends Manager {
 		private LabelField header;
 		private RichTextField items[];
+		private RichTextField fields[];
 
 		public OtherDetailsLayoutManager() {
 			super(0);
 
-			items = new RichTextField[9];
+			items = new RichTextField[5];
 
 			header = new LabelField("OTHER DETAILS");
 			header.setFont(Styles.getHeaderFont());
 
+			Caregiver caregiver = record.getCareGiver();
+			
 			items[0] = new RichTextField("Caregiver Details:", Field.READONLY);
-			items[1] = new RichTextField("Name: Susan Goode", Field.READONLY);
-			items[2] = new RichTextField("Profession: Aid Worker",
+			
+			String name = (caregiver == null) ? "-" : caregiver.getName();
+			name = (name == null) ? "-" : name;
+			
+			String profession = (caregiver == null) ? "-" : caregiver.getProfession();
+			profession = (profession == null) ? "-" : profession;
+			
+			String relationship = (caregiver == null) ? "-" : caregiver.getRelationshipToChild();
+			relationship = (relationship == null) ? "-" : relationship;
+			
+			items[1] = new RichTextField("Name: " + name, Field.READONLY);
+			items[2] = new RichTextField("Profession: " + profession,
 					Field.READONLY);
-			items[3] = new RichTextField("R'ship to Child: ...", Field.READONLY);
+			items[3] = new RichTextField("R'ship to Child: " + relationship, Field.READONLY);
 			items[4] = new RichTextField("Protection Concerns:", Field.READONLY);
-			items[5] = new RichTextField("   UNACCOMPANIED", Field.READONLY);
-			items[6] = new RichTextField("   REFUGEE", Field.READONLY);
-			items[7] = new RichTextField("   IN INTERIM CARE", Field.READONLY);
-			items[8] = new RichTextField("   SICK/INJURED", Field.READONLY);
+
 
 			Font defaultFont = Styles.getDefaultFont();
 
@@ -320,6 +334,29 @@ public class RecordReviewScreen extends DisplayPage {
 
 				add(items[i]);
 			}
+
+			ProtectionConcerns protectionConcerns = record
+					.getProtectionConcerns();
+
+			if (protectionConcerns != null) {
+				ProtectionConcern concerns[] = protectionConcerns.getConcerns();
+				
+				fields = new RichTextField[0];
+
+				for (int i = 0; i < concerns.length; i++) {
+					if (concerns[i].isStatus()) {
+						RichTextField field = new RichTextField("   "
+								+ concerns[i].getName(), Field.READONLY);
+						
+						field.setFont(Styles.getSecondaryFont());
+						
+						Arrays.add(fields, field);
+						
+						add(field);
+					}
+				}
+			}
+
 		}
 
 		protected void sublayout(int width, int height) {
@@ -332,48 +369,40 @@ public class RecordReviewScreen extends DisplayPage {
 				setPositionChild(items[i], 10, 25 + (i * 15));
 			}
 
-			setExtent(width, 170);
+			int fieldsOffset = 0;
+			
+			if (fields != null) {
+				for (int i = 0; i < fields.length; i++) {
+					layoutChild(fields[i], width, 20);
+
+					setPositionChild(fields[i], 10, 100 + (i * 15));
+				}
+				
+				fieldsOffset = (fields.length * 25) + 5;
+			}
+
+			setExtent(width, 80 + fieldsOffset);
 		}
 
 	}
 
 	private class OptionsLayoutManager extends Manager {
 		private LabelField header;
-		private RichTextField items[];
 
 		public OptionsLayoutManager() {
 			super(0);
 
-			items = new RichTextField[2];
-
 			header = new LabelField("OPTIONS");
 			header.setFont(Styles.getHeaderFont());
 
-			items[0] = new RichTextField("   REUNIFICATION", Field.READONLY);
-			items[1] = new RichTextField("   FOLLOW-UP", Field.READONLY);
-
 			add(header);
-
-			Font defaultFont = Styles.getDefaultFont();
-
-			for (int i = 0; i < items.length; i++) {
-				items[i].setFont(defaultFont);
-
-				add(items[i]);
-			}
 		}
 
 		protected void sublayout(int width, int height) {
 			layoutChild(header, width, 20);
 			setPositionChild(header, 5, 5);
 
-			for (int i = 0; i < items.length; i++) {
-				layoutChild(items[i], width, 20);
-
-				setPositionChild(items[i], 10, 25 + (i * 15));
-			}
-
-			setExtent(width, (items.length * 25) + 5);
+			setExtent(width, 30);
 		}
 	}
 }

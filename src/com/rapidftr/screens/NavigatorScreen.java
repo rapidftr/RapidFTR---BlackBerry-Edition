@@ -11,18 +11,25 @@ import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.util.Persistable;
 
-import com.rapidftr.NavigationController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.layouts.HeaderLayoutManager;
+import com.rapidftr.model.Caregiver;
 import com.rapidftr.model.ChildRecord;
 import com.rapidftr.model.Family;
 import com.rapidftr.model.Identification;
+import com.rapidftr.model.ProtectionConcerns;
 import com.rapidftr.model.Relative;
 import com.rapidftr.utilities.Utilities;
 
 public class NavigatorScreen extends DisplayPage {
+	public static final int SAVE_ACTION = 1;
+	public static final int CLOSE_ACTION = 2;
+	public static final int ID_SCREEN_ACTION = 3;
+	public static final int FAMILY_SCREEN_ACTION = 4;
+	public static final int OTHER_SCREEN_ACTION = 5;
+	public static final int OPTIONS_SCREEN_ACTION = 6;
+
 	private int type;
 
 	private LayoutManager manager;
@@ -69,6 +76,24 @@ public class NavigatorScreen extends DisplayPage {
 					}
 				});
 
+		manager.buttons[FAMILY].setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				onAddFamily();
+			}
+		});
+
+		manager.buttons[OTHER].setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				onAddOther();
+			}
+		});
+
+		manager.buttons[OPTIONS].setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				onSetOptions();
+			}
+		});
+
 		manager.buttons[SAVE].setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onSaveRecord();
@@ -82,34 +107,69 @@ public class NavigatorScreen extends DisplayPage {
 		});
 	}
 
-	public void updatePage(Object userInfo) {
+	public void updatePage(Object userInfo, DisplayPage source) {
 		if (userInfo != null) {
-			handleSave((Persistable) userInfo);
+			handleSave(userInfo, source);
 		}
 	}
 
-	public void handleSave(Persistable data) {
-		if (data instanceof Identification) {
+	public void handleSave(Object data, DisplayPage source) {
+		if (source instanceof IdentificationScreen) {
 			Identification identification = (Identification) data;
 
 			record.setName(identification.getName());
 
 			record.setIdentification(identification);
 
-			manager.ticks[0].setBitmap(Utilities.getScaledBitmap(
+			manager.ticks[IDENTIFICATION].setBitmap(Utilities.getScaledBitmap(
 					"img/checkmark.gif", 10));
+
+			Dialog.alert("Added Identification Data");
+		} else if (source instanceof OtherDetailsScreen) {
+			Hashtable userInfo = (Hashtable) data;
+
+			ProtectionConcerns protectionConcerns = (ProtectionConcerns) (userInfo
+					.get("protectionConcerns"));
+
+			record.setProtectionConcerns(protectionConcerns);
+
+			Caregiver careGiver = (Caregiver) (userInfo.get("caregiverDetails"));
+
+			record.setCareGiver(careGiver);
+
+			manager.ticks[OTHER].setBitmap(Utilities.getScaledBitmap(
+					"img/checkmark.gif", 10));
+
+			Dialog.alert("Added Protection Concerns");
 		}
 
 		// test family data
 		record.setFamily(getFamilyData());
 
-		Dialog.alert("Added Identification Data");
 	}
 
 	private MenuItem _identification = new MenuItem("Add/Edit Ident. Details",
 			110, 10) {
 		public void run() {
 			onIdentification();
+		}
+	};
+
+	private MenuItem _family = new MenuItem("Add/Edit Family Details", 110, 10) {
+		public void run() {
+			onAddFamily();
+		}
+	};
+
+	private MenuItem _other = new MenuItem("Add/Edit Other Details", 110, 10) {
+		public void run() {
+			onAddOther();
+		}
+	};
+
+	private MenuItem _options = new MenuItem("Set Options", 110, 10) {
+		public void run() {
+			onSetOptions();
 		}
 	};
 
@@ -121,22 +181,42 @@ public class NavigatorScreen extends DisplayPage {
 
 	protected void makeMenu(Menu menu, int instance) {
 		menu.add(_identification);
+		menu.add(_family);
+		menu.add(_other);
+		menu.add(_options);
 		menu.add(_close);
 	}
 
 	public boolean onClose() {
-		NavigationController.getInstance(this.getUiEngine()).popScreen(2,
-				record.getRecordId());
-
+		if ( Dialog.ask(Dialog.D_YES_NO, "Are you sure?") == Dialog.YES ) {
+			popScreen(CLOSE_ACTION, record.getRecordId());
+		}
+	
 		return true;
 	}
 
 	private void onIdentification() {
-		pushScreen(3, record.getRecordId());
+		pushScreen(ID_SCREEN_ACTION, record.getRecordId());
+	}
+
+	private void onAddFamily() {
+		pushScreen(FAMILY_SCREEN_ACTION, record.getRecordId());
+	}
+
+	private void onAddOther() {
+		pushScreen(OTHER_SCREEN_ACTION, record.getRecordId());
+	}
+
+	private void onSetOptions() {
+		pushScreen(OPTIONS_SCREEN_ACTION, record.getRecordId());
 	}
 
 	private void onSaveRecord() {
-		pushScreen(1, record);
+		if (record.getName() != null) {
+			pushScreen(SAVE_ACTION, record);
+		} else {
+			Dialog.alert("Child name cannot be blank");
+		}
 	}
 
 	private Family getFamilyData() {
@@ -202,8 +282,7 @@ public class NavigatorScreen extends DisplayPage {
 				add(buttons[i]);
 
 				if (i < (buttons.length - 2)) {
-					ticks[i] = new BitmapField(); // Utilities.getScaledBitmap("img/checkmark.gif",
-					// 10));
+					ticks[i] = new BitmapField();
 
 					add(ticks[i]);
 				}

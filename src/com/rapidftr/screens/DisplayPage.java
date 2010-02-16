@@ -29,7 +29,7 @@ abstract public class DisplayPage extends MainScreen implements Page {
 		
 	}
 
-	public void updatePage(Object userInfo) {
+	public void updatePage(Object userInfo, DisplayPage source) {
 		
 		
 	}

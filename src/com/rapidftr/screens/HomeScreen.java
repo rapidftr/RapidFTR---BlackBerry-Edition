@@ -20,6 +20,9 @@ import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
 
 public class HomeScreen extends DisplayPage {
+	public static final int CREATE_RECORD_ACTION = 1;
+	public static final int SEARCH_ACTION = 2;
+	
 	private static final String DEFAULT_IMAGE_NAME = "img/head.png";
 
 	private String user;
@@ -62,7 +65,7 @@ public class HomeScreen extends DisplayPage {
 
 	}
 
-	public void updatePage(Object userInfo) {
+	public void updatePage(Object userInfo, DisplayPage source) {
 		String recordId = (String) userInfo;
 
 		manager.headerField.setText("Status: saved record " + recordId);
@@ -118,10 +121,10 @@ public class HomeScreen extends DisplayPage {
 		userInfo.put("id", recordId);
 		userInfo.put("user", user);
 
-		pushScreen(1, userInfo);
+		pushScreen(CREATE_RECORD_ACTION, userInfo);
 	}
 
 	private void onSearchAndEdit() {
-		pushScreen(2, null);
+		pushScreen(SEARCH_ACTION, null);
 	}
 }

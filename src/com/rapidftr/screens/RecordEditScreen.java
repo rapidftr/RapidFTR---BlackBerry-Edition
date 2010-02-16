@@ -118,7 +118,7 @@ public class RecordEditScreen extends DisplayPage {
 
 			idFields[0] = new LabelField("Name: " + record.getName());
 
-			String sex = identification.isSex() ? "Male" : "Female";
+			String sex = identification.isMale() ? "Male" : "Female";
 
 			idFields[1] = new LabelField("Sex: " + sex);
 

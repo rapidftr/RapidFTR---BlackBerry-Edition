@@ -21,6 +21,8 @@ import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
 
 public class LoginScreen extends DisplayPage {
+	public static final int HOME_SCREEN_ACTION = 1;
+	
 	private LayoutManager layoutManager;
 
 	public LoginScreen() {
@@ -54,7 +56,6 @@ public class LoginScreen extends DisplayPage {
 	
 	private MenuItem _next = new MenuItem("Next", 110, 10) {
 		public void run() {
-
 			onLaunch();
 		}
 	};
@@ -80,7 +81,7 @@ public class LoginScreen extends DisplayPage {
 					userName, password);
 
 			if (loginResult) {
-				pushScreen(1, null);	
+				pushScreen(HOME_SCREEN_ACTION, null);	
 			} else {
 				Dialog.alert("Invalid login.\nTry again.");
 			}

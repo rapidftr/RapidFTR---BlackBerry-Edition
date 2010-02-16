@@ -1,0 +1,36 @@
+<project name="RapidFTR Client" default="build">
+	<taskdef resource="bb-ant-defs.xml" />
+ 
+	<!-- rapc and sigtool require the jde.home property to be set -->
+	<property name="jde.home" location="C:/Program Files/Eclipse/plugins/net.rim.eide.componentpack4.5.0_4.5.0.16/components/" />
+ 
+	<!-- directory of simulator to copy files to -->
+	<property name="simulator.home" location="C:/Program Files/Eclipse/plugins/net.rim.eide.componentpack4.5.0_4.5.0.16/components/simulator" />
+		
+		
+	<property name="src.dir" location="src" />
+	<property name="build.dir" location="build" />
+	<property name="cod.name" value="RapidFTR" />
+ 
+	<target name="build">
+		<mkdir dir="${build.dir}" />
+		<rapc output="${cod.name}" srcdir="${src.dir}" destdir="${build.dir}">
+			<jdp title="Rapid FTR" />
+		</rapc>
+	</target>
+ 
+	<target name="sign">
+		<sigtool codfile="${build.dir}/${cod.name}.cod" />
+	</target>
+ 
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+ 
+	<target name="load-simulator" depends="build">
+		<copy todir="${simulator.home}">
+			<fileset dir="${build.dir}" includes="*.cod,*.cso,*.debug,*.jad,*.jar" />
+		</copy>
+		<exec executable="${simulator.home}/8300.bat" />
+	</target>
+</project>

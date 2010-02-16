@@ -19,7 +19,7 @@ public class Identification implements Persistable {
 	
 
 	private String name;
-	private boolean sex;
+	private boolean male;
 	private int age;
 	private boolean isExactAge;
 	private String origin;
@@ -35,12 +35,12 @@ public class Identification implements Persistable {
 		this.name = name;
 	}
 
-	public boolean isSex() {
-		return sex;
+	public boolean isMale() {
+		return male;
 	}
 	
-	public void setSex(boolean sex) {
-		this.sex = sex;
+	public void setMale(boolean male) {
+		this.male = male;
 	}
 	
 	public int getAge() {
@@ -77,7 +77,7 @@ public class Identification implements Persistable {
 	}
 	
 	public static String getFormattedSeparationDate(int dateOfSeparation) {
-		return separationDates[dateOfSeparation];
+		return (dateOfSeparation == -1) ? "-" : separationDates[dateOfSeparation];
 	}
 	
 }

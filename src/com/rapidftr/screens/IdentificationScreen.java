@@ -3,6 +3,7 @@ package com.rapidftr.screens;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.NumericChoiceField;
@@ -16,6 +17,8 @@ import com.rapidftr.model.Identification;
 import com.rapidftr.utilities.Styles;
 
 public class IdentificationScreen extends DisplayPage {
+	public static final int CLOSE_ACTION = 1;
+	
 	private static final String[] separationDates = { "1 - 2 Weeks",
 			"2 - 4 Weeks", "1 - 6 Months", "6 Months - 1 Year", "> 1 Year" };
 
@@ -52,7 +55,14 @@ public class IdentificationScreen extends DisplayPage {
 	public boolean onSave() {
 		Identification data = new Identification();
 
-		data.setName(layoutManager.nameField.getText());
+		String name = layoutManager.nameField.getText();
+		
+		if ( (name == null) || (name.length() == 0) ) {
+			Dialog.alert("Child name cannot be blank");
+			return false;
+		}
+		
+		data.setName(name);
 
 		data.setAge(layoutManager.ageField.getSelectedValue());
 		data.setDateOfSeparation(layoutManager.separationDateGroup.getSelectedIndex());
@@ -60,14 +70,14 @@ public class IdentificationScreen extends DisplayPage {
 		data.setLastKnownLocation(layoutManager.lastKnownLocField.getText());
 		data.setOrigin(layoutManager.originField.getText());
 		
-		data.setSex(layoutManager.gendersGroup.getSelectedIndex() == 0);
+		data.setMale(layoutManager.gendersGroup.getSelectedIndex() == 0);
 
-		popScreen(1, data);
+		popScreen(CLOSE_ACTION, data);
 		return true;
 	}
 
 	public boolean onClose() {
-		popScreen(1, null);
+		popScreen(CLOSE_ACTION, null);
 
 		return true;
 	}
@@ -107,15 +117,13 @@ public class IdentificationScreen extends DisplayPage {
 
 			nameField = new BorderedEditField("Name: ", "", defaultFont);
 
-			nameField.setFont(defaultFont);
-
 			sexField = new LabelField("Sex: ");
 
 			sexField.setFont(defaultFont);
 
 			gendersGroup = new RadioButtonGroup();
 
-			genderMale = new RadioButtonField(" Male", gendersGroup, false);
+			genderMale = new RadioButtonField(" Male", gendersGroup, true);
 
 			genderMale.setFont(secondaryFont);
 
