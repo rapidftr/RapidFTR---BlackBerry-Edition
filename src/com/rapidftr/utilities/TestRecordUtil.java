@@ -27,10 +27,6 @@ public class TestRecordUtil {
 				Utilities.getImageAsBytes("img/cait.jpg"));
 	}
 
-	public static ChildRecordItem[] getChildRecordItems() {
-		return CHILD_DATA;
-	}
-
 	public static ChildRecord[] createTestRecords() {
 		ChildRecord[] records = new ChildRecord[CHILD_DATA.length];
 		

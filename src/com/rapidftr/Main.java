@@ -2,11 +2,7 @@ package com.rapidftr;
 
 import net.rim.device.api.ui.UiApplication;
 
-import com.rapidftr.model.ChildRecord;
 import com.rapidftr.screens.LoginScreen;
-import com.rapidftr.utilities.LocalStore;
-import com.rapidftr.utilities.TestRecordUtil;
-import com.rapidftr.utilities.impl.LocalStoreImpl;
 
 public class Main extends UiApplication {
 
@@ -32,20 +28,6 @@ public class Main extends UiApplication {
 	 * the application's root screen onto the UI stack.
 	 */
 	public Main() {
-		// create some test data
-		//persistToStore();
-
-		
 		pushScreen(new LoginScreen());
-	}
-
-	private void persistToStore() {
-		LocalStore localStore = LocalStoreImpl.getInstance();
-
-		if (localStore.countStoredRecords() == 0) {
-			ChildRecord[] testRecords = TestRecordUtil.createTestRecords();
-
-			localStore.persist(testRecords);
-		}
 	}
 }

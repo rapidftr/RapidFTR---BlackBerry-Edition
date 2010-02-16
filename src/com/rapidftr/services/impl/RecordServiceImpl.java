@@ -7,12 +7,13 @@ import com.rapidftr.model.ChildRecordItem;
 import com.rapidftr.services.RecordService;
 import com.rapidftr.services.ServiceException;
 import com.rapidftr.utilities.LocalStore;
-import com.rapidftr.utilities.TestRecordUtil;
 import com.rapidftr.utilities.impl.LocalStoreImpl;
 
 public class RecordServiceImpl implements RecordService {
 	private static RecordService instance;
 
+	private LocalStore localStore;
+	
 	public static synchronized RecordService getInstance() {
 		if (instance == null) {
 			instance = new RecordServiceImpl();
@@ -22,16 +23,26 @@ public class RecordServiceImpl implements RecordService {
 	}
 
 	private RecordServiceImpl() {
+		localStore = LocalStoreImpl.getInstance();
 	}
 
 	public ChildRecordItem[] getMatches(String searchCriteria) {
-		LocalStore localStore = LocalStoreImpl.getInstance();
-		
-		return localStore.retrieveAll();
+		return localStore.retrieveMatching(searchCriteria);
 	}
 	
 	public ChildRecord getRecord(String recordId) throws ServiceException {
-		return TestRecordUtil.createTestRecord(recordId);
+		ChildRecord records[] = (ChildRecord[])localStore.retrieveAll();
+		
+		ChildRecord match = null;
+		
+		for ( int i=0; i<records.length; i++ ) {
+			if ( records[i].getRecordId().equals(recordId) ) {
+				match = records[i];
+				break;
+			}
+		}
+		
+		return match;
 	}
 
 	public String getRecordId() throws ServiceException {
@@ -44,7 +55,7 @@ public class RecordServiceImpl implements RecordService {
 	}
 
 	public void save(ChildRecord record) throws ServiceException {
-		LocalStoreImpl.getInstance().persist(record);
+		localStore.persist(record);
 	}
 
 

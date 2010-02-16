@@ -9,6 +9,8 @@ public interface LocalStore {
 	
 	void persist(ChildRecord record);
 	
+	ChildRecordItem[] retrieveMatching(String searchCriteria);
+	
 	ChildRecordItem[] retrieveAll();
 	
 	int countStoredRecords();

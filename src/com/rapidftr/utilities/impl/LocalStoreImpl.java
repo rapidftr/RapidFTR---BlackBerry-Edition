@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import net.rim.device.api.system.PersistentObject;
 import net.rim.device.api.system.PersistentStore;
+import net.rim.device.api.util.Arrays;
 
 import com.rapidftr.model.ChildRecord;
 import com.rapidftr.model.ChildRecordItem;
@@ -59,6 +60,28 @@ public class LocalStoreImpl implements LocalStore {
 		ChildRecordItem records[] = retrieveAll();
 		
 		return (records == null) ? 0 : records.length;
+	}
+	
+	public ChildRecordItem[] retrieveMatching(String searchCriteria) {
+		ChildRecordItem[] matchedRecords = new ChildRecordItem[0];
+		
+		if ( searchCriteria.length() > 0 ) {
+			ChildRecordItem[] records = retrieveAll();
+
+			for ( int i=0; i<records.length; i++ ) {
+				String searchString = searchCriteria.toLowerCase();
+				
+				if ( ( records[i].getName().toLowerCase().indexOf(searchString) != -1 ) 
+						|| ( records[i].getRecordId().indexOf(searchString) != -1 ) ) {
+					Arrays.add(matchedRecords, records[i]);
+				}
+			}
+			
+			return matchedRecords;
+		}
+		else {
+			return retrieveAll();
+		}
 	}
 	
 	public ChildRecordItem[] retrieveAll() {
