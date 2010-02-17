@@ -18,8 +18,10 @@ import com.rapidftr.layouts.HeaderLayoutManager;
 import com.rapidftr.model.Caregiver;
 import com.rapidftr.model.ChildRecord;
 import com.rapidftr.model.Identification;
+import com.rapidftr.model.Options;
 import com.rapidftr.model.ProtectionConcerns;
 import com.rapidftr.model.Relative;
+import com.rapidftr.model.Options.Option;
 import com.rapidftr.model.ProtectionConcerns.ProtectionConcern;
 import com.rapidftr.services.ServiceException;
 import com.rapidftr.services.ServiceManager;
@@ -306,24 +308,26 @@ public class RecordReviewScreen extends DisplayPage {
 			header.setFont(Styles.getHeaderFont());
 
 			Caregiver caregiver = record.getCareGiver();
-			
+
 			items[0] = new RichTextField("Caregiver Details:", Field.READONLY);
-			
+
 			String name = (caregiver == null) ? "-" : caregiver.getName();
 			name = (name == null) ? "-" : name;
-			
-			String profession = (caregiver == null) ? "-" : caregiver.getProfession();
+
+			String profession = (caregiver == null) ? "-" : caregiver
+					.getProfession();
 			profession = (profession == null) ? "-" : profession;
-			
-			String relationship = (caregiver == null) ? "-" : caregiver.getRelationshipToChild();
+
+			String relationship = (caregiver == null) ? "-" : caregiver
+					.getRelationshipToChild();
 			relationship = (relationship == null) ? "-" : relationship;
-			
+
 			items[1] = new RichTextField("Name: " + name, Field.READONLY);
 			items[2] = new RichTextField("Profession: " + profession,
 					Field.READONLY);
-			items[3] = new RichTextField("R'ship to Child: " + relationship, Field.READONLY);
+			items[3] = new RichTextField("R'ship to Child: " + relationship,
+					Field.READONLY);
 			items[4] = new RichTextField("Protection Concerns:", Field.READONLY);
-
 
 			Font defaultFont = Styles.getDefaultFont();
 
@@ -340,18 +344,18 @@ public class RecordReviewScreen extends DisplayPage {
 
 			if (protectionConcerns != null) {
 				ProtectionConcern concerns[] = protectionConcerns.getConcerns();
-				
+
 				fields = new RichTextField[0];
 
 				for (int i = 0; i < concerns.length; i++) {
 					if (concerns[i].isStatus()) {
 						RichTextField field = new RichTextField("   "
 								+ concerns[i].getName(), Field.READONLY);
-						
+
 						field.setFont(Styles.getSecondaryFont());
-						
+
 						Arrays.add(fields, field);
-						
+
 						add(field);
 					}
 				}
@@ -370,14 +374,14 @@ public class RecordReviewScreen extends DisplayPage {
 			}
 
 			int fieldsOffset = 0;
-			
+
 			if (fields != null) {
 				for (int i = 0; i < fields.length; i++) {
 					layoutChild(fields[i], width, 20);
 
 					setPositionChild(fields[i], 10, 100 + (i * 15));
 				}
-				
+
 				fieldsOffset = (fields.length * 25) + 5;
 			}
 
@@ -388,6 +392,7 @@ public class RecordReviewScreen extends DisplayPage {
 
 	private class OptionsLayoutManager extends Manager {
 		private LabelField header;
+		private RichTextField fields[];
 
 		public OptionsLayoutManager() {
 			super(0);
@@ -396,13 +401,47 @@ public class RecordReviewScreen extends DisplayPage {
 			header.setFont(Styles.getHeaderFont());
 
 			add(header);
+
+			Options options = record
+					.getOptions();
+
+			if (options != null) {
+				Option option[] = options.getOptions();
+
+				fields = new RichTextField[0];
+
+				for (int i = 0; i < option.length; i++) {
+					if (option[i].isStatus()) {
+						RichTextField field = new RichTextField("   "
+								+ option[i].getName(), Field.READONLY);
+
+						field.setFont(Styles.getSecondaryFont());
+
+						Arrays.add(fields, field);
+
+						add(field);
+					}
+				}
+			}
 		}
 
 		protected void sublayout(int width, int height) {
 			layoutChild(header, width, 20);
 			setPositionChild(header, 5, 5);
 
-			setExtent(width, 30);
+			int fieldsOffset = 0;
+
+			if (fields != null) {
+				for (int i = 0; i < fields.length; i++) {
+					layoutChild(fields[i], width, 20);
+
+					setPositionChild(fields[i], 10, 25 + (i * 15));
+				}
+
+				fieldsOffset = (fields.length * 25) + 5;
+			}
+
+			setExtent(width, 10 + fieldsOffset);
 		}
 	}
 }

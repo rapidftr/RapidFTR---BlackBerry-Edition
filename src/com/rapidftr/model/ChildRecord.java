@@ -7,7 +7,8 @@ public class ChildRecord extends ChildRecordItem implements Persistable {
 	private Family family;
 	private Caregiver careGiver;
 	private ProtectionConcerns protectionConcerns;
-
+	private Options options;
+	
 	public ChildRecord() {}
 	
 	public Identification getIdentification() {
@@ -41,6 +42,13 @@ public class ChildRecord extends ChildRecordItem implements Persistable {
 	public void setProtectionConcerns(ProtectionConcerns protectionConcerns) {
 		this.protectionConcerns = protectionConcerns;
 	}
-	
-	
+
+	public Options getOptions() {
+		return options;
+	}
+
+	public void setOptions(Options options) {
+		this.options = options;
+	}
+
 }

@@ -18,6 +18,7 @@ import com.rapidftr.model.Caregiver;
 import com.rapidftr.model.ChildRecord;
 import com.rapidftr.model.Family;
 import com.rapidftr.model.Identification;
+import com.rapidftr.model.Options;
 import com.rapidftr.model.ProtectionConcerns;
 import com.rapidftr.model.Relative;
 import com.rapidftr.utilities.Utilities;
@@ -141,6 +142,16 @@ public class NavigatorScreen extends DisplayPage {
 					"img/checkmark.gif", 10));
 
 			Dialog.alert("Added Protection Concerns");
+		}
+		else if (source instanceof SetOptionsScreen) {
+			Options options = (Options)data;
+			
+			record.setOptions(options);
+			
+			manager.ticks[OPTIONS].setBitmap(Utilities.getScaledBitmap(
+					"img/checkmark.gif", 10));
+
+			Dialog.alert("Added Options");
 		}
 
 		// test family data
