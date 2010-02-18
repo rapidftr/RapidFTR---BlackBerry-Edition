@@ -16,6 +16,8 @@ public class Main extends UiApplication {
 		// Create a new instance of the application.
 		Main application = new Main();
 
+		
+		
 		// To make the application enter the event thread and start processing
 		// messages,
 		// we invoke the enterEventDispatcher() method.

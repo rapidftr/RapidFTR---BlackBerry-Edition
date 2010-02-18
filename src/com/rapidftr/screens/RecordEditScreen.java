@@ -28,7 +28,7 @@ public class RecordEditScreen extends DisplayPage {
 	}
 
 	public void initializePage(Object userInfo) {
-		this.record = (ChildRecord)userInfo;
+		this.record = (ChildRecord) userInfo;
 
 		this.recordId = record.getRecordId();
 
@@ -92,13 +92,13 @@ public class RecordEditScreen extends DisplayPage {
 			}
 		});
 	}
-	
+
 	private void onEdit() {
 		Hashtable userInfo = new Hashtable();
-		
+
 		userInfo.put("record", record);
 		userInfo.put("type", String.valueOf(NavigatorScreen.TYPE_EDIT));
-		
+
 		pushScreen(1, userInfo);
 	}
 
@@ -133,8 +133,7 @@ public class RecordEditScreen extends DisplayPage {
 					+ identification.getLastKnownLocation());
 
 			idFields[5] = new LabelField("Date of Separation: "
-					+ Identification.getFormattedSeparationDate(identification
-							.getDateOfSeparation()));
+					+ identification.getFormattedSeparationDate());
 
 			Font defaultFont = Styles.getDefaultFont();
 
@@ -148,9 +147,9 @@ public class RecordEditScreen extends DisplayPage {
 		}
 
 		protected void sublayout(int width, int height) {
-			layoutChild(imageField, width/2, 80);
+			layoutChild(imageField, width / 2, 80);
 			setPositionChild(imageField, (width - 85), 5);
-			
+
 			for (int i = 0; i < idFields.length; i++) {
 				layoutChild(idFields[i], width, 25);
 

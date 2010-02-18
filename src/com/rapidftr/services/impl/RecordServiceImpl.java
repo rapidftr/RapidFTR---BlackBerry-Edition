@@ -1,16 +1,14 @@
 package com.rapidftr.services.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Hashtable;
 import java.util.Random;
-
-import javax.microedition.io.Connector;
-import javax.microedition.io.HttpConnection;
 
 import com.rapidftr.model.ChildRecord;
 import com.rapidftr.model.ChildRecordItem;
 import com.rapidftr.services.RecordService;
 import com.rapidftr.services.ServiceException;
+import com.rapidftr.utilities.HttpServer;
 import com.rapidftr.utilities.LocalStore;
 import com.rapidftr.utilities.impl.LocalStoreImpl;
 
@@ -31,7 +29,18 @@ public class RecordServiceImpl implements RecordService {
 		localStore = LocalStoreImpl.getInstance();
 	}
 
-	public ChildRecordItem[] getMatches(String searchCriteria) {
+	public ChildRecordItem[] getMatches(String searchCriteria)
+			throws ServiceException {
+		try {
+			String id = "31bf2c074aa06488a3fb7b243328ade2";
+			String responseFromServer = (new HttpServer())
+					.getFromServer("children/" + id);
+
+			System.out.println("From Server: " + responseFromServer);
+		} catch (IOException e) {
+			throw new ServiceException(e.getMessage());
+		}
+
 		return localStore.retrieveMatching(searchCriteria);
 	}
 
@@ -61,88 +70,41 @@ public class RecordServiceImpl implements RecordService {
 
 	public void save(ChildRecord record) throws ServiceException {
 		localStore.persist(record);
-/**
-		try {
-	
-//	          case CONNECTION_BES:
-//	            url = url + ";deviceside=false";
-//	            break;
-//	          case CONNECTION_BIS:
-//	            url = url + ";XXXXXXXXXXXXXXXX";
-//	            break;
-//	          case CONNECTION_TCPIP:
-//	            url = url + ";deviceside=true";
-//	            break;
-//	          case CONNECTION_WIFI:
-//	            url = url + ";interface=wifi";
-	        
 
-//			String resp = getViaHttpConnection("http://proximobus.appspot.com/agencies/sf-muni.js;deviceside=true;apn=wap.gprs.unifon.com.ar;t...");
-			String resp = getViaHttpConnection("http://madeleine:3000/children/31bf2c074aa06488a3fb7b243328ade2;interface=wifi");
-			
-//			o "https://www.blackberry.com/go/mobile/samplehttps.shtml;deviceside=true;apn=wap.gprs.unifon.com.ar;t..."
-			System.out.println("HTTP RESP " + resp);
+		try {
+			if (!persistToServer(record, record.getPhoto())) {
+				throw new ServiceException("Failed to save child record");
+			}
 		} catch (Exception e) {
-			System.out.println("HTTP ERR " + e);
 			throw new ServiceException(e.getMessage());
 		}
-**/
 	}
 
-	String getViaHttpConnection(String url) throws IOException {
-		String response = null;
+	private boolean persistToServer(ChildRecord record, byte[] photoData)
+			throws Exception {
+		Hashtable params = new Hashtable();
+		params.put("commit", "Create");
+		params.put("child[name]", record.getName());
+		params.put("child[age]", String.valueOf(record.getIdentification()
+				.getAge()));
 
-		HttpConnection c = null;
-		InputStream is = null;
-		int rc;
+		String isExact = (record.getIdentification().isExactAge()) ? "exact"
+				: "approximate";
 
-		try {
-			c = (HttpConnection) Connector.open(url);
+		params.put("child[isAgeExact]", isExact);
+		String gender = (record.getIdentification().isMale()) ? "male"
+				: "female";
 
-			// Getting the response code will open the connection,
-			// send the request, and read the HTTP response headers.
-			// The headers are stored until requested.
-			rc = c.getResponseCode();
-			if (rc != HttpConnection.HTTP_OK) {
-				throw new IOException("HTTP response code: " + rc);
-			}
+		params.put("child[gender]", gender);
+		params.put("child[origin]", record.getIdentification().getOrigin());
 
-			is = c.openInputStream();
+		params.put("child[lastKnownLocation]", record.getIdentification()
+				.getLastKnownLocation());
 
-			// Get the ContentType
-			String type = c.getType();
+		params.put("child[date_of_separation]", record.getIdentification()
+				.getFormattedSeparationDate());
 
-			// Get the length and process the data
-			int len = (int) c.getLength();
-			if (len > 0) {
-				int actual = 0;
-				int bytesread = 0;
-				byte[] data = new byte[len];
-				while ((bytesread != len) && (actual != -1)) {
-					actual = is.read(data, bytesread, len - bytesread);
-					bytesread += actual;
-				}
-
-				response = new String(data);
-			}
-
-			// else {
-			// int ch;
-			// while ((ch = is.read()) != -1) {
-			// ...
-			// }
-			// }
-
-		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Not an HTTP URL");
-		} finally {
-			if (is != null)
-				is.close();
-			if (c != null)
-				c.close();
-		}
-
-		return response;
+		return (new HttpServer()).persistToServer(params, "child[photo]",
+				photoData);
 	}
-
 }

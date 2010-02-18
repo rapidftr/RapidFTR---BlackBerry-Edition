@@ -19,9 +19,7 @@ import com.rapidftr.utilities.Styles;
 public class IdentificationScreen extends DisplayPage {
 	public static final int CLOSE_ACTION = 1;
 	
-	private static final String[] separationDates = { "1 - 2 Weeks",
-			"2 - 4 Weeks", "1 - 6 Months", "6 Months - 1 Year", "> 1 Year" };
-
+     	
 	private LayoutManager layoutManager;
 
 	public void initializePage(Object userInfo) {
@@ -106,7 +104,7 @@ public class IdentificationScreen extends DisplayPage {
 
 		private LabelField sepDateField;
 
-		private RadioButtonField separationDateFields[] = new RadioButtonField[separationDates.length];
+		private RadioButtonField separationDateFields[] = new RadioButtonField[Identification.separationDates.length];
 
 		public LayoutManager() {
 			super(0);
@@ -159,9 +157,9 @@ public class IdentificationScreen extends DisplayPage {
 
 			separationDateGroup = new RadioButtonGroup();
 
-			for (int i = 0; i < separationDates.length; i++) {
+			for (int i = 0; i < Identification.separationDates.length; i++) {
 				separationDateFields[i] = new RadioButtonField(
-						separationDates[i], separationDateGroup, false);
+						Identification.separationDates[i], separationDateGroup, false);
 
 				separationDateFields[i].setFont(secondaryFont);
 			}
@@ -181,7 +179,7 @@ public class IdentificationScreen extends DisplayPage {
 
 			add(sepDateField);
 
-			for (int i = 0; i < separationDates.length; i++) {
+			for (int i = 0; i < Identification.separationDates.length; i++) {
 				add(separationDateFields[i]);
 			}
 		}

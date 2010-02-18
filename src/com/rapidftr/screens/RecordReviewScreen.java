@@ -87,6 +87,8 @@ public class RecordReviewScreen extends DisplayPage {
 	private void onSubmit() {
 		try {
 			ServiceManager.getRecordService().save(record);
+			
+			Dialog.alert("Child record " + recordId + " saved successfully");
 		} catch (ServiceException se) {
 			Dialog.alert("Failed to save record " + recordId + ": " + se);
 		}
@@ -129,8 +131,7 @@ public class RecordReviewScreen extends DisplayPage {
 					+ identification.getLastKnownLocation(), Field.READONLY);
 
 			items[5] = new RichTextField("Date of Separation: "
-					+ Identification.getFormattedSeparationDate(identification
-							.getDateOfSeparation()), Field.READONLY);
+					+ identification.getFormattedSeparationDate(), Field.READONLY);
 
 			Font defaultFont = Styles.getDefaultFont();
 
