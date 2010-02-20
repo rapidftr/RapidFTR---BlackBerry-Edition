@@ -1,8 +1,16 @@
 package com.rapidftr.services.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Random;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import net.rim.device.api.xml.parsers.DocumentBuilder;
+import net.rim.device.api.xml.parsers.DocumentBuilderFactory;
 
 import com.rapidftr.model.ChildRecord;
 import com.rapidftr.model.ChildRecordItem;
@@ -32,11 +40,13 @@ public class RecordServiceImpl implements RecordService {
 	public ChildRecordItem[] getMatches(String searchCriteria)
 			throws ServiceException {
 		try {
-			String id = "31bf2c074aa06488a3fb7b243328ade2";
-			String responseFromServer = (new HttpServer())
-					.getFromServer("children/" + id);
+			InputStream is = (new HttpServer())
+					.getAsStreamFromServer("children");
 
-			System.out.println("From Server: " + responseFromServer);
+			// String responseFromServer = (new HttpServer())
+			// .getFromServer("children");
+			//			
+			// System.out.println("From Server: " + responseFromServer);
 		} catch (IOException e) {
 			throw new ServiceException(e.getMessage());
 		}
@@ -106,5 +116,23 @@ public class RecordServiceImpl implements RecordService {
 
 		return (new HttpServer()).persistToServer(params, "child[photo]",
 				photoData);
+	}
+
+	private class Parser {
+
+		ChildRecordItem[] parse(InputStream is) throws Exception {
+			DocumentBuilder documentBuilder = DocumentBuilderFactory
+					.newInstance().newDocumentBuilder();
+
+			Document document = documentBuilder.parse(is);
+
+			Element root = document.getDocumentElement();
+
+			NodeList nodes = root.getChildNodes();
+
+			System.out.println("Got nodes " + nodes);
+
+			return null;
+		}
 	}
 }

@@ -1,5 +1,10 @@
 package com.rapidftr.utilities;
 
+import java.io.InputStream;
+
+import javax.microedition.io.Connector;
+import javax.microedition.io.file.FileConnection;
+
 import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
@@ -18,29 +23,49 @@ public class Utilities {
 	public static Bitmap getScaledBitmapFromBytes(byte[] bytes, int height) {
 		return getScaledBitmap(getEncodedImageFromBytes(bytes), height);
 	}
-	
+
 	public static EncodedImage getScaledImage(String name, int height) {
-		EncodedImage ei = EncodedImage.getEncodedImageResource(name);
-		
+		EncodedImage ei = null;
+
+		try {
+			FileConnection fconn = (FileConnection) Connector
+					.open("file:///SDCard/BlackBerry/pictures/IMG00047.jpg");
+
+			InputStream input = null;
+			input = fconn.openInputStream();
+
+			int available = 0;
+			available = input.available();
+			int fSz = (int) fconn.fileSize();
+			byte[] data = new byte[fSz];
+
+			input.read(data, 0, fSz);
+			ei = EncodedImage.createEncodedImage(data, 0, data.length);
+
+		} catch (Exception e) {
+
+		}
+
+		// EncodedImage ei = EncodedImage.getEncodedImageResource(name);
+
 		return getScaledImage(ei, height);
 	}
-	
-	public static EncodedImage getScaledImage(EncodedImage encodedImage, int height) {
+
+	public static EncodedImage getScaledImage(EncodedImage encodedImage,
+			int height) {
 		int numerator = Fixed32.toFP(encodedImage.getHeight());
 		int denominator = Fixed32.toFP(height);
 		int heightScale = Fixed32.div(numerator, denominator);
 
-	
 		return encodedImage.scaleImage32(heightScale, heightScale);
 	}
-	
+
 	public static Bitmap getScaledBitmap(EncodedImage encodedImage, int height) {
 		EncodedImage newEi = getScaledImage(encodedImage, height);
-		
+
 		return newEi.getBitmap();
 	}
 
-	
 	public static Bitmap getScaledBitmap(String name) {
 		return getScaledBitmap(name, 40);
 	}
@@ -93,12 +118,13 @@ public class Utilities {
 	public static Bitmap getBitmapFromBytes(byte[] bytes) {
 		return (getEncodedImageFromBytes(bytes)).getBitmap();
 	}
-	
+
 	public static byte[] getImageAsBytes(String imageName) {
 		// Creates an EncodedImage from provided name resource
 		EncodedImage image = EncodedImage.getEncodedImageResource(imageName);
-		
-		// Returns a byte array containing the encoded data for this EncodedImage
+
+		// Returns a byte array containing the encoded data for this
+		// EncodedImage
 		return image.getData();
 	}
 }

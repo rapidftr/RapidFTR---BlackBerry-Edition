@@ -9,27 +9,58 @@ import javax.microedition.io.HttpConnection;
 
 public class HttpServer {
 	public static final String SERVER_NAME = "madeleine";
-	
-	private static final String URL_PREFIX = "http://" + SERVER_NAME + ":3000/";
+
 	private static final String IMAGE_MIME_TYPE = "image/jpg";
 
 	private static final String CONNECTION_BES = ";deviceside=false";
 	private static final String CONNECTION_BIS = ";XXXXXXXXXXXXXXXX";
 	private static final String CONNECTION_TCPIP = ";deviceside=true";
 	private static final String CONNECTION_WIFI = ";interface=wifi";
-	
-	public boolean persistToServer(Hashtable params, String photoKey, byte[] photoData) throws Exception {
+
+	public boolean persistToServer(Hashtable params, String photoKey,
+			byte[] photoData) throws Exception {
 		String imageName = "photo.jpg";
 
-		HttpMultipartRequest req = new HttpMultipartRequest(URL_PREFIX
-				+ "children" + CONNECTION_TCPIP, params, photoKey,
-				imageName, IMAGE_MIME_TYPE, photoData);
+		HttpMultipartRequest req = new HttpMultipartRequest(getUrlPrefix()
+				+ "children" + CONNECTION_TCPIP, params, photoKey, imageName,
+				IMAGE_MIME_TYPE, photoData);
 
 		return (req.send() != null);
 	}
-	
+
+	public InputStream getAsStreamFromServer(String uri) throws IOException {
+		String url = getUrlPrefix() + uri + CONNECTION_TCPIP;
+
+		HttpConnection c = null;
+		InputStream is = null;
+		int rc;
+
+		try {
+			c = (HttpConnection) Connector.open(url);
+
+			c.setRequestProperty("Accept", "application/xml");
+			// c.setRequestProperty("Accept", "application/json");
+
+			rc = c.getResponseCode();
+			if (rc != HttpConnection.HTTP_OK) {
+				throw new IOException("HTTP response code: " + rc);
+			}
+
+			is = c.openInputStream();
+		} catch (Exception e) {
+			if (is != null)
+				is.close();
+			if (c != null)
+				c.close();
+			
+			throw new IllegalArgumentException("Not an HTTP URL");
+		} 
+		
+		return is;
+	}
+
 	public String getFromServer(String uri) throws IOException {
-		String url = URL_PREFIX + uri + CONNECTION_TCPIP;
+		String url = getUrlPrefix() + uri + CONNECTION_TCPIP;
 
 		String response = null;
 
@@ -66,7 +97,7 @@ public class HttpServer {
 
 				response = new String(data);
 			}
-		} catch (ClassCastException e) {
+		} catch (Exception e) {
 			throw new IllegalArgumentException("Not an HTTP URL");
 		} finally {
 			if (is != null)
@@ -76,5 +107,11 @@ public class HttpServer {
 		}
 
 		return response;
+	}
+
+	private String getUrlPrefix() {
+		String hostName = Properties.getInstance().getHostName();
+		
+		return "http://" + hostName + ":3000/";
 	}
 }

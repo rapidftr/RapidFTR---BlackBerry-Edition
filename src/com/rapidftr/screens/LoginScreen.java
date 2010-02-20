@@ -18,6 +18,7 @@ import com.rapidftr.controls.BorderedPasswordField;
 import com.rapidftr.controls.Button;
 import com.rapidftr.services.ServiceException;
 import com.rapidftr.services.ServiceManager;
+import com.rapidftr.utilities.Properties;
 import com.rapidftr.utilities.Styles;
 
 public class LoginScreen extends DisplayPage {
@@ -66,16 +67,22 @@ public class LoginScreen extends DisplayPage {
 			onClose();
 		}
 	};
-
+	
 	protected void makeMenu(Menu menu, int instance) {
 		menu.add(_next);
 		menu.add(_close);
 	}
-
+	
 	private void onLaunch() {
 		String userName = layoutManager.usernameField.getText();
 		String password = layoutManager.passwordField.getText();
 
+		String hostName = layoutManager.hostField.getText();
+		
+		if ( hostName != null ) {
+			Properties.getInstance().setHostName(hostName);
+		}
+		
 		try {
 			boolean loginResult = ServiceManager.getLoginService().login(
 					userName, password);
@@ -104,7 +111,8 @@ public class LoginScreen extends DisplayPage {
 	private class LayoutManager extends Manager {
 		public BorderedEditField usernameField;
 		public BorderedPasswordField passwordField;
-
+		public BorderedEditField hostField;
+		
 		private LabelField header;
 		private Button okButton;
 		private Button closeButton;
@@ -115,7 +123,7 @@ public class LoginScreen extends DisplayPage {
 
 			this.okButton = okButton;
 			this.closeButton = closeButton;
-
+	
 			final Font titleFont = Styles.getTitleFont();
 
 			Font defaultFont = Styles.getDefaultFont();
@@ -141,10 +149,14 @@ public class LoginScreen extends DisplayPage {
 			passwordField = new BorderedPasswordField("Password: ", "");
 			passwordField.setFont(defaultFont);
 
+			hostField = new BorderedEditField("Host: ", "");
+			hostField.setFont(defaultFont);
+			
 			add(imageField);
 			add(header);
 			add(usernameField);
 			add(passwordField);
+			add(hostField);
 			add(okButton);
 			add(closeButton);
 		}
@@ -154,6 +166,7 @@ public class LoginScreen extends DisplayPage {
 			layoutChild(header, width, 25);
 			layoutChild(usernameField, width, 25);
 			layoutChild(passwordField, width, 25);
+			layoutChild(hostField, width, 25);
 
 			layoutChild(okButton, width / 4, 25);
 			layoutChild(closeButton, width / 4, 25);
@@ -164,12 +177,14 @@ public class LoginScreen extends DisplayPage {
 			setPositionChild(usernameField, 10 + (width - usernameField
 					.getWidth()) / 2, 100);
 			setPositionChild(passwordField, 10 + (width - passwordField
-					.getWidth()) / 2, 130);
+					.getWidth()) / 2, 125);
+			setPositionChild(hostField, 10 + (width - hostField
+					.getWidth()) / 2, 150);
+			
+			setPositionChild(okButton, 60, 180);
+			setPositionChild(closeButton, 160, 180);
 
-			setPositionChild(okButton, 60, 160);
-			setPositionChild(closeButton, 180, 160);
-
-			int actualHeight = 200;
+			int actualHeight = 220;
 
 			setExtent(width, actualHeight);
 		}

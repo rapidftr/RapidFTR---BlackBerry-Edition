@@ -10,19 +10,24 @@ import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
-import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 
 import com.rapidftr.layouts.BorderManager;
 import com.rapidftr.model.ChildRecord;
+import com.rapidftr.services.PhotoServiceListener;
+import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
+import com.rapidftr.utilities.Utilities;
 
 public class RecordCreationScreen extends DisplayPage {
 
 	private String id;
 	private EncodedImage photo;
+	BitmapField imageField;
 
+	public static final int SEARCH_ACTION = 3;
+	
 	public void initializePage(Object userInfo) {
 		Hashtable hashTable = (Hashtable) userInfo;
 
@@ -46,7 +51,7 @@ public class RecordCreationScreen extends DisplayPage {
 
 		footerField.setFont(footerFont);
 
-		BitmapField imageField = new BitmapField(photo.getBitmap());
+		imageField = new BitmapField(photo.getBitmap());
 
 		BorderManager manager = new BorderManager(headerText, imageField,
 				footerField, true);
@@ -85,7 +90,7 @@ public class RecordCreationScreen extends DisplayPage {
 		}
 	};
 
-	private MenuItem _searchAndEdit = new MenuItem("Search + Edit", 110, 10) {
+	private MenuItem _searchAndEdit = new MenuItem("Search", 110, 10) {
 		public void run() {
 			onSearchAndEdit();
 		}
@@ -111,9 +116,15 @@ public class RecordCreationScreen extends DisplayPage {
 	}
 
 	private void onRetake() {
-		System.out.println("_retakePhoto");
+		ServiceManager.getPhotoService().startCamera( new PhotoServiceListener() {
 
-		Dialog.alert("Retake Photo");
+			public void handlePhoto(EncodedImage encodedImage) {
+				EncodedImage e2 = Utilities.getScaledImage(encodedImage, 100);
+
+				imageField.setBitmap(e2.getBitmap());	
+			}
+			
+		});
 	}
 
 	private void onEnterNewInfo() {
@@ -131,8 +142,6 @@ public class RecordCreationScreen extends DisplayPage {
 	}
 
 	private void onSearchAndEdit() {
-		System.out.println("_searchAndEdit");
-
-		Dialog.alert("Search + Edit");
+		pushScreen(SEARCH_ACTION, null);
 	}
 }
