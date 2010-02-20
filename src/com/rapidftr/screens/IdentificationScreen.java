@@ -1,5 +1,7 @@
 package com.rapidftr.screens;
 
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
@@ -12,6 +14,7 @@ import net.rim.device.api.ui.component.RadioButtonGroup;
 import net.rim.device.api.ui.component.SeparatorField;
 
 import com.rapidftr.controls.BorderedEditField;
+import com.rapidftr.controls.Button;
 import com.rapidftr.layouts.HeaderLayoutManager;
 import com.rapidftr.model.Identification;
 import com.rapidftr.utilities.Styles;
@@ -106,6 +109,9 @@ public class IdentificationScreen extends DisplayPage {
 
 		private RadioButtonField separationDateFields[] = new RadioButtonField[Identification.separationDates.length];
 
+		private Button cancelButton;
+		private Button saveButton;
+		
 		public LayoutManager() {
 			super(0);
 
@@ -164,6 +170,24 @@ public class IdentificationScreen extends DisplayPage {
 				separationDateFields[i].setFont(secondaryFont);
 			}
 
+			cancelButton = new Button("Cancel", 60);
+			cancelButton.setFont(defaultFont);
+			
+			cancelButton.setChangeListener(new FieldChangeListener() {
+				public void fieldChanged(Field field, int context) {
+					onClose();
+				}
+			});
+			
+			saveButton = new Button("Save", 60);
+			saveButton.setFont(defaultFont);
+			
+			saveButton.setChangeListener(new FieldChangeListener() {
+				public void fieldChanged(Field field, int context) {
+					onSave();
+				}
+			});
+			
 			add(nameField);
 			add(sexField);
 
@@ -182,6 +206,9 @@ public class IdentificationScreen extends DisplayPage {
 			for (int i = 0; i < Identification.separationDates.length; i++) {
 				add(separationDateFields[i]);
 			}
+			
+			add(cancelButton);
+			add(saveButton);
 		}
 
 		protected void sublayout(int width, int height) {
@@ -195,6 +222,8 @@ public class IdentificationScreen extends DisplayPage {
 			layoutChild(originField, width, 30);
 			layoutChild(lastKnownLocField, width, 30);
 			layoutChild(sepDateField, width, 30);
+			layoutChild(cancelButton, width/2, 30);
+			layoutChild(saveButton, width/2, 30);
 
 			for (int i = 0; i < separationDateFields.length; i++) {
 				layoutChild(separationDateFields[i], width / 2, 30);
@@ -215,7 +244,10 @@ public class IdentificationScreen extends DisplayPage {
 				setPositionChild(separationDateFields[i], 50, 120 + (15 * i));
 			}
 
-			int actualHeight = 220;
+			setPositionChild(cancelButton, 10, 200);
+			setPositionChild(saveButton, 100, 200);
+			
+			int actualHeight = 240;
 
 			setExtent(width, actualHeight);
 		}

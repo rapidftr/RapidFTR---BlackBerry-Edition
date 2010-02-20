@@ -8,10 +8,8 @@ import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
-import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.component.Menu;
 
 import com.rapidftr.layouts.BorderManager;
 import com.rapidftr.model.ChildRecord;
@@ -76,37 +74,6 @@ public class RecordCreationScreen extends DisplayPage {
 				});
 
 		add(manager);
-	}
-
-	private MenuItem _retakePhoto = new MenuItem("Retake Photo", 110, 10) {
-		public void run() {
-			onRetake();
-		}
-	};
-
-	private MenuItem _enterNewInfo = new MenuItem("Add Details", 110, 10) {
-		public void run() {
-			onEnterNewInfo();
-		}
-	};
-
-	private MenuItem _searchAndEdit = new MenuItem("Search", 110, 10) {
-		public void run() {
-			onSearchAndEdit();
-		}
-	};
-
-	private MenuItem _close = new MenuItem("Close Page", 110, 10) {
-		public void run() {
-			onClose();
-		}
-	};
-
-	protected void makeMenu(Menu menu, int instance) {
-		menu.add(_retakePhoto);
-		menu.add(_enterNewInfo);
-		menu.add(_searchAndEdit);
-		menu.add(_close);
 	}
 
 	public boolean onClose() {

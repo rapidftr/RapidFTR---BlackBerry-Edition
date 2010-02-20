@@ -40,14 +40,20 @@ public class RecordServiceImpl implements RecordService {
 	public ChildRecordItem[] getMatches(String searchCriteria)
 			throws ServiceException {
 		try {
-			InputStream is = (new HttpServer())
-					.getAsStreamFromServer("children");
+//			InputStream is = (new HttpServer())
+//					.getAsStreamFromServer("children");
 
-			// String responseFromServer = (new HttpServer())
-			// .getFromServer("children");
-			//			
-			// System.out.println("From Server: " + responseFromServer);
-		} catch (IOException e) {
+			InputStream is = this.getClass().getResourceAsStream("/joe.xml");
+
+			
+			ChildRecordItem[] items = (new Parser()).parse(is);
+
+	
+//			 String responseFromServer = (new HttpServer())
+//			 .getFromServer("children");
+//			//			
+//			System.out.println("From Server: " + responseFromServer);
+		} catch (Exception e) {
 			throw new ServiceException(e.getMessage());
 		}
 

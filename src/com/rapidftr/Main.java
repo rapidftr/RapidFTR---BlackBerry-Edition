@@ -1,5 +1,7 @@
 package com.rapidftr;
 
+import net.rim.device.api.applicationcontrol.ApplicationPermissions;
+import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 
 import com.rapidftr.screens.LoginScreen;
@@ -16,8 +18,6 @@ public class Main extends UiApplication {
 		// Create a new instance of the application.
 		Main application = new Main();
 
-		
-		
 		// To make the application enter the event thread and start processing
 		// messages,
 		// we invoke the enterEventDispatcher() method.
@@ -30,6 +30,21 @@ public class Main extends UiApplication {
 	 * the application's root screen onto the UI stack.
 	 */
 	public Main() {
+		enableEventInjection();
+
 		pushScreen(new LoginScreen());
+	}
+
+	private void enableEventInjection() {
+		ApplicationPermissions requestedPermissions = new ApplicationPermissions();
+
+		int permission = ApplicationPermissions.PERMISSION_EVENT_INJECTOR;
+
+		if (!requestedPermissions.containsPermissionKey(permission)) {
+			requestedPermissions.addPermission(permission);
+		}
+
+		ApplicationPermissionsManager.getInstance().invokePermissionsRequest(
+				requestedPermissions);
 	}
 }

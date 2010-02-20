@@ -1,16 +1,19 @@
 package com.rapidftr.screens;
 
 import net.rim.device.api.system.Bitmap;
+import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
+import net.rim.device.api.ui.component.CheckboxField;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
+import net.rim.device.api.ui.component.RadioButtonField;
+import net.rim.device.api.ui.component.RadioButtonGroup;
 
 import com.rapidftr.Main;
 import com.rapidftr.controls.BorderedEditField;
@@ -23,14 +26,14 @@ import com.rapidftr.utilities.Styles;
 
 public class LoginScreen extends DisplayPage {
 	public static final int HOME_SCREEN_ACTION = 1;
-	
+
 	private LayoutManager layoutManager;
 
 	public LoginScreen() {
 		super();
-			
+
 		int limit = 50;
-	
+
 		Button okButton = new Button("OK", limit);
 		Button closeButton = new Button("Close", limit);
 
@@ -54,47 +57,43 @@ public class LoginScreen extends DisplayPage {
 
 		okButton.setChangeListener(okListener);
 	}
-	
-	private MenuItem _next = new MenuItem("Next", 110, 10) {
-		public void run() {
-			onLaunch();
-		}
-	};
 
-	private MenuItem _close = new MenuItem("Close " + Main.APPLICATION_NAME,
-			110, 10) {
-		public void run() {
-			onClose();
-		}
-	};
-	
-	protected void makeMenu(Menu menu, int instance) {
-		menu.add(_next);
-		menu.add(_close);
-	}
-	
 	private void onLaunch() {
 		String userName = layoutManager.usernameField.getText();
 		String password = layoutManager.passwordField.getText();
 
 		String hostName = layoutManager.hostField.getText();
-		
-		if ( hostName != null ) {
+
+		if (hostName != null) {
 			Properties.getInstance().setHostName(hostName);
 		}
-		
+
+		Properties.getInstance().setUseCamera(
+				!layoutManager.disableCamera.getChecked());
+
+		Properties.getInstance().setConnectionType(
+				layoutManager.connectionsGroup.getSelectedIndex());
+
 		try {
 			boolean loginResult = ServiceManager.getLoginService().login(
 					userName, password);
 
 			if (loginResult) {
-				pushScreen(HOME_SCREEN_ACTION, null);	
+				pushScreen(HOME_SCREEN_ACTION, null);
 			} else {
 				Dialog.alert("Invalid login.\nTry again.");
 			}
 		} catch (ServiceException se) {
 			System.out.println("Service Exception " + se);
 		}
+	}
+
+	protected void makeMenu(Menu menu, int instance) {
+
+	}
+
+	protected boolean navigationClick(int status, int time) {
+		return true;
 	}
 
 	public boolean onClose() {
@@ -111,8 +110,14 @@ public class LoginScreen extends DisplayPage {
 	private class LayoutManager extends Manager {
 		public BorderedEditField usernameField;
 		public BorderedPasswordField passwordField;
+
 		public BorderedEditField hostField;
-		
+		public CheckboxField disableCamera;
+		private RadioButtonField wifi;
+		private RadioButtonField bis;
+		private RadioButtonField tcpip;
+		public RadioButtonGroup connectionsGroup;
+
 		private LabelField header;
 		private Button okButton;
 		private Button closeButton;
@@ -123,7 +128,7 @@ public class LoginScreen extends DisplayPage {
 
 			this.okButton = okButton;
 			this.closeButton = closeButton;
-	
+
 			final Font titleFont = Styles.getTitleFont();
 
 			Font defaultFont = Styles.getDefaultFont();
@@ -149,14 +154,36 @@ public class LoginScreen extends DisplayPage {
 			passwordField = new BorderedPasswordField("Password: ", "");
 			passwordField.setFont(defaultFont);
 
-			hostField = new BorderedEditField("Host: ", "");
-			hostField.setFont(defaultFont);
-			
+			hostField = new BorderedEditField("Host: ", "") {
+				public void paint(Graphics graphics) {
+					graphics.setColor(Color.BLUE);
+					super.paint(graphics);
+				}
+			};
+
+			hostField.setFont(Styles.getAuxFont());
+
+			disableCamera = new CheckboxField("Disable Camera: ", false);
+			disableCamera.setFont(Styles.getAuxFont());
+
+			connectionsGroup = new RadioButtonGroup();
+
+			wifi = new RadioButtonField("Wifi: ", connectionsGroup, true);
+			bis = new RadioButtonField("BIS: ", connectionsGroup, false);
+			tcpip = new RadioButtonField("TCP/IP: ", connectionsGroup, false);
+			wifi.setFont(Styles.getAuxFont());
+			bis.setFont(Styles.getAuxFont());
+			tcpip.setFont(Styles.getAuxFont());
+
 			add(imageField);
 			add(header);
 			add(usernameField);
 			add(passwordField);
 			add(hostField);
+			add(disableCamera);
+			add(wifi);
+			add(bis);
+			add(tcpip);
 			add(okButton);
 			add(closeButton);
 		}
@@ -167,24 +194,53 @@ public class LoginScreen extends DisplayPage {
 			layoutChild(usernameField, width, 25);
 			layoutChild(passwordField, width, 25);
 			layoutChild(hostField, width, 25);
+			layoutChild(disableCamera, width, 25);
+			layoutChild(wifi, width / 3, 25);
+			layoutChild(bis, width / 3, 25);
+			layoutChild(tcpip, width / 3, 25);
 
 			layoutChild(okButton, width / 4, 25);
 			layoutChild(closeButton, width / 4, 25);
 
-			setPositionChild(imageField, (width - imageField.getWidth()) / 2,
-					10);
-			setPositionChild(header, (width - header.getWidth()) / 2, 60);
-			setPositionChild(usernameField, 10 + (width - usernameField
-					.getWidth()) / 2, 100);
-			setPositionChild(passwordField, 10 + (width - passwordField
-					.getWidth()) / 2, 125);
-			setPositionChild(hostField, 10 + (width - hostField
-					.getWidth()) / 2, 150);
-			
-			setPositionChild(okButton, 60, 180);
-			setPositionChild(closeButton, 160, 180);
+			int y = 10;
 
-			int actualHeight = 220;
+			setPositionChild(imageField, (width - imageField.getWidth()) / 2, y);
+
+			y += 40;
+
+			setPositionChild(header, (width - header.getWidth()) / 2, y);
+
+			y += 25;
+
+			setPositionChild(usernameField, 10 + (width - usernameField
+					.getWidth()) / 2, y);
+
+			y += 25;
+
+			setPositionChild(passwordField, 10 + (width - passwordField
+					.getWidth()) / 2, y);
+
+			y += 25;
+
+			setPositionChild(hostField,
+					10 + (width - hostField.getWidth()) / 2, y);
+
+			y += 20;
+
+			setPositionChild(disableCamera,
+					10 + (width - hostField.getWidth()) / 2, y);
+
+			y += 20;
+			setPositionChild(wifi, 10, y);
+			setPositionChild(bis, 80, y);
+			setPositionChild(tcpip, 150, y);
+
+			y += 20;
+
+			setPositionChild(okButton, 60, y);
+			setPositionChild(closeButton, 160, y);
+
+			int actualHeight = y + 30;
 
 			setExtent(width, actualHeight);
 		}

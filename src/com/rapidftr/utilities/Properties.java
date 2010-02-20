@@ -1,16 +1,19 @@
 package com.rapidftr.utilities;
 
-import com.rapidftr.services.RecordService;
-import com.rapidftr.services.impl.RecordServiceImpl;
-import com.rapidftr.utilities.impl.LocalStoreImpl;
 
 public class Properties {
 
+	public static final int CONNECTION_WIFI = 0;
+	public static final int CONNECTION_BIS = 1;
+	public static final int CONNECTION_TCPIP = 2;
+	
 	private static final String DEFAULT_HOST = "madeleine";
 	
 	private static Properties instance;
 
 	private String hostName;
+	private boolean useCamera;
+	private int connectionType;
 	
 	public static synchronized Properties getInstance() {
 		if (instance == null) {
@@ -21,6 +24,7 @@ public class Properties {
 	}
 
 	private Properties() {
+		useCamera = false;
 	}
 	
 	public String getHostName() {
@@ -30,4 +34,22 @@ public class Properties {
 	public void setHostName(String hostName) {
 		this.hostName = hostName;
 	}
+
+	public boolean isUseCamera() {
+		return useCamera;
+	}
+
+	public void setUseCamera(boolean useCamera) {
+		this.useCamera = useCamera;
+	}
+
+	public int getConnectionType() {
+		return connectionType;
+	}
+
+	public void setConnectionType(int connectionType) {
+		this.connectionType = connectionType;
+	}
+	
+	
 }

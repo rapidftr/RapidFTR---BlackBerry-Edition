@@ -25,28 +25,7 @@ public class Utilities {
 	}
 
 	public static EncodedImage getScaledImage(String name, int height) {
-		EncodedImage ei = null;
-
-		try {
-			FileConnection fconn = (FileConnection) Connector
-					.open("file:///SDCard/BlackBerry/pictures/IMG00047.jpg");
-
-			InputStream input = null;
-			input = fconn.openInputStream();
-
-			int available = 0;
-			available = input.available();
-			int fSz = (int) fconn.fileSize();
-			byte[] data = new byte[fSz];
-
-			input.read(data, 0, fSz);
-			ei = EncodedImage.createEncodedImage(data, 0, data.length);
-
-		} catch (Exception e) {
-
-		}
-
-		// EncodedImage ei = EncodedImage.getEncodedImageResource(name);
+		EncodedImage ei = EncodedImage.getEncodedImageResource(name);
 
 		return getScaledImage(ei, height);
 	}

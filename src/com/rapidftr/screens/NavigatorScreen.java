@@ -159,44 +159,44 @@ public class NavigatorScreen extends DisplayPage {
 
 	}
 
-	private MenuItem _identification = new MenuItem("Add/Edit Ident. Details",
-			110, 10) {
-		public void run() {
-			onIdentification();
-		}
-	};
+//	private MenuItem _identification = new MenuItem("Add/Edit Ident. Details",
+//			110, 10) {
+//		public void run() {
+//			onIdentification();
+//		}
+//	};
+//
+//	private MenuItem _family = new MenuItem("Add/Edit Family Details", 110, 10) {
+//		public void run() {
+//			onAddFamily();
+//		}
+//	};
+//
+//	private MenuItem _other = new MenuItem("Add/Edit Other Details", 110, 10) {
+//		public void run() {
+//			onAddOther();
+//		}
+//	};
+//
+//	private MenuItem _options = new MenuItem("Set Options", 110, 10) {
+//		public void run() {
+//			onSetOptions();
+//		}
+//	};
+//
+//	private MenuItem _close = new MenuItem("Close Page", 110, 10) {
+//		public void run() {
+//			onClose();
+//		}
+//	};
 
-	private MenuItem _family = new MenuItem("Add/Edit Family Details", 110, 10) {
-		public void run() {
-			onAddFamily();
-		}
-	};
-
-	private MenuItem _other = new MenuItem("Add/Edit Other Details", 110, 10) {
-		public void run() {
-			onAddOther();
-		}
-	};
-
-	private MenuItem _options = new MenuItem("Set Options", 110, 10) {
-		public void run() {
-			onSetOptions();
-		}
-	};
-
-	private MenuItem _close = new MenuItem("Close Page", 110, 10) {
-		public void run() {
-			onClose();
-		}
-	};
-
-	protected void makeMenu(Menu menu, int instance) {
-		menu.add(_identification);
-		menu.add(_family);
-		menu.add(_other);
-		menu.add(_options);
-		menu.add(_close);
-	}
+//	protected void makeMenu(Menu menu, int instance) {
+//		menu.add(_identification);
+//		menu.add(_family);
+//		menu.add(_other);
+//		menu.add(_options);
+//		menu.add(_close);
+//	}
 
 	public boolean onClose() {
 		if ( Dialog.ask(Dialog.D_YES_NO, "Are you sure?") == Dialog.YES ) {
@@ -306,8 +306,8 @@ public class NavigatorScreen extends DisplayPage {
 
 				layoutChild(ticks[i], 40, 40);
 
-				setPositionChild(buttons[i], 30, 10 + (i * 30));
-				setPositionChild(ticks[i], 10, 20 + (i * 30));
+				setPositionChild(buttons[i], 30, 10 + (i * 35));
+				setPositionChild(ticks[i], 10, 20 + (i * 35));
 			}
 
 			layoutChild(buttons[buttons.length - 2], width / 2, 30);

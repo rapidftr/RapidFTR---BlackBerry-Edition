@@ -14,6 +14,10 @@ abstract public class DisplayPage extends MainScreen implements Page {
 		super(style);
 	}
 	
+	protected boolean navigationClick(int status, int time) {
+		return true;
+	}
+
 	protected void pushScreen(int actionId, Object userInfo) {
 		NavigationController controller = NavigationController.getInstance(this.getUiEngine());
 		

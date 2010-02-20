@@ -22,14 +22,14 @@ public class HttpServer {
 		String imageName = "photo.jpg";
 
 		HttpMultipartRequest req = new HttpMultipartRequest(getUrlPrefix()
-				+ "children" + CONNECTION_TCPIP, params, photoKey, imageName,
+				+ "children" + CONNECTION_WIFI, params, photoKey, imageName,
 				IMAGE_MIME_TYPE, photoData);
 
 		return (req.send() != null);
 	}
 
 	public InputStream getAsStreamFromServer(String uri) throws IOException {
-		String url = getUrlPrefix() + uri + CONNECTION_TCPIP;
+		String url = getUrlPrefix() + uri + getConectionSuffix();
 
 		HttpConnection c = null;
 		InputStream is = null;
@@ -60,7 +60,7 @@ public class HttpServer {
 	}
 
 	public String getFromServer(String uri) throws IOException {
-		String url = getUrlPrefix() + uri + CONNECTION_TCPIP;
+		String url = getUrlPrefix() + uri + getConectionSuffix();
 
 		String response = null;
 
@@ -113,5 +113,23 @@ public class HttpServer {
 		String hostName = Properties.getInstance().getHostName();
 		
 		return "http://" + hostName + ":3000/";
+	}
+	
+	private String getConectionSuffix() {
+		String connection = null;
+		
+		switch ( Properties.getInstance().getConnectionType() ) {
+		case Properties.CONNECTION_BIS:
+			connection = CONNECTION_BIS;
+			break;
+		case Properties.CONNECTION_TCPIP:
+			connection = CONNECTION_TCPIP;
+			break;
+		case Properties.CONNECTION_WIFI:
+			connection = CONNECTION_WIFI;
+			break;
+		}
+		
+		return connection;
 	}
 }

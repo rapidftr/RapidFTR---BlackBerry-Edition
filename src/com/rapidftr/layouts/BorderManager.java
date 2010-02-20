@@ -59,7 +59,7 @@ public class BorderManager extends Manager {
 
 			add(newInfoButton);
 			
-			searchAndEditButton = new Button("Search + Edit", limit);
+			searchAndEditButton = new Button("Search", limit);
 
 			searchAndEditButton.setFont(defaultFont);
 
@@ -101,11 +101,11 @@ public class BorderManager extends Manager {
 
 		if (withControls) {
 			x = imageField.getWidth() + 45;
-			y = headerField.getHeight() + 10;
+			y = headerField.getHeight() + 15;
 			
 			setPositionChild(retakeButton, x, y);
-			setPositionChild(newInfoButton, x, y + 30);
-			setPositionChild(searchAndEditButton, x, y + 60);
+			setPositionChild(newInfoButton, x, y + 40);
+			setPositionChild(searchAndEditButton, x, y + 80);
 		}
 
 		setExtent(width, actualHeight);

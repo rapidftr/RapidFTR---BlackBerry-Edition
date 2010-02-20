@@ -48,9 +48,9 @@ public class PhotoServiceImpl implements PhotoService {
 		Invoke.invokeApplication(Invoke.APP_TYPE_CAMERA, new CameraArguments());
 	}
 	
-//	public EncodedImage getPhoto() {
-//		return getImage(IMAGE_NAME);
-//	}
+	public EncodedImage getPhoto() {
+		return getImage(IMAGE_NAME);
+	}
 	
 	private EncodedImage getImage(String imageName) {
 		int imageHeight = Display.getHeight() - 60;

@@ -103,6 +103,8 @@ public class HttpMultipartRequest {
 			res = new byte[1]; // bos.toByteArray();
 		} catch (Exception e) {
 			e.printStackTrace();
+			
+			throw e;
 		} finally {
 			try {
 				if (bos != null)

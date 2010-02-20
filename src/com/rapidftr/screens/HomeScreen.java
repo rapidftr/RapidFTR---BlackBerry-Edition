@@ -18,6 +18,7 @@ import com.rapidftr.layouts.BorderManager;
 import com.rapidftr.services.PhotoServiceListener;
 import com.rapidftr.services.ServiceException;
 import com.rapidftr.services.ServiceManager;
+import com.rapidftr.utilities.Properties;
 import com.rapidftr.utilities.Styles;
 import com.rapidftr.utilities.Utilities;
 
@@ -94,11 +95,11 @@ public class HomeScreen extends DisplayPage {
 		}
 	};
 
-	protected void makeMenu(Menu menu, int instance) {
-		menu.add(_takePhoto);
-		menu.add(_searchAndEdit);
-		menu.add(_close);
-	}
+//	protected void makeMenu(Menu menu, int instance) {
+//		menu.add(_takePhoto);
+//		menu.add(_searchAndEdit);
+//		menu.add(_close);
+//	}
 
 	public boolean onClose() {
 		Dialog.alert("Closing " + Main.APPLICATION_NAME);
@@ -107,32 +108,41 @@ public class HomeScreen extends DisplayPage {
 	}
 
 	private void onTakePhoto() {
-		ServiceManager.getPhotoService().startCamera(
-				new PhotoServiceListener() {
+		if (Properties.getInstance().isUseCamera()) {
+			ServiceManager.getPhotoService().startCamera(
+					new PhotoServiceListener() {
 
-					public void handlePhoto(EncodedImage encodedImage) {
-						EncodedImage photo = Utilities.getScaledImage(
-								encodedImage, 100);
+						public void handlePhoto(EncodedImage encodedImage) {
+							EncodedImage photo = Utilities.getScaledImage(
+									encodedImage, 100);
 
-						String recordId = null;
-
-						try {
-							recordId = ServiceManager.getRecordService()
-									.getRecordId();
-						} catch (ServiceException se) {
-							System.out.println("Service Exception " + se);
+							createNewRecord(photo);
 						}
 
-						Hashtable userInfo = new Hashtable();
+					});
+		} else {
+			EncodedImage photo = ServiceManager.getPhotoService().getPhoto();
 
-						userInfo.put("photo", photo);
-						userInfo.put("id", recordId);
-						userInfo.put("user", user);
+			createNewRecord(photo);
+		}
+	}
 
-						pushScreen(CREATE_RECORD_ACTION, userInfo);
-					}
+	private void createNewRecord(EncodedImage photo) {
+		String recordId = null;
 
-				});
+		try {
+			recordId = ServiceManager.getRecordService().getRecordId();
+		} catch (ServiceException se) {
+			System.out.println("Service Exception " + se);
+		}
+
+		Hashtable userInfo = new Hashtable();
+
+		userInfo.put("photo", photo);
+		userInfo.put("id", recordId);
+		userInfo.put("user", user);
+
+		pushScreen(CREATE_RECORD_ACTION, userInfo);
 	}
 
 	private void onSearchAndEdit() {
