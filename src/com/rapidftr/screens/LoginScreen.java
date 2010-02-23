@@ -85,6 +85,8 @@ public class LoginScreen extends DisplayPage {
 			}
 		} catch (ServiceException se) {
 			System.out.println("Service Exception " + se);
+			
+			Dialog.alert("Login Error\n" + se);
 		}
 	}
 
@@ -154,12 +156,8 @@ public class LoginScreen extends DisplayPage {
 			passwordField = new BorderedPasswordField("Password: ", "");
 			passwordField.setFont(defaultFont);
 
-			hostField = new BorderedEditField("Host: ", "") {
-				public void paint(Graphics graphics) {
-					graphics.setColor(Color.BLUE);
-					super.paint(graphics);
-				}
-			};
+			hostField = new BorderedEditField("Host: ",
+					"");
 
 			hostField.setFont(Styles.getAuxFont());
 

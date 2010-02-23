@@ -15,12 +15,15 @@ public class HttpMultipartRequest {
 
 	byte[] postBytes = null;
 	String url = null;
+	String cookie;
 
 	public HttpMultipartRequest(String url, Hashtable params, String fileField,
 			String fileName, String fileType, byte[] fileBytes)
 			throws Exception {
 		this.url = url;
 
+		this.cookie = Properties.getInstance().getSessionCookie();
+		
 		String boundary = getBoundaryString();
 
 		String boundaryMessage = getBoundaryMessage(boundary, params,
@@ -78,9 +81,15 @@ public class HttpMultipartRequest {
 		byte[] res = null;
 
 		try {
+			System.out.println("Created connection");
+			
 			hc = (HttpConnection) Connector.open(url);
 
-			hc.setRequestProperty("Accept", "application/xml");
+			System.out.println("After open URL");
+			
+			//hc.setRequestProperty("Accept", "application/xml");
+			
+			hc.setRequestProperty("cookie", cookie);
 			
 			hc.setRequestProperty("Content-Type",
 					"multipart/form-data; boundary=" + getBoundaryString());
@@ -89,18 +98,21 @@ public class HttpMultipartRequest {
 
 			OutputStream dout = hc.openOutputStream();
 
+			System.out.println("got output stream");
+			
 			dout.write(postBytes);
 
 			dout.close();
 
-//			int ch;
-//
+			int ch;
+
+			System.out.println("COOKIE " + hc.getHeaderField("Set-Cookie"));
 			is = hc.openInputStream();
 //
-//			while ((ch = is.read()) != -1) {
-//				bos.write(ch);
-//			}
-			res = new byte[1]; // bos.toByteArray();
+			while ((ch = is.read()) != -1) {
+				bos.write(ch);
+			}
+			res = bos.toByteArray();
 		} catch (Exception e) {
 			e.printStackTrace();
 			

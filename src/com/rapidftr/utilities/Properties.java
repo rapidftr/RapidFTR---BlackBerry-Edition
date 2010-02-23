@@ -7,14 +7,17 @@ public class Properties {
 	public static final int CONNECTION_BIS = 1;
 	public static final int CONNECTION_TCPIP = 2;
 	
-	private static final String DEFAULT_HOST = "madeleine";
+	private static final String DEFAULT_HOST = "chidmzhcf01.thoughtworks.com";
 	
 	private static Properties instance;
 
 	private String hostName;
+	private int port;
 	private boolean useCamera;
 	private int connectionType;
-	
+	private String authenticityToken;
+	private String sessionCookie;
+			
 	public static synchronized Properties getInstance() {
 		if (instance == null) {
 			instance = new Properties();
@@ -35,6 +38,11 @@ public class Properties {
 		this.hostName = hostName;
 	}
 
+	
+	public int getPort() {
+		return ((hostName.length() == 0) || (hostName.equals(DEFAULT_HOST))) ? 80 : 3000;
+	}
+
 	public boolean isUseCamera() {
 		return useCamera;
 	}
@@ -49,6 +57,22 @@ public class Properties {
 
 	public void setConnectionType(int connectionType) {
 		this.connectionType = connectionType;
+	}
+
+	public String getAuthenticityToken() {
+		return authenticityToken;
+	}
+
+	public void setAuthenticityToken(String authenticityToken) {
+		this.authenticityToken = authenticityToken;
+	}
+
+	public String getSessionCookie() {
+		return sessionCookie;
+	}
+
+	public void setSessionCookie(String sessionCookie) {
+		this.sessionCookie = sessionCookie;
 	}
 	
 	
