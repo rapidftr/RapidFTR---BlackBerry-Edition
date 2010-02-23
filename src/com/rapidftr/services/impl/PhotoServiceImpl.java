@@ -62,6 +62,8 @@ public class PhotoServiceImpl implements PhotoService {
 		FileConnection fconn = (FileConnection) Connector
 				.open("file://" + path);
 
+		System.out.println("Setting photo at " + path);
+		
 		InputStream input = null;
 		input = fconn.openInputStream();
 
@@ -69,7 +71,9 @@ public class PhotoServiceImpl implements PhotoService {
 		byte[] data = new byte[fSz];
 
 		input.read(data, 0, fSz);
-		return EncodedImage.createEncodedImage(data, 0, data.length);
+		EncodedImage ei = EncodedImage.createEncodedImage(data, 0, data.length);
+		
+		return ei;
 	}
 	
 	private class JournalListener implements FileSystemJournalListener {

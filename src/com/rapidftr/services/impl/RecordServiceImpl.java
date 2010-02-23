@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.rapidftr.model.ChildRecord;
@@ -45,10 +46,10 @@ public class RecordServiceImpl implements RecordService {
 	public ChildRecordItem[] getMatches(String searchCriteria)
 			throws ServiceException {
 		try {
-			// InputStream is = (new HttpServer())
-			// .getAsStreamFromServer("children");
+			InputStream is = HttpServer.getInstance().getAsStreamFromServer(
+					"children");
 
-			InputStream is = this.getClass().getResourceAsStream("/joe.xml");
+			// InputStream is = this.getClass().getResourceAsStream("/joe.xml");
 
 			// ChildRecordItem[] items = (new Parser()).parse(is);
 
@@ -138,25 +139,7 @@ public class RecordServiceImpl implements RecordService {
 		params.put("child[date_of_separation]", record.getIdentification()
 				.getFormattedSeparationDate());
 
-		return server.persistToServer(params, "child[photo]", photoData, token);
-	}
-
-	private class Parser {
-
-		ChildRecordItem[] parse(InputStream is) throws Exception {
-			DocumentBuilder documentBuilder = DocumentBuilderFactory
-					.newInstance().newDocumentBuilder();
-
-			Document document = documentBuilder.parse(is);
-
-			Element root = document.getDocumentElement();
-
-			NodeList nodes = root.getChildNodes();
-
-			System.out.println("Got nodes " + nodes);
-
-			return null;
-		}
+		return server.persistToServer("children", params, "child[photo]", photoData);
 	}
 
 	private class CarHandler extends DefaultHandler {
@@ -176,6 +159,14 @@ public class RecordServiceImpl implements RecordService {
 			//
 			// currentCar = new Car();
 			// }
+		}
+
+		public void error(SAXParseException e) {
+			System.out.println("Error!! " + e);
+		}
+
+		public void fatalError(SAXParseException e) {
+			System.out.println("FATAL Error!! " + e);
 		}
 
 		public void endElement(String uri, String localName, String qName) {

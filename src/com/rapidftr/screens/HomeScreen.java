@@ -9,7 +9,6 @@ import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.Dialog;
-import net.rim.device.api.ui.component.Menu;
 
 import com.rapidftr.Main;
 import com.rapidftr.controls.Button;
@@ -33,7 +32,7 @@ public class HomeScreen extends DisplayPage {
 	private BorderManager manager;
 
 	public HomeScreen() {
-		this.user = ServiceManager.getLoginService().getLoggedInUser();
+		this.user = ServiceManager.getLoginService().getLoggedInFullName();
 
 		headerText = "logged in: " + user;
 

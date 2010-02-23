@@ -36,9 +36,17 @@ public class Main extends UiApplication {
 	}
 
 	private void enableEventInjection() {
-		ApplicationPermissions requestedPermissions = new ApplicationPermissions();
+		ApplicationPermissionsManager manager = ApplicationPermissionsManager
+				.getInstance();
 
 		int permission = ApplicationPermissions.PERMISSION_EVENT_INJECTOR;
+
+		if (manager.getApplicationPermissions().getPermission(permission) == ApplicationPermissions.VALUE_ALLOW) {
+			System.out.println("Got correct permissions");
+			return;
+		}
+
+		ApplicationPermissions requestedPermissions = new ApplicationPermissions();
 
 		if (!requestedPermissions.containsPermissionKey(permission)) {
 			requestedPermissions.addPermission(permission);

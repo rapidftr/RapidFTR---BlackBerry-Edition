@@ -116,7 +116,6 @@ public class LoginScreen extends DisplayPage {
 		public BorderedEditField hostField;
 		public CheckboxField disableCamera;
 		private RadioButtonField wifi;
-		private RadioButtonField bis;
 		private RadioButtonField tcpip;
 		public RadioButtonGroup connectionsGroup;
 
@@ -167,10 +166,8 @@ public class LoginScreen extends DisplayPage {
 			connectionsGroup = new RadioButtonGroup();
 
 			wifi = new RadioButtonField("Wifi: ", connectionsGroup, true);
-			bis = new RadioButtonField("BIS: ", connectionsGroup, false);
 			tcpip = new RadioButtonField("TCP/IP: ", connectionsGroup, false);
 			wifi.setFont(Styles.getAuxFont());
-			bis.setFont(Styles.getAuxFont());
 			tcpip.setFont(Styles.getAuxFont());
 
 			add(imageField);
@@ -180,7 +177,6 @@ public class LoginScreen extends DisplayPage {
 			add(hostField);
 			add(disableCamera);
 			add(wifi);
-			add(bis);
 			add(tcpip);
 			add(okButton);
 			add(closeButton);
@@ -194,7 +190,6 @@ public class LoginScreen extends DisplayPage {
 			layoutChild(hostField, width, 25);
 			layoutChild(disableCamera, width, 25);
 			layoutChild(wifi, width / 3, 25);
-			layoutChild(bis, width / 3, 25);
 			layoutChild(tcpip, width / 3, 25);
 
 			layoutChild(okButton, width / 4, 25);
@@ -230,8 +225,7 @@ public class LoginScreen extends DisplayPage {
 
 			y += 20;
 			setPositionChild(wifi, 10, y);
-			setPositionChild(bis, 80, y);
-			setPositionChild(tcpip, 150, y);
+			setPositionChild(tcpip, 80, y);
 
 			y += 20;
 
