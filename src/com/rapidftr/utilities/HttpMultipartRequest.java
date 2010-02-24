@@ -87,7 +87,8 @@ public class HttpMultipartRequest {
 
 			System.out.println("After open URL");
 
-			// hc.setRequestProperty("Accept", "application/xml");
+			// use HTML response -- easier/quicker to parse
+//			hc.setRequestProperty("Accept", "application/xml");
 
 			hc.setRequestProperty("cookie", cookie);
 

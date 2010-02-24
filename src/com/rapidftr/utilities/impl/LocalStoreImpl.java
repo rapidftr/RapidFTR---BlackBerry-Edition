@@ -86,6 +86,21 @@ public class LocalStoreImpl implements LocalStore {
 		}
 	}
 
+	public ChildRecordItem[] augmentRecords(ChildRecordItem[] records) {
+		if (records != null) {
+			for (int i = 0; i < records.length; i++) {
+				ChildRecordItem matchingItem = getMatchingItem(records[i]
+						.getId());
+
+				if (matchingItem != null) {
+					records[i].updateWith(matchingItem);
+				}
+			}
+		}
+
+		return records;
+	}
+
 	public ChildRecordItem[] retrieveAll() {
 		ChildRecord records[] = null;
 
@@ -118,4 +133,24 @@ public class LocalStoreImpl implements LocalStore {
 		}
 	}
 
+	private ChildRecordItem getMatchingItem(String id) {
+		ChildRecordItem matchingItem = null;
+
+		ChildRecordItem[] records = retrieveAll();
+
+		if (records != null) {
+			for (int i = 0; i < records.length; i++) {
+				String localId = records[i].getId();
+
+				if (localId != null) {
+					if (localId.equals(id)) {
+						matchingItem = records[i];
+						break;
+					}
+				}
+			}
+		}
+
+		return matchingItem;
+	}
 }

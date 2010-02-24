@@ -11,6 +11,8 @@ public interface LocalStore {
 	
 	ChildRecordItem[] retrieveMatching(String searchCriteria);
 	
+	ChildRecordItem[] augmentRecords(ChildRecordItem[] records);
+	
 	ChildRecordItem[] retrieveAll();
 	
 	int countStoredRecords();

@@ -20,6 +20,12 @@ public class ChildRecordItem implements Persistable {
 		this.photo = photo;
 	}
 
+	public void updateWith(ChildRecordItem item) {
+		recordId = (recordId == null) ? item.recordId : recordId;
+		name = (name == null) ? item.name : name;
+		photo = (photo == null) ? item.photo : photo;
+	}
+	
 	public String getId() {
 		return id;
 	}

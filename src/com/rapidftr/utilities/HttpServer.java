@@ -18,7 +18,6 @@ import org.xml.sax.helpers.DefaultHandler;
 public class HttpServer {
 	private static final String IMAGE_MIME_TYPE = "image/jpg";
 
-	private static final String CONNECTION_BES = ";deviceside=false";
 	private static final String CONNECTION_BIS = ";XXXXXXXXXXXXXXXX";
 	private static final String CONNECTION_TCPIP = ";deviceside=true";
 	private static final String CONNECTION_WIFI = ";interface=wifi";
@@ -62,7 +61,7 @@ public class HttpServer {
 		return output;
 	}
 
-	public boolean persistToServer(String uri, Hashtable params,
+	public String persistToServer(String uri, Hashtable params,
 			String photoKey, byte[] photoData) throws Exception {
 		String imageName = "photo.jpg";
 
@@ -78,15 +77,14 @@ public class HttpServer {
 		System.out.println("Created HttpMultipartRequest - now send");
 		byte[] response = req.send();
 
-		System.out.println("resp " + new String(response));
+		// parse the HTTP response
+		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 
-		return (response != null);
-	}
+		PostResponseHandler handler = new PostResponseHandler();
 
-	public InputStream getAsStreamFromServer(String uri) throws IOException {
-		String url = getUrlPrefix() + uri + getConectionSuffix();
+		parser.parse(new ByteArrayInputStream(response), handler);
 
-		return getAsStreamFromServer((HttpConnection) Connector.open(url));
+		return handler.getId();
 	}
 
 	public InputStream getFromServer(String uri) throws IOException {
@@ -182,7 +180,7 @@ public class HttpServer {
 		return is;
 	}
 
-	public byte[] getImageFromServer(String uri, int imageSize)
+	public byte[] getImageFromServer(String uri)
 			throws IOException {
 		byte[] response = null;
 
@@ -292,9 +290,6 @@ public class HttpServer {
 			if (qName.equals("input")) {
 				if (attributes != null) {
 					for (int i = 0; i < attributes.getLength(); i++) {
-
-						System.out.println("NEXT " + attributes.getLocalName(i)
-								+ " " + attributes.getValue(i));
 						if ((attributes.getLocalName(i).equals("name"))
 								&& (attributes.getValue(i)
 										.equals("authenticity_token"))) {
@@ -314,5 +309,31 @@ public class HttpServer {
 		public String getToken() {
 			return token;
 		}
+	}
+	
+	private class PostResponseHandler extends DefaultHandler {
+		String id = null;
+		
+		public void startElement(String uri, String localName, String qName,
+				Attributes attributes) {
+
+			if (qName.equals("a")) {
+				if (attributes != null) {
+					String value = attributes.getValue("href");
+					
+					int index = value.lastIndexOf('/');
+					
+					if ( index != -1 ) {
+						id = value.substring(index + 1);
+					}
+				}
+			}
+		}
+
+		public String getId() {
+			return id;
+		}
+		
+		
 	}
 }

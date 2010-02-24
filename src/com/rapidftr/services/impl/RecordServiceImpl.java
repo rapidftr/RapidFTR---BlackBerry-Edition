@@ -60,37 +60,32 @@ public class RecordServiceImpl implements RecordService {
 			throw new ServiceException(e.getMessage());
 		}
 
-		return records; // localStore.retrieveMatching(searchCriteria);
+		// augment with any extra data in local store
+		return localStore.augmentRecords(records); 
 	}
 
 	public ChildRecord getRecord(ChildRecordItem item) throws ServiceException {
 		ChildRecord record = null;
-		
-		System.out.println("SEARCH USING ID " + item.getId() );
+
+		System.out.println("SEARCH USING ID " + item.getId());
 
 		try {
 			HttpServer server = HttpServer.getInstance();
 			
-
-//			
-			InputStream is = server.getFromServer(
-					"children/" + item.getId());
+			InputStream is = server.getFromServer("children/" + item.getId());
 
 			SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 
 			ItemHandler handler = new ItemHandler(item);
 
 			parser.parse(is, handler);
-			
-			record = handler.getRecord();
-			
 
-			byte[] photo = server.getImageFromServer("children/" + item.getId() + ".jpg", 1387780);
-			
-			System.out.println("Got photo " + photo);
-			
+			record = handler.getRecord();
+
+			byte[] photo = server.getImageFromServer("children/" + item.getId() + ".jpg");
+
 			record.setPhoto(photo);
-			
+
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage());
 		}
@@ -122,18 +117,22 @@ public class RecordServiceImpl implements RecordService {
 	}
 
 	public void save(ChildRecord record) throws ServiceException {
-		localStore.persist(record);
-
 		try {
-			if (!persistToServer(record, record.getPhoto())) {
+			String id = persistToServer(record, record.getPhoto());
+
+			if (id == null) {
 				throw new ServiceException("Failed to save child record");
 			}
+
+			record.setId(id);
+
+			localStore.persist(record);
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage());
 		}
 	}
 
-	private boolean persistToServer(ChildRecord record, byte[] photoData)
+	private String persistToServer(ChildRecord record, byte[] photoData)
 			throws Exception {
 
 		HttpServer server = HttpServer.getInstance();
@@ -191,7 +190,8 @@ public class RecordServiceImpl implements RecordService {
 				value.append(ch, start, length);
 
 				if ((searchCriteria.length() == 0)
-						|| (value.toString().toLowerCase().indexOf(searchCriteria.toLowerCase()) != -1)) {
+						|| (value.toString().toLowerCase().indexOf(
+								searchCriteria.toLowerCase()) != -1)) {
 					isMatch = true;
 					currentRecord = new ChildRecordItem();
 
@@ -244,35 +244,30 @@ public class RecordServiceImpl implements RecordService {
 			record.setIdentification(new Identification());
 			record.getIdentification().setName(item.getName());
 		}
-		
+
 		public void characters(char[] ch, int start, int length) {
 
-		
-		
 			value.append(ch, start, length);
 
 			String stringValue = value.toString();
 
 			if (currentTag.equals("date-of-separation")) {
 				record.getIdentification().setDateOfSeparation(stringValue);
-			}
-			else if (currentTag.equals("is-age-exact")) {
-				record.getIdentification().setExactAge(stringValue.equalsIgnoreCase("Exact"));
-			}
-			else if (currentTag.equals("gender")) {
-				record.getIdentification().setMale(stringValue.equalsIgnoreCase("Male"));
-			}
-			else if (currentTag.equals("origin")) {
+			} else if (currentTag.equals("is-age-exact")) {
+				record.getIdentification().setExactAge(
+						stringValue.equalsIgnoreCase("Exact"));
+			} else if (currentTag.equals("gender")) {
+				record.getIdentification().setMale(
+						stringValue.equalsIgnoreCase("Male"));
+			} else if (currentTag.equals("origin")) {
 				record.getIdentification().setOrigin(stringValue);
-			}
-			else if (currentTag.equals("last-known-location")) {
+			} else if (currentTag.equals("last-known-location")) {
 				record.getIdentification().setLastKnownLocation(stringValue);
-			}
-			else if (currentTag.equals("age")) {
-				record.getIdentification().setAge( Integer.parseInt(stringValue) );
-			}
-			else if (currentTag.equals("length")) {
-				record.setPhotoLength( Integer.parseInt(stringValue) );
+			} else if (currentTag.equals("age")) {
+				record.getIdentification()
+						.setAge(Integer.parseInt(stringValue));
+			} else if (currentTag.equals("length")) {
+				record.setPhotoLength(Integer.parseInt(stringValue));
 			}
 		}
 
