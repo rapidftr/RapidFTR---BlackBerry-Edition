@@ -19,7 +19,7 @@ import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
 
 public class SearchScreen extends DisplayPage {
-	
+
 	private BorderedEditField searchField;
 	private RecordList recordList;
 	private ChildRecordItem model[];
@@ -31,7 +31,7 @@ public class SearchScreen extends DisplayPage {
 
 		recordList = layoutManager.recordList;
 		searchField = layoutManager.searchField;
-		
+
 		layoutManager.goButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onGo();
@@ -39,7 +39,6 @@ public class SearchScreen extends DisplayPage {
 		});
 	}
 
-	
 	private MenuItem _go = new MenuItem("Go", 110, 10) {
 		public void run() {
 			onGo();
@@ -66,15 +65,16 @@ public class SearchScreen extends DisplayPage {
 
 	private void onGo() {
 		String searchCriteria = searchField.getText();
-		
+
 		try {
-			model = ServiceManager.getRecordService().getMatches(searchCriteria);
+			model = ServiceManager.getRecordService()
+					.getMatches(searchCriteria);
 		} catch (ServiceException se) {
 			Dialog.alert("Service Exception: " + se);
 		}
 
 		recordList.setModel(model);
-		
+
 		this.invalidate();
 	}
 
@@ -84,8 +84,7 @@ public class SearchScreen extends DisplayPage {
 		ChildRecord record = null;
 
 		try {
-			record = ServiceManager.getRecordService().getRecord(
-					model[index].getRecordId());
+			record = ServiceManager.getRecordService().getRecord(model[index]);
 		} catch (ServiceException se) {
 			Dialog.alert("Service Exception: " + se);
 		}
@@ -99,8 +98,6 @@ public class SearchScreen extends DisplayPage {
 		return true;
 	}
 
-
-	
 	/**
 	 * Layout Manager
 	 * 
@@ -114,7 +111,7 @@ public class SearchScreen extends DisplayPage {
 
 		private LabelField header;
 		private LabelField subtext;
-		
+
 		public LayoutManager() {
 			super(0);
 

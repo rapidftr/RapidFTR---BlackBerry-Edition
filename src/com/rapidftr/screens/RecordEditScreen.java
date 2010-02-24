@@ -2,6 +2,8 @@ package com.rapidftr.screens;
 
 import java.util.Hashtable;
 
+import net.rim.device.api.system.Bitmap;
+import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
@@ -19,6 +21,8 @@ import com.rapidftr.utilities.Styles;
 import com.rapidftr.utilities.Utilities;
 
 public class RecordEditScreen extends DisplayPage {
+	private static final String DEFAULT_IMAGE_NAME = "img/head.png";
+	
 	private ChildRecord record;
 	private String recordId;
 	private LabelField fields[];
@@ -111,8 +115,20 @@ public class RecordEditScreen extends DisplayPage {
 
 			Identification identification = record.getIdentification();
 
-			imageField = new BitmapField(Utilities.getScaledBitmapFromBytes(
-					record.getPhoto(), 80));
+			Bitmap bitmap;
+			int imageHeight = 80;
+
+			if (record.getPhoto() != null) {
+				EncodedImage encodedImage = Utilities
+						.getEncodedImageFromBytes(record.getPhoto());
+
+				bitmap = Utilities.getScaledBitmap(encodedImage, imageHeight);
+			} else {
+				bitmap = Utilities.getScaledBitmap(DEFAULT_IMAGE_NAME,
+						imageHeight);
+			}
+			
+			imageField = new BitmapField(bitmap);
 
 			idFields = new LabelField[6];
 

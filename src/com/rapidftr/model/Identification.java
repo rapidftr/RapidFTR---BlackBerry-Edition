@@ -73,6 +73,15 @@ public class Identification implements Persistable {
 		return dateOfSeparation;
 	}
 
+	public void setDateOfSeparation(String dateOfSeparation) {
+		for ( int i=0; i<separationDates.length; i++ ) {
+			if ( dateOfSeparation.equals(separationDates[i])) {
+				this.dateOfSeparation = i;
+				break;
+			}
+		}
+	}
+	
 	public void setDateOfSeparation(int dateOfSeparation) {
 		this.dateOfSeparation = dateOfSeparation;
 	}

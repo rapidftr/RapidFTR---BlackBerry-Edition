@@ -1,5 +1,6 @@
 package com.rapidftr.controls;
 
+import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Graphics;
@@ -15,6 +16,11 @@ import com.rapidftr.utilities.Styles;
 import com.rapidftr.utilities.Utilities;
 
 public class RecordList extends ListField {
+	private static final String DEFAULT_IMAGE_NAME = "img/head.png";
+	
+	// temporary?
+	private static final String RECORD_ID_PREFIX = "fix_me_to_return_session_user_name";
+
 	// Array of managers, with length equal to the number of rows,
 	// each of which lays out the fields in a row.
 	private RowManager[] _rows;
@@ -27,7 +33,7 @@ public class RecordList extends ListField {
 	// specifies a number of pixels that will be reserved as blank
 	// space following each column.
 	private int[] _horizontalPaddings;
-	
+
 	public void setModel(ChildRecordItem[] records) {
 		Field[][] tableContent = new Field[records.length][];
 
@@ -36,12 +42,28 @@ public class RecordList extends ListField {
 			tableContent[curRecord] = new Field[3];
 			ChildRecordItem record = records[curRecord];
 
-			EncodedImage encodedImage = Utilities.getEncodedImageFromBytes(record.getPhoto());
-			
-			tableContent[curRecord][0] = new BitmapField(Utilities
-					.getScaledBitmap(encodedImage, 40));
+			Bitmap bitmap;
+			int imageHeight = 40;
 
-			tableContent[curRecord][1] = new LabelField(record.getRecordId());
+			if (record.getPhoto() != null) {
+				EncodedImage encodedImage = Utilities
+						.getEncodedImageFromBytes(record.getPhoto());
+
+				bitmap = Utilities.getScaledBitmap(encodedImage, imageHeight);
+			} else {
+				bitmap = Utilities.getScaledBitmap(DEFAULT_IMAGE_NAME,
+						imageHeight);
+			}
+
+			tableContent[curRecord][0] = new BitmapField(bitmap);
+
+			String recordId = record.getRecordId();
+			
+			if ( recordId.indexOf(RECORD_ID_PREFIX) != -1 ) {
+				recordId = recordId.substring(RECORD_ID_PREFIX.length());
+			}
+			
+			tableContent[curRecord][1] = new LabelField(recordId);
 			tableContent[curRecord][1].setFont(Styles.getSecondaryFont());
 
 			tableContent[curRecord][2] = new LabelField(record.getName());
@@ -49,18 +71,18 @@ public class RecordList extends ListField {
 		}
 
 		int[] widths = { 40, 130, 160 };
-		int[] paddings = { 5, 2, 2 };	
-		
+		int[] paddings = { 5, 2, 2 };
+
 		initialize(tableContent, widths, paddings);
 	}
-	
-	public RecordList() {	
+
+	public RecordList() {
 	}
-	
+
 	public RecordList(ChildRecord[] records) {
 		setModel(records);
 	}
-	
+
 	public void initialize(Field[][] contents, int[] columnWidths,
 			int[] horizontalPaddings) {
 		int numRows = contents.length;
@@ -133,7 +155,7 @@ public class RecordList extends ListField {
 						getPreferredHeight());
 
 				int y = (col == 0) ? 0 : 10;
-				
+
 				setPositionChild(curCellField, getColumnStart(col), y);
 			}
 

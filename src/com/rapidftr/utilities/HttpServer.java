@@ -128,8 +128,12 @@ public class HttpServer {
 		tags.put("</-id>", "</id>");
 		tags.put("<-rev>", "<rev>");
 		tags.put("</-rev>", "</rev>");
+		tags.put("<-attachments>", "<attachments>");
+		tags.put("</-attachments>", "</attachments>");
 		
 		response = replaceTags(response, tags);
+		
+		System.out.println("Got Response: " + response);
 		
 		return new ByteArrayInputStream(response.getBytes());	
 	}
@@ -206,7 +210,7 @@ public class HttpServer {
 			if (c != null)
 				c.close();
 
-			throw new IllegalArgumentException("Not an HTTP URL");
+			throw new IllegalArgumentException(e.getMessage());
 		}
 
 		return output;

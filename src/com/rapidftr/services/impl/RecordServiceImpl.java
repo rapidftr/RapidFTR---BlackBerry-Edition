@@ -5,20 +5,16 @@ import java.util.Hashtable;
 import java.util.Random;
 import java.util.Vector;
 
-import net.rim.device.api.xml.parsers.DocumentBuilder;
-import net.rim.device.api.xml.parsers.DocumentBuilderFactory;
+import net.rim.device.api.util.Arrays;
 import net.rim.device.api.xml.parsers.SAXParser;
 import net.rim.device.api.xml.parsers.SAXParserFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.rapidftr.model.ChildRecord;
 import com.rapidftr.model.ChildRecordItem;
+import com.rapidftr.model.Identification;
 import com.rapidftr.services.RecordService;
 import com.rapidftr.services.ServiceException;
 import com.rapidftr.utilities.HttpServer;
@@ -45,46 +41,63 @@ public class RecordServiceImpl implements RecordService {
 
 	public ChildRecordItem[] getMatches(String searchCriteria)
 			throws ServiceException {
+		ChildRecordItem[] records = null;
+
 		try {
-			InputStream is = HttpServer.getInstance().getAsStreamFromServer(
-					"children");
-
-			// InputStream is = this.getClass().getResourceAsStream("/joe.xml");
-
-			// ChildRecordItem[] items = (new Parser()).parse(is);
-
-			// String responseFromServer = (new HttpServer())
-			// .getFromServer("children");
-			// //
-			// System.out.println("From Server: " + responseFromServer);
-
-			// SAX
-			String parserClassName = "com.sun.xml.parser.Parser";
+			InputStream is = HttpServer.getInstance().getFromServer("children");
 
 			SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 
-			parser.parse(is, new CarHandler());
+			RecordHandler handler = new RecordHandler(searchCriteria);
+
+			parser.parse(is, handler);
+
+			records = handler.getRecords();
+
+			System.out.println("Got matches from server " + records);
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage());
 		}
 
-		return localStore.retrieveMatching(searchCriteria);
+		return records; // localStore.retrieveMatching(searchCriteria);
 	}
 
-	public ChildRecord getRecord(String recordId) throws ServiceException {
-		ChildRecord records[] = (ChildRecord[]) localStore.retrieveAll();
+	public ChildRecord getRecord(ChildRecordItem item) throws ServiceException {
+		ChildRecord record = null;
+		
+		System.out.println("SEARCH USING ID " + item.getId() );
 
-		ChildRecord match = null;
+		try {
+			InputStream is = HttpServer.getInstance().getFromServer(
+					"children/" + item.getId());
 
-		for (int i = 0; i < records.length; i++) {
-			if (records[i].getRecordId().equals(recordId)) {
-				match = records[i];
-				break;
-			}
+			SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+
+			ItemHandler handler = new ItemHandler(item);
+
+			parser.parse(is, handler);
+			
+			record = handler.getRecord();
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
 		}
 
-		return match;
+		return record;
 	}
+
+	// from local store
+	/**
+	 * public ChildRecord getRecord(String recordId) throws ServiceException {
+	 * ChildRecord records[] = (ChildRecord[]) localStore.retrieveAll();
+	 * 
+	 * ChildRecord match = null;
+	 * 
+	 * for (int i = 0; i < records.length; i++) { if
+	 * (records[i].getRecordId().equals(recordId)) { match = records[i]; break;
+	 * } }
+	 * 
+	 * return match; }
+	 **/
 
 	public String getRecordId() throws ServiceException {
 		Random random = new Random();
@@ -139,47 +152,124 @@ public class RecordServiceImpl implements RecordService {
 		params.put("child[date_of_separation]", record.getIdentification()
 				.getFormattedSeparationDate());
 
-		return server.persistToServer("children", params, "child[photo]", photoData);
+		return server.persistToServer("children", params, "child[photo]",
+				photoData);
 	}
 
-	private class CarHandler extends DefaultHandler {
-		StringBuffer value = new StringBuffer();
-		Vector cars = new Vector();
+	private class RecordHandler extends DefaultHandler {
+		private String searchCriteria;
+		private ChildRecordItem records[];
+		private String currentTag;
+		private boolean isMatch;
+
+		private StringBuffer value = new StringBuffer();
+
+		private ChildRecordItem currentRecord;
+
+		public RecordHandler(String searchCriteria) {
+			this.searchCriteria = searchCriteria;
+
+			records = new ChildRecordItem[0];
+			isMatch = false;
+		}
 
 		public void characters(char[] ch, int start, int length) {
-			// value.append(ch, start, len);
+			if (currentTag.equals("name")) {
+				value.append(ch, start, length);
+
+				if ((searchCriteria.length() == 0)
+						|| (value.toString().indexOf(searchCriteria) != -1)) {
+					isMatch = true;
+					currentRecord = new ChildRecordItem();
+
+					Arrays.add(records, currentRecord);
+
+					currentRecord.setName(value.toString());
+				} else {
+					isMatch = false;
+				}
+			} else if (isMatch) {
+				value.append(ch, start, length);
+
+				String stringValue = value.toString();
+
+				if (stringValue.trim().length() > 0) {
+					if (currentTag.equals("unique-identifier")) {
+						currentRecord.setRecordId(stringValue);
+					} else if (currentTag.equals("id")) {
+						currentRecord.setId(stringValue);
+					}
+				}
+			}
 		}
 
 		public void startElement(String uri, String localName, String qName,
 				Attributes attributes) {
 
-			System.out.println("Got el " + qName);
+			currentTag = qName;
 
-			// if ("car".equals(qName)) {
-			//
-			// currentCar = new Car();
-			// }
+			value = new StringBuffer();
 		}
 
-		public void error(SAXParseException e) {
-			System.out.println("Error!! " + e);
+		public ChildRecordItem[] getRecords() {
+			return records;
 		}
 
-		public void fatalError(SAXParseException e) {
-			System.out.println("FATAL Error!! " + e);
+		public void setRecords(ChildRecordItem[] records) {
+			this.records = records;
+		}
+	}
+
+	private class ItemHandler extends DefaultHandler {
+		private ChildRecord record;
+		private String currentTag;
+
+		private StringBuffer value = new StringBuffer();
+
+		public ItemHandler(ChildRecordItem item) {
+			record = new ChildRecord(item);
+			record.setIdentification(new Identification());
+			record.getIdentification().setName(item.getName());
+		}
+		
+		public void characters(char[] ch, int start, int length) {
+
+		
+		
+			value.append(ch, start, length);
+
+			String stringValue = value.toString();
+
+			if (currentTag.equals("date-of-separation")) {
+				record.getIdentification().setDateOfSeparation(stringValue);
+			}
+			else if (currentTag.equals("is-age-exact")) {
+				record.getIdentification().setExactAge(stringValue.equalsIgnoreCase("Exact"));
+			}
+			else if (currentTag.equals("gender")) {
+				record.getIdentification().setMale(stringValue.equalsIgnoreCase("Male"));
+			}
+			else if (currentTag.equals("origin")) {
+				record.getIdentification().setOrigin(stringValue);
+			}
+			else if (currentTag.equals("last-known-location")) {
+				record.getIdentification().setLastKnownLocation(stringValue);
+			}
+			else if (currentTag.equals("age")) {
+				record.getIdentification().setAge( Integer.parseInt(stringValue) );
+			}
 		}
 
-		public void endElement(String uri, String localName, String qName) {
-			// if ("car".equals(qName)) {
-			// cars.addElement(currentCar);
-			// currentCar = null;
-			// } else if ("type".equals(qName)) {
-			// currentCar.setType(value.toString());
-			// value.setLength(0);
-			// } else if ("year".equals(qName)) {
-			// currentCar.setYear(value.toString());
-			// value.setLength(0);
-			// }
+		public void startElement(String uri, String localName, String qName,
+				Attributes attributes) {
+
+			currentTag = qName;
+
+			value = new StringBuffer();
+		}
+
+		public ChildRecord getRecord() {
+			return record;
 		}
 	}
 }

@@ -2,15 +2,23 @@ package com.rapidftr.model;
 
 import net.rim.device.api.util.Persistable;
 
-public class ChildRecord extends ChildRecordItem implements Persistable {	
+public class ChildRecord extends ChildRecordItem implements Persistable {
 	private Identification identification;
 	private Family family;
 	private Caregiver careGiver;
 	private ProtectionConcerns protectionConcerns;
 	private Options options;
-	
-	public ChildRecord() {}
-	
+
+	public ChildRecord() {
+	}
+
+	public ChildRecord(ChildRecordItem item) {
+		id = item.getId();
+		name = item.getName();
+		photo = item.getPhoto();
+		recordId = item.getRecordId();
+	}
+
 	public Identification getIdentification() {
 		return identification;
 	}
