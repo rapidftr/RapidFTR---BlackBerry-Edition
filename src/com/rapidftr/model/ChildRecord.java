@@ -8,6 +8,7 @@ public class ChildRecord extends ChildRecordItem implements Persistable {
 	private Caregiver careGiver;
 	private ProtectionConcerns protectionConcerns;
 	private Options options;
+	private int photoLength;
 
 	public ChildRecord() {
 	}
@@ -59,4 +60,13 @@ public class ChildRecord extends ChildRecordItem implements Persistable {
 		this.options = options;
 	}
 
+	public int getPhotoLength() {
+		return photoLength;
+	}
+
+	public void setPhotoLength(int photoLength) {
+		this.photoLength = photoLength;
+	}
+
+	
 }

@@ -1,5 +1,6 @@
 package com.rapidftr.services.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Random;
@@ -68,7 +69,11 @@ public class RecordServiceImpl implements RecordService {
 		System.out.println("SEARCH USING ID " + item.getId() );
 
 		try {
-			InputStream is = HttpServer.getInstance().getFromServer(
+			HttpServer server = HttpServer.getInstance();
+			
+
+//			
+			InputStream is = server.getFromServer(
 					"children/" + item.getId());
 
 			SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
@@ -78,6 +83,14 @@ public class RecordServiceImpl implements RecordService {
 			parser.parse(is, handler);
 			
 			record = handler.getRecord();
+			
+
+			byte[] photo = server.getImageFromServer("children/" + item.getId() + ".jpg", 1387780);
+			
+			System.out.println("Got photo " + photo);
+			
+			record.setPhoto(photo);
+			
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage());
 		}
@@ -178,7 +191,7 @@ public class RecordServiceImpl implements RecordService {
 				value.append(ch, start, length);
 
 				if ((searchCriteria.length() == 0)
-						|| (value.toString().indexOf(searchCriteria) != -1)) {
+						|| (value.toString().toLowerCase().indexOf(searchCriteria.toLowerCase()) != -1)) {
 					isMatch = true;
 					currentRecord = new ChildRecordItem();
 
@@ -257,6 +270,9 @@ public class RecordServiceImpl implements RecordService {
 			}
 			else if (currentTag.equals("age")) {
 				record.getIdentification().setAge( Integer.parseInt(stringValue) );
+			}
+			else if (currentTag.equals("length")) {
+				record.setPhotoLength( Integer.parseInt(stringValue) );
 			}
 		}
 

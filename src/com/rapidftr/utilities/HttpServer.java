@@ -113,8 +113,9 @@ public class HttpServer {
 
 				response = new String(data);
 			}
+
 		} catch (Exception e) {
-			throw new IllegalArgumentException("Not an HTTP URL");
+			throw new IllegalArgumentException(e.getMessage());
 		} finally {
 			if (is != null)
 				is.close();
@@ -123,19 +124,19 @@ public class HttpServer {
 		}
 
 		Hashtable tags = new Hashtable();
-		
+
 		tags.put("<-id>", "<id>");
 		tags.put("</-id>", "</id>");
 		tags.put("<-rev>", "<rev>");
 		tags.put("</-rev>", "</rev>");
 		tags.put("<-attachments>", "<attachments>");
 		tags.put("</-attachments>", "</attachments>");
-		
+
 		response = replaceTags(response, tags);
-		
+
 		System.out.println("Got Response: " + response);
-		
-		return new ByteArrayInputStream(response.getBytes());	
+
+		return new ByteArrayInputStream(response.getBytes());
 	}
 
 	private String replaceTags(String response, Hashtable tags) {
@@ -152,17 +153,17 @@ public class HttpServer {
 						+ response.substring(ind + oldTag.length());
 			}
 		}
-		
+
 		return response;
 	}
-	
+
 	private InputStream getAsStreamFromServer(HttpConnection connection)
 			throws IOException {
 		InputStream is = null;
 		int rc;
 
 		connection.setRequestProperty("Accept", "application/xml");
-		
+
 		try {
 			rc = connection.getResponseCode();
 			if (rc != HttpConnection.HTTP_OK) {
@@ -175,10 +176,49 @@ public class HttpServer {
 			if (connection != null)
 				connection.close();
 
-			throw new IllegalArgumentException("Not an HTTP URL");
+			throw new IllegalArgumentException(e.getMessage());
 		}
 
 		return is;
+	}
+
+	public byte[] getImageFromServer(String uri, int imageSize)
+			throws IOException {
+		byte[] response = null;
+
+		String url = getUrlPrefix() + uri + getConectionSuffix();
+
+		HttpConnection c = null;
+		InputStream is = null;
+		int rc;
+
+		try {
+			c = (HttpConnection) Connector.open(url);
+
+			c.setRequestProperty("Accept", "image/jpeg");
+
+			rc = c.getResponseCode();
+			if (rc != HttpConnection.HTTP_OK) {
+				throw new IOException("HTTP response code: " + rc);
+			}
+
+			is = c.openInputStream();
+
+			int len = (int)c.getLength();
+			
+			response = new byte[len];
+
+			is.read(response, 0, len);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e.getMessage());
+		} finally {
+			if (is != null)
+				is.close();
+			if (c != null)
+				c.close();
+		}
+
+		return response;
 	}
 
 	public Hashtable getAsHtmlFromServer(String uri) throws IOException {
