@@ -77,7 +77,7 @@ public class RecordCreationScreen extends DisplayPage {
 	}
 
 	public boolean onClose() {
-		popScreen(2, null);
+		popScreen(POP_ACTION, null);
 
 		return true;
 	}

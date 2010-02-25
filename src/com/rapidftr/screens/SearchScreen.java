@@ -1,5 +1,7 @@
 package com.rapidftr.screens;
 
+import java.util.Hashtable;
+
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Graphics;
@@ -20,6 +22,8 @@ import com.rapidftr.utilities.Styles;
 
 public class SearchScreen extends DisplayPage {
 
+	private static final int RECORD_EDIT_ACTION = 1;
+	
 	private BorderedEditField searchField;
 	private RecordList recordList;
 	private ChildRecordItem model[];
@@ -58,7 +62,7 @@ public class SearchScreen extends DisplayPage {
 	};
 
 	protected void makeMenu(Menu menu, int instance) {
-		menu.add(_go);
+//		menu.add(_go);
 		menu.add(_open);
 		menu.add(_cancel);
 	}
@@ -89,11 +93,15 @@ public class SearchScreen extends DisplayPage {
 			Dialog.alert("Service Exception: " + se);
 		}
 
-		pushScreen(1, record);
+		Hashtable userInfo = new Hashtable();
+		userInfo.put("record", record);
+		userInfo.put("type", String.valueOf(NavigatorScreen.TYPE_EDIT) );
+		
+		pushScreen(RECORD_EDIT_ACTION, userInfo);
 	}
 
 	public boolean onClose() {
-		popScreen(2, null);
+		popScreen(POP_ACTION, null);
 
 		return true;
 	}

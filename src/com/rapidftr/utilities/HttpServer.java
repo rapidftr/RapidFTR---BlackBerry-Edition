@@ -62,7 +62,7 @@ public class HttpServer {
 	}
 
 	public String persistToServer(String uri, Hashtable params,
-			String photoKey, byte[] photoData) throws Exception {
+			String photoKey, byte[] photoData, boolean isUpdate) throws Exception {
 		String imageName = "photo.jpg";
 
 		System.out.println("Create HttpMultipartRequest");
@@ -75,7 +75,8 @@ public class HttpServer {
 				IMAGE_MIME_TYPE, photoData);
 
 		System.out.println("Created HttpMultipartRequest - now send");
-		byte[] response = req.send();
+		
+		byte[] response = req.send(isUpdate);
 
 		// parse the HTTP response
 		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();

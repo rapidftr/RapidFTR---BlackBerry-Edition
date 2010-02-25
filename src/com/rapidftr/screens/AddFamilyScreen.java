@@ -15,8 +15,6 @@ import com.rapidftr.layouts.HeaderLayoutManager;
 import com.rapidftr.utilities.Styles;
 
 public class AddFamilyScreen extends DisplayPage {
-	public static final int CLOSE_ACTION = 1;
-
 	private static final String OPTIONAL_RELATIVES[] = {
 		"Siblings",
 		"Uncles",
@@ -63,7 +61,7 @@ public class AddFamilyScreen extends DisplayPage {
 	}
 
 	public boolean onClose() {
-		popScreen(CLOSE_ACTION, null);
+		popScreen(POP_ACTION, null);
 
 		return true;
 	}

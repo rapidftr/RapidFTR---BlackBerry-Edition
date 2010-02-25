@@ -71,7 +71,7 @@ public class HttpMultipartRequest {
 		return res.toString();
 	}
 
-	public byte[] send() throws Exception {
+	public byte[] send(boolean isUpdate) throws Exception {
 		HttpConnection hc = null;
 
 		InputStream is = null;
@@ -95,7 +95,9 @@ public class HttpMultipartRequest {
 			hc.setRequestProperty("Content-Type",
 					"multipart/form-data; boundary=" + getBoundaryString());
 
-			hc.setRequestMethod(HttpConnection.POST);
+			String requestMethod = (isUpdate) ? "PUT" : HttpConnection.POST;
+			
+			hc.setRequestMethod(requestMethod);
 
 			OutputStream dout = hc.openOutputStream();
 

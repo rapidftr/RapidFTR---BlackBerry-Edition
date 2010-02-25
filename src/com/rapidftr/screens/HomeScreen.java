@@ -127,13 +127,7 @@ public class HomeScreen extends DisplayPage {
 	}
 
 	private void createNewRecord(EncodedImage photo) {
-		String recordId = null;
-
-		try {
-			recordId = ServiceManager.getRecordService().getRecordId();
-		} catch (ServiceException se) {
-			System.out.println("Service Exception " + se);
-		}
+		String recordId = "[ - ]";
 
 		Hashtable userInfo = new Hashtable();
 

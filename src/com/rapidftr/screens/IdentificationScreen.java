@@ -16,26 +16,26 @@ import net.rim.device.api.ui.component.SeparatorField;
 import com.rapidftr.controls.BorderedEditField;
 import com.rapidftr.controls.Button;
 import com.rapidftr.layouts.HeaderLayoutManager;
+import com.rapidftr.model.ChildRecord;
 import com.rapidftr.model.Identification;
 import com.rapidftr.utilities.Styles;
 
 public class IdentificationScreen extends DisplayPage {
-	public static final int CLOSE_ACTION = 1;
-	
-     	
+
+	private ChildRecord record;
 	private LayoutManager layoutManager;
 
 	public void initializePage(Object userInfo) {
-		String id = (String) userInfo;
+		record = (ChildRecord) userInfo;
 
-		add(new HeaderLayoutManager("1. Identification", id));
+		add(new HeaderLayoutManager("1. Identification", record.getRecordId()));
 		add(new SeparatorField());
 
 		layoutManager = new LayoutManager();
 
 		add(layoutManager);
 	}
-	
+
 	private MenuItem _cancel = new MenuItem("Cancel", 110, 10) {
 		public void run() {
 			onClose();
@@ -57,28 +57,30 @@ public class IdentificationScreen extends DisplayPage {
 		Identification data = new Identification();
 
 		String name = layoutManager.nameField.getText();
-		
-		if ( (name == null) || (name.length() == 0) ) {
+
+		if ((name == null) || (name.length() == 0)) {
 			Dialog.alert("Child name cannot be blank");
 			return false;
 		}
-		
+
 		data.setName(name);
 
 		data.setAge(layoutManager.ageField.getSelectedValue());
-		data.setDateOfSeparation(layoutManager.separationDateGroup.getSelectedIndex());
-		data.setExactAge(layoutManager.ageAccuracyGroup.getSelectedIndex() == 0);
+		data.setDateOfSeparation(layoutManager.separationDateGroup
+				.getSelectedIndex());
+		data
+				.setExactAge(layoutManager.ageAccuracyGroup.getSelectedIndex() == 0);
 		data.setLastKnownLocation(layoutManager.lastKnownLocField.getText());
 		data.setOrigin(layoutManager.originField.getText());
-		
+
 		data.setMale(layoutManager.gendersGroup.getSelectedIndex() == 0);
 
-		popScreen(CLOSE_ACTION, data);
+		popScreen(POP_ACTION, data);
 		return true;
 	}
 
 	public boolean onClose() {
-		popScreen(CLOSE_ACTION, null);
+		popScreen(POP_ACTION, null);
 
 		return true;
 	}
@@ -111,7 +113,7 @@ public class IdentificationScreen extends DisplayPage {
 
 		private Button cancelButton;
 		private Button saveButton;
-		
+
 		public LayoutManager() {
 			super(0);
 
@@ -119,7 +121,8 @@ public class IdentificationScreen extends DisplayPage {
 
 			final Font secondaryFont = Styles.getSecondaryFont();
 
-			nameField = new BorderedEditField("Name: ", "", defaultFont);
+			nameField = new BorderedEditField("Name: ", record.getName(),
+					defaultFont);
 
 			sexField = new LabelField("Sex: ");
 
@@ -130,29 +133,39 @@ public class IdentificationScreen extends DisplayPage {
 			genderMale = new RadioButtonField(" Male", gendersGroup, true);
 
 			genderMale.setFont(secondaryFont);
+			genderMale.setSelected(record.getIdentification().isMale());
 
 			genderFemale = new RadioButtonField(" Female", gendersGroup, false);
+			genderFemale.setSelected(!record.getIdentification().isMale());
 
 			genderFemale.setFont(secondaryFont);
 
 			ageField = new NumericChoiceField("Age: ", 0, 20, 1);
 
+			ageField.setSelectedValue(record.getIdentification().getAge());
+			
 			ageField.setFont(defaultFont);
 
 			ageAccuracyGroup = new RadioButtonGroup();
 
+			boolean isExact = record.getIdentification().isExactAge();
+			
 			ageExact = new RadioButtonField(" Exact", ageAccuracyGroup, false);
+			ageExact.setSelected( isExact );
 
-			ageApprox = new RadioButtonField(" Approx.", ageAccuracyGroup, true);
+			ageApprox = new RadioButtonField(" Approx.", ageAccuracyGroup, false);
+			ageApprox.setSelected( !isExact );
 
 			ageExact.setFont(secondaryFont);
 			ageApprox.setFont(secondaryFont);
 
-			originField = new BorderedEditField("Origin: ", "", defaultFont);
+			originField = new BorderedEditField("Origin: ", record
+					.getIdentification().getOrigin(), defaultFont);
 
 			originField.setFont(defaultFont);
 
-			lastKnownLocField = new BorderedEditField("Last Known Loc.: ", "",
+			lastKnownLocField = new BorderedEditField("Last Known Loc.: ",
+					record.getIdentification().getLastKnownLocation(),
 					defaultFont, 15);
 
 			lastKnownLocField.setFont(defaultFont);
@@ -165,29 +178,34 @@ public class IdentificationScreen extends DisplayPage {
 
 			for (int i = 0; i < Identification.separationDates.length; i++) {
 				separationDateFields[i] = new RadioButtonField(
-						Identification.separationDates[i], separationDateGroup, false);
+						Identification.separationDates[i], separationDateGroup,
+						false);
 
 				separationDateFields[i].setFont(secondaryFont);
+				
+				boolean selected = (record.getIdentification().getDateOfSeparation() == i);
+				
+				separationDateFields[i].setSelected(selected);
 			}
 
 			cancelButton = new Button("Cancel", 60);
 			cancelButton.setFont(defaultFont);
-			
+
 			cancelButton.setChangeListener(new FieldChangeListener() {
 				public void fieldChanged(Field field, int context) {
 					onClose();
 				}
 			});
-			
+
 			saveButton = new Button("Save", 60);
 			saveButton.setFont(defaultFont);
-			
+
 			saveButton.setChangeListener(new FieldChangeListener() {
 				public void fieldChanged(Field field, int context) {
 					onSave();
 				}
 			});
-			
+
 			add(nameField);
 			add(sexField);
 
@@ -206,7 +224,7 @@ public class IdentificationScreen extends DisplayPage {
 			for (int i = 0; i < Identification.separationDates.length; i++) {
 				add(separationDateFields[i]);
 			}
-			
+
 			add(cancelButton);
 			add(saveButton);
 		}
@@ -222,8 +240,8 @@ public class IdentificationScreen extends DisplayPage {
 			layoutChild(originField, width, 30);
 			layoutChild(lastKnownLocField, width, 30);
 			layoutChild(sepDateField, width, 30);
-			layoutChild(cancelButton, width/2, 30);
-			layoutChild(saveButton, width/2, 30);
+			layoutChild(cancelButton, width / 2, 30);
+			layoutChild(saveButton, width / 2, 30);
 
 			for (int i = 0; i < separationDateFields.length; i++) {
 				layoutChild(separationDateFields[i], width / 2, 30);
@@ -246,7 +264,7 @@ public class IdentificationScreen extends DisplayPage {
 
 			setPositionChild(cancelButton, 10, 200);
 			setPositionChild(saveButton, 100, 200);
-			
+
 			int actualHeight = 240;
 
 			setExtent(width, actualHeight);

@@ -7,10 +7,8 @@ import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.FontFamily;
 import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
-import net.rim.device.api.ui.component.Menu;
 
 import com.rapidftr.controls.Button;
 import com.rapidftr.layouts.HeaderLayoutManager;
@@ -25,7 +23,6 @@ import com.rapidftr.utilities.Utilities;
 
 public class NavigatorScreen extends DisplayPage {
 	public static final int SAVE_ACTION = 1;
-	public static final int CLOSE_ACTION = 2;
 	public static final int ID_SCREEN_ACTION = 3;
 	public static final int FAMILY_SCREEN_ACTION = 4;
 	public static final int OTHER_SCREEN_ACTION = 5;
@@ -109,9 +106,15 @@ public class NavigatorScreen extends DisplayPage {
 	}
 
 	public void updatePage(Object userInfo, DisplayPage source) {
-		if (userInfo != null) {
+		if (source instanceof RecordReviewScreen) {
+			handleEdit(userInfo, source);
+		} else {
 			handleSave(userInfo, source);
 		}
+	}
+
+	public void handleEdit(Object data, DisplayPage source) {
+		record = (data == null) ? record : (ChildRecord) data;
 	}
 
 	public void handleSave(Object data, DisplayPage source) {
@@ -125,7 +128,7 @@ public class NavigatorScreen extends DisplayPage {
 			manager.ticks[IDENTIFICATION].setBitmap(Utilities.getScaledBitmap(
 					"img/checkmark.gif", 10));
 
-			Dialog.alert("Added Identification Data");
+			Dialog.alert(getAlertMessage(IDENTIFICATION));
 		} else if (source instanceof OtherDetailsScreen) {
 			Hashtable userInfo = (Hashtable) data;
 
@@ -141,17 +144,16 @@ public class NavigatorScreen extends DisplayPage {
 			manager.ticks[OTHER].setBitmap(Utilities.getScaledBitmap(
 					"img/checkmark.gif", 10));
 
-			Dialog.alert("Added Protection Concerns");
-		}
-		else if (source instanceof SetOptionsScreen) {
-			Options options = (Options)data;
-			
+			Dialog.alert(getAlertMessage(OTHER));
+		} else if (source instanceof SetOptionsScreen) {
+			Options options = (Options) data;
+
 			record.setOptions(options);
-			
+
 			manager.ticks[OPTIONS].setBitmap(Utilities.getScaledBitmap(
 					"img/checkmark.gif", 10));
 
-			Dialog.alert("Added Options");
+			Dialog.alert(getAlertMessage(OPTIONS));
 		}
 
 		// test family data
@@ -159,55 +161,38 @@ public class NavigatorScreen extends DisplayPage {
 
 	}
 
-//	private MenuItem _identification = new MenuItem("Add/Edit Ident. Details",
-//			110, 10) {
-//		public void run() {
-//			onIdentification();
-//		}
-//	};
-//
-//	private MenuItem _family = new MenuItem("Add/Edit Family Details", 110, 10) {
-//		public void run() {
-//			onAddFamily();
-//		}
-//	};
-//
-//	private MenuItem _other = new MenuItem("Add/Edit Other Details", 110, 10) {
-//		public void run() {
-//			onAddOther();
-//		}
-//	};
-//
-//	private MenuItem _options = new MenuItem("Set Options", 110, 10) {
-//		public void run() {
-//			onSetOptions();
-//		}
-//	};
-//
-//	private MenuItem _close = new MenuItem("Close Page", 110, 10) {
-//		public void run() {
-//			onClose();
-//		}
-//	};
-
-//	protected void makeMenu(Menu menu, int instance) {
-//		menu.add(_identification);
-//		menu.add(_family);
-//		menu.add(_other);
-//		menu.add(_options);
-//		menu.add(_close);
-//	}
-
 	public boolean onClose() {
-		if ( Dialog.ask(Dialog.D_YES_NO, "Are you sure?") == Dialog.YES ) {
-			popScreen(CLOSE_ACTION, record.getRecordId());
+		if (Dialog.ask(Dialog.D_YES_NO, "Are you sure?") == Dialog.YES) {
+			popScreen(RETURN_HOME_ACTION, record.getRecordId());
 		}
-	
+
 		return true;
 	}
 
+	private String getAlertMessage(int action) {
+		String message = null;
+		String prefix = (type == TYPE_NEW) ? "Added" : "Updated";
+
+		switch (action) {
+		case IDENTIFICATION:
+			message = prefix + " Identification Data";
+			break;
+		case FAMILY:
+			message = prefix + " Family Data";
+			break;
+		case OTHER:
+			message = prefix + " Protection Concerns";
+			break;
+		case OPTIONS:
+			message = prefix + " Options";
+			break;
+		}
+
+		return message;
+	}
+
 	private void onIdentification() {
-		pushScreen(ID_SCREEN_ACTION, record.getRecordId());
+		pushScreen(ID_SCREEN_ACTION, record);
 	}
 
 	private void onAddFamily() {
@@ -224,7 +209,12 @@ public class NavigatorScreen extends DisplayPage {
 
 	private void onSaveRecord() {
 		if (record.getName() != null) {
-			pushScreen(SAVE_ACTION, record);
+			Hashtable userInfo = new Hashtable();
+
+			userInfo.put("record", record);
+			userInfo.put("type", String.valueOf(TYPE_NEW));
+
+			pushScreen(SAVE_ACTION, userInfo);
 		} else {
 			Dialog.alert("Child name cannot be blank");
 		}

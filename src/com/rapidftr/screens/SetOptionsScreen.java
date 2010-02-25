@@ -15,8 +15,6 @@ import com.rapidftr.model.ProtectionConcerns;
 import com.rapidftr.utilities.Styles;
 
 public class SetOptionsScreen extends DisplayPage {
-	public static final int CLOSE_ACTION = 1;
-	
 	private LayoutManager layoutManager;
 	
 	public void initializePage(Object userInfo) {
@@ -56,13 +54,13 @@ public class SetOptionsScreen extends DisplayPage {
 			options.setOption(i, field.getChecked());
 		}
 
-		popScreen(CLOSE_ACTION, options);
+		popScreen(POP_ACTION, options);
 		
 		return true;
 	}
 	
 	public boolean onClose() {
-		popScreen(CLOSE_ACTION, null);
+		popScreen(POP_ACTION, null);
 
 		return true;
 	}

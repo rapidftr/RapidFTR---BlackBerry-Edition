@@ -17,8 +17,6 @@ import com.rapidftr.model.ProtectionConcerns;
 import com.rapidftr.utilities.Styles;
 
 public class OtherDetailsScreen extends DisplayPage {
-	public static final int CLOSE_ACTION = 1;
-
 	private LayoutManager layoutManager;
 
 	public void initializePage(Object userInfo) {
@@ -69,13 +67,13 @@ public class OtherDetailsScreen extends DisplayPage {
 		userInfo.put("protectionConcerns", protectionConcerns);
 		userInfo.put("caregiverDetails", caregiverDetails);
 		
-		popScreen(CLOSE_ACTION, userInfo);
+		popScreen(POP_ACTION, userInfo);
 		
 		return true;
 	}
 
 	public boolean onClose() {
-		popScreen(CLOSE_ACTION, null);
+		popScreen(POP_ACTION, null);
 
 		return true;
 	}

@@ -11,9 +11,13 @@ public class ChildRecord extends ChildRecordItem implements Persistable {
 	private int photoLength;
 
 	public ChildRecord() {
+		identification = new Identification();
+		family = new Family();
 	}
 
 	public ChildRecord(ChildRecordItem item) {
+		this();
+		
 		id = item.getId();
 		name = item.getName();
 		photo = item.getPhoto();

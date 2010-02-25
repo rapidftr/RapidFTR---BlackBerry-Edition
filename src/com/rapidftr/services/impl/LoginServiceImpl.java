@@ -38,7 +38,7 @@ public class LoginServiceImpl implements LoginService {
 		try {
 			isValid = validateLogin(userName, password);
 		} catch (Exception e) {
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException("Unable to reach server (" + e.getMessage() + ")");
 		}
 
 		if (isValid) {

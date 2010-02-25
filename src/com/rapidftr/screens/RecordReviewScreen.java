@@ -1,5 +1,6 @@
 package com.rapidftr.screens;
 
+import java.util.Hashtable;
 import java.util.Vector;
 
 import net.rim.device.api.ui.Field;
@@ -29,7 +30,9 @@ import com.rapidftr.utilities.Styles;
 import com.rapidftr.utilities.Utilities;
 
 public class RecordReviewScreen extends DisplayPage {
-	// private ScreenManager screenManager;
+	public static final int NAVIGATOR_SCREEN_ACTION = 1;
+
+	private int type;
 	private ChildRecord record;
 	private String recordId;
 
@@ -38,7 +41,12 @@ public class RecordReviewScreen extends DisplayPage {
 	}
 
 	public void initializePage(Object userInfo) {
-		this.record = (ChildRecord) userInfo;
+		Hashtable data = (Hashtable) userInfo;
+
+		this.type = Integer.parseInt((String) data.get("type"));
+
+		this.record = (ChildRecord) (data.get("record"));
+
 		this.recordId = record.getRecordId();
 
 		add(new HeaderLayoutManager("Review Record", recordId));
@@ -55,15 +63,25 @@ public class RecordReviewScreen extends DisplayPage {
 
 		int limit = 60;
 
+		HorizontalFieldManager buttonManager = new HorizontalFieldManager();
+		
 		Button editButton = new Button("Edit", limit);
 		editButton.setFont(defaultFont);
-		Button submitButton = new Button("Submit", limit);
-		submitButton.setFont(defaultFont);
-
-		HorizontalFieldManager buttonManager = new HorizontalFieldManager();
 
 		buttonManager.add(editButton);
-		buttonManager.add(submitButton);
+		
+		if (type == NavigatorScreen.TYPE_NEW) {
+			Button submitButton = new Button("Submit", limit);
+			submitButton.setFont(defaultFont);
+
+			submitButton.setChangeListener(new FieldChangeListener() {
+				public void fieldChanged(Field field, int context) {
+					onSubmit();
+				}
+			});
+			
+			buttonManager.add(submitButton);
+		}
 
 		add(buttonManager);
 
@@ -72,28 +90,31 @@ public class RecordReviewScreen extends DisplayPage {
 				onEdit();
 			}
 		});
-
-		submitButton.setChangeListener(new FieldChangeListener() {
-			public void fieldChanged(Field field, int context) {
-				onSubmit();
-			}
-		});
 	}
 
 	private void onEdit() {
-		popScreen(3, null);
+		if (type == NavigatorScreen.TYPE_NEW) {
+			popScreen(POP_ACTION, record);
+		} else {
+			Hashtable userInfo = new Hashtable();
+			
+			userInfo.put("record", record);
+			userInfo.put("type", String.valueOf(type));
+			
+			pushScreen(NAVIGATOR_SCREEN_ACTION, userInfo);
+		}
 	}
 
 	private void onSubmit() {
 		try {
 			ServiceManager.getRecordService().save(record);
-			
+
 			Dialog.alert("Child record " + recordId + " saved successfully");
 		} catch (ServiceException se) {
 			Dialog.alert("Failed to save record " + recordId + ": " + se);
 		}
 
-		popScreen(2, recordId);
+		popScreen(RETURN_HOME_ACTION, recordId);
 	}
 
 	private class IdentificationLayoutManager extends Manager {
@@ -131,7 +152,8 @@ public class RecordReviewScreen extends DisplayPage {
 					+ identification.getLastKnownLocation(), Field.READONLY);
 
 			items[5] = new RichTextField("Date of Separation: "
-					+ identification.getFormattedSeparationDate(), Field.READONLY);
+					+ identification.getFormattedSeparationDate(),
+					Field.READONLY);
 
 			Font defaultFont = Styles.getDefaultFont();
 
@@ -403,8 +425,7 @@ public class RecordReviewScreen extends DisplayPage {
 
 			add(header);
 
-			Options options = record
-					.getOptions();
+			Options options = record.getOptions();
 
 			if (options != null) {
 				Option option[] = options.getOptions();

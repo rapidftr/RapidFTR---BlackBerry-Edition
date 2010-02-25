@@ -1,10 +1,7 @@
 package com.rapidftr.services.impl;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
-import java.util.Random;
-import java.util.Vector;
 
 import net.rim.device.api.util.Arrays;
 import net.rim.device.api.xml.parsers.SAXParser;
@@ -61,7 +58,7 @@ public class RecordServiceImpl implements RecordService {
 		}
 
 		// augment with any extra data in local store
-		return localStore.augmentRecords(records); 
+		return localStore.augmentRecords(records);
 	}
 
 	public ChildRecord getRecord(ChildRecordItem item) throws ServiceException {
@@ -71,7 +68,7 @@ public class RecordServiceImpl implements RecordService {
 
 		try {
 			HttpServer server = HttpServer.getInstance();
-			
+
 			InputStream is = server.getFromServer("children/" + item.getId());
 
 			SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
@@ -82,7 +79,8 @@ public class RecordServiceImpl implements RecordService {
 
 			record = handler.getRecord();
 
-			byte[] photo = server.getImageFromServer("children/" + item.getId() + ".jpg");
+			byte[] photo = server.getImageFromServer("children/" + item.getId()
+					+ ".jpg");
 
 			record.setPhoto(photo);
 
@@ -106,15 +104,6 @@ public class RecordServiceImpl implements RecordService {
 	 * 
 	 * return match; }
 	 **/
-
-	public String getRecordId() throws ServiceException {
-		Random random = new Random();
-
-		int id = random.nextInt();
-		id = (id < 0) ? -id : id;
-
-		return String.valueOf(id);
-	}
 
 	public void save(ChildRecord record) throws ServiceException {
 		try {
@@ -140,7 +129,22 @@ public class RecordServiceImpl implements RecordService {
 		String token = Properties.getInstance().getAuthenticityToken();
 
 		Hashtable params = new Hashtable();
-		params.put("commit", "Create");
+
+		String action;
+		String uri;
+		boolean isUpdate;
+
+		if (record.getId() == null) { // new record
+			action = "Create";
+			uri = "children";
+			isUpdate = false;
+		} else { // updated record
+			action = "Update";
+			uri = "children/" + record.getId();
+			isUpdate = true;
+		}
+
+		params.put("commit", action);
 
 		params.put("authenticity_token", token);
 
@@ -164,8 +168,8 @@ public class RecordServiceImpl implements RecordService {
 		params.put("child[date_of_separation]", record.getIdentification()
 				.getFormattedSeparationDate());
 
-		return server.persistToServer("children", params, "child[photo]",
-				photoData);
+		return server.persistToServer(uri, params, "child[photo]", photoData,
+				isUpdate);
 	}
 
 	private class RecordHandler extends DefaultHandler {
