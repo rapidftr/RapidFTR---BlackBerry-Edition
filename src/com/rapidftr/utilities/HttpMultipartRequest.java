@@ -1,12 +1,12 @@
 package com.rapidftr.utilities;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
 public class HttpMultipartRequest {
@@ -20,7 +20,7 @@ public class HttpMultipartRequest {
 	public HttpMultipartRequest(String url, Hashtable params, String fileField,
 			String fileName, String fileType, byte[] fileBytes)
 			throws Exception {
-		this.url = url;
+		this.url = url + ";ConnectionTimeout=30000";
 
 		this.cookie = Properties.getInstance().getSessionCookie();
 
@@ -47,7 +47,7 @@ public class HttpMultipartRequest {
 	String getBoundaryString() {
 		return BOUNDARY;
 	}
-	
+
 	String getBoundaryMessage(String boundary, Hashtable params,
 			String fileField, String fileName, String fileType) {
 		StringBuffer res = new StringBuffer("--").append(boundary).append(
@@ -71,8 +71,8 @@ public class HttpMultipartRequest {
 		return res.toString();
 	}
 
-	public byte[] send(boolean isUpdate) throws Exception {
-		HttpConnection hc = null;
+	public byte[] send2(boolean isUpdate) throws Exception {
+		HttpConnection connection = null;
 
 		InputStream is = null;
 
@@ -80,45 +80,52 @@ public class HttpMultipartRequest {
 
 		byte[] res = null;
 
+		HttpConnectionFactory factory = new HttpConnectionFactory(url,
+				HttpConnectionFactory.TRANSPORT_WIFI | HttpConnectionFactory.TRANSPORT_BIS | HttpConnectionFactory.TRANSPORT_DIRECT_TCP);
+
 		try {
-			System.out.println("Created connection");
+			while (true) {
+				connection = factory.getNextConnection();
 
-			hc = (HttpConnection) Connector.open(url);
+				connection.setRequestProperty("cookie", cookie);
 
-			System.out.println("After open URL");
+				connection.setRequestProperty("Content-Type",
+						"multipart/form-data; boundary=" + getBoundaryString());
 
-			// use HTML response -- easier/quicker to parse
-//			hc.setRequestProperty("Accept", "application/xml");
+				String requestMethod = (isUpdate) ? "PUT" : HttpConnection.POST;
 
-			hc.setRequestProperty("cookie", cookie);
+				connection.setRequestMethod(requestMethod);
 
-			hc.setRequestProperty("Content-Type",
-					"multipart/form-data; boundary=" + getBoundaryString());
+				OutputStream dout = connection.openOutputStream();
 
-			String requestMethod = (isUpdate) ? "PUT" : HttpConnection.POST;
-			
-			hc.setRequestMethod(requestMethod);
+				dout.write(postBytes);
 
-			OutputStream dout = hc.openOutputStream();
+				dout.close();
+				int ch;
 
-			System.out.println("got output stream");
+				try {
+					int rc = connection.getResponseCode();
 
-			dout.write(postBytes);
+					System.out.println("RC " + rc);
 
-			dout.close();
+					if (rc == HttpConnection.HTTP_MOVED_TEMP) {
 
-			int ch;
+						is = connection.openInputStream();
 
-			System.out.println("COOKIE " + hc.getHeaderField("Set-Cookie"));
-			is = hc.openInputStream();
-			//
-			while ((ch = is.read()) != -1) {
-				bos.write(ch);
+						while ((ch = is.read()) != -1) {
+							bos.write(ch);
+						}
+						res = bos.toByteArray();
+
+						System.out.println("RESP " + new String(res));
+						break;
+					}
+				} catch (IOException e) {
+					System.out.println("IO Exc " + e);
+				}
 			}
-			res = bos.toByteArray();
 		} catch (Exception e) {
-			e.printStackTrace();
-
+			System.out.println("EXCEPTION " + e);
 			throw e;
 		} finally {
 			try {
@@ -128,12 +135,79 @@ public class HttpMultipartRequest {
 				if (is != null)
 					is.close();
 
-				if (hc != null)
-					hc.close();
+				if (connection != null)
+					connection.close();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 		}
+
 		return res;
 	}
+
+	// public byte[] send(boolean isUpdate) throws Exception {
+	// HttpConnection hc = null;
+	//
+	// InputStream is = null;
+	//
+	// ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	//
+	// byte[] res = null;
+	//
+	// try {
+	// System.out.println("Created connection");
+	//
+	// hc = (HttpConnection) Connector.open(url);
+	//
+	// System.out.println("After open URL");
+	//
+	// // use HTML response -- easier/quicker to parse
+	// // hc.setRequestProperty("Accept", "application/xml");
+	//
+	// hc.setRequestProperty("cookie", cookie);
+	//
+	// hc.setRequestProperty("Content-Type",
+	// "multipart/form-data; boundary=" + getBoundaryString());
+	//
+	// String requestMethod = (isUpdate) ? "PUT" : HttpConnection.POST;
+	//
+	// hc.setRequestMethod(requestMethod);
+	//
+	// OutputStream dout = hc.openOutputStream();
+	//
+	// System.out.println("got output stream");
+	//
+	// dout.write(postBytes);
+	//
+	// dout.close();
+	//
+	// int ch;
+	//
+	// System.out.println("COOKIE " + hc.getHeaderField("Set-Cookie"));
+	// is = hc.openInputStream();
+	// //
+	// while ((ch = is.read()) != -1) {
+	// bos.write(ch);
+	// }
+	// res = bos.toByteArray();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	//
+	// throw e;
+	// } finally {
+	// try {
+	// if (bos != null)
+	// bos.close();
+	//
+	// if (is != null)
+	// is.close();
+	//
+	// if (hc != null)
+	// hc.close();
+	// } catch (Exception e2) {
+	// e2.printStackTrace();
+	// }
+	// }
+	// return res;
+	// }
 }

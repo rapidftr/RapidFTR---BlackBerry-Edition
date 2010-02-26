@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
 import net.rim.device.api.xml.parsers.SAXParser;
@@ -21,6 +20,10 @@ public class HttpServer {
 	private static final String CONNECTION_BIS = ";XXXXXXXXXXXXXXXX";
 	private static final String CONNECTION_TCPIP = ";deviceside=true";
 	private static final String CONNECTION_WIFI = ";interface=wifi";
+
+	private static final int GET_IMAGE = 1;
+	private static final int GET_HTML = 2;
+	private static final int GET_STREAM = 3;
 
 	private static HttpServer instance;
 
@@ -62,21 +65,15 @@ public class HttpServer {
 	}
 
 	public String persistToServer(String uri, Hashtable params,
-			String photoKey, byte[] photoData, boolean isUpdate) throws Exception {
+			String photoKey, byte[] photoData, boolean isUpdate)
+			throws Exception {
 		String imageName = "photo.jpg";
 
-		System.out.println("Create HttpMultipartRequest");
-
-		System.out.println("URL = " + getUrlPrefix() + uri
-				+ getConectionSuffix());
-
 		HttpMultipartRequest req = new HttpMultipartRequest(getUrlPrefix()
-				+ uri + getConectionSuffix(), params, photoKey, imageName,
+				+ uri, params, photoKey, imageName,
 				IMAGE_MIME_TYPE, photoData);
 
-		System.out.println("Created HttpMultipartRequest - now send");
-		
-		byte[] response = req.send(isUpdate);
+		byte[] response = req.send2(isUpdate);
 
 		// parse the HTTP response
 		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
@@ -88,40 +85,33 @@ public class HttpServer {
 		return handler.getId();
 	}
 
-	public InputStream getFromServer(String uri) throws IOException {
-		String url = getUrlPrefix() + uri + getConectionSuffix();
-		InputStream is = null;
-		HttpConnection c = null;
+	public InputStream getFromServer(String uri) throws Exception {		
+		String response = (String)getFromServer( uri, GET_STREAM ); 
+
+		response = transformResponse(response);
+
+		return new ByteArrayInputStream(response.getBytes());
+	}
+
+	private String readResponse(InputStream is, int len) throws IOException {
 		String response = null;
 
-		try {
-			c = (HttpConnection) Connector.open(url);
-
-			is = getAsStreamFromServer(c);
-
-			// Get the length and process the data
-			int len = (int) c.getLength();
-			if (len > 0) {
-				int actual = 0;
-				int bytesread = 0;
-				byte[] data = new byte[len];
-				while ((bytesread != len) && (actual != -1)) {
-					actual = is.read(data, bytesread, len - bytesread);
-					bytesread += actual;
-				}
-
-				response = new String(data);
+		if (len > 0) {
+			int actual = 0;
+			int bytesread = 0;
+			byte[] data = new byte[len];
+			while ((bytesread != len) && (actual != -1)) {
+				actual = is.read(data, bytesread, len - bytesread);
+				bytesread += actual;
 			}
 
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e.getMessage());
-		} finally {
-			if (is != null)
-				is.close();
-			if (c != null)
-				c.close();
+			response = new String(data);
 		}
 
+		return response;
+	}
+
+	private String transformResponse(String response) {
 		Hashtable tags = new Hashtable();
 
 		tags.put("<-id>", "<id>");
@@ -131,11 +121,7 @@ public class HttpServer {
 		tags.put("<-attachments>", "<attachments>");
 		tags.put("</-attachments>", "</attachments>");
 
-		response = replaceTags(response, tags);
-
-		System.out.println("Got Response: " + response);
-
-		return new ByteArrayInputStream(response.getBytes());
+		return replaceTags(response, tags);
 	}
 
 	private String replaceTags(String response, Hashtable tags) {
@@ -156,101 +142,115 @@ public class HttpServer {
 		return response;
 	}
 
-	private InputStream getAsStreamFromServer(HttpConnection connection)
-			throws IOException {
-		InputStream is = null;
-		int rc;
+	public byte[] getImageFromServer(String uri) throws IOException,
+			NoMoreTransportsException {
 
-		connection.setRequestProperty("Accept", "application/xml");
-
-		try {
-			rc = connection.getResponseCode();
-			if (rc != HttpConnection.HTTP_OK) {
-				throw new IOException("HTTP response code: " + rc);
-			}
-			is = connection.openInputStream();
-		} catch (Exception e) {
-			if (is != null)
-				is.close();
-			if (connection != null)
-				connection.close();
-
-			throw new IllegalArgumentException(e.getMessage());
-		}
-
-		return is;
-	}
-
-	public byte[] getImageFromServer(String uri)
-			throws IOException {
-		byte[] response = null;
-
-		String url = getUrlPrefix() + uri + getConectionSuffix();
-
-		HttpConnection c = null;
-		InputStream is = null;
-		int rc;
-
-		try {
-			c = (HttpConnection) Connector.open(url);
-
-			c.setRequestProperty("Accept", "image/jpeg");
-
-			rc = c.getResponseCode();
-			if (rc != HttpConnection.HTTP_OK) {
-				throw new IOException("HTTP response code: " + rc);
-			}
-
-			is = c.openInputStream();
-
-			int len = (int)c.getLength();
-			
-			response = new byte[len];
-
-			is.read(response, 0, len);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e.getMessage());
-		} finally {
-			if (is != null)
-				is.close();
-			if (c != null)
-				c.close();
-		}
-
-		return response;
+		return (byte[])getFromServer( uri, GET_IMAGE );
 	}
 
 	public Hashtable getAsHtmlFromServer(String uri) throws IOException {
-		String url = getUrlPrefix() + uri + getConectionSuffix();
+		return (Hashtable)getFromServer( uri, GET_HTML );
+	}
 
+	public Object getFromServer(String uri, int type) throws IOException {
+		String url = getUrlPrefix() + uri + ";ConnectionTimeout=30000";
+
+		Object output = null;
+
+		HttpConnection connection = null;
+		InputStream is = null;
+
+		HttpConnectionFactory factory = new HttpConnectionFactory(url,
+				HttpConnectionFactory.TRANSPORT_WIFI | HttpConnectionFactory.TRANSPORT_BIS | HttpConnectionFactory.TRANSPORT_DIRECT_TCP);
+
+		while (true) {
+			try {
+				connection = factory.getNextConnection();
+
+				connection.setRequestMethod("GET");
+
+				switch (type) {
+				case GET_IMAGE:
+					connection.setRequestProperty("Accept", "image/jpeg");
+					break;
+				case GET_HTML:
+					break;
+				case GET_STREAM:
+					connection.setRequestProperty("Accept", "application/xml");
+					break;
+				}
+				
+				int rc = connection.getResponseCode();
+
+				if (rc == HttpConnection.HTTP_OK) {
+					is = connection.openInputStream();
+					
+					switch (type) {
+					case GET_IMAGE:
+						output = handleImageResponse(connection, is);
+						break;
+					case GET_HTML:
+						output = handleHtmlResponse(connection, is);
+						break;
+					case GET_STREAM:
+						output = handleStreamResponse(connection, is);
+						break;
+					}
+
+					break;
+				}
+			} catch (Exception e) {
+				if (is != null)
+					is.close();
+				if (connection != null)
+					connection.close();
+
+				throw new IllegalArgumentException(e.getMessage());
+			}
+		}
+
+		return output;
+	}
+
+	private Object handleImageResponse(HttpConnection connection,
+			InputStream is) throws IOException {
+		byte[] response = null;
+
+		// Get the length and process the data
+		int len = (int) connection.getLength();
+
+		response = new byte[len];
+
+		is.read(response, 0, len);
+
+		is.close();
+		connection.close();
+		
+		return response;
+	}
+
+	private Object handleStreamResponse(HttpConnection connection,
+			InputStream is) throws IOException {
+
+		// Get the length and process the data
+		int len = (int) connection.getLength();
+
+		String response = readResponse(is, len);
+
+		is.close();
+		connection.close();
+		
+		return response;
+	}
+
+	private Object handleHtmlResponse(HttpConnection connection,
+			InputStream is) throws IOException {
 		Hashtable output = new Hashtable();
 
-		HttpConnection c = null;
-		InputStream is = null;
-		int rc;
+		output.put("cookie", connection.getHeaderField("Set-Cookie"));
 
-		try {
-			c = (HttpConnection) Connector.open(url);
-
-			rc = c.getResponseCode();
-			if (rc != HttpConnection.HTTP_OK) {
-				throw new IOException("HTTP response code: " + rc);
-			}
-
-			output.put("cookie", c.getHeaderField("Set-Cookie"));
-
-			is = c.openInputStream();
-
-			output.put("response", is);
-			output.put("connection", c);
-		} catch (Exception e) {
-			if (is != null)
-				is.close();
-			if (c != null)
-				c.close();
-
-			throw new IllegalArgumentException(e.getMessage());
-		}
+		output.put("response", is);
+		output.put("connection", connection);
 
 		return output;
 	}
@@ -311,20 +311,20 @@ public class HttpServer {
 			return token;
 		}
 	}
-	
+
 	private class PostResponseHandler extends DefaultHandler {
 		String id = null;
-		
+
 		public void startElement(String uri, String localName, String qName,
 				Attributes attributes) {
 
 			if (qName.equals("a")) {
 				if (attributes != null) {
 					String value = attributes.getValue("href");
-					
+
 					int index = value.lastIndexOf('/');
-					
-					if ( index != -1 ) {
+
+					if (index != -1) {
 						id = value.substring(index + 1);
 					}
 				}
@@ -334,7 +334,6 @@ public class HttpServer {
 		public String getId() {
 			return id;
 		}
-		
-		
+
 	}
 }

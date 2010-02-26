@@ -22,12 +22,12 @@ import com.rapidftr.utilities.Utilities;
 
 public class PhotoServiceImpl implements PhotoService {
 	private static final String IMAGE_NAME = "img/cait.jpg";
-	
+
 	private static PhotoService instance;
-	
+
 	private long _lastUSN; // = 0;
 	private PhotoServiceListener listener;
-	
+
 	public static synchronized PhotoService getInstance() {
 		if (instance == null) {
 			instance = new PhotoServiceImpl();
@@ -35,35 +35,35 @@ public class PhotoServiceImpl implements PhotoService {
 
 		return instance;
 	}
-	
+
 	private PhotoServiceImpl() {
 		JournalListener jl = new JournalListener();
 
 		UiApplication.getUiApplication().addFileSystemJournalListener(jl);
 	}
-	
+
 	public void startCamera(PhotoServiceListener listener) {
 		this.listener = listener;
-		
+
 		Invoke.invokeApplication(Invoke.APP_TYPE_CAMERA, new CameraArguments());
 	}
-	
+
 	public EncodedImage getPhoto() {
 		return getImage(IMAGE_NAME);
 	}
-	
+
 	private EncodedImage getImage(String imageName) {
 		int imageHeight = Display.getHeight() - 60;
 
 		return Utilities.getScaledImage(imageName, imageHeight);
 	}
-	
+
 	private EncodedImage setImageFromCamera(String path) throws Exception {
 		FileConnection fconn = (FileConnection) Connector
 				.open("file://" + path);
 
 		System.out.println("Setting photo at " + path);
-		
+
 		InputStream input = null;
 		input = fconn.openInputStream();
 
@@ -72,10 +72,10 @@ public class PhotoServiceImpl implements PhotoService {
 
 		input.read(data, 0, fSz);
 		EncodedImage ei = EncodedImage.createEncodedImage(data, 0, data.length);
-		
+
 		return ei;
 	}
-	
+
 	private class JournalListener implements FileSystemJournalListener {
 
 		public void fileJournalChanged() {
@@ -89,6 +89,11 @@ public class PhotoServiceImpl implements PhotoService {
 				// We didn't find an entry.
 				if (entry == null) {
 					break;
+				}
+
+				try {
+					Thread.sleep(500);
+				} catch (Exception e) {
 				}
 
 				// Try to kill camera app here by injecting esc.
@@ -105,8 +110,8 @@ public class PhotoServiceImpl implements PhotoService {
 					case FileSystemJournalEntry.FILE_ADDED:
 						try {
 							EncodedImage encodedImage = setImageFromCamera(path);
-							
-							if ( listener != null ) {
+
+							if (listener != null) {
 								listener.handlePhoto(encodedImage);
 							}
 						} catch (Exception e) {

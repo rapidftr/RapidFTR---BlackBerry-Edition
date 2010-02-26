@@ -7,7 +7,9 @@ public class Properties {
 	public static final int CONNECTION_BIS = 1;
 	public static final int CONNECTION_TCPIP = 2;
 	
-	private static final String DEFAULT_HOST = "chidmzhcf01.thoughtworks.com";
+	//private static final String DEFAULT_HOST = "chidmzhcf01.thoughtworks.com";
+	
+	private static final String DEFAULT_HOST = "97.107.135.7"; 
 	
 	private static Properties instance;
 
@@ -40,7 +42,8 @@ public class Properties {
 
 	
 	public int getPort() {
-		return ((hostName.length() == 0) || (hostName.equals(DEFAULT_HOST))) ? 80 : 3000;
+		return 3000;
+		//return ((hostName.length() == 0) || (hostName.equals(DEFAULT_HOST))) ? 80 : 3000;
 	}
 
 	public boolean isUseCamera() {
