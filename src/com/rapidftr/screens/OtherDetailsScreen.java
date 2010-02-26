@@ -146,7 +146,7 @@ public class OtherDetailsScreen extends DisplayPage {
 				setPositionChild(items[i], 10, 110 + (20 * i));
 			}
 
-			setExtent(width, 75 + (items.length * 20));
+			setExtent(width, 100 + (items.length * 20));
 		}
 	}
 }

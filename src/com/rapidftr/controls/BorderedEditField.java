@@ -13,7 +13,7 @@ public class BorderedEditField extends BasicEditField {
 	public BorderedEditField(String label, String defaultValue, Font defaultFont, int maxSize) {
 		super(label, defaultValue, maxSize, 0);
 
-		iRectWidth = defaultFont.getAdvance('w') * maxSize;
+		iRectWidth = defaultFont.getAdvance('e') * maxSize;
 
 		iRectX = defaultFont.getAdvance(getLabel());	
 		

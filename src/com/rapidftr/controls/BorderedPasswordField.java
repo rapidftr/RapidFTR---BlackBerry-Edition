@@ -18,7 +18,7 @@ public class BorderedPasswordField extends PasswordEditField {
 		
 		setFont( defaultFont );
 		
-		iRectWidth = defaultFont.getAdvance('w') * maxSize;
+		iRectWidth = defaultFont.getAdvance('e') * maxSize;
 
 		iRectX = defaultFont.getAdvance(getLabel());
 	}
