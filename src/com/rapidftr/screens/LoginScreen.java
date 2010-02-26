@@ -1,7 +1,6 @@
 package com.rapidftr.screens;
 
 import net.rim.device.api.system.Bitmap;
-import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
@@ -68,11 +67,7 @@ public class LoginScreen extends DisplayPage {
 			Properties.getInstance().setHostName(hostName);
 		}
 
-		Properties.getInstance().setUseCamera(
-				!layoutManager.disableCamera.getChecked());
-
-		Properties.getInstance().setConnectionType(
-				layoutManager.connectionsGroup.getSelectedIndex());
+		Properties.getInstance().setUseCamera(true);
 
 		try {
 			boolean loginResult = ServiceManager.getLoginService().login(
@@ -85,8 +80,8 @@ public class LoginScreen extends DisplayPage {
 			}
 		} catch (ServiceException se) {
 			System.out.println("Service Exception " + se);
-			
-			Dialog.alert("Login Error\n" + se);
+
+			Dialog.alert("Login Error:\n" + se.getMessage());
 		}
 	}
 
@@ -155,29 +150,15 @@ public class LoginScreen extends DisplayPage {
 			passwordField = new BorderedPasswordField("Password: ", "");
 			passwordField.setFont(defaultFont);
 
-			hostField = new BorderedEditField("Host: ",
-					"");
+			hostField = new BorderedEditField("Host: ", "");
 
 			hostField.setFont(Styles.getAuxFont());
-
-			disableCamera = new CheckboxField("Disable Camera: ", false);
-			disableCamera.setFont(Styles.getAuxFont());
-
-			connectionsGroup = new RadioButtonGroup();
-
-			wifi = new RadioButtonField("Wifi: ", connectionsGroup, true);
-			tcpip = new RadioButtonField("TCP/IP: ", connectionsGroup, false);
-			wifi.setFont(Styles.getAuxFont());
-			tcpip.setFont(Styles.getAuxFont());
 
 			add(imageField);
 			add(header);
 			add(usernameField);
 			add(passwordField);
 			add(hostField);
-			add(disableCamera);
-			add(wifi);
-			add(tcpip);
 			add(okButton);
 			add(closeButton);
 		}
@@ -188,9 +169,6 @@ public class LoginScreen extends DisplayPage {
 			layoutChild(usernameField, width, 25);
 			layoutChild(passwordField, width, 25);
 			layoutChild(hostField, width, 25);
-			layoutChild(disableCamera, width, 25);
-			layoutChild(wifi, width / 3, 25);
-			layoutChild(tcpip, width / 3, 25);
 
 			layoutChild(okButton, width / 4, 25);
 			layoutChild(closeButton, width / 4, 25);
@@ -217,15 +195,6 @@ public class LoginScreen extends DisplayPage {
 
 			setPositionChild(hostField,
 					10 + (width - hostField.getWidth()) / 2, y);
-
-			y += 20;
-
-			setPositionChild(disableCamera,
-					10 + (width - hostField.getWidth()) / 2, y);
-
-			y += 20;
-			setPositionChild(wifi, 10, y);
-			setPositionChild(tcpip, 80, y);
 
 			y += 20;
 
