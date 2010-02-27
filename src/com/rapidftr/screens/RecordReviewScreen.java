@@ -34,7 +34,6 @@ public class RecordReviewScreen extends DisplayPage {
 
 	private int type;
 	private ChildRecord record;
-	private String recordId;
 
 	public RecordReviewScreen() {
 		super(Manager.VERTICAL_SCROLL | Manager.VERTICAL_SCROLLBAR);
@@ -47,9 +46,7 @@ public class RecordReviewScreen extends DisplayPage {
 
 		this.record = (ChildRecord) (data.get("record"));
 
-		this.recordId = record.getRecordId();
-
-		add(new HeaderLayoutManager("Review Record", recordId));
+		add(new HeaderLayoutManager("Review Record", record.getRecordId()));
 
 		add(new IdentificationLayoutManager());
 
@@ -109,12 +106,12 @@ public class RecordReviewScreen extends DisplayPage {
 		try {
 			ServiceManager.getRecordService().save(record);
 
-			Dialog.alert("Child record " + recordId + " saved successfully");
+			Dialog.alert("Child record " + record.getRecordId() + " saved successfully");
 		} catch (ServiceException se) {
-			Dialog.alert("Failed to save record " + recordId + ": " + se);
+			Dialog.alert("Failed to save record " + record.getRecordId() + ": " + se);
 		}
 
-		popScreen(RETURN_HOME_ACTION, recordId);
+		popScreen(RETURN_HOME_ACTION, record.getRecordId());
 	}
 
 	private class IdentificationLayoutManager extends Manager {

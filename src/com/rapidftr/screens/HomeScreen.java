@@ -7,7 +7,6 @@ import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
-import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.Dialog;
 
 import com.rapidftr.Main;
@@ -15,9 +14,7 @@ import com.rapidftr.controls.Button;
 import com.rapidftr.controls.ImageButton;
 import com.rapidftr.layouts.BorderManager;
 import com.rapidftr.services.PhotoServiceListener;
-import com.rapidftr.services.ServiceException;
 import com.rapidftr.services.ServiceManager;
-import com.rapidftr.utilities.Properties;
 import com.rapidftr.utilities.Styles;
 import com.rapidftr.utilities.Utilities;
 
@@ -75,31 +72,6 @@ public class HomeScreen extends DisplayPage {
 		invalidate();
 	}
 
-	private MenuItem _takePhoto = new MenuItem("Take Photo", 110, 10) {
-		public void run() {
-			onTakePhoto();
-		}
-	};
-
-	private MenuItem _searchAndEdit = new MenuItem("Search + Edit", 110, 10) {
-		public void run() {
-			onSearchAndEdit();
-		}
-	};
-
-	private MenuItem _close = new MenuItem("Close " + Main.APPLICATION_NAME,
-			110, 10) {
-		public void run() {
-			onClose();
-		}
-	};
-
-//	protected void makeMenu(Menu menu, int instance) {
-//		menu.add(_takePhoto);
-//		menu.add(_searchAndEdit);
-//		menu.add(_close);
-//	}
-
 	public boolean onClose() {
 		Dialog.alert("Closing " + Main.APPLICATION_NAME);
 		System.exit(0);
@@ -107,23 +79,18 @@ public class HomeScreen extends DisplayPage {
 	}
 
 	private void onTakePhoto() {
-		if (Properties.getInstance().isUseCamera()) {
-			ServiceManager.getPhotoService().startCamera(
-					new PhotoServiceListener() {
+		ServiceManager.getPhotoService().startCamera(
+				new PhotoServiceListener() {
 
-						public void handlePhoto(EncodedImage encodedImage) {
-							EncodedImage photo = Utilities.getScaledImage(
-									encodedImage, 100);
+					public void handlePhoto(EncodedImage encodedImage) {
+						EncodedImage photo = Utilities.getScaledImage(
+								encodedImage, 100);
 
-							createNewRecord(photo);
-						}
+						createNewRecord(photo);
+					}
 
-					});
-		} else {
-			EncodedImage photo = ServiceManager.getPhotoService().getPhoto();
+				});
 
-			createNewRecord(photo);
-		}
 	}
 
 	private void createNewRecord(EncodedImage photo) {

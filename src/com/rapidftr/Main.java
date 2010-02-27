@@ -15,6 +15,7 @@ public class Main extends UiApplication {
 	 */
 	public static void main(String[] args) {
 
+		
 		// Create a new instance of the application.
 		Main application = new Main();
 

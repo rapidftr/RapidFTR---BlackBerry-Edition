@@ -11,14 +11,15 @@ public class Properties {
 	
 	private static final String DEFAULT_HOST = "97.107.135.7"; 
 	
+	private static final int DEFAULT_HTTP_TIMEOUT = 20000;
+	
 	private static Properties instance;
 
 	private String hostName;
 	private int port;
-	private boolean useCamera;
-	private int connectionType;
 	private String authenticityToken;
 	private String sessionCookie;
+	private int httpRequestTimeout;
 			
 	public static synchronized Properties getInstance() {
 		if (instance == null) {
@@ -29,7 +30,7 @@ public class Properties {
 	}
 
 	private Properties() {
-		useCamera = false;
+		httpRequestTimeout = DEFAULT_HTTP_TIMEOUT;
 	}
 	
 	public String getHostName() {
@@ -46,22 +47,6 @@ public class Properties {
 		//return ((hostName.length() == 0) || (hostName.equals(DEFAULT_HOST))) ? 80 : 3000;
 	}
 
-	public boolean isUseCamera() {
-		return useCamera;
-	}
-
-	public void setUseCamera(boolean useCamera) {
-		this.useCamera = useCamera;
-	}
-
-	public int getConnectionType() {
-		return connectionType;
-	}
-
-	public void setConnectionType(int connectionType) {
-		this.connectionType = connectionType;
-	}
-
 	public String getAuthenticityToken() {
 		return authenticityToken;
 	}
@@ -76,6 +61,14 @@ public class Properties {
 
 	public void setSessionCookie(String sessionCookie) {
 		this.sessionCookie = sessionCookie;
+	}
+
+	public int getHttpRequestTimeout() {
+		return httpRequestTimeout;
+	}
+
+	public void setHttpRequestTimeout(int httpRequestTimeout) {
+		this.httpRequestTimeout = httpRequestTimeout;
 	}
 	
 	

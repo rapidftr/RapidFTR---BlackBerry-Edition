@@ -131,7 +131,7 @@ public class HttpConnectionFactory {
 	 * The default order in which selected transports will be attempted
 	 * 
 	 */
-	public static final int DEFAULT_TRANSPORT_ORDER[] = { TRANSPORT_WIFI, TRANSPORT_DIRECT_TCP, TRANSPORT_BES, TRANSPORT_BIS, TRANSPORT_WAP2 };
+	public static final int DEFAULT_TRANSPORT_ORDER[] = { TRANSPORT_WIFI, TRANSPORT_BIS, TRANSPORT_DIRECT_TCP, TRANSPORT_BES, TRANSPORT_WAP2 };
 	
 	private static final int TRANSPORT_COUNT = DEFAULT_TRANSPORT_ORDER.length;
 	

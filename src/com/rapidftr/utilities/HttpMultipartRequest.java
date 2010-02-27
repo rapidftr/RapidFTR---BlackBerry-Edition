@@ -20,7 +20,8 @@ public class HttpMultipartRequest {
 	public HttpMultipartRequest(String url, Hashtable params, String fileField,
 			String fileName, String fileType, byte[] fileBytes)
 			throws Exception {
-		this.url = url + ";ConnectionTimeout=30000";
+		this.url = url + ";ConnectionTimeout="
+				+ Properties.getInstance().getHttpRequestTimeout();
 
 		this.cookie = Properties.getInstance().getSessionCookie();
 
@@ -71,7 +72,7 @@ public class HttpMultipartRequest {
 		return res.toString();
 	}
 
-	public byte[] send2(boolean isUpdate) throws Exception {
+	public byte[] send(boolean isUpdate) throws Exception {
 		HttpConnection connection = null;
 
 		InputStream is = null;
@@ -81,43 +82,18 @@ public class HttpMultipartRequest {
 		byte[] res = null;
 
 		HttpConnectionFactory factory = new HttpConnectionFactory(url,
-				HttpConnectionFactory.TRANSPORT_WIFI | HttpConnectionFactory.TRANSPORT_BIS | HttpConnectionFactory.TRANSPORT_DIRECT_TCP);
+				HttpConnectionFactory.TRANSPORT_WIFI
+						| HttpConnectionFactory.TRANSPORT_BIS
+						| HttpConnectionFactory.TRANSPORT_DIRECT_TCP);
 
 		try {
 			while (true) {
 				connection = factory.getNextConnection();
 
-				connection.setRequestProperty("cookie", cookie);
-
-				connection.setRequestProperty("Content-Type",
-						"multipart/form-data; boundary=" + getBoundaryString());
-
-				String requestMethod = (isUpdate) ? "PUT" : HttpConnection.POST;
-
-				connection.setRequestMethod(requestMethod);
-
-				OutputStream dout = connection.openOutputStream();
-
-				dout.write(postBytes);
-
-				dout.close();
-				int ch;
-
 				try {
-					int rc = connection.getResponseCode();
+					res = handlePost(connection, isUpdate);
 
-					System.out.println("RC " + rc);
-
-					if (rc == HttpConnection.HTTP_MOVED_TEMP) {
-
-						is = connection.openInputStream();
-
-						while ((ch = is.read()) != -1) {
-							bos.write(ch);
-						}
-						res = bos.toByteArray();
-
-						System.out.println("RESP " + new String(res));
+					if (res != null) {
 						break;
 					}
 				} catch (IOException e) {
@@ -145,69 +121,50 @@ public class HttpMultipartRequest {
 		return res;
 	}
 
-	// public byte[] send(boolean isUpdate) throws Exception {
-	// HttpConnection hc = null;
-	//
-	// InputStream is = null;
-	//
-	// ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	//
-	// byte[] res = null;
-	//
-	// try {
-	// System.out.println("Created connection");
-	//
-	// hc = (HttpConnection) Connector.open(url);
-	//
-	// System.out.println("After open URL");
-	//
-	// // use HTML response -- easier/quicker to parse
-	// // hc.setRequestProperty("Accept", "application/xml");
-	//
-	// hc.setRequestProperty("cookie", cookie);
-	//
-	// hc.setRequestProperty("Content-Type",
-	// "multipart/form-data; boundary=" + getBoundaryString());
-	//
-	// String requestMethod = (isUpdate) ? "PUT" : HttpConnection.POST;
-	//
-	// hc.setRequestMethod(requestMethod);
-	//
-	// OutputStream dout = hc.openOutputStream();
-	//
-	// System.out.println("got output stream");
-	//
-	// dout.write(postBytes);
-	//
-	// dout.close();
-	//
-	// int ch;
-	//
-	// System.out.println("COOKIE " + hc.getHeaderField("Set-Cookie"));
-	// is = hc.openInputStream();
-	// //
-	// while ((ch = is.read()) != -1) {
-	// bos.write(ch);
-	// }
-	// res = bos.toByteArray();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	//
-	// throw e;
-	// } finally {
-	// try {
-	// if (bos != null)
-	// bos.close();
-	//
-	// if (is != null)
-	// is.close();
-	//
-	// if (hc != null)
-	// hc.close();
-	// } catch (Exception e2) {
-	// e2.printStackTrace();
-	// }
-	// }
-	// return res;
-	// }
+	private byte[] handlePost(HttpConnection connection, boolean isUpdate)
+			throws IOException {
+		byte[] res = null;
+
+		connection.setRequestProperty("cookie", cookie);
+
+		connection.setRequestProperty("Content-Type",
+				"multipart/form-data; boundary=" + getBoundaryString());
+
+//		connection.setRequestProperty("Accept", "application/xml");
+		
+		String requestMethod = (isUpdate) ? "PUT" : HttpConnection.POST;
+
+		connection.setRequestMethod(requestMethod);
+
+		OutputStream dout = connection.openOutputStream();
+
+		dout.write(postBytes);
+
+		dout.close();
+
+		int rc = connection.getResponseCode();
+
+		System.out.println("RC " + rc);
+
+//		if (rc == HttpConnection.HTTP_CREATED) {
+		if (rc == HttpConnection.HTTP_MOVED_TEMP) {
+			res = getResponse(connection);
+		}
+
+		return res;
+	}
+
+	private byte[] getResponse(HttpConnection connection) throws IOException {
+		InputStream is = connection.openInputStream();
+
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+		int ch;
+
+		while ((ch = is.read()) != -1) {
+			bos.write(ch);
+		}
+
+		return bos.toByteArray();
+	}
 }

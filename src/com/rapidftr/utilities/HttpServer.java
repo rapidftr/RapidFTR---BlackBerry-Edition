@@ -17,15 +17,13 @@ import org.xml.sax.helpers.DefaultHandler;
 public class HttpServer {
 	private static final String IMAGE_MIME_TYPE = "image/jpg";
 
-	private static final String CONNECTION_BIS = ";XXXXXXXXXXXXXXXX";
-	private static final String CONNECTION_TCPIP = ";deviceside=true";
-	private static final String CONNECTION_WIFI = ";interface=wifi";
-
 	private static final int GET_IMAGE = 1;
 	private static final int GET_HTML = 2;
 	private static final int GET_STREAM = 3;
 
 	private static HttpServer instance;
+
+	private int requestTimeout;
 
 	public static synchronized HttpServer getInstance() {
 		if (instance == null) {
@@ -36,6 +34,7 @@ public class HttpServer {
 	}
 
 	private HttpServer() {
+		requestTimeout = Properties.getInstance().getHttpRequestTimeout();
 	}
 
 	public Hashtable getSessionParameters() throws Exception {
@@ -70,10 +69,10 @@ public class HttpServer {
 		String imageName = "photo.jpg";
 
 		HttpMultipartRequest req = new HttpMultipartRequest(getUrlPrefix()
-				+ uri, params, photoKey, imageName,
-				IMAGE_MIME_TYPE, photoData);
+				+ uri, params, photoKey, imageName, IMAGE_MIME_TYPE, photoData);
 
-		byte[] response = req.send2(isUpdate);
+		byte[] response = req.send(isUpdate);
+
 
 		// parse the HTTP response
 		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
@@ -85,8 +84,8 @@ public class HttpServer {
 		return handler.getId();
 	}
 
-	public InputStream getFromServer(String uri) throws Exception {		
-		String response = (String)getFromServer( uri, GET_STREAM ); 
+	public InputStream getFromServer(String uri) throws Exception {
+		String response = (String) getFromServer(uri, GET_STREAM);
 
 		response = transformResponse(response);
 
@@ -142,18 +141,19 @@ public class HttpServer {
 		return response;
 	}
 
-	public byte[] getImageFromServer(String uri) throws IOException,
+	public byte[] getImageFromServer(String uri) throws Exception,
 			NoMoreTransportsException {
 
-		return (byte[])getFromServer( uri, GET_IMAGE );
+		return (byte[]) getFromServer(uri, GET_IMAGE);
 	}
 
-	public Hashtable getAsHtmlFromServer(String uri) throws IOException {
-		return (Hashtable)getFromServer( uri, GET_HTML );
+	public Hashtable getAsHtmlFromServer(String uri) throws Exception {
+		return (Hashtable) getFromServer(uri, GET_HTML);
 	}
 
-	public Object getFromServer(String uri, int type) throws IOException {
-		String url = getUrlPrefix() + uri + ";ConnectionTimeout=30000";
+	public Object getFromServer(String uri, int type) throws Exception {
+		String url = getUrlPrefix() + uri + ";ConnectionTimeout="
+				+ requestTimeout;
 
 		Object output = null;
 
@@ -161,7 +161,9 @@ public class HttpServer {
 		InputStream is = null;
 
 		HttpConnectionFactory factory = new HttpConnectionFactory(url,
-				HttpConnectionFactory.TRANSPORT_WIFI | HttpConnectionFactory.TRANSPORT_BIS | HttpConnectionFactory.TRANSPORT_DIRECT_TCP);
+				HttpConnectionFactory.TRANSPORT_WIFI
+						| HttpConnectionFactory.TRANSPORT_BIS
+						| HttpConnectionFactory.TRANSPORT_DIRECT_TCP);
 
 		while (true) {
 			try {
@@ -179,12 +181,12 @@ public class HttpServer {
 					connection.setRequestProperty("Accept", "application/xml");
 					break;
 				}
-				
+
 				int rc = connection.getResponseCode();
 
 				if (rc == HttpConnection.HTTP_OK) {
 					is = connection.openInputStream();
-					
+
 					switch (type) {
 					case GET_IMAGE:
 						output = handleImageResponse(connection, is);
@@ -205,15 +207,15 @@ public class HttpServer {
 				if (connection != null)
 					connection.close();
 
-				throw new IllegalArgumentException(e.getMessage());
+				throw e;
 			}
 		}
 
 		return output;
 	}
 
-	private Object handleImageResponse(HttpConnection connection,
-			InputStream is) throws IOException {
+	private Object handleImageResponse(HttpConnection connection, InputStream is)
+			throws IOException {
 		byte[] response = null;
 
 		// Get the length and process the data
@@ -225,7 +227,7 @@ public class HttpServer {
 
 		is.close();
 		connection.close();
-		
+
 		return response;
 	}
 
@@ -239,12 +241,12 @@ public class HttpServer {
 
 		is.close();
 		connection.close();
-		
+
 		return response;
 	}
 
-	private Object handleHtmlResponse(HttpConnection connection,
-			InputStream is) throws IOException {
+	private Object handleHtmlResponse(HttpConnection connection, InputStream is)
+			throws IOException {
 		Hashtable output = new Hashtable();
 
 		output.put("cookie", connection.getHeaderField("Set-Cookie"));
@@ -260,24 +262,6 @@ public class HttpServer {
 		int port = Properties.getInstance().getPort();
 
 		return "http://" + hostName + ":" + port + "/";
-	}
-
-	private String getConectionSuffix() {
-		String connection = null;
-
-		switch (Properties.getInstance().getConnectionType()) {
-		case Properties.CONNECTION_BIS:
-			connection = CONNECTION_BIS;
-			break;
-		case Properties.CONNECTION_TCPIP:
-			connection = CONNECTION_TCPIP;
-			break;
-		case Properties.CONNECTION_WIFI:
-			connection = CONNECTION_WIFI;
-			break;
-		}
-
-		return connection;
 	}
 
 	private class TokenHandler extends DefaultHandler {

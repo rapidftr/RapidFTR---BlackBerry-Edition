@@ -82,7 +82,7 @@ src\navigation.config
 ]
 HaveAlxImports=0
 HaveDefs=0
-HaveImports=0
+HaveImports=1
 [Icons
 res\img\cf.png
 ]

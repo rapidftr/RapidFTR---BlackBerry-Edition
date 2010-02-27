@@ -11,7 +11,6 @@ import net.rim.device.api.ui.component.CheckboxField;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.component.RadioButtonField;
 import net.rim.device.api.ui.component.RadioButtonGroup;
 
 import com.rapidftr.Main;
@@ -67,8 +66,6 @@ public class LoginScreen extends DisplayPage {
 			Properties.getInstance().setHostName(hostName);
 		}
 
-		Properties.getInstance().setUseCamera(true);
-
 		try {
 			boolean loginResult = ServiceManager.getLoginService().login(
 					userName, password);
@@ -110,8 +107,6 @@ public class LoginScreen extends DisplayPage {
 
 		public BorderedEditField hostField;
 		public CheckboxField disableCamera;
-		private RadioButtonField wifi;
-		private RadioButtonField tcpip;
 		public RadioButtonGroup connectionsGroup;
 
 		private LabelField header;
