@@ -61,7 +61,7 @@ public class AddFamilyScreen extends DisplayPage {
 	}
 
 	public boolean onClose() {
-		popScreen(POP_ACTION, null);
+		//popScreen(POP_ACTION, null);
 
 		return true;
 	}

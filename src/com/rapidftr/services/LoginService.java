@@ -1,7 +1,7 @@
 package com.rapidftr.services;
 
 public interface LoginService {
-	boolean login(String userName, String password) throws ServiceException;
+	boolean login(String hostName, String userName, String password) throws ServiceException;
 
 	String getLoggedInUser();
 	

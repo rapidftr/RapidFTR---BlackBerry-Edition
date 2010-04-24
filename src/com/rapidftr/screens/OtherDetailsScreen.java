@@ -67,13 +67,13 @@ public class OtherDetailsScreen extends DisplayPage {
 		userInfo.put("protectionConcerns", protectionConcerns);
 		userInfo.put("caregiverDetails", caregiverDetails);
 		
-		popScreen(POP_ACTION, userInfo);
+		//popScreen(POP_ACTION, userInfo);
 		
 		return true;
 	}
 
 	public boolean onClose() {
-		popScreen(POP_ACTION, null);
+		//popScreen(POP_ACTION, null);
 
 		return true;
 	}

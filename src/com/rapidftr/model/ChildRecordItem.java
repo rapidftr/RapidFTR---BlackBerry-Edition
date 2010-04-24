@@ -6,10 +6,10 @@ public class ChildRecordItem implements Persistable {
 	// temporary?
 	private static final String RECORD_ID_PREFIX = "fix_me_to_return_session_user_name";
 
-	protected String id;
-	protected String recordId;
-	protected String name;
-	protected byte[] photo;
+	protected String id = "";
+	protected String recordId = "";
+	protected String name = "";
+	protected byte[] photo = null;
 
 	public ChildRecordItem() {
 	}
@@ -35,6 +35,7 @@ public class ChildRecordItem implements Persistable {
 	}
 
 	public String getRecordId() {
+		
 		return (recordId.indexOf(RECORD_ID_PREFIX) != -1) ? recordId
 				.substring(RECORD_ID_PREFIX.length()) : recordId;
 	}

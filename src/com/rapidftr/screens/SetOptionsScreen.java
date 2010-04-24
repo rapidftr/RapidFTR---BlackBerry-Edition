@@ -54,13 +54,13 @@ public class SetOptionsScreen extends DisplayPage {
 			options.setOption(i, field.getChecked());
 		}
 
-		popScreen(POP_ACTION, options);
+		//popScreen(POP_ACTION, options);
 		
 		return true;
 	}
 	
 	public boolean onClose() {
-		popScreen(POP_ACTION, null);
+		//popScreen(POP_ACTION, null);
 
 		return true;
 	}

@@ -77,7 +77,7 @@ public class RecordCreationScreen extends DisplayPage {
 	}
 
 	public boolean onClose() {
-		popScreen(POP_ACTION, null);
+		//popScreen(POP_ACTION, null);
 
 		return true;
 	}
@@ -105,10 +105,10 @@ public class RecordCreationScreen extends DisplayPage {
 		userInfo.put("record", record);
 		userInfo.put("type", String.valueOf(NavigatorScreen.TYPE_NEW));
 
-		pushScreen(1, userInfo);
+		//pushScreen(1, userInfo);
 	}
 
 	private void onSearchAndEdit() {
-		pushScreen(SEARCH_ACTION, null);
+		//pushScreen(SEARCH_ACTION, null);
 	}
 }

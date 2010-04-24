@@ -31,12 +31,12 @@ public class LoginServiceImpl implements LoginService {
 	private LoginServiceImpl() {
 	}
 
-	public boolean login(String userName, String password)
+	public boolean login(String hostName, String userName, String password)
 			throws ServiceException {
 		boolean isValid = false;
 
 		try {
-			isValid = validateLogin(userName, password);
+			isValid = validateLogin(hostName, userName, password);
 		} catch (Exception e) {
 			throw new ServiceException("Unable to reach server (" + e.getMessage() + ")");
 		}
@@ -69,8 +69,9 @@ public class LoginServiceImpl implements LoginService {
 		this.loggedInFullName = loggedInFullName;
 	}
 
-	boolean validateLogin(String userName, String password) throws Exception {
-		InputStream is = HttpServer.getInstance().getFromServer("users");
+	boolean validateLogin(String hostname, String userName, String password) throws Exception {
+		// TODO(tcox): Hook into login box
+		InputStream is = HttpServer.getInstance().getFromServer("http://ci.rapidftr.com:3000/sessions");
 
 		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 

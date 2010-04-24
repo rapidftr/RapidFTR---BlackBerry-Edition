@@ -163,7 +163,7 @@ public class NavigatorScreen extends DisplayPage {
 
 	public boolean onClose() {
 		if (Dialog.ask(Dialog.D_YES_NO, "Are you sure?") == Dialog.YES) {
-			popScreen(RETURN_HOME_ACTION, record.getRecordId());
+			//popScreen(RETURN_HOME_ACTION, record.getRecordId());
 		}
 
 		return true;
@@ -192,19 +192,19 @@ public class NavigatorScreen extends DisplayPage {
 	}
 
 	private void onIdentification() {
-		pushScreen(ID_SCREEN_ACTION, record);
+		//pushScreen(ID_SCREEN_ACTION, record);
 	}
 
 	private void onAddFamily() {
-		pushScreen(FAMILY_SCREEN_ACTION, record.getRecordId());
+		//pushScreen(FAMILY_SCREEN_ACTION, record.getRecordId());
 	}
 
 	private void onAddOther() {
-		pushScreen(OTHER_SCREEN_ACTION, record.getRecordId());
+		//pushScreen(OTHER_SCREEN_ACTION, record.getRecordId());
 	}
 
 	private void onSetOptions() {
-		pushScreen(OPTIONS_SCREEN_ACTION, record.getRecordId());
+		//pushScreen(OPTIONS_SCREEN_ACTION, record.getRecordId());
 	}
 
 	private void onSaveRecord() {
@@ -214,7 +214,7 @@ public class NavigatorScreen extends DisplayPage {
 			userInfo.put("record", record);
 			userInfo.put("type", String.valueOf(TYPE_NEW));
 
-			pushScreen(SAVE_ACTION, userInfo);
+			//pushScreen(SAVE_ACTION, userInfo);
 		} else {
 			Dialog.alert("Child name cannot be blank");
 		}
@@ -270,6 +270,10 @@ public class NavigatorScreen extends DisplayPage {
 
 			imageField = new BitmapField(Utilities.getScaledBitmapFromBytes(
 					record.getPhoto(), 80));
+			/*
+			if (record.getPhoto() != null && record.getPhoto().length != 0) {
+				imageField.setBitmap(bitmap)
+			}*/
 
 			add(imageField);
 

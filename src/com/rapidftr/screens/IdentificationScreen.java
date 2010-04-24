@@ -75,12 +75,12 @@ public class IdentificationScreen extends DisplayPage {
 
 		data.setMale(layoutManager.gendersGroup.getSelectedIndex() == 0);
 
-		popScreen(POP_ACTION, data);
+		//popScreen(POP_ACTION, data);
 		return true;
 	}
 
 	public boolean onClose() {
-		popScreen(POP_ACTION, null);
+		//popScreen(POP_ACTION, null);
 
 		return true;
 	}

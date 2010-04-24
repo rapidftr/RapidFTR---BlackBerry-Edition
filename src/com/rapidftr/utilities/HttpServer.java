@@ -33,7 +33,7 @@ public class HttpServer {
 		return instance;
 	}
 
-	private HttpServer() {
+	public HttpServer() {
 		requestTimeout = Properties.getInstance().getHttpRequestTimeout();
 	}
 
@@ -163,7 +163,8 @@ public class HttpServer {
 		HttpConnectionFactory factory = new HttpConnectionFactory(url,
 				HttpConnectionFactory.TRANSPORT_WIFI
 						| HttpConnectionFactory.TRANSPORT_BIS
-						| HttpConnectionFactory.TRANSPORT_DIRECT_TCP);
+						| HttpConnectionFactory.TRANSPORT_DIRECT_TCP
+						| HttpConnectionFactory.TRANSPORTS_ANY);
 
 		while (true) {
 			try {

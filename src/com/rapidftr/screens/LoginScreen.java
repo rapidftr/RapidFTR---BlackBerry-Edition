@@ -1,89 +1,152 @@
 package com.rapidftr.screens;
 
+import java.util.Hashtable;
+
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
-import net.rim.device.api.ui.Font;
-import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.XYEdges;
+import net.rim.device.api.ui.component.BasicEditField;
 import net.rim.device.api.ui.component.BitmapField;
-import net.rim.device.api.ui.component.CheckboxField;
 import net.rim.device.api.ui.component.Dialog;
-import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.component.RadioButtonGroup;
+import net.rim.device.api.ui.component.PasswordEditField;
+import net.rim.device.api.ui.component.SeparatorField;
+import net.rim.device.api.ui.component.TextField;
+import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.Main;
-import com.rapidftr.controls.BorderedEditField;
-import com.rapidftr.controls.BorderedPasswordField;
 import com.rapidftr.controls.Button;
-import com.rapidftr.services.ServiceException;
-import com.rapidftr.services.ServiceManager;
-import com.rapidftr.utilities.Properties;
-import com.rapidftr.utilities.Styles;
+import com.rapidftr.utilities.FtrStore;
+import com.rapidftr.utilities.HttpServer;
 
-public class LoginScreen extends DisplayPage {
-	public static final int HOME_SCREEN_ACTION = 1;
+public class LoginScreen extends MainScreen {
 
-	private LayoutManager layoutManager;
+	private static final int BUTTON_WIDTH = 50;
+	private static final int MAX_SIZE = 200;
+	private static final XYEdges PADDING = new XYEdges(4, 4, 4, 4);
 
-	public LoginScreen() {
+	private final BasicEditField usernameField = new BasicEditField(
+			"Username:", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
+	private final PasswordEditField passwordField = new PasswordEditField(
+			"Password:", "", MAX_SIZE, USE_ALL_WIDTH);
+	private final BasicEditField hostField = new BasicEditField("Host:", "",
+			MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
+
+	private final FtrStore store;
+	private final FtrController controller;
+
+	public LoginScreen(FtrStore store, FtrController controller) {
 		super();
+		this.store = store;
+		this.controller = controller;
+		addLogo();
+		add(new SeparatorField());
+		usernameField.setPadding(PADDING);
+		usernameField.setText(store.getLastUsedLoginUsername());
+		add(usernameField);
+		passwordField.setPadding(PADDING);
+		add(passwordField);
+		add(new SeparatorField());
+		addButtons();
+		passwordField.setFocus();
+	}
 
-		int limit = 50;
+	private void addHostField(FtrStore store) {
+		if (hostField.getManager() != null) {
+			return;
+		}
+		hostField.setPadding(PADDING);
+		hostField.setText(store.getLastUsedLoginHost());
+		int hostPosition = getHostPosition();
+		if (hostPosition == -1) {
+			add(hostField);
+		} else {
+			insert(hostField, hostPosition);
+		}
+	}
 
-		Button okButton = new Button("OK", limit);
-		Button closeButton = new Button("Close", limit);
+	private int getHostPosition() {
+		int position = getFieldCount() - 2;
+		if (position >= 0) {
+			return position;
+		} else {
+			return -1;
+		}
+	}
 
-		layoutManager = new LayoutManager(okButton, closeButton);
+	private void saveValuesToStore() {
+		store.setLastUsedUsername(usernameField.getText());
+		store.setLastUsedHost(hostField.getText());
+	}
 
-		add(layoutManager);
+	private void addLogo() {
+		Bitmap bitmap = Bitmap.getBitmapResource("img/logo.jpg");
+		if (bitmap == null) {
+			return;
+		}
 
-		FieldChangeListener closeListener = new FieldChangeListener() {
+		BitmapField field = new BitmapField(bitmap, FIELD_HCENTER);
+		field.setPadding(PADDING);
+		add(field);
+	}
+
+	private void addButtons() {
+		Button okButton = new Button("Login", BUTTON_WIDTH);
+		Button closeButton = new Button("Close", BUTTON_WIDTH);
+
+		closeButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onClose();
 			}
-		};
+		});
 
-		closeButton.setChangeListener(closeListener);
-
-		FieldChangeListener okListener = new FieldChangeListener() {
+		okButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onLaunch();
 			}
-		};
+		});
 
-		okButton.setChangeListener(okListener);
+		Manager manager = new HorizontalFieldManager(FIELD_HCENTER);
+		manager.setPadding(PADDING);
+		okButton.setPadding(PADDING);
+		manager.add(okButton);
+		closeButton.setPadding(PADDING);
+		manager.add(closeButton);
+		add(manager);
+	}
+
+	protected void onChangeHost() {
+		addHostField(store);
 	}
 
 	private void onLaunch() {
-		String userName = layoutManager.usernameField.getText();
-		String password = layoutManager.passwordField.getText();
-
-		String hostName = layoutManager.hostField.getText();
-
-		if (hostName != null) {
-			Properties.getInstance().setHostName(hostName);
-		}
-
+		saveValuesToStore();
+		
+		HttpServer server = new HttpServer();
 		try {
-			boolean loginResult = ServiceManager.getLoginService().login(
-					userName, password);
-
-			if (loginResult) {
-				pushScreen(HOME_SCREEN_ACTION, null);
-			} else {
-				Dialog.alert("Invalid login.\nTry again.");
-			}
-		} catch (ServiceException se) {
-			System.out.println("Service Exception " + se);
-
-			Dialog.alert("Login Error:\n" + se.getMessage());
+			Dialog.inform("about to hit google");
+			Hashtable foo = server.getAsHtmlFromServer("www.google.com");
+			Dialog.inform("It worked maybe");
+		} catch (Exception e) {
+			Dialog.inform("broked");
+			Dialog.inform(e.getClass().toString());
+			Dialog.inform(e.getMessage());
+			e.printStackTrace();
 		}
+		
 	}
 
 	protected void makeMenu(Menu menu, int instance) {
-
+		MenuItem changeHostMenuItem = new MenuItem("Change Host", 1, 1) {
+			public void run() {
+				onChangeHost();
+			}
+		};
+		menu.add(changeHostMenuItem);
 	}
 
 	protected boolean navigationClick(int status, int time) {
@@ -94,111 +157,5 @@ public class LoginScreen extends DisplayPage {
 		Dialog.alert("Closing " + Main.APPLICATION_NAME);
 		System.exit(0);
 		return true;
-	}
-
-	/**
-	 * Layout Manager
-	 * 
-	 */
-
-	private class LayoutManager extends Manager {
-		public BorderedEditField usernameField;
-		public BorderedPasswordField passwordField;
-
-		public BorderedEditField hostField;
-		public CheckboxField disableCamera;
-		public RadioButtonGroup connectionsGroup;
-
-		private LabelField header;
-		private Button okButton;
-		private Button closeButton;
-		private BitmapField imageField;
-
-		public LayoutManager(Button okButton, Button closeButton) {
-			super(0);
-
-			this.okButton = okButton;
-			this.closeButton = closeButton;
-
-			final Font titleFont = Styles.getTitleFont();
-
-			Font defaultFont = Styles.getDefaultFont();
-
-			header = new LabelField("Login") {
-				public void paint(Graphics graphics) {
-					graphics.setColor(0x00008800);
-					super.paint(graphics);
-				}
-			};
-
-			header.setFont(titleFont);
-
-			Bitmap logoImage = Bitmap.getBitmapResource("img/logo.jpg");
-
-			imageField = new BitmapField(logoImage);
-
-			usernameField = new BorderedEditField("User Name: ", "",
-					defaultFont, 19);
-
-			usernameField.setFont(defaultFont);
-
-			passwordField = new BorderedPasswordField("Password: ", "");
-			passwordField.setFont(defaultFont);
-
-			hostField = new BorderedEditField("Host: ", "");
-
-			hostField.setFont(Styles.getAuxFont());
-
-			add(imageField);
-			add(header);
-			add(usernameField);
-			add(passwordField);
-			add(hostField);
-			add(okButton);
-			add(closeButton);
-		}
-
-		protected void sublayout(int width, int height) {
-			layoutChild(imageField, width, 50);
-			layoutChild(header, width, 25);
-			layoutChild(usernameField, width, 25);
-			layoutChild(passwordField, width, 25);
-			layoutChild(hostField, width, 25);
-
-			layoutChild(okButton, width / 4, 25);
-			layoutChild(closeButton, width / 4, 25);
-
-			int y = 10;
-
-			setPositionChild(imageField, (width - imageField.getWidth()) / 2, y);
-
-			y += 40;
-
-			setPositionChild(header, (width - header.getWidth()) / 2, y);
-
-			y += 25;
-
-			setPositionChild(usernameField, 10 + (width - usernameField
-					.getWidth()) / 2, y);
-
-			y += 25;
-
-			setPositionChild(passwordField, 10 + (width - passwordField
-					.getWidth()) / 2, y);
-
-			y += 25;
-
-			setPositionChild(hostField,
-					10 + (width - hostField.getWidth()) / 2, y);
-
-			y += 20;
-
-			setPositionChild(okButton, 60, y);
-			setPositionChild(closeButton, 160, y);
-
-			int actualHeight = y + 30;
-
-			setExtent(width, actualHeight);
-		}
 	}
 }

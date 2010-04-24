@@ -1,7 +1,5 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.NavigationController;
-
 import net.rim.device.api.ui.container.MainScreen;
 
 abstract public class DisplayPage extends MainScreen implements Page {
@@ -18,16 +16,6 @@ abstract public class DisplayPage extends MainScreen implements Page {
 	
 	protected boolean navigationClick(int status, int time) {
 		return true;
-	}
-
-	protected void pushScreen(int actionId, Object userInfo) {
-		NavigationController controller = NavigationController.getInstance(this.getUiEngine());
-		
-		controller.pushScreen(this, actionId, userInfo);
-	}
-	
-	protected void popScreen(int actionId, Object userInfo) {
-		NavigationController.getInstance(this.getUiEngine()).popScreen(actionId, userInfo);
 	}
 	
 	public void initializePage(Object userInfo) {

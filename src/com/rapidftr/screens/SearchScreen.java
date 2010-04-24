@@ -97,11 +97,11 @@ public class SearchScreen extends DisplayPage {
 		userInfo.put("record", record);
 		userInfo.put("type", String.valueOf(NavigatorScreen.TYPE_EDIT) );
 		
-		pushScreen(RECORD_EDIT_ACTION, userInfo);
+		//pushScreen(RECORD_EDIT_ACTION, userInfo);
 	}
 
 	public boolean onClose() {
-		popScreen(POP_ACTION, null);
+		//popScreen(POP_ACTION, null);
 
 		return true;
 	}

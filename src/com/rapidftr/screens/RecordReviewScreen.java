@@ -91,14 +91,14 @@ public class RecordReviewScreen extends DisplayPage {
 
 	private void onEdit() {
 		if (type == NavigatorScreen.TYPE_NEW) {
-			popScreen(POP_ACTION, record);
+			//popScreen(POP_ACTION, record);
 		} else {
 			Hashtable userInfo = new Hashtable();
 			
 			userInfo.put("record", record);
 			userInfo.put("type", String.valueOf(type));
 			
-			pushScreen(NAVIGATOR_SCREEN_ACTION, userInfo);
+			//pushScreen(NAVIGATOR_SCREEN_ACTION, userInfo);
 		}
 	}
 
@@ -111,7 +111,7 @@ public class RecordReviewScreen extends DisplayPage {
 			Dialog.alert("Failed to save record " + record.getRecordId() + ": " + se);
 		}
 
-		popScreen(RETURN_HOME_ACTION, record.getRecordId());
+		//popScreen(RETURN_HOME_ACTION, record.getRecordId());
 	}
 
 	private class IdentificationLayoutManager extends Manager {
