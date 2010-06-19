@@ -4,8 +4,10 @@ import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 
-import com.rapidftr.screens.NavigationController;
+import com.rapidftr.controllers.LoginController;
 import com.rapidftr.screens.LoginScreen;
+import com.rapidftr.screens.NavigationController;
+import com.rapidftr.screens.UiStack;
 import com.rapidftr.utilities.SettingsStore;
 
 public class Main extends UiApplication {
@@ -37,7 +39,9 @@ public class Main extends UiApplication {
 
 		SettingsStore settings = new SettingsStore();
 		NavigationController controller = new NavigationController(this);
-		pushScreen(new LoginScreen(settings, controller));
+		LoginController loginController = new LoginController(new LoginScreen(settings, controller), new UiStack(this));
+		loginController.show();
+	
 	}
 
 	private void enableEventInjection() {
