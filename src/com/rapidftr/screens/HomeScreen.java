@@ -8,22 +8,20 @@ import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.Screen;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.FlowFieldManager;
+import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.Main;
 import com.rapidftr.controls.Button;
 import com.rapidftr.controls.ImageButton;
-import com.rapidftr.layouts.BorderManager;
-import com.rapidftr.model.ChildRecord;
 import com.rapidftr.services.PhotoServiceListener;
 import com.rapidftr.services.ServiceManager;
 import com.rapidftr.utilities.Styles;
 import com.rapidftr.utilities.Utilities;
 
-public class HomeScreen extends DisplayPage {
+public class HomeScreen extends MainScreen {
 	public static final int CREATE_RECORD_ACTION = 1; // Legacy?  Looks like photo taking code
 	public static final int SEARCH_ACTION = 2;
 	public static final int CREATE_NEW_CHILD_RECORD_ACTION = 3;
@@ -87,19 +85,8 @@ public class HomeScreen extends DisplayPage {
 	}
 
 	private void onCreateNewChildRecord() {
-		RecordEditScreen screen = new RecordEditScreen();
-		ChildRecord childRecord = new ChildRecord();
-		screen.initializePage(childRecord);
-		this.getUiEngine().pushScreen(screen);
+		
 
-	}
-
-	public void updatePage(Object userInfo, DisplayPage source) {
-		String recordId = (String) userInfo;
-
-		//manager.headerField.setText("Status: saved record " + recordId);
-
-		invalidate();
 	}
 
 	public boolean onClose() {
