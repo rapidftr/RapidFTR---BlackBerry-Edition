@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import net.rim.device.api.system.PersistentObject;
 import net.rim.device.api.system.PersistentStore;
 
-public class FtrStore {
+public class SettingsStore {
 	
 	private static final String DEFAULT_HOST = "defaulthost.foo.org";
 
@@ -20,7 +20,7 @@ public class FtrStore {
 
 	private Hashtable contents;
 	
-	public FtrStore() {
+	public SettingsStore() {
 		loadContentsHashtable();
 	}
 

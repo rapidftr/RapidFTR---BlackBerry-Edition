@@ -4,9 +4,9 @@ import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 
-import com.rapidftr.screens.FtrController;
+import com.rapidftr.screens.NavigationController;
 import com.rapidftr.screens.LoginScreen;
-import com.rapidftr.utilities.FtrStore;
+import com.rapidftr.utilities.SettingsStore;
 
 public class Main extends UiApplication {
 
@@ -35,8 +35,8 @@ public class Main extends UiApplication {
 	public Main() {
 		enableEventInjection();
 
-		FtrStore store = new FtrStore();
-		FtrController controller = new FtrController(this);
+		SettingsStore store = new SettingsStore();
+		NavigationController controller = new NavigationController(this);
 		pushScreen(new LoginScreen(store, controller));
 	}
 

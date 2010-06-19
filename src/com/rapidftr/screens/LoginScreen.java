@@ -20,7 +20,7 @@ import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.Main;
 import com.rapidftr.controls.Button;
-import com.rapidftr.utilities.FtrStore;
+import com.rapidftr.utilities.SettingsStore;
 import com.rapidftr.utilities.HttpServer;
 
 public class LoginScreen extends MainScreen {
@@ -36,13 +36,18 @@ public class LoginScreen extends MainScreen {
 	private final BasicEditField hostField = new BasicEditField("Host:", "",
 			MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
 
-	private final FtrStore store;
-	private final FtrController controller;
+	private final SettingsStore store;
+	private final NavigationController controller;
 
-	public LoginScreen(FtrStore store, FtrController controller) {
+	public LoginScreen(SettingsStore store, NavigationController controller) {
 		super();
 		this.store = store;
 		this.controller = controller;
+		layoutScreen();
+		passwordField.setFocus();
+	}
+
+	private void layoutScreen() {
 		addLogo();
 		add(new SeparatorField());
 		usernameField.setPadding(PADDING);
@@ -52,10 +57,9 @@ public class LoginScreen extends MainScreen {
 		add(passwordField);
 		add(new SeparatorField());
 		addButtons();
-		passwordField.setFocus();
 	}
 
-	private void addHostField(FtrStore store) {
+	private void addHostField(SettingsStore store) {
 		if (hostField.getManager() != null) {
 			return;
 		}
