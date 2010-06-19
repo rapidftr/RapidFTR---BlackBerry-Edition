@@ -15,23 +15,13 @@ import com.rapidftr.utilities.HttpServer;
 import com.rapidftr.utilities.Properties;
 
 public class LoginServiceImpl implements LoginService {
-	private static LoginService instance;
-
 	private String loggedInUser;
 	private String loggedInFullName;
 
-	public static synchronized LoginService getInstance() {
-		if (instance == null) {
-			instance = new LoginServiceImpl();
-		}
-
-		return instance;
-	}
-
-	private LoginServiceImpl() {
-	}
-
-	public boolean login(String hostName, String userName, String password)
+	public String login(String userName, String password) throws ServiceException {
+        return login("dev.rapidftr.com:3000", userName, password);
+    }
+	public String login(String hostName, String userName, String password)
 			throws ServiceException {
 		boolean isValid = false;
 
@@ -53,14 +43,14 @@ public class LoginServiceImpl implements LoginService {
 			}
 		}
 
-		return isValid;
+		return "junk";
 	}
 
 	public String getLoggedInUser() {
 		return loggedInUser;
 	}
 
-	
+
 	public String getLoggedInFullName() {
 		return loggedInFullName;
 	}

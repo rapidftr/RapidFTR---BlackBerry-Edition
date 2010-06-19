@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="RIM">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../tools/eclipse/plugins/net.rim.ejde.componentpack4.6.1_4.6.1.36/components/lib/net_rim_api.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

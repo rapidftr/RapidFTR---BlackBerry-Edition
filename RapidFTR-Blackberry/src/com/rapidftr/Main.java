@@ -1,12 +1,13 @@
 package com.rapidftr;
 
+import com.rapidftr.services.LoginService;
+import com.rapidftr.services.impl.LoginServiceImpl;
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.screens.LoginScreen;
-import com.rapidftr.screens.NavigationController;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.utilities.SettingsStore;
 
@@ -38,8 +39,8 @@ public class Main extends UiApplication {
 		enableEventInjection();
 
 		SettingsStore settings = new SettingsStore();
-		NavigationController controller = new NavigationController(this);
-		LoginController loginController = new LoginController(new LoginScreen(settings, controller), new UiStack(this));
+        LoginService loginService = new LoginServiceImpl();
+        LoginController loginController = new LoginController(new LoginScreen(settings), new UiStack(this), loginService, settings);
 		loginController.show();
 	
 	}

@@ -1,7 +1,5 @@
 package com.rapidftr.screens;
 
-import java.util.Hashtable;
-
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
@@ -19,9 +17,9 @@ import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.MainScreen;
 
 import com.rapidftr.Main;
+import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.utilities.SettingsStore;
-import com.rapidftr.utilities.HttpServer;
 
 public class LoginScreen extends MainScreen {
 
@@ -37,12 +35,12 @@ public class LoginScreen extends MainScreen {
 			MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
 
 	private final SettingsStore store;
-	private final NavigationController controller;
 
-	public LoginScreen(SettingsStore store, NavigationController controller) {
+	private LoginController loginController;
+
+	public LoginScreen(SettingsStore store) {
 		super();
 		this.store = store;
-		this.controller = controller;
 		layoutScreen();
 		passwordField.setFocus();
 	}
@@ -110,8 +108,8 @@ public class LoginScreen extends MainScreen {
 
 		okButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
-				onLaunch();
-			}
+                loginController.login(usernameField.getText(), passwordField.getText());
+            }
 		});
 
 		Manager manager = new HorizontalFieldManager(FIELD_HCENTER);
@@ -127,24 +125,7 @@ public class LoginScreen extends MainScreen {
 		addHostField(store);
 	}
 
-	private void onLaunch() {
-		saveValuesToStore();
-		
-		HttpServer server = new HttpServer();
-		try {
-			Dialog.inform("about to hit google");
-			Hashtable foo = server.getAsHtmlFromServer("www.google.com");
-			Dialog.inform("It worked maybe");
-		} catch (Exception e) {
-			Dialog.inform("broked");
-			Dialog.inform(e.getClass().toString());
-			Dialog.inform(e.getMessage());
-			e.printStackTrace();
-		}
-		
-	}
-
-	protected void makeMenu(Menu menu, int instance) {
+    protected void makeMenu(Menu menu, int instance) {
 		MenuItem changeHostMenuItem = new MenuItem("Change Host", 1, 1) {
 			public void run() {
 				onChangeHost();
@@ -162,4 +143,10 @@ public class LoginScreen extends MainScreen {
 		System.exit(0);
 		return true;
 	}
+
+	public void setLoginController(LoginController loginController) {
+		this.loginController = loginController;
+	}
+	
+	
 }

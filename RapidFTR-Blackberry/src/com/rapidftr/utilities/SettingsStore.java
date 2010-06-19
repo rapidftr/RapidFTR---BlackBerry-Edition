@@ -19,8 +19,9 @@ public class SettingsStore {
 	private final PersistentObject persistentObject = PersistentStore.getPersistentObject(KEY);
 
 	private Hashtable contents;
-	
-	public SettingsStore() {
+    private static final String AUTHORISATION_TOKEN = "Authorisation_Token";
+
+    public SettingsStore() {
 		loadContentsHashtable();
 	}
 
@@ -69,4 +70,8 @@ public class SettingsStore {
 		contents.put(key, value);
 		persistentObject.commit();
 	}
+
+    public void setAuthorisationToken(String authorisationToken) {
+        setString(AUTHORISATION_TOKEN, authorisationToken);
+    }
 }

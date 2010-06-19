@@ -34,7 +34,7 @@ public class HomeScreen extends MainScreen {
 	private Manager manager;
 
 	public HomeScreen() {
-		this.user = "fake_user"; //ServiceManager.getLoginService().getLoggedInFullName();
+		this.user = "fake_user"; 
 
 		headerText = "logged in: " + user;
 
