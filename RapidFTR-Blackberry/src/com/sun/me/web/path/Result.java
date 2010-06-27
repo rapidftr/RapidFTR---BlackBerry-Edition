@@ -32,9 +32,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sun.me.web.path;
 
-import java.util.Vector;
 import org.json.me.JSONArray;
+import org.json.me.JSONException;
 import org.json.me.JSONObject;
+
+import java.util.Vector;
 
 //#if WithXML
 //# import org.json.me.util.XML;
@@ -62,6 +64,14 @@ public class Result {
         
         if (content == null) {
             throw new IllegalArgumentException("content cannot be null");
+        }
+
+        if (content.equals("")) {
+            try {
+                return new Result(new JSONObject("{}"));
+            } catch (JSONException e) {
+                throw new ResultException(e);
+            }
         }
         
         if (JS_CONTENT_TYPE.equals(contentType) ||
