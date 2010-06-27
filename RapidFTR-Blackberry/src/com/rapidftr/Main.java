@@ -1,7 +1,7 @@
 package com.rapidftr;
 
 import com.rapidftr.services.LoginService;
-import com.rapidftr.services.impl.LoginServiceImpl;
+import com.rapidftr.services.LoginServiceImpl;
 import com.rapidftr.utilities.HttpServer;
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;

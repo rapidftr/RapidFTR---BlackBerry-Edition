@@ -1,4 +1,4 @@
-package com.rapidftr.services.impl;
+package com.rapidftr.services;
 
 import java.io.InputStream;
 import java.util.Hashtable;

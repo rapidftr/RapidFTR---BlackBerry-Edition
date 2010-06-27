@@ -1,4 +1,4 @@
-package com.rapidftr.services.impl;
+package com.rapidftr.services;
 
 import java.io.InputStream;
 
@@ -16,8 +16,6 @@ import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.system.EventInjector;
 import net.rim.device.api.ui.UiApplication;
 
-import com.rapidftr.services.PhotoService;
-import com.rapidftr.services.PhotoServiceListener;
 import com.rapidftr.utilities.Utilities;
 
 public class PhotoServiceImpl implements PhotoService {
