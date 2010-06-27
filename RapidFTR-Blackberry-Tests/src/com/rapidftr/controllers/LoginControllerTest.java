@@ -5,7 +5,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.rapidftr.services.LoginService;
-import com.rapidftr.services.ServiceException;
 import com.rapidftr.utilities.SettingsStore;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +43,7 @@ public class LoginControllerTest {
 	}
 
     @Test
-    public void should_attempt_login_over_http_provider_with_given_credentials() throws ServiceException {
+    public void should_attempt_login_over_http_provider_with_given_credentials() throws Exception {
         LoginController loginController = new LoginController(loginScreen, uiStack, loginService, settingsStore);
 
         String userName = "zskjh";
@@ -64,7 +63,7 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void should_store_authorisation_token_when_login_is_successful() throws ServiceException {
+    public void should_store_authorisation_token_when_login_is_successful() throws Exception {
         LoginController loginController = new LoginController(loginScreen, uiStack, loginService, settingsStore);
         when(loginService.login("username", "password")).thenReturn(AUTHORISATION_TOKEN);
 

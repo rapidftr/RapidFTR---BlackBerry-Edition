@@ -7,5 +7,5 @@ public interface LoginService {
 	
 	String getLoggedInFullName();
 
-    String login(String userName, String password) throws ServiceException;
+    String login(String userName, String password) throws LoginFailedException;
 }

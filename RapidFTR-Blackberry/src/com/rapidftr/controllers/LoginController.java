@@ -2,8 +2,8 @@ package com.rapidftr.controllers;
 
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.UiStack;
+import com.rapidftr.services.LoginFailedException;
 import com.rapidftr.services.LoginService;
-import com.rapidftr.services.ServiceException;
 import com.rapidftr.utilities.SettingsStore;
 
 public class LoginController {
@@ -30,7 +30,7 @@ public class LoginController {
             String authorisationToken = loginService.login(userName, password);
             settingsStore.setLastUsedUsername(userName);
             settingsStore.setAuthorisationToken(authorisationToken);
-        } catch (ServiceException ignore) {
+        } catch (LoginFailedException ignore) {
         }
     }
 }

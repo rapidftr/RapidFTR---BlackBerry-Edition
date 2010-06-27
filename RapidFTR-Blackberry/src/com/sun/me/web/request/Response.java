@@ -35,7 +35,7 @@ package com.sun.me.web.request;
 import com.sun.me.web.path.Result;
 import javax.microedition.io.HttpConnection;
 
-public final class Response {
+public class Response {
 
     Result result = null;
     int responseCode = HttpConnection.HTTP_NOT_FOUND;
