@@ -3,3 +3,4 @@ RapidFTR-Blackberry/deliverables/*
 RapidFTR-Blackberry-Tests/bin/*
 RapidFTR-Blackberry-Tests/deliverables/*
 out/*
+.idea/workspace.xml
