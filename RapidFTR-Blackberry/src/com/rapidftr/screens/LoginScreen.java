@@ -151,6 +151,9 @@ public class LoginScreen extends MainScreen {
 	public void setLoginController(LoginController loginController) {
 		this.loginController = loginController;
 	}
-	
-	
+
+
+    public void loginFailed() {
+        Dialog.alert("Login failed.");
+    }
 }

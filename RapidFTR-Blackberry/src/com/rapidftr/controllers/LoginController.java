@@ -30,7 +30,8 @@ public class LoginController {
             String authorisationToken = loginService.login(userName, password);
             settingsStore.setLastUsedUsername(userName);
             settingsStore.setAuthorisationToken(authorisationToken);
-        } catch (LoginFailedException ignore) {
+        } catch (LoginFailedException loginFailed) {
+            screen.loginFailed();
         }
     }
 }

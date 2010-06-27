@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/impl/LoginServiceImpl.java" />
+    <bookmark url="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginServiceImpl.java" />
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="341592bd-17d6-4788-89d0-d6e74276a0f6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/utilities/HttpServer.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/utilities/HttpServer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/Main.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/impl/LoginServiceImpl.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/impl/LoginServiceImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/ServiceException.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/ServiceException.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginFailedException.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Response.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Response.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/services/LoginServiceImplTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/controllers/LoginController.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/controllers/LoginController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/path/Result.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/path/Result.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/controllers/LoginControllerTest.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/controllers/LoginControllerTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginService.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginServiceImpl.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginServiceImpl.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/LoginScreen.java" afterPath="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/LoginScreen.java" />
     </list>
     <ignored path="$USER_HOME_GRIFFON$/" />
@@ -27,6 +34,21 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <line_breakpoints>
+      <breakpoint url="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginServiceImpl.java" line="33" class="com.rapidftr.services.LoginServiceImpl" package="com.rapidftr.services">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </line_breakpoints>
     <breakpoint_any>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -68,55 +90,10 @@
   <component name="FileColors" enabled="true" enabledForTabs="true" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="LoginController.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/controllers/LoginController.java">
+      <file leaf-file-name="LoginControllerTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/controllers/LoginControllerTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="55" selection-start="929" selection-end="929" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoginService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="11" selection-start="227" selection-end="227" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoginServiceImpl.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/impl/LoginServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="21" selection-start="1103" selection-end="1108" vertical-scroll-proportion="0.7690476">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="42" column="22" selection-start="1239" selection-end="1239" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HomeScreen.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/HomeScreen.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="33" selection-start="1235" selection-end="1235" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HttpServer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/utilities/HttpServer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="265" column="29" selection-start="7792" selection-end="7792" vertical-scroll-proportion="0.0">
+            <state line="80" column="38" selection-start="2919" selection-end="2919" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -124,19 +101,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RuntimeException.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files (x86)/Java/jdk1.6.0_20/src.zip!/java/lang/RuntimeException.java">
+      <file leaf-file-name="LoginScreen.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/LoginScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="11" selection-start="2139" selection-end="2139" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Response.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Response.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="24" selection-start="1683" selection-end="1683" vertical-scroll-proportion="0.0">
+            <state line="156" column="35" selection-start="4303" selection-end="4303" vertical-scroll-proportion="5.391204">
               <folding />
             </state>
           </provider>
@@ -145,8 +113,10 @@
       <file leaf-file-name="Result.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/path/Result.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="42" column="13" selection-start="1728" selection-end="1728" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="65" column="60" selection-start="2686" selection-end="2686" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -154,8 +124,46 @@
       <file leaf-file-name="Request.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Request.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="79" column="27" selection-start="2952" selection-end="2952" vertical-scroll-proportion="0.0">
+            <state line="424" column="35" selection-start="15102" selection-end="15102" vertical-scroll-proportion="0.0">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ResultException.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/path/ResultException.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="36" column="25" selection-start="1629" selection-end="1629" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Response.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Response.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="45" column="38" selection-start="1873" selection-end="1873" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LoginController.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/controllers/LoginController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="33" column="28" selection-start="1165" selection-end="1165" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LoginServiceImplTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/services/LoginServiceImplTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="27" column="45" selection-start="1058" selection-end="1058" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -170,17 +178,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginService.java" />
         <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/ServiceManager.java" />
         <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/utilities/SettingsStore.java" />
-        <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/controllers/LoginController.java" />
-        <option value="$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/controllers/LoginControllerTest.java" />
         <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/HomeScreen.java" />
-        <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/LoginScreen.java" />
         <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/Main.java" />
         <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/impl/LoginServiceImpl.java" />
         <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/utilities/HttpServer.java" />
         <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Response.java" />
+        <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/ServiceException.java" />
+        <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginFailedException.java" />
+        <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginServiceImpl.java" />
+        <option value="$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/services/LoginServiceImplTest.java" />
+        <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginService.java" />
+        <option value="$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/controllers/LoginControllerTest.java" />
+        <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/controllers/LoginController.java" />
+        <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/path/Result.java" />
+        <option value="$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/LoginScreen.java" />
       </list>
     </option>
   </component>
@@ -234,6 +247,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -258,94 +272,50 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="RapidFTR-Blackberry-Tests" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
               <option name="myItemId" value="RapidFTR-Blackberry" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="RapidFTR-Blackberry" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="RapidFTR-Blackberry" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="RapidFTR-Blackberry" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="RapidFTR-Blackberry" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="RapidFTR-Blackberry" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="Favorites" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="Errors" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="options.lastSelected" value="editor.preferences.import" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="IntroduceConstantDialog.RECENTS_KEY">
       <recent name="com.rapidftr.controllers.LoginControllerTest" />
     </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.rapidftr.services" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.rapidftr.services" />
+    </key>
   </component>
-  <component name="RunManager" selected="JUnit.LoginControllerTest">
-    <configuration default="false" name="LoginControllerTest" type="JUnit" factoryName="JUnit" temporary="true">
+  <component name="RunManager" selected="JUnit.LoginControllerTest.should_show_error_on_screen_if_login_fails">
+    <configuration default="false" name="LoginServiceImplTest.should_post_to_server_and_extract_auth_token_from_response" type="JUnit" factoryName="JUnit" temporary="true">
       <extension name="coverage" enabled="false" merge="false">
         <pattern>
-          <option name="PATTERN" value="com.rapidftr.controllers.*" />
+          <option name="PATTERN" value="com.rapidftr.services.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -353,8 +323,76 @@
       <module name="RapidFTR-Blackberry-Tests" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.rapidftr.controllers" />
-      <option name="MAIN_CLASS_NAME" value="com.rapidftr.controllers.LoginControllerTest" />
+      <option name="PACKAGE_NAME" value="com.rapidftr.services" />
+      <option name="MAIN_CLASS_NAME" value="com.rapidftr.services.LoginServiceImplTest" />
+      <option name="METHOD_NAME" value="should_post_to_server_and_extract_auth_token_from_response" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="63158" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="LoginServiceImplTest.should_throw_service_exception_if_response_from_server_is_in_unexpected_format" type="JUnit" factoryName="JUnit" temporary="true">
+      <extension name="coverage" enabled="false" merge="false">
+        <pattern>
+          <option name="PATTERN" value="com.rapidftr.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="snapshooter" />
+      <module name="RapidFTR-Blackberry-Tests" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.rapidftr.services" />
+      <option name="MAIN_CLASS_NAME" value="com.rapidftr.services.LoginServiceImplTest" />
+      <option name="METHOD_NAME" value="should_throw_service_exception_if_response_from_server_is_in_unexpected_format" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="63308" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="LoginServiceImplTest" type="JUnit" factoryName="JUnit" temporary="true">
+      <extension name="coverage" enabled="false" merge="false">
+        <pattern>
+          <option name="PATTERN" value="com.rapidftr.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="snapshooter" />
+      <module name="RapidFTR-Blackberry-Tests" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.rapidftr.services" />
+      <option name="MAIN_CLASS_NAME" value="com.rapidftr.services.LoginServiceImplTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
@@ -370,7 +408,30 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="LoginControllerTest.should_store_authorisation_token_when_login_is_successful" type="JUnit" factoryName="JUnit" temporary="true">
+    <configuration default="false" name="All in RapidFTR-Blackberry-Tests" type="JUnit" factoryName="JUnit" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" />
+      <extension name="snapshooter" />
+      <module name="RapidFTR-Blackberry-Tests" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="LoginControllerTest.should_show_error_on_screen_if_login_fails" type="JUnit" factoryName="JUnit" temporary="true">
       <extension name="coverage" enabled="false" merge="false">
         <pattern>
           <option name="PATTERN" value="com.rapidftr.controllers.*" />
@@ -383,7 +444,7 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="com.rapidftr.controllers" />
       <option name="MAIN_CLASS_NAME" value="com.rapidftr.controllers.LoginControllerTest" />
-      <option name="METHOD_NAME" value="should_store_authorisation_token_when_login_is_successful" />
+      <option name="METHOD_NAME" value="should_show_error_on_screen_if_login_fails" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" />
       <option name="PARAMETERS" />
@@ -410,7 +471,7 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit">
+    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" air_descriptor_path="" air_program_params="" air_publisher_id="" air_root_dir_path="" air_run_mode="AppDescriptor" class_name="" html_or_swf_file_path="" main_class_name="" method_name="" module_name="" output_log_level="" package_name="" port="0" run_mode="HtmlOrSwfFile" scope="Class" socket_policy_port="0" url_to_launch="http://">
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -517,9 +578,12 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.LoginControllerTest" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.LoginControllerTest.should_store_authorisation_token_when_login_is_successful" />
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="JUnit.LoginServiceImplTest.should_post_to_server_and_extract_auth_token_from_response" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.LoginServiceImplTest.should_throw_service_exception_if_response_from_server_is_in_unexpected_format" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.LoginServiceImplTest" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.All in RapidFTR-Blackberry-Tests" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.LoginControllerTest.should_show_error_on_screen_if_login_fails" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -545,6 +609,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+      <changelist id="341592bd-17d6-4788-89d0-d6e74276a0f6" name="Default" comment="" />
       <created>1276960666675</created>
       <updated>1276960666675</updated>
     </task>
@@ -554,26 +619,26 @@
     <frame x="1" y="1" width="1438" height="858" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3371266" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3371266" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32859176" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3997155" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32859176" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24963716" sideWeight="0.6614509" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24945454" sideWeight="0.6614509" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32859176" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
@@ -611,51 +676,42 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/utilities/SettingsStore.java">
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.6.0_20/src.zip!/java/lang/RuntimeException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="28" selection-start="1984" selection-end="1984" vertical-scroll-proportion="0.0">
+        <state line="59" column="11" selection-start="2139" selection-end="2139" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Arg.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="19" selection-start="1597" selection-end="1597" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/NavigationController.java">
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/ServiceException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="13" selection-start="84" selection-end="84" vertical-scroll-proportion="0.0">
+        <state line="2" column="12" selection-start="44" selection-end="44" vertical-scroll-proportion="0.05029586">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/utilities/Properties.java">
+    <entry file="jar://$PROJECT_DIR$/RapidFTR-Blackberry-Tests/lib/mockito-all-1.8.5.jar!/org/mockito/Matchers.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="15" selection-start="1494" selection-end="1494" vertical-scroll-proportion="0.0">
+        <state line="32" column="24" selection-start="1051" selection-end="1051" vertical-scroll-proportion="0.20245399">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/../tools/eclipse/plugins/net.rim.ejde.componentpack4.6.1_4.6.1.36/components/lib/net_rim_api.jar!/net/rim/device/api/ui/Screen.class">
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginFailedException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="26" selection-start="3560" selection-end="3560" vertical-scroll-proportion="-6.4583335">
+        <state line="3" column="4" selection-start="90" selection-end="90" vertical-scroll-proportion="0.07544379">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/LoginScreen.java">
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/utilities/HttpServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="124" column="27" selection-start="3591" selection-end="3591" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/controllers/LoginControllerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="64" selection-start="979" selection-end="979" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/controllers/LoginController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="55" selection-start="929" selection-end="929" vertical-scroll-proportion="0.0">
+        <state line="271" column="20" selection-start="7968" selection-end="7968" vertical-scroll-proportion="0.20710059">
           <folding />
         </state>
       </provider>
@@ -667,60 +723,73 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/HomeScreen.java">
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/LoginServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="33" selection-start="1235" selection-end="1235" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="22" selection-start="1239" selection-end="1239" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Request.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="27" selection-start="2952" selection-end="2952" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.6.0_20/src.zip!/java/lang/RuntimeException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="11" selection-start="2139" selection-end="2139" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/path/Result.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="13" selection-start="1728" selection-end="1728" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Response.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="24" selection-start="1683" selection-end="1683" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/utilities/HttpServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="265" column="29" selection-start="7792" selection-end="7792" vertical-scroll-proportion="0.0">
+        <state line="24" column="18" selection-start="756" selection-end="756" vertical-scroll-proportion="0.3239645">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/services/impl/LoginServiceImpl.java">
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/services/LoginServiceImplTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="21" selection-start="1103" selection-end="1108" vertical-scroll-proportion="0.7690476">
+        <state line="27" column="45" selection-start="1058" selection-end="1058" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/controllers/LoginController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="28" selection-start="1165" selection-end="1165" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry-Tests/src/com/rapidftr/controllers/LoginControllerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="80" column="38" selection-start="2919" selection-end="2919" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/path/ResultException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="25" selection-start="1629" selection-end="1629" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Request.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="424" column="35" selection-start="15102" selection-end="15102" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/request/Response.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="38" selection-start="1873" selection-end="1873" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/sun/me/web/path/Result.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="65" column="60" selection-start="2686" selection-end="2686" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RapidFTR-Blackberry/src/com/rapidftr/screens/LoginScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="156" column="35" selection-start="4303" selection-end="4303" vertical-scroll-proportion="5.391204">
           <folding />
         </state>
       </provider>
