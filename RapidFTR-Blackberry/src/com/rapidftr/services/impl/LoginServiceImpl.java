@@ -3,6 +3,8 @@ package com.rapidftr.services.impl;
 import java.io.InputStream;
 import java.util.Hashtable;
 
+import com.sun.me.web.request.Arg;
+import com.sun.me.web.request.Response;
 import net.rim.device.api.xml.parsers.SAXParser;
 import net.rim.device.api.xml.parsers.SAXParserFactory;
 
@@ -17,9 +19,19 @@ import com.rapidftr.utilities.Properties;
 public class LoginServiceImpl implements LoginService {
 	private String loggedInUser;
 	private String loggedInFullName;
+    private final HttpServer httpServer;
 
-	public String login(String userName, String password) throws ServiceException {
-        return login("dev.rapidftr.com:3000", userName, password);
+    public LoginServiceImpl(HttpServer httpServer) {
+        this.httpServer = httpServer;
+    }
+
+    public String login(String userName, String password) throws ServiceException {
+        Arg[] postParams = new Arg[] {
+                        new Arg("user_name", userName),
+                        new Arg("password", password) };
+
+        Response response = httpServer.postToServer(postParams);
+        return "hello";
     }
 	public String login(String hostName, String userName, String password)
 			throws ServiceException {
@@ -61,7 +73,7 @@ public class LoginServiceImpl implements LoginService {
 
 	boolean validateLogin(String hostname, String userName, String password) throws Exception {
 		// TODO(tcox): Hook into login box
-		InputStream is = HttpServer.getInstance().getFromServer("http://ci.rapidftr.com:3000/sessions");
+		InputStream is = httpServer.getFromServer("http://ci.rapidftr.com:3000/sessions");
 
 		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 

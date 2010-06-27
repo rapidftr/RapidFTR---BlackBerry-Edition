@@ -108,7 +108,7 @@ public class LoginScreen extends MainScreen {
 
 		okButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
-                loginController.login(usernameField.getText(), passwordField.getText());
+                onOkClicked();
             }
 		});
 
@@ -121,7 +121,11 @@ public class LoginScreen extends MainScreen {
 		add(manager);
 	}
 
-	protected void onChangeHost() {
+    private void onOkClicked() {
+        loginController.login(usernameField.getText(), passwordField.getText());
+    }
+
+    protected void onChangeHost() {
 		addHostField(store);
 	}
 

@@ -2,6 +2,7 @@ package com.rapidftr;
 
 import com.rapidftr.services.LoginService;
 import com.rapidftr.services.impl.LoginServiceImpl;
+import com.rapidftr.utilities.HttpServer;
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
@@ -39,7 +40,7 @@ public class Main extends UiApplication {
 		enableEventInjection();
 
 		SettingsStore settings = new SettingsStore();
-        LoginService loginService = new LoginServiceImpl();
+        LoginService loginService = new LoginServiceImpl(HttpServer.getInstance());
         LoginController loginController = new LoginController(new LoginScreen(settings), new UiStack(this), loginService, settings);
 		loginController.show();
 	
