@@ -17,4 +17,8 @@ public class ApplicationRootController {
     public void start() {
         uiStack.pushScreen(applicationRootScreen);
     }
+
+    public void login() {
+        loginController.show();
+    }
 }
