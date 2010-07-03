@@ -13,5 +13,7 @@ public class NavigationController {
 	public void gotoHomeScreen() {
 		engine.pushScreen(new HomeScreen());
 	}
-	
+
+    public void back() {
+    }
 }
