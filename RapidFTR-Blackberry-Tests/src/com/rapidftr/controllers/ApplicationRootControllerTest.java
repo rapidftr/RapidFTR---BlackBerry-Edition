@@ -4,23 +4,24 @@ import com.rapidftr.screens.ApplicationRootScreen;
 import com.rapidftr.screens.UiStack;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class ApplicationRootControllerTest {
     private LoginController loginController;
+    private ApplicationRootScreen applicationRootScreen;
+    private UiStack uiStack;
 
     @Before
     public void setup(){
-        loginController = Mockito.mock(LoginController.class);
+        loginController = mock(LoginController.class);
+        applicationRootScreen = mock(ApplicationRootScreen.class);
+        uiStack = mock(UiStack.class);
     }
 
     @Test
     public void should_show_root_screen_on_start() {
-
-        ApplicationRootScreen applicationRootScreen = new ApplicationRootScreen();
-        UiStack uiStack = Mockito.mock(UiStack.class);
 
         ApplicationRootController controller = new ApplicationRootController(loginController, applicationRootScreen, uiStack);
 
@@ -32,9 +33,16 @@ public class ApplicationRootControllerTest {
     @Test
     public void should_show_login_controller_when_the_user_clicks_login() {
 
-        ApplicationRootController rootController = new ApplicationRootController(loginController, null, null);
+        ApplicationRootController rootController = new ApplicationRootController(loginController, applicationRootScreen, null);
         rootController.login();
         verify(loginController).show();
+    }
+
+    @Test
+    public void should_set_self_as_the_screens_controller() {
+        ApplicationRootController controller = new ApplicationRootController(loginController, applicationRootScreen, uiStack);
+
+        verify(applicationRootScreen).setApplicationRootController(controller);
     }
 
 }

@@ -12,6 +12,7 @@ public class ApplicationRootController {
         this.loginController = loginController;
         this.applicationRootScreen = applicationRootScreen;
         this.uiStack = uiStack;
+        applicationRootScreen.setApplicationRootController(this);
     }
 
     public void start() {
@@ -20,5 +21,5 @@ public class ApplicationRootController {
 
     public void login() {
         loginController.show();
-    }
+    }               
 }
