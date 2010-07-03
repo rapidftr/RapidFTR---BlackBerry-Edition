@@ -27,13 +27,13 @@ public class ApplicationRootScreen extends MainScreen{
 			}
 		});
         Button searchButton = new Button("Search for a child", 200);
-        newChildButton.setChangeListener(new FieldChangeListener() {
+        searchButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onSearchClicked();
 			}
 		});
         Button loginButton = new Button("Login", 200);
-        newChildButton.setChangeListener(new FieldChangeListener() {
+        loginButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onLoginClicked();
 			}
