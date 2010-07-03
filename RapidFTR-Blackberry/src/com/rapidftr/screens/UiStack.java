@@ -2,6 +2,7 @@ package com.rapidftr.screens;
 
 import net.rim.device.api.ui.Screen;
 import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.container.MainScreen;
 
 public class UiStack {
 
@@ -14,7 +15,9 @@ public class UiStack {
 
 	public void pushScreen(Screen screen) {
 		application.pushScreen(screen);
-		
 	}
 
+    public void popScreen(MainScreen screen) {
+        application.popScreen(screen);
+    }
 }

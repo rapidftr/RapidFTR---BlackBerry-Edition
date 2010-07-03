@@ -69,6 +69,17 @@ public class LoginControllerTest {
         loginController.login("username", "password");
 
         verify(settingsStore).setAuthorisationToken(AUTHORISATION_TOKEN);
+        verify(settingsStore).setCurrentlyLoggedIn("username");
+    }
+
+    @Test
+    public void should_pop_screen_back_to_main_screen_when_login_is_successful() throws LoginFailedException {
+        LoginController loginController = new LoginController(loginScreen, uiStack, loginService, settingsStore);
+        when(loginService.login("username", "password")).thenReturn(AUTHORISATION_TOKEN);
+
+        loginController.login("username", "password");
+
+        verify(uiStack).popScreen(loginScreen);
     }
 
     @Test

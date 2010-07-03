@@ -1,9 +1,9 @@
 package com.rapidftr.utilities;
 
-import java.util.Hashtable;
-
 import net.rim.device.api.system.PersistentObject;
 import net.rim.device.api.system.PersistentStore;
+
+import java.util.Hashtable;
 
 public class SettingsStore {
 	
@@ -20,6 +20,7 @@ public class SettingsStore {
 
 	private Hashtable contents;
     private static final String AUTHORISATION_TOKEN = "Authorisation_Token";
+    private static final String CURRENT_USER = "Current_User";
 
     public SettingsStore() {
 		loadContentsHashtable();
@@ -73,5 +74,9 @@ public class SettingsStore {
 
     public void setAuthorisationToken(String authorisationToken) {
         setString(AUTHORISATION_TOKEN, authorisationToken);
+    }
+
+    public void setCurrentlyLoggedIn(String userName) {
+        setString(CURRENT_USER, userName);
     }
 }

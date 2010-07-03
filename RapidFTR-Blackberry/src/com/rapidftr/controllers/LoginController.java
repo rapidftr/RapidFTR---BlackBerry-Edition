@@ -30,6 +30,8 @@ public class LoginController {
             String authorisationToken = loginService.login(userName, password);
             settingsStore.setLastUsedUsername(userName);
             settingsStore.setAuthorisationToken(authorisationToken);
+            settingsStore.setCurrentlyLoggedIn(userName);
+            uiStack.popScreen(screen);
         } catch (LoginFailedException loginFailed) {
             screen.loginFailed();
         }
