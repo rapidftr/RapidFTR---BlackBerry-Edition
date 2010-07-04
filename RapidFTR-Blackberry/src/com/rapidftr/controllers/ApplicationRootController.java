@@ -7,11 +7,13 @@ public class ApplicationRootController {
     private LoginController loginController;
     private ApplicationRootScreen applicationRootScreen;
     private UiStack uiStack;
+    private final ViewChildrenController viewChildrenController;
 
-    public ApplicationRootController(LoginController loginController, ApplicationRootScreen applicationRootScreen, UiStack uiStack) {
+    public ApplicationRootController(ApplicationRootScreen applicationRootScreen, UiStack uiStack, LoginController loginController, ViewChildrenController viewChildrenController) {
         this.loginController = loginController;
         this.applicationRootScreen = applicationRootScreen;
         this.uiStack = uiStack;
+        this.viewChildrenController = viewChildrenController;
         applicationRootScreen.setApplicationRootController(this);
     }
 
@@ -21,5 +23,9 @@ public class ApplicationRootController {
 
     public void login() {
         loginController.show();
-    }               
+    }
+
+    public void viewChildren() {
+        viewChildrenController.show();
+    }
 }

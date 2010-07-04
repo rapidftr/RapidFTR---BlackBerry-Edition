@@ -12,10 +12,12 @@ public class ApplicationRootControllerTest {
     private LoginController loginController;
     private ApplicationRootScreen applicationRootScreen;
     private UiStack uiStack;
+    private ViewChildrenController viewChildrenController;
 
     @Before
     public void setup(){
         loginController = mock(LoginController.class);
+        viewChildrenController = mock(ViewChildrenController.class);
         applicationRootScreen = mock(ApplicationRootScreen.class);
         uiStack = mock(UiStack.class);
     }
@@ -23,7 +25,7 @@ public class ApplicationRootControllerTest {
     @Test
     public void should_show_root_screen_on_start() {
 
-        ApplicationRootController controller = new ApplicationRootController(loginController, applicationRootScreen, uiStack);
+        ApplicationRootController controller = new ApplicationRootController(applicationRootScreen, uiStack, loginController, viewChildrenController);
 
         controller.start();
 
@@ -32,15 +34,21 @@ public class ApplicationRootControllerTest {
 
     @Test
     public void should_show_login_controller_when_the_user_clicks_login() {
-
-        ApplicationRootController rootController = new ApplicationRootController(loginController, applicationRootScreen, null);
+        ApplicationRootController rootController = new ApplicationRootController(applicationRootScreen, null, loginController, viewChildrenController);
         rootController.login();
         verify(loginController).show();
     }
 
     @Test
+    public void should_show_view_children_controller_when_user_clicks_view_children() {
+        ApplicationRootController rootController = new ApplicationRootController(applicationRootScreen, null, loginController, viewChildrenController);
+        rootController.viewChildren();
+        verify(viewChildrenController).show();
+    }
+
+    @Test
     public void should_set_self_as_the_screens_controller() {
-        ApplicationRootController controller = new ApplicationRootController(loginController, applicationRootScreen, uiStack);
+        ApplicationRootController controller = new ApplicationRootController(applicationRootScreen, uiStack, loginController, viewChildrenController);
 
         verify(applicationRootScreen).setApplicationRootController(controller);
     }

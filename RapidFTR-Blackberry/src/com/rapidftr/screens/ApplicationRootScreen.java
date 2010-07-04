@@ -11,7 +11,7 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 
 public class ApplicationRootScreen extends MainScreen{
 
-    private static final XYEdges PADDING = new XYEdges(8, 8, 8, 8);
+    private static final XYEdges PADDING = new XYEdges(16, 16, 16, 16);
     private ApplicationRootController controller;
 
     public ApplicationRootScreen() {
@@ -24,6 +24,12 @@ public class ApplicationRootScreen extends MainScreen{
         newChildButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onNewChildClicked();
+			}
+		});
+        Button viewChildrenButton = new Button("View all children", 200);
+        viewChildrenButton.setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				onViewChildrenClicked();
 			}
 		});
         Button searchButton = new Button("Search for a child", 200);
@@ -43,10 +49,16 @@ public class ApplicationRootScreen extends MainScreen{
 		newChildButton.setPadding(PADDING);
 		manager.add(newChildButton);
 		searchButton.setPadding(PADDING);
+		manager.add(viewChildrenButton);
+		viewChildrenButton.setPadding(PADDING);
 		manager.add(searchButton);
 		loginButton.setPadding(PADDING);
 		manager.add(loginButton);
 		add(manager);
+    }
+
+    private void onViewChildrenClicked() {
+        controller.viewChildren();
     }
 
     private void onLoginClicked() {
