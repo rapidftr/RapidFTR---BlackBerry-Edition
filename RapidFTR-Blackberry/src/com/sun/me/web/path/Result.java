@@ -193,7 +193,7 @@ public class Result {
         return arr;
     }
     
-    private JSONArray getAsArray(final String path) throws ResultException {
+    public JSONArray getAsArray(final String path) throws ResultException {
         final Vector tokens = new ResultTokenizer(path).tokenize();
         if (isArray && tokens.isEmpty()) {
             return array;

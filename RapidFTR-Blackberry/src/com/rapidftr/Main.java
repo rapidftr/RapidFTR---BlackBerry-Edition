@@ -8,6 +8,7 @@ import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.services.ChildService;
+import com.rapidftr.services.ChildServiceImpl;
 import com.rapidftr.services.LoginService;
 import com.rapidftr.services.LoginServiceImpl;
 import com.rapidftr.utilities.HttpServer;
@@ -45,8 +46,9 @@ public class Main extends UiApplication {
 
 		SettingsStore settings = new SettingsStore();
 
-        LoginService loginService = new LoginServiceImpl(HttpServer.getInstance());
-        ChildService childService = new ChildService();
+        HttpServer httpServer = new HttpServer(settings);
+        LoginService loginService = new LoginServiceImpl(httpServer);
+        ChildService childService = new ChildServiceImpl(httpServer);
         UiStack uiStack = new UiStack(this);
         LoginController loginController = new LoginController(new LoginScreen(settings), uiStack, loginService, settings);
         ViewChildrenController viewChildrenController = new ViewChildrenController(new ViewChildrenScreen(), uiStack, childService);

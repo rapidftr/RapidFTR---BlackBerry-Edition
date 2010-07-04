@@ -45,16 +45,14 @@ public class SettingsStore {
 	public String getLastUsedLoginHost() {
 		return getString(KEY_LAST_USED_HOST, DEFAULT_HOST);
 	}
-	
 
 	public void setLastUsedUsername(String value) {
 		setString(KEY_LAST_USED_USERNAME, value);
 	}
-	
-	public void setLastUsedHost(String value) {
-		setString(KEY_LAST_USED_HOST, value);
-	}
 
+    private String getString(String key) {
+        return getString(key, "");
+    }
 	private String getString(String key, String def) {
 		if (contents.containsKey(key)) {
 			return "" + contents.get(key);
@@ -78,5 +76,9 @@ public class SettingsStore {
 
     public void setCurrentlyLoggedIn(String userName) {
         setString(CURRENT_USER, userName);
+    }
+
+    public String getAuthorizationToken() {
+        return getString(AUTHORISATION_TOKEN);
     }
 }

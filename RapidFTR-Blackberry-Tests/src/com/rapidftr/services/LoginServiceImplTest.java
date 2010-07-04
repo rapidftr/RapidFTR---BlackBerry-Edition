@@ -17,7 +17,7 @@ public class LoginServiceImplTest {
     @Test
     public void should_post_to_server_and_extract_auth_token_from_response() throws Exception {
 
-        HttpServer httpServer = mock(HttpServer.class);
+        HttpServer httpServer = mock(HttpServer.class);     
         Response successfulResponse = stubSuccessfulResponseWithToken("authorization_token");
         when(httpServer.postToServer(new Arg[]{new Arg("user_name", "rapidftr"), new Arg("password", "rapidftr")}))
                 .thenReturn(successfulResponse);

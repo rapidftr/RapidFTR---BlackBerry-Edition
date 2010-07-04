@@ -3,7 +3,7 @@ package com.rapidftr.controllers;
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildrenScreen;
-import com.rapidftr.services.ChildService;
+import com.rapidftr.services.ChildServiceImpl;
 import com.rapidftr.utilities.SettingsStore;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,14 +12,14 @@ import static org.mockito.Mockito.*;
 
 public class ViewChildrenControllerTest {
 
-    private ChildService childService;
+    private ChildServiceImpl childService;
     private ViewChildrenScreen viewChildrenScreen;
     private UiStack uiStack;
     private SettingsStore settingsStore;
 
     @Before
     public void setup() {
-        this.childService = mock(ChildService.class);
+        this.childService = mock(ChildServiceImpl.class);
         viewChildrenScreen = mock(ViewChildrenScreen.class);
         uiStack = mock(UiStack.class);
         settingsStore = mock(SettingsStore.class);

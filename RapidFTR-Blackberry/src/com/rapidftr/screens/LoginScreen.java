@@ -80,12 +80,7 @@ public class LoginScreen extends MainScreen {
 		}
 	}
 
-	private void saveValuesToStore() {
-		store.setLastUsedUsername(usernameField.getText());
-		store.setLastUsedHost(hostField.getText());
-	}
-
-	private void addLogo() {
+    private void addLogo() {
 		Bitmap bitmap = Bitmap.getBitmapResource("img/logo.jpg");
 		if (bitmap == null) {
 			return;

@@ -11,5 +11,9 @@ public class Child {
     public String toString() {
         return "Child: " + name;
     }
+
+    public String getName() {
+        return name;
+    }
 }
 
