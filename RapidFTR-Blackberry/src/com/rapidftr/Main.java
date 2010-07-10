@@ -1,12 +1,7 @@
 package com.rapidftr;
 
-import com.rapidftr.controllers.ApplicationRootController;
-import com.rapidftr.controllers.LoginController;
-import com.rapidftr.controllers.ViewChildrenController;
-import com.rapidftr.screens.ApplicationRootScreen;
-import com.rapidftr.screens.LoginScreen;
-import com.rapidftr.screens.UiStack;
-import com.rapidftr.screens.ViewChildrenScreen;
+import com.rapidftr.controllers.*;
+import com.rapidftr.screens.*;
 import com.rapidftr.services.ChildService;
 import com.rapidftr.services.ChildServiceImpl;
 import com.rapidftr.services.LoginService;
@@ -51,10 +46,13 @@ public class Main extends UiApplication {
         ChildService childService = new ChildServiceImpl(httpServer);
         UiStack uiStack = new UiStack(this);
         LoginController loginController = new LoginController(new LoginScreen(settings), uiStack, loginService, settings);
-        ViewChildrenController viewChildrenController = new ViewChildrenController(new ViewChildrenScreen(), uiStack, childService);
         ApplicationRootScreen applicationRootScreen = new ApplicationRootScreen();
 
-        ApplicationRootController _rootApp = new ApplicationRootController(applicationRootScreen, uiStack, loginController, viewChildrenController);
+        NewChildController newChildController = new NewChildController();
+        ViewChildScreen viewChildScreen = new ViewChildScreen();
+        ViewChildController viewChildController = new ViewChildController(viewChildScreen, uiStack);
+        ViewChildrenController viewChildrenController = new ViewChildrenController(new ViewChildrenScreen(), uiStack, childService);
+        ApplicationRootController _rootApp = new ApplicationRootController(applicationRootScreen, uiStack, loginController, viewChildrenController, newChildController, viewChildController);
 
         _rootApp.start();
 	

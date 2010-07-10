@@ -10,6 +10,7 @@ public class ViewChildrenController {
     private final ViewChildrenScreen screen;
     private final UiStack uiStack;
     private final ChildService childService;
+    private ApplicationRootController applicationRootController;
 
     public ViewChildrenController(ViewChildrenScreen screen, UiStack uiStack, ChildService childService) {
 
@@ -23,5 +24,14 @@ public class ViewChildrenController {
         Child[] children = childService.getAllChildren();
         screen.setChildren(children);
         uiStack.pushScreen(screen);
+    }
+
+    public void showChild(Child child) {
+        this.applicationRootController.viewChild(child);
+        
+    }
+
+    public void setApplicationRootController(ApplicationRootController applicationRootController) {
+        this.applicationRootController = applicationRootController;
     }
 }

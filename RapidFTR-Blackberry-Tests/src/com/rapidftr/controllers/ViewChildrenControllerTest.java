@@ -16,6 +16,7 @@ public class ViewChildrenControllerTest {
     private ViewChildrenScreen viewChildrenScreen;
     private UiStack uiStack;
     private SettingsStore settingsStore;
+    private ApplicationRootController applicationRootController;
 
     @Before
     public void setup() {
@@ -23,6 +24,8 @@ public class ViewChildrenControllerTest {
         viewChildrenScreen = mock(ViewChildrenScreen.class);
         uiStack = mock(UiStack.class);
         settingsStore = mock(SettingsStore.class);
+        applicationRootController = mock(ApplicationRootController.class);
+
     }
 
     @Test
@@ -52,6 +55,15 @@ public class ViewChildrenControllerTest {
         
         verify(childService).getAllChildren();
         verify(viewChildrenScreen).setChildren(children);
+    }
 
+    @Test
+    public void should_show_child_details_when_a_single_child_is_clicked() {
+        ViewChildrenController controller = new ViewChildrenController(viewChildrenScreen, uiStack, childService);
+        Child child = new Child("Tom");
+
+        controller.showChild(child);
+
+        verify(applicationRootController).viewChild(child);
     }
 }
