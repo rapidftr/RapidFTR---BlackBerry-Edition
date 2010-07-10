@@ -1,5 +1,6 @@
 package com.rapidftr.model;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 public class Child {
@@ -23,8 +24,14 @@ public class Child {
         return (String) fields.get(fieldName);
     }
 
+    public Enumeration getFieldNames() {
+        return fields.keys();
+    }
+
     public void setField(String fieldName, String fieldValue) {
         fields.put(fieldName, fieldValue);
     }
+
+
 }
 
