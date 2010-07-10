@@ -60,6 +60,7 @@ public class ViewChildrenControllerTest {
     @Test
     public void should_show_child_details_when_a_single_child_is_clicked() {
         ViewChildrenController controller = new ViewChildrenController(viewChildrenScreen, uiStack, childService);
+        controller.setApplicationRootController(applicationRootController);
         Child child = new Child("Tom");
 
         controller.showChild(child);

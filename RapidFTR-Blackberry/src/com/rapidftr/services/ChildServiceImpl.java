@@ -26,7 +26,15 @@ public class ChildServiceImpl implements ChildService {
             Child[] children = new Child[jsonChildren.length()];
             for (int i = 0; i < jsonChildren.length(); i++) {
                 JSONObject jsonChild = (JSONObject) jsonChildren.get(i);
-                children[i] = new Child(jsonChild.getString("name"));
+                Child child = new Child(jsonChild.getString("name"));
+                JSONArray fieldNames = jsonChild.names();
+                for (int j = 0; j < fieldNames.length(); j++) {
+                    String fieldName = fieldNames.get(j).toString();
+                    String fieldValue = jsonChild.getString(fieldName);
+                    child.setField(fieldName, fieldValue);
+                }
+
+                children[i] = child;
             }
             return children;     
         } catch (ResultException e) {
