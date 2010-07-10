@@ -10,6 +10,13 @@ public class ViewChildScreen extends MainScreen {
     }
 
     public void setChild(Child child) {
+        clearFields();
         add(new LabelField("Child: " + child.getName()));
+    }
+
+    private void clearFields() {
+        int fieldCount = this.getFieldCount();
+        if (fieldCount > 0)
+                this.deleteRange(0, fieldCount);
     }
 }

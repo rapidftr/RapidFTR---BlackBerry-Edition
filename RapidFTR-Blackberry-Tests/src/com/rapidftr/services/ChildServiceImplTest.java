@@ -24,7 +24,6 @@ public class ChildServiceImplTest {
 
         Child[] children = childService.getAllChildren();
 
-
         assertThat(children.length, is(1));
         assertThat(children[0].getName(), is("Dave"));
     }

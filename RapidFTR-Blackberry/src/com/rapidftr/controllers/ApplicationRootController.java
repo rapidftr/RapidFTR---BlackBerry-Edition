@@ -21,7 +21,7 @@ public class ApplicationRootController {
         this.newChildController = newChildController;
         this.viewChildController = viewChildController;
         applicationRootScreen.setApplicationRootController(this);
-        this.SetApplicationRootController();
+        this.setApplicationRootController();
     }
 
     public void start() {
@@ -44,7 +44,7 @@ public class ApplicationRootController {
         viewChildController.show(child);
     }
 
-    public void SetApplicationRootController() {
+    public void setApplicationRootController() {
         viewChildrenController.setApplicationRootController(this);
     }
 }
