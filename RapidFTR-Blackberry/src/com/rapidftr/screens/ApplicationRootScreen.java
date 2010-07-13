@@ -69,6 +69,7 @@ public class ApplicationRootScreen extends MainScreen{
     }
 
     private void onNewChildClicked() {
+        controller.newChildRecord();
     }
 
     public void setApplicationRootController(ApplicationRootController controller) {

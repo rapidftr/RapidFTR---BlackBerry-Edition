@@ -2,10 +2,7 @@ package com.rapidftr;
 
 import com.rapidftr.controllers.*;
 import com.rapidftr.screens.*;
-import com.rapidftr.services.ChildService;
-import com.rapidftr.services.ChildServiceImpl;
-import com.rapidftr.services.LoginService;
-import com.rapidftr.services.LoginServiceImpl;
+import com.rapidftr.services.*;
 import com.rapidftr.utilities.HttpServer;
 import com.rapidftr.utilities.SettingsStore;
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
@@ -44,15 +41,13 @@ public class Main extends UiApplication {
         HttpServer httpServer = new HttpServer(settings);
         LoginService loginService = new LoginServiceImpl(httpServer);
         ChildService childService = new ChildServiceImpl(httpServer);
+        PhotoService photoService = new PhotoServiceImpl();
         UiStack uiStack = new UiStack(this);
         LoginController loginController = new LoginController(new LoginScreen(settings), uiStack, loginService, settings);
-        ApplicationRootScreen applicationRootScreen = new ApplicationRootScreen();
-
-        NewChildController newChildController = new NewChildController();
-        ViewChildScreen viewChildScreen = new ViewChildScreen();
-        ViewChildController viewChildController = new ViewChildController(viewChildScreen, uiStack);
+        NewChildController newChildController = new NewChildController(uiStack, new NewChildScreen(), photoService);
+        ViewChildController viewChildController = new ViewChildController(new ViewChildScreen(), uiStack);
         ViewChildrenController viewChildrenController = new ViewChildrenController(new ViewChildrenScreen(), uiStack, childService);
-        ApplicationRootController _rootApp = new ApplicationRootController(applicationRootScreen, uiStack, loginController, viewChildrenController, newChildController, viewChildController);
+        ApplicationRootController _rootApp = new ApplicationRootController(new ApplicationRootScreen(), uiStack, loginController, viewChildrenController, newChildController, viewChildController);
 
         _rootApp.start();
 	

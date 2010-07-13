@@ -1,17 +1,8 @@
 package com.rapidftr.utilities;
 
-import java.io.InputStream;
-
-import javax.microedition.io.Connector;
-import javax.microedition.io.file.FileConnection;
-
 import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
-import net.rim.device.api.ui.Screen;
-import net.rim.device.api.ui.UiEngine;
-
-import com.rapidftr.screens.HomeScreen;
 
 public class Utilities {
 	public static Bitmap getScaledBitmap(String name, int height) {
@@ -72,25 +63,7 @@ public class Utilities {
 		return output;
 	}
 
-	/**
-	 * Pop to Home Screen
-	 */
-	public static void popToHomeScreen(Screen screen) {
-		UiEngine engine = screen.getUiEngine();
-
-		Screen nextScreen = screen;
-		Screen parentScreen;
-
-		while ((parentScreen = nextScreen.getScreenBelow()) != null) {
-			if (!(nextScreen instanceof HomeScreen)) {
-				engine.popScreen(nextScreen);
-			}
-
-			nextScreen = parentScreen;
-		}
-	}
-
-	public static EncodedImage getEncodedImageFromBytes(byte[] bytes) {
+    public static EncodedImage getEncodedImageFromBytes(byte[] bytes) {
 		return EncodedImage.createEncodedImage(bytes, 0, bytes.length);
 	}
 

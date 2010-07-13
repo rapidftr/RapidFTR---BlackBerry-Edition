@@ -1,10 +1,6 @@
 package com.rapidftr.services;
 
-import java.io.InputStream;
-
-import javax.microedition.io.Connector;
-import javax.microedition.io.file.FileConnection;
-
+import com.rapidftr.utilities.Utilities;
 import net.rim.blackberry.api.invoke.CameraArguments;
 import net.rim.blackberry.api.invoke.Invoke;
 import net.rim.device.api.io.file.FileSystemJournal;
@@ -16,7 +12,9 @@ import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.system.EventInjector;
 import net.rim.device.api.ui.UiApplication;
 
-import com.rapidftr.utilities.Utilities;
+import javax.microedition.io.Connector;
+import javax.microedition.io.file.FileConnection;
+import java.io.InputStream;
 
 public class PhotoServiceImpl implements PhotoService {
 	private static final String IMAGE_NAME = "img/cait.jpg";
@@ -26,15 +24,7 @@ public class PhotoServiceImpl implements PhotoService {
 	private long _lastUSN; // = 0;
 	private PhotoServiceListener listener;
 
-	public static synchronized PhotoService getInstance() {
-		if (instance == null) {
-			instance = new PhotoServiceImpl();
-		}
-
-		return instance;
-	}
-
-	private PhotoServiceImpl() {
+	public PhotoServiceImpl() {
 		JournalListener jl = new JournalListener();
 
 		UiApplication.getUiApplication().addFileSystemJournalListener(jl);

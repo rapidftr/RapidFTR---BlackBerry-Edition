@@ -27,6 +27,7 @@ public class HttpServer {
 
     public Response getFromServer(String uri) {
         try {
+            // TODO: Perhaps inspect response code: if unauthorized, throw NotAuthorizedException?
             return Request.get(buildConnectionUrl(uri), new Arg[0], getHttpArgs(), null);
         } catch (IOException e) {
             // TODO: Decide what to do with a connection problem
