@@ -109,17 +109,17 @@ public final class Request implements Runnable {
         return response;
     }
     
-    public static void get(
+    public static Request get(
         final String url,
         final Arg[] inputArgs,
         final Arg[] httpArgs,
         final RequestListener listener,
         final Object context) {
         
-        async(HttpConnection.GET, url, inputArgs, httpArgs, listener, null, context);
+        return async(HttpConnection.GET, url, inputArgs, httpArgs, listener, null, context);
     }
     
-    public static void post(
+    public static Request post(
         final String url,
         final Arg[] inputArgs,
         final Arg[] httpArgs,
@@ -127,10 +127,10 @@ public final class Request implements Runnable {
         final PostData multiPart,
         final Object context) {
         
-        async(HttpConnection.POST, url, inputArgs, httpArgs, listener, multiPart, context);
+        return async(HttpConnection.POST, url, inputArgs, httpArgs, listener, multiPart, context);
     }
     
-    private static void async(
+    private static Request async(
         final String method,
         final String url,
         final Arg[] inputArgs,
@@ -151,6 +151,7 @@ public final class Request implements Runnable {
         // TODO: implement more sophisticated pooling, queuing and scheduling strategies
         request.thread = new Thread(request);
         request.thread.start();
+        return request;
     }
     
     private Request() {}
@@ -271,6 +272,7 @@ public final class Request implements Runnable {
                         final String value = httpArgs[i].getValue();
                         if (value != null) {
                             conn.setRequestProperty(httpArgs[i].getKey(), value);
+                            System.out.println("Setting Header"+httpArgs[i].getKey()+";"+ value);
                         }
                     }
                 }

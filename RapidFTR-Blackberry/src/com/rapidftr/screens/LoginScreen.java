@@ -5,25 +5,24 @@ import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BasicEditField;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
+import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.PasswordEditField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
-import net.rim.device.api.ui.container.MainScreen;
 
-import com.rapidftr.Main;
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.utilities.SettingsStore;
 
-public class LoginScreen extends MainScreen {
+public class LoginScreen extends Screen implements FieldChangeListener {
 
-	private static final int BUTTON_WIDTH = 50;
 	private static final int MAX_SIZE = 200;
 	private static final XYEdges PADDING = new XYEdges(4, 4, 4, 4);
 
@@ -35,8 +34,11 @@ public class LoginScreen extends MainScreen {
 			MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
 
 	private final SettingsStore store;
-
-	private LoginController loginController;
+	private Manager progressMsgFieldmanager;
+	private LabelField progressMsg;
+	private Button loginButton;
+	private Manager buttonManager;
+	private Button cancelButton;
 
 	public LoginScreen(SettingsStore store) {
 		super();
@@ -55,6 +57,17 @@ public class LoginScreen extends MainScreen {
 		add(passwordField);
 		add(new SeparatorField());
 		addButtons();
+		createProgressMsg();
+	}
+
+	private void createProgressMsg() {
+
+		progressMsg = new LabelField();
+		progressMsgFieldmanager = new HorizontalFieldManager(FIELD_HCENTER);
+		progressMsgFieldmanager.setPadding(PADDING);
+		progressMsg.setPadding(PADDING);
+		progressMsgFieldmanager.add(progressMsg);
+
 	}
 
 	private void addHostField(SettingsStore store) {
@@ -73,6 +86,7 @@ public class LoginScreen extends MainScreen {
 
 	private int getHostPosition() {
 		int position = getFieldCount() - 2;
+
 		if (position >= 0) {
 			return position;
 		} else {
@@ -80,8 +94,8 @@ public class LoginScreen extends MainScreen {
 		}
 	}
 
-    private void addLogo() {
-		Bitmap bitmap = Bitmap.getBitmapResource("img/logo.jpg");
+	private void addLogo() {
+		Bitmap bitmap = Bitmap.getBitmapResource("res/logo.jpg");
 		if (bitmap == null) {
 			return;
 		}
@@ -92,39 +106,21 @@ public class LoginScreen extends MainScreen {
 	}
 
 	private void addButtons() {
-		Button okButton = new Button("Login", BUTTON_WIDTH);
-		Button closeButton = new Button("Close", BUTTON_WIDTH);
+		loginButton = new Button("Login");
+		loginButton.setChangeListener(this);
 
-		closeButton.setChangeListener(new FieldChangeListener() {
-			public void fieldChanged(Field field, int context) {
-				onClose();
-			}
-		});
-
-		okButton.setChangeListener(new FieldChangeListener() {
-			public void fieldChanged(Field field, int context) {
-                onOkClicked();
-            }
-		});
-
-		Manager manager = new HorizontalFieldManager(FIELD_HCENTER);
-		manager.setPadding(PADDING);
-		okButton.setPadding(PADDING);
-		manager.add(okButton);
-		closeButton.setPadding(PADDING);
-		manager.add(closeButton);
-		add(manager);
+		cancelButton = new Button("Cancel");
+		cancelButton.setChangeListener(this);
+		buttonManager = new HorizontalFieldManager(FIELD_HCENTER);
+		buttonManager.setPadding(PADDING);
+		add(buttonManager);
 	}
 
-    private void onOkClicked() {
-        loginController.login(usernameField.getText(), passwordField.getText());
-    }
-
-    protected void onChangeHost() {
+	protected void onChangeHost() {
 		addHostField(store);
 	}
 
-    protected void makeMenu(Menu menu, int instance) {
+	protected void makeMenu(Menu menu, int instance) {
 		MenuItem changeHostMenuItem = new MenuItem("Change Host", 1, 1) {
 			public void run() {
 				onChangeHost();
@@ -133,22 +129,106 @@ public class LoginScreen extends MainScreen {
 		menu.add(changeHostMenuItem);
 	}
 
-	protected boolean navigationClick(int status, int time) {
-		return true;
+	public void loginFailed() {
+		Dialog.alert("Login failed.");
+	}
+
+	public void setProgressMsg(String msg) {
+
+		progressMsg.setText(msg);
+
+		try {
+			add(progressMsgFieldmanager);
+		} catch (IllegalStateException ex) {
+
+		}
+
+	}
+
+	public boolean isDirty() {
+		return false;
+	}
+
+	public void removeProgressMsgIfExist() {
+
+		try {
+			delete(progressMsgFieldmanager);
+		} catch (IllegalArgumentException ex) {
+
+		}
+
+	}
+
+	public void onLoginFailed() {
+
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				setProgressMsg("Login Failed");
+				setLoginButton();
+			}
+		});
+
+	}
+
+	public void onConnectionProblem() {
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				setProgressMsg("Connection Problem");
+				setLoginButton();
+			}
+		});
+
+	}
+
+	public void fieldChanged(Field field, int context) {
+
+		if (field.equals(loginButton)) {
+			onLoginButtonClicked();
+
+		}
+		if (field.equals(cancelButton)) {
+			onCancelButtonClicked();
+		}
+	}
+
+	private void onLoginButtonClicked() {
+
+		((LoginController) controller).login(usernameField.getText(),
+				passwordField.getText());
+		setCacelButton();
+	}
+
+	private void onCancelButtonClicked() {
+		cleanUp();
+	}
+
+	private void setCacelButton() {
+		buttonManager.deleteAll();
+		buttonManager.add(cancelButton);
+	}
+
+	public void setUp() {
+		setLoginButton();
+		removeProgressMsgIfExist();
+	}
+
+	private void setLoginButton() {
+		buttonManager.deleteAll();
+		buttonManager.add(loginButton);
 	}
 
 	public boolean onClose() {
-		Dialog.alert("Closing " + Main.APPLICATION_NAME);
-		System.exit(0);
-		return true;
+
+		cleanUp();
+		return super.onClose();
+
 	}
 
-	public void setLoginController(LoginController loginController) {
-		this.loginController = loginController;
+	public void cleanUp() {
+
+		removeProgressMsgIfExist();
+		setLoginButton();
+		((LoginController) controller).loginCancelled();
 	}
 
-
-    public void loginFailed() {
-        Dialog.alert("Login failed.");
-    }
 }

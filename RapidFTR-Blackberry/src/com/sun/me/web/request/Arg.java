@@ -35,7 +35,7 @@ package com.sun.me.web.request;
 public final class Arg {
 
     // some commonly used http header names
-    public static final String AUTHORIZATION = "authorization";
+    public static final String AUTHORIZATION = "Authorization";
 
     public static final String CONTENT_LENGTH = "content-length";
     public static final String CONTENT_TYPE = "content-type";

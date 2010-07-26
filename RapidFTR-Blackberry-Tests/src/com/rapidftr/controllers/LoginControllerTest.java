@@ -1,95 +1,88 @@
 package com.rapidftr.controllers;
 
-import com.rapidftr.screens.LoginScreen;
-import com.rapidftr.screens.UiStack;
-import com.rapidftr.services.LoginFailedException;
-import com.rapidftr.services.LoginService;
-import com.rapidftr.utilities.SettingsStore;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Hashtable;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.mockito.Mockito.*;
+import com.rapidftr.screens.LoginScreen;
+import com.rapidftr.screens.UiStack;
+import com.rapidftr.services.LoginService;
+import com.rapidftr.utilities.SettingsStore;
 
 public class LoginControllerTest {
-    private LoginService loginService;
-    private LoginScreen loginScreen;
-    private UiStack uiStack;
-    private SettingsStore settingsStore;
-    private static final String AUTHORISATION_TOKEN = "authorisationtoken";
+	private LoginService loginService;
+	private LoginScreen loginScreen;
+	private UiStack uiStack;
+	private SettingsStore settingsStore;
+	private LoginController loginController;
 
-    @Before
-    public void setup() {
-        this.loginService = mock(LoginService.class);
-        loginScreen = mock(LoginScreen.class);
-        uiStack = mock(UiStack.class);
-        settingsStore = mock(SettingsStore.class);
-    }
+	@Before
+	public void setup() {
+		this.loginService = mock(LoginService.class);
+		loginScreen = mock(LoginScreen.class);
+		uiStack = mock(UiStack.class);
+		settingsStore = mock(SettingsStore.class);
+		loginController = new LoginController(loginScreen, uiStack,
+				loginService, settingsStore);
+	}
 
-    @Test
-    public void should_initalise_and_display_the_login_form() {
-        LoginController controller = new LoginController(loginScreen, uiStack, loginService, settingsStore);
+	@Test
+	public void shouldSetLoginServiceListenerOnLoginService() {
+		verify(loginService).setListener(loginController);
+	}
 
-        controller.show();
-        verify(uiStack).pushScreen(loginScreen);
+	@Test
+	public void shouldAttemptLoginOverHttpProviderWithGivenCredentials()
+			throws Exception {
 
-    }
+		String userName = "zskjh";
+		String password = "ksdhfkl";
+		loginController.login(userName, password);
 
-    @Test
-    public void should_set_self_as_the_login_screens_controller() {
-        LoginController controller = new LoginController(loginScreen, uiStack, loginService, settingsStore);
+		verify(loginService).login(userName, password);
+	}
 
-        verify(loginScreen).setLoginController(controller);
-    }
+	@Test
+	public void shouldSaveTheLastEnteredUsernameAndAuthorizationTokenAndPopOutLoginScreenInorderToGetBackToHomeScreen() {
 
-    @Test
-    public void should_attempt_login_over_http_provider_with_given_credentials() throws Exception {
-        LoginController loginController = new LoginController(loginScreen, uiStack, loginService, settingsStore);
+		loginController.login("abcd", "abcd"); // Just to make the
+												// isRequestInProgress flag to
+												// set
+		Hashtable context = new Hashtable();
+		String userName = "name";
+		context.put(LoginController.USER_NAME, userName);
 
-        String userName = "zskjh";
-        String password = "ksdhfkl";
-        loginController.login(userName, password);
+		String authorisationToken = "token";
+		loginController.onLoginSucees(context, authorisationToken);
 
-        verify(loginService).login(userName, password);
-    }
+		verify(settingsStore).setLastUsedUsername(userName);
+		verify(settingsStore).setAuthorisationToken(authorisationToken);
+		verify(loginScreen).popScreen(uiStack);
+	}
 
-    @Test
-    public void should_save_the_last_entered_username() {
-        LoginController loginController = new LoginController(loginScreen, uiStack, loginService, settingsStore);
+	@Test
+	public void shouldUpdateTheScreenWithConnectionProblemErrorMessage() {
+		loginController.login("abcd", "abcd"); // Just to make the
+												// requestInProgress flag to
+												// set
 
-        loginController.login("username", "password");
+		loginController.onConnectionProblem();
+		verify(loginScreen).onConnectionProblem();
+	}
 
-        verify(settingsStore).setLastUsedUsername("username");
-    }
+	@Test
+	public void shouldUpdateTheScreenWithLoginFailedErrorMessage() {
+		loginController.login("abcd", "abcd"); // Just to make the
+												// isRequestInProgress flag to
+												// set
 
-    @Test
-    public void should_store_authorisation_token_when_login_is_successful() throws Exception {
-        LoginController loginController = new LoginController(loginScreen, uiStack, loginService, settingsStore);
-        when(loginService.login("username", "password")).thenReturn(AUTHORISATION_TOKEN);
+		loginController.onAuthenticationFailure();
+		verify(loginScreen).onLoginFailed();
+	}
 
-        loginController.login("username", "password");
-
-        verify(settingsStore).setAuthorisationToken(AUTHORISATION_TOKEN);
-        verify(settingsStore).setCurrentlyLoggedIn("username");
-    }
-
-    @Test
-    public void should_pop_screen_back_to_main_screen_when_login_is_successful() throws LoginFailedException {
-        LoginController loginController = new LoginController(loginScreen, uiStack, loginService, settingsStore);
-        when(loginService.login("username", "password")).thenReturn(AUTHORISATION_TOKEN);
-
-        loginController.login("username", "password");
-
-        verify(uiStack).popScreen(loginScreen);
-    }
-
-    @Test
-    public void should_show_error_on_screen_if_login_fails() throws Exception {
-        LoginController loginController = new LoginController(loginScreen, uiStack, loginService, settingsStore);
-        when(loginService.login("username", "password")).thenThrow(new LoginFailedException());
-
-        loginController.login("username", "password");
-
-        verify(loginScreen).loginFailed();
-
-    }
 }

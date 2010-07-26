@@ -1,37 +1,38 @@
 package com.rapidftr.controllers;
 
+import java.io.IOException;
+
+import net.rim.device.api.ui.component.Dialog;
+
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.services.ChildService;
 
+public class ViewChildrenController extends Controller {
 
-public class ViewChildrenController {
-    private final ViewChildrenScreen screen;
-    private final UiStack uiStack;
-    private final ChildService childService;
-    private ApplicationRootController applicationRootController;
+	private final ChildService childService;
 
-    public ViewChildrenController(ViewChildrenScreen screen, UiStack uiStack, ChildService childService) {
+	public ViewChildrenController(ViewChildrenScreen screen, UiStack uiStack,
+			ChildService childService) {
+		super(screen, uiStack);
+		this.childService = childService;
+	}
 
-        this.screen = screen;
-        this.uiStack = uiStack;
-        this.childService = childService;
-        screen.setViewChildrenController(this);
-    }
+	public void show() {
+		Child[] children;
+		try {
+			children = childService.getAllChildren();
+			((ViewChildrenScreen) screen).setChildren(children);
+			uiStack.pushScreen(screen);
+		} catch (IOException e) {
+			//Alert user with proper error message
+		}
 
-    public void show() {
-        Child[] children = childService.getAllChildren();
-        screen.setChildren(children);
-        uiStack.pushScreen(screen);
-    }
+	}
 
-    public void showChild(Child child) {
-        this.applicationRootController.viewChild(child);
-        
-    }
+	public void showChild(Child child) {
+		dispatcher.viewChild(child);
+	}
 
-    public void setApplicationRootController(ApplicationRootController applicationRootController) {
-        this.applicationRootController = applicationRootController;
-    }
 }

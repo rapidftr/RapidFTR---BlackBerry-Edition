@@ -1,16 +1,30 @@
 package com.rapidftr;
 
+import java.io.IOException;
+
 import com.rapidftr.controllers.*;
+import com.rapidftr.controls.Button;
+import com.rapidftr.datastore.FormStore;
+import com.rapidftr.net.HttpServer;
+import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.*;
 import com.rapidftr.services.ChildService;
-import com.rapidftr.services.ChildServiceImpl;
+import com.rapidftr.services.ChildService;
+import com.rapidftr.services.FormService;
+import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
-import com.rapidftr.services.LoginServiceImpl;
-import com.rapidftr.utilities.HttpServer;
+import com.rapidftr.services.LoginService;
 import com.rapidftr.utilities.SettingsStore;
+import com.sun.me.web.request.Arg;
+import com.sun.me.web.request.Request;
+import com.sun.me.web.request.Response;
+
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.container.MainScreen;
 
 public class Main extends UiApplication {
 
@@ -21,7 +35,6 @@ public class Main extends UiApplication {
 	 */
 	public static void main(String[] args) {
 
-		
 		// Create a new instance of the application.
 		Main application = new Main();
 
@@ -41,21 +54,45 @@ public class Main extends UiApplication {
 
 		SettingsStore settings = new SettingsStore();
 
-        HttpServer httpServer = new HttpServer(settings);
-        LoginService loginService = new LoginServiceImpl(httpServer);
-        ChildService childService = new ChildServiceImpl(httpServer);
-        UiStack uiStack = new UiStack(this);
-        LoginController loginController = new LoginController(new LoginScreen(settings), uiStack, loginService, settings);
-        ApplicationRootScreen applicationRootScreen = new ApplicationRootScreen();
+//		System.out.println("***Authorization key from Persistent Store***");
+//		System.out.println(settings.getAuthorizationToken());
+//		System.out.println("*********");
 
-        NewChildController newChildController = new NewChildController();
-        ViewChildScreen viewChildScreen = new ViewChildScreen();
-        ViewChildController viewChildController = new ViewChildController(viewChildScreen, uiStack);
-        ViewChildrenController viewChildrenController = new ViewChildrenController(new ViewChildrenScreen(), uiStack, childService);
-        ApplicationRootController _rootApp = new ApplicationRootController(applicationRootScreen, uiStack, loginController, viewChildrenController, newChildController, viewChildController);
+		HttpServer httpServer = new HttpServer(settings);
+		HttpService httpService = new HttpService(httpServer);
 
-        _rootApp.start();
-	
+		LoginService loginService = new LoginService(httpService);
+		ChildService childService = new ChildService(httpService);
+		UiStack uiStack = new UiStack(this);
+
+		LoginScreen loginScreen = new LoginScreen(settings);
+		LoginController loginController = new LoginController(loginScreen,
+				uiStack, loginService, settings);
+		loginScreen.setController(loginController);
+
+		HomeScreen homeScreen = new HomeScreen();
+		HomeScreenController homeScreenController = new HomeScreenController(
+				homeScreen, uiStack);
+
+		ViewChildScreen viewChildScreen = new ViewChildScreen();
+		ViewChildController viewChildController = new ViewChildController(
+				viewChildScreen, uiStack);
+
+		ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
+		ViewChildrenController viewChildrenController = new ViewChildrenController(
+				viewChildrenScreen, uiStack, childService);
+
+		SynchronizeFormsScreen synchronizeFormsScreen = new SynchronizeFormsScreen();
+		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(
+				new FormService(httpService), new FormStore(), uiStack,
+				synchronizeFormsScreen);
+
+		Dispatcher dispatcher = new Dispatcher(homeScreenController,
+				loginController, viewChildrenController, viewChildController,
+				synchronizeFormsController);
+
+		dispatcher.homeScreen();
+
 	}
 
 	private void enableEventInjection() {

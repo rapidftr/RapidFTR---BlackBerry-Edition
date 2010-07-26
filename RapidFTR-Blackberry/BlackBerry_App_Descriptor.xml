@@ -1,5 +1,5 @@
 <Properties ModelVersion="1.1.2">
-  <General Title="" Version="1.0.0" Vendor="BlackBerry Developer" Description=""/>
+  <General Title="RapidFTR" Version="1.0.0" Vendor="BlackBerry Developer" Description=""/>
   <Application Type="BlackBerry Application" MainMIDletName="" MainArgs="" HomeScreenPosition="0" StartupTier="7" IsSystemModule="false" IsAutostartup="false"/>
   <Resources hasTitleResource="false" TitleResourceBundleName="" TitleResourceBundleRelativePath="" TitleResourceBundleClassName="" TitleResourceBundleKey="" DescriptionId="">
     <Icons/>

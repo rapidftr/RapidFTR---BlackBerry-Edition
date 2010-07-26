@@ -4,20 +4,17 @@ import com.rapidftr.model.Child;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildScreen;
 
-public class ViewChildController {
-    private final ViewChildScreen viewChildScreen;
-    private final UiStack uiStack;
-
+public class ViewChildController extends Controller{
+	
+	
+	
     public ViewChildController(ViewChildScreen viewChildScreen, UiStack uiStack) {
-        this.viewChildScreen = viewChildScreen;
-        this.uiStack = uiStack;
+		super(viewChildScreen, uiStack);
+	}
+
+	public void show(Child child) {
+       ((ViewChildScreen) screen).setChild(child);
+       super.show(); 
     }
-
-
-    public void show(Child child) {
-        viewChildScreen.setChild(child);
-        uiStack.pushScreen(viewChildScreen);
-    }
-
 
 }

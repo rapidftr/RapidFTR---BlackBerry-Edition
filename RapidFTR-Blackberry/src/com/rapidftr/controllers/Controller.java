@@ -1,0 +1,34 @@
+package com.rapidftr.controllers;
+
+import net.rim.device.api.ui.UiApplication;
+
+import com.rapidftr.screens.Screen;
+import com.rapidftr.screens.UiStack;
+
+abstract public class Controller {
+
+	protected Dispatcher dispatcher;
+	protected Screen screen;
+	protected UiStack uiStack;
+
+	public Controller(Screen screen, UiStack uiStack) {
+		this.screen = screen;
+		this.uiStack = uiStack;
+		this.screen.setController(this);
+	}
+
+	public void setDispatcher(Dispatcher dispatcher) {
+		this.dispatcher = dispatcher;
+	}
+
+	public void show() {
+
+		if (!screen.isActive())
+			uiStack.pushScreen(screen);
+		screen.setUp();
+	}
+
+	public void popScreen() {
+		screen.popScreen(uiStack);
+	}
+}

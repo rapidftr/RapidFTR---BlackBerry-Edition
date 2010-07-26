@@ -2,11 +2,10 @@ package com.rapidftr.screens;
 
 import com.rapidftr.model.Child;
 import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.container.MainScreen;
 
 import java.util.Enumeration;
 
-public class ViewChildScreen extends MainScreen {
+public class ViewChildScreen extends Screen {
 
     public ViewChildScreen() {
     }
@@ -32,4 +31,14 @@ public class ViewChildScreen extends MainScreen {
         if (fieldCount > 0)
                 this.deleteRange(0, fieldCount);
     }
+
+	public void setUp() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void cleanUp() {
+		// TODO Auto-generated method stub
+		
+	}
 }

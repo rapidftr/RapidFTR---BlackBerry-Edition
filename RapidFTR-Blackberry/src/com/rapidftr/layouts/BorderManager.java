@@ -47,19 +47,19 @@ public class BorderManager extends Manager {
 			int limit = 90;
 			Font defaultFont = Styles.getTitleFont();
 	
-			retakeButton = new Button("Retake", limit);
+			retakeButton = new Button("Retake");
 
 			retakeButton.setFont(defaultFont);
 
 			add(retakeButton);
 			
-			newInfoButton = new Button("Add Details", limit);
+			newInfoButton = new Button("Add Details");
 
 			newInfoButton.setFont(defaultFont);
 
 			add(newInfoButton);
 			
-			searchAndEditButton = new Button("Search", limit);
+			searchAndEditButton = new Button("Search");
 
 			searchAndEditButton.setFont(defaultFont);
 
