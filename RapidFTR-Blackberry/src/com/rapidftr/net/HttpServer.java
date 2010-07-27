@@ -12,11 +12,13 @@ public class HttpServer {
 
 	private Request request = null;
 	private SettingsStore settingsStrore;
+	private int requestTimeout;
 
 	
 	public HttpServer(SettingsStore settingsStore)
 	{
 		settingsStrore = settingsStore;
+		requestTimeout = Properties.getInstance().getHttpRequestTimeout();
 		
 	}
 	
@@ -64,7 +66,7 @@ public class HttpServer {
 	
 	public String buildFullyQualifiedUrl(String uri) {
 
-		String url = getUrlPrefix() + uri;// +";ConnectionTimeout="+requestTimeout;
+		String url = getUrlPrefix() + uri+";deviceside=true"+";ConnectionTimeout="+requestTimeout;
 		return url;
 	}
 

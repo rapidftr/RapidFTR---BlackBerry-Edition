@@ -1,6 +1,7 @@
 package com.rapidftr;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import com.rapidftr.controllers.*;
 import com.rapidftr.controls.Button;
@@ -54,9 +55,15 @@ public class Main extends UiApplication {
 
 		SettingsStore settings = new SettingsStore();
 
-//		System.out.println("***Authorization key from Persistent Store***");
-//		System.out.println(settings.getAuthorizationToken());
-//		System.out.println("*********");
+		// System.out.println("***Authorization key from Persistent Store***");
+		// System.out.println(settings.getAuthorizationToken());
+		// System.out.println("*********");
+
+		FormStore formStore = new FormStore();
+		
+		// System.out.println("*******Form******");
+		// Vector v = formStore.getForms();
+		// System.out.println(v);
 
 		HttpServer httpServer = new HttpServer(settings);
 		HttpService httpService = new HttpService(httpServer);
@@ -84,12 +91,14 @@ public class Main extends UiApplication {
 
 		SynchronizeFormsScreen synchronizeFormsScreen = new SynchronizeFormsScreen();
 		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(
-				new FormService(httpService), new FormStore(), uiStack,
+				new FormService(httpService), formStore, uiStack,
 				synchronizeFormsScreen);
 
+		NewChildScreen newChildScreen = new NewChildScreen();
+		NewChildController newChildController = new NewChildController(newChildScreen, uiStack, formStore);
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,
 				loginController, viewChildrenController, viewChildController,
-				synchronizeFormsController);
+				synchronizeFormsController,newChildController);
 
 		dispatcher.homeScreen();
 

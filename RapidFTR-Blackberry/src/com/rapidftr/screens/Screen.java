@@ -15,6 +15,7 @@ public abstract class Screen extends MainScreen {
 
 	Controller controller;
 	private TitleField titleField;
+	
 
 	public Screen() {
 

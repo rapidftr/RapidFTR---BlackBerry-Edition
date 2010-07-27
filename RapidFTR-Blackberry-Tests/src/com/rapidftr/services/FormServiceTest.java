@@ -20,6 +20,7 @@ import com.sun.me.web.path.Result;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.RequestListener;
 import com.sun.me.web.request.Response;
+import static org.mockito.Mockito.when;
 
 public class FormServiceTest {
 
@@ -48,71 +49,53 @@ public class FormServiceTest {
 	public void shouldSendDownloadStatusToServiceListener() {
 		int received = 10;
 		int total = 100;
-		((RequestListener) formService).readProgress(context,
-				received, total);
+		((RequestListener) formService).readProgress(context, received, total);
 		verify(formServiceListener).updateDownloadStatus(received, total);
 	}
 
 	@Test
 	public void shouldSendFormsToSynchronizeServiceListenerOnDownloadComplete()
 			throws Exception {
-		Response response = stubSuccessfulResponse();
+		Response response = mock(Response.class);
+		Result mockResult = mock(Result.class);
+		when(response.getResult()).thenReturn(mockResult);
+		when(response.getCode()).thenReturn(HttpConnection.HTTP_OK);
+
+		String json = "json response";
+		when(mockResult.getAsString("")).thenReturn(json);
+
 		((RequestListener) formService).done(context, response);
 
-		Vector forms = new Vector();
-
-		Vector fieldList = new Vector();
-
-		FormField textFormField = new FormField("age", "text_box");
-		fieldList.add(textFormField);
-
-		Vector optionString = new Vector();
-		optionString.add("Approximate");
-		optionString.add("Exact");
-
-		FormField selectBoxFormField = new FormField("age_is", "select_box",
-				optionString);
-		fieldList.add(selectBoxFormField);
-
-		Form form = new Form("Basic_details", "basic_details", fieldList);
-
-		forms.add(form);
-
-		verify(formServiceListener).onDownloadComplete(forms);
+		verify(formServiceListener).onDownloadComplete(json);
 	}
 
-	
 	@Test
-	public void shouldSendAuthenticationFailureMesssageToServiceListener() throws Exception
-	{
-			Response response = mock(Response.class);
-			when(response.getCode()).thenReturn(HttpConnection.HTTP_UNAUTHORIZED);
-			((RequestListener) formService).done(context, response);
-			verify(formServiceListener).onAuthenticationFailure();
+	public void shouldSendAuthenticationFailureMesssageToServiceListener()
+			throws Exception {
+		Response response = mock(Response.class);
+		when(response.getCode()).thenReturn(HttpConnection.HTTP_UNAUTHORIZED);
+		((RequestListener) formService).done(context, response);
+		verify(formServiceListener).onAuthenticationFailure();
 	}
-	
-	
+
 	@Test
 	public void shoudlSendDownloadFailedErrorMessageToServiceListenerOnFailure()
 			throws Exception {
 		Response response = mock(Response.class);
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_CLIENT_TIMEOUT);
-		when(response.getException()).thenReturn(new Exception());
+
 		((RequestListener) formService).done(context, response);
 		verify(formServiceListener).onConnectionProblem();
 	}
 
-	private Response stubSuccessfulResponse() throws ResultException {
+	@Test
+	public void shouldSendDownloadFailedErrorMessageToServiceListenerOnAnyException()
+			throws Exception {
 		Response response = mock(Response.class);
-		String jsonFormString = String
-				.format("[{\"name\":\"Basic_details\",\"unique_id\":\"basic_details\",\"fields\":[{\"name\":\"age\",\"type\":\"text_box\"},{\"name\":\"age_is\",\"type\":\"select_box\",\"option_strings\":"
-						+
+		when(response.getException()).thenReturn(new Exception());
+		((RequestListener) formService).done(context, response);
+		verify(formServiceListener).onDownloadFailed();
 
-						"[\"Approximate\",\"Exact\"]}]}]");
-		when(response.getResult()).thenReturn(
-				Result.fromContent(jsonFormString, "application/json"));
-		when(response.getCode()).thenReturn(200);
-		return response;
 	}
 
 }

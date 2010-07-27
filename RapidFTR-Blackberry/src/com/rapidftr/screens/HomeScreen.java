@@ -95,6 +95,7 @@ public class HomeScreen extends Screen {
 	}
 
 	private void onNewChildClicked() {
+		((HomeScreenController) controller).newChild();
 	}
 
 	private void onSyncFormsClicked() {

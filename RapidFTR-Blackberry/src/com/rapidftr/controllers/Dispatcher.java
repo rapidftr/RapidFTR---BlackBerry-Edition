@@ -9,23 +9,27 @@ public class Dispatcher {
 	private ViewChildrenController viewChildrenController;
 	private ViewChildController viewChildController;
 	private SynchronizeFormsController synchronizeFormsController;
+	private NewChildController newChildController;
 
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController,
 			ViewChildrenController viewChildrenController,
-			ViewChildController viewChildController, SynchronizeFormsController synchronizeFormsController) {
+			ViewChildController viewChildController,
+			SynchronizeFormsController synchronizeFormsController,NewChildController newChildController) {
 
 		this.homeScreenController = homeScreenController;
 		this.loginController = loginController;
 		this.viewChildrenController = viewChildrenController;
 		this.viewChildController = viewChildController;
 		this.synchronizeFormsController = synchronizeFormsController;
+		this.newChildController = newChildController;
 
 		homeScreenController.setDispatcher(this);
 		loginController.setDispatcher(this);
 		viewChildrenController.setDispatcher(this);
 		viewChildController.setDispatcher(this);
 		synchronizeFormsController.setDispatcher(this);
+		newChildController.setDispatcher(this);
 
 	}
 
@@ -37,9 +41,6 @@ public class Dispatcher {
 		viewChildrenController.show();
 	}
 
-	public void newChildController() {
-
-	}
 
 	public void viewChild(Child child) {
 		viewChildController.show(child);
@@ -48,9 +49,13 @@ public class Dispatcher {
 	public void login() {
 		loginController.show();
 	}
-	public void synchronizeForms()
-	{
+
+	public void synchronizeForms() {
 		synchronizeFormsController.synchronizeForms();
+	}
+
+	public void newChild() {
+		newChildController.show();
 	}
 
 }

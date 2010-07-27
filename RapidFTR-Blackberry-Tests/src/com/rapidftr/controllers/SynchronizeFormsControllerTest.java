@@ -3,6 +3,7 @@ package com.rapidftr.controllers;
 import java.io.IOException;
 import java.util.Vector;
 
+import org.json.me.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,6 +12,8 @@ import com.rapidftr.screens.SynchronizeFormsScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.FormServiceListener;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.stub;
 
 import static org.mockito.Mockito.*;
 
@@ -66,8 +69,22 @@ public class SynchronizeFormsControllerTest {
 	@Test
 	public void shouldSendDownloadCompletedMessageToSynchronizeFormsScreenOnDownloadComplete() {
 		synchronizeFormsController.synchronizeForms();
-		synchronizeFormsController.onDownloadComplete(mock(Vector.class));
+		String jsonResult = new String("json");
+		synchronizeFormsController.onDownloadComplete(jsonResult);
 		verify(synchronizeFormsScreen).downloadCompleted();
+	}
+
+	@Test
+	public void shouldSendDownloadFaileddMessageToSynchronizeFormsScreenOnJsonExceptionFormStore()
+			throws JSONException {
+		synchronizeFormsController.synchronizeForms();
+		String jsonResult = new String("json");
+		doThrow(new JSONException("Json Exception")).when(formStore)
+				.storeForms(jsonResult);
+		synchronizeFormsController.onDownloadComplete(jsonResult);
+		verify(synchronizeFormsScreen, never()).downloadCompleted();
+		verify(synchronizeFormsScreen).downloadFailed();
+
 	}
 
 	@Test

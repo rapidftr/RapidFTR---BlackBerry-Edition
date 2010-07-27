@@ -16,6 +16,7 @@ public class DispatcherTests {
 	private ViewChildController viewChildController;
 	private SynchronizeFormsController synchronizeFormsController;
 	private Dispatcher dispatcher;
+	private NewChildController newChildController;
 
 	@Before
 	public void setUp() {
@@ -24,14 +25,15 @@ public class DispatcherTests {
 		viewChildrenController = mock(ViewChildrenController.class);
 		viewChildController = mock(ViewChildController.class);
 		synchronizeFormsController = mock(SynchronizeFormsController.class);
+		newChildController = mock(NewChildController.class);
 		dispatcher = new Dispatcher(homeScreenController, loginController,
 				viewChildrenController, viewChildController,
-				synchronizeFormsController);
+				synchronizeFormsController, newChildController);
 
 	}
 
 	@Test
-	public void shoulShowHomeScrenn() {
+	public void shouldShowHomeScrenn() {
 
 		dispatcher.homeScreen();
 		verify(homeScreenController).show();
@@ -54,6 +56,12 @@ public class DispatcherTests {
 		Child child = mock(Child.class);
 		dispatcher.viewChild(child);
 		verify(viewChildController).show(child);
+	}
+
+	@Test
+	public void shouldShowNewChildScreen() {
+		dispatcher.newChild();
+		verify(newChildController).show();
 	}
 
 }

@@ -44,7 +44,6 @@ public class BorderedEditField extends BasicEditField {
 
 	public void paint(Graphics g) {
 		g.setColor(0x000000);
-
 		g.drawRect(iRectX, 0, iRectWidth, 16);
 		super.paint(g);
 	}

@@ -10,8 +10,6 @@ public class Form implements Persistable {
 	private final String id;
 	private final Vector fieldList;
 
-	
-
 	public Form(String name, String id, Vector fieldList) {
 		this.name = name;
 		this.id = id;
@@ -30,18 +28,26 @@ public class Form implements Persistable {
 
 		Form form = (Form) obj;
 
-		try
-		{
-		return name.equals(form.name)&& id.equals(form.id) && fieldList.equals(form.fieldList);
-		}
-		catch (NullPointerException e) {
+		try {
+			return name.equals(form.name) && id.equals(form.id)
+					&& getFieldList().equals(form.getFieldList());
+		} catch (NullPointerException e) {
 			return false;
 		}
 	}
 
+	public String formatedSring() {
+
+		return "[" + name + "," + id + "," + getFieldList().toString();
+	}
+
 	public String toString() {
-		
-		return "[" + name + "," + id + ","+ fieldList.toString();
+
+		return name;
+	}
+
+	public Vector getFieldList() {
+		return fieldList;
 	}
 	
 	

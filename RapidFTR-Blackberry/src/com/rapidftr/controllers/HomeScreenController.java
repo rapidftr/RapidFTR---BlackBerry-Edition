@@ -22,5 +22,9 @@ public class HomeScreenController extends Controller {
 		
 	}
 
+	public void newChild() {
+		dispatcher.newChild();
+	}
+
 
 }

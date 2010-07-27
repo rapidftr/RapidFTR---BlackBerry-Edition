@@ -2,14 +2,16 @@ package com.rapidftr.services;
 
 import java.util.Vector;
 
+import org.json.me.JSONArray;
+
 import com.rapidftr.net.HttpServiceListener;
 
 public interface FormServiceListener extends HttpServiceListener {
 
 	void updateDownloadStatus(int received, int total);
 
-	void onDownloadComplete(Vector forms);
+	void onDownloadComplete(String formsAsJson);
 
-	void downloadFailed();
+	void onDownloadFailed();
 
 }

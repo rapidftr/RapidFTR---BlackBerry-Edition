@@ -2,6 +2,8 @@ package com.rapidftr.controllers;
 
 import java.util.Vector;
 
+import org.json.me.JSONException;
+
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.screens.SynchronizeFormsScreen;
 import com.rapidftr.screens.UiStack;
@@ -61,10 +63,20 @@ public class SynchronizeFormsController extends Controller implements
 
 	}
 
-	public void onDownloadComplete(Vector forms) {
+	public void onDownloadComplete(String jsonFormsAsString) {
 		if (!downloadInProgress)
 			return;
+		
 		downloadInProgress = false;
+		
+		try {
+			formStore.storeForms(jsonFormsAsString);
+		} catch (JSONException e) {
+			
+			((SynchronizeFormsScreen) screen).downloadFailed();
+			return;
+		}
+		
 		((SynchronizeFormsScreen) screen).downloadCompleted();
 
 	}
@@ -80,12 +92,15 @@ public class SynchronizeFormsController extends Controller implements
 
 	}
 
-	public void downloadFailed() {
+
+	public void onDownloadFailed() {
 		if (!downloadInProgress)
 			return;
-
+		
 		downloadInProgress = false;
 		((SynchronizeFormsScreen) screen).downloadFailed();
-
+		
 	}
+
+	
 }
