@@ -39,6 +39,9 @@ public class NewChildScreen extends Screen {
 
 	public void setForms(Vector forms) {
 		this.forms = forms;
+		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
+			((Form) list.nextElement()).initializeLayout((NewChildController) controller);
+		}
 	}
 
 	private void createScreenLayout() {
@@ -77,38 +80,20 @@ public class NewChildScreen extends Screen {
 		screenManager.add(formsManager);
 
 		final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
-		formManager.add(createNewFormManager(formArray[0]));
+		formManager.add(((Form) formArray[0]).getLayout());
 		screenManager.add(formManager);
 		availableForms.setChangeListener(new FieldChangeListener() {
 
 			public void fieldChanged(Field field, int context) {
-				
 
-					formManager.deleteAll();
-					formManager
-							.add(createNewFormManager(formArray[availableForms
-									.getSelectedIndex()]));
-				
+				formManager.deleteAll();
+				formManager.add(((Form) formArray[availableForms
+						.getSelectedIndex()]).getLayout());
+
 			}
 
 		});
-	
 
-	}
-
-	private Manager createNewFormManager(Object object) {
-
-		Manager manager = new VerticalFieldManager();
-
-		Form form = (Form) object;
-
-		Vector fields = form.getFieldList();
-
-		for (Enumeration list = fields.elements(); list.hasMoreElements();) {
-			FormField formField = (FormField) list.nextElement();
-			manager.add(formField.getLayout());
-		}
-		return manager;
 	}
 
 }

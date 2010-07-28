@@ -1,50 +1,47 @@
 package com.rapidftr.controls;
 
+import com.rapidftr.utilities.Styles;
+
+import net.rim.device.api.system.Display;
+import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.component.BasicEditField;
 
-import com.rapidftr.utilities.Styles;
-
 public class BorderedEditField extends BasicEditField {
-	private int iRectWidth;
-	private int iRectX;
-	
-	public BorderedEditField(String label, String defaultValue, Font defaultFont, int maxSize) {
-		super(label, defaultValue, maxSize, 0);
 
-		iRectWidth = defaultFont.getAdvance('e') * maxSize;
+	private int fieldHeight;
+	private int fieldWidth;
+	private int padding;
 
-		iRectX = defaultFont.getAdvance(getLabel());	
-		
-		this.setFont(defaultFont);
-	}
-	
-	public BorderedEditField(String label, String defaultValue, Font defaultFont) {
-		this(label, defaultValue, defaultFont, 20);
+	public BorderedEditField(String text) {
+		super("", text);
+		padding = 8;
+		fieldHeight = Font.getDefault().getHeight() + padding;
+		fieldWidth = Display.getWidth() - padding;
 	}
 
-	public BorderedEditField(String label, String defaultValue) {
-		this(label, defaultValue, Styles.getDefaultFont(), 20);
+	public int getPreferredWidth() {
+		return fieldWidth;
 	}
-	
-	public BorderedEditField(String label, String defaultValue, int maxSize) {
-		this(label, defaultValue, Styles.getDefaultFont(), maxSize);
-	}
-	
+
 	public int getPreferredHeight() {
-		return 20;
+		return fieldHeight;
 	}
 
-	public void layout(int width, int height) {
-		super.layout(width, getPreferredHeight());
-		setExtent(width, getPreferredHeight());
-
+	protected void layout(int arg0, int arg1) {
+		setExtent(getPreferredWidth(), getPreferredHeight());
 	}
 
-	public void paint(Graphics g) {
-		g.setColor(0x000000);
-		g.drawRect(iRectX, 0, iRectWidth, 16);
-		super.paint(g);
+	protected void paint(Graphics graphics) {
+
+		graphics.setColor(Styles.COLOR_FIELD_BACKGROUND);
+		graphics.drawRoundRect(0, 0, fieldWidth, fieldHeight, 8, 8);
+
+		graphics.setColor(Color.WHITE);
+		graphics.drawText(super.getText(), padding, padding / 2 + 1);
+
+		super.paint(graphics);
 	}
+
 }

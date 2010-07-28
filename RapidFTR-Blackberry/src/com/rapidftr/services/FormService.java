@@ -2,8 +2,6 @@ package com.rapidftr.services;
 
 import java.io.IOException;
 import java.util.Hashtable;
-import java.util.Vector;
-
 import javax.microedition.io.HttpConnection;
 
 import net.rim.device.api.io.http.HttpServerConnection;
@@ -46,8 +44,8 @@ public class FormService implements RequestListener {
 		}
 		if (result.getException() != null) {
 
-			// formServiceListener.onDownloadComplete(sampleJsonForTesting());
-			formServiceListener.onDownloadFailed();
+			formServiceListener.onDownloadComplete(sampleJsonForTesting());
+			//formServiceListener.onDownloadFailed();
 			return;
 		}
 
