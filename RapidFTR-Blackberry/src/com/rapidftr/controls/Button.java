@@ -5,11 +5,13 @@ import java.util.Vector;
 
 import com.rapidftr.utilities.Styles;
 
+import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
+import net.rim.device.api.ui.XYRect;
 import net.rim.device.api.ui.component.ButtonField;
 import net.rim.device.api.ui.decor.Background;
 import net.rim.device.api.ui.decor.BackgroundFactory;
@@ -21,6 +23,7 @@ public class Button extends Field {
 	private int padding = 8;
 
 	private int backgroundColour;
+	private Bitmap bitmap;
 
 	public Button(String text) {
 		super(Field.FOCUSABLE);
@@ -30,6 +33,13 @@ public class Button extends Field {
 		fieldHeight = defaultFont.getHeight() + padding;
 		fieldWidth = defaultFont.getAdvance(text) + (padding * 2);
 		this.setPadding(2, 2, 2, 2);
+	}
+
+	public Button(Bitmap bitmap) {
+		super(Field.FOCUSABLE);
+		this.bitmap = bitmap;
+		fieldHeight = bitmap.getHeight() + 8;
+		fieldWidth = bitmap.getWidth() + 8;
 	}
 
 	protected boolean navigationClick(int status, int time) {
@@ -67,10 +77,19 @@ public class Button extends Field {
 		try {
 			this.getChangeListener().fieldChanged(this, context);
 		} catch (Exception e) {
+			System.out.println(e.toString());
 		}
 	}
 
 	protected void paint(Graphics graphics) {
+
+		if (bitmap != null) {
+			graphics.setColor(backgroundColour);
+			graphics.fillRect(0, 0, fieldWidth, fieldHeight);
+			graphics.drawBitmap(new  XYRect(4, 4, bitmap.getWidth()-1, bitmap
+					.getHeight()-1), bitmap, 0, 0);
+			return;
+		}
 
 		graphics.setColor(backgroundColour);
 		graphics.fillRoundRect(0, 0, fieldWidth, fieldHeight, 8, 8);
@@ -80,13 +99,6 @@ public class Button extends Field {
 		graphics.setColor(Color.WHITE);
 		graphics.drawText(text, (fieldWidth / 2)
 				- (getFont().getAdvance(text) / 2), padding / 2 + 1);
-
-	}
-
-	public void enable(FieldChangeListener listener) {
-
-		setChangeListener(listener);
-		invalidate();
 
 	}
 
@@ -108,6 +120,12 @@ public class Button extends Field {
 			button.fieldWidth = maxWidth;
 		}
 
+	}
+
+	public void setBitmap(Bitmap bitmap) {
+		this.bitmap = bitmap;
+		fieldHeight = bitmap.getHeight() + 8;
+		fieldWidth = bitmap.getWidth() + 8;
 	}
 
 }

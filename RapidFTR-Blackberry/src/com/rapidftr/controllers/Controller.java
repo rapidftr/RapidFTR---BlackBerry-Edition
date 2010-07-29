@@ -2,16 +2,16 @@ package com.rapidftr.controllers;
 
 import net.rim.device.api.ui.UiApplication;
 
-import com.rapidftr.screens.Screen;
+import com.rapidftr.screens.CustomScreen;
 import com.rapidftr.screens.UiStack;
 
 abstract public class Controller {
 
 	protected Dispatcher dispatcher;
-	protected Screen screen;
+	protected CustomScreen screen;
 	protected UiStack uiStack;
 
-	public Controller(Screen screen, UiStack uiStack) {
+	public Controller(CustomScreen screen, UiStack uiStack) {
 		this.screen = screen;
 		this.uiStack = uiStack;
 		this.screen.setController(this);

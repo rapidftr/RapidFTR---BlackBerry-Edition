@@ -7,7 +7,7 @@ import net.rim.device.api.ui.component.SeparatorField;
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.model.Child;
 
-public class ViewChildrenScreen extends Screen {
+public class ViewChildrenScreen extends CustomScreen {
   
     private ObjectListField childList;
 

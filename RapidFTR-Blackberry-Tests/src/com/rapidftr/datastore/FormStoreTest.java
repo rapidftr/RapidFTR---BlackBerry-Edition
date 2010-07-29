@@ -10,6 +10,8 @@ import org.junit.Test;
 
 import com.rapidftr.model.Form;
 import com.rapidftr.model.FormField;
+import com.rapidftr.model.FormFieldFactory;
+import com.rapidftr.model.TextBoxField;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Response;
@@ -37,14 +39,15 @@ public class FormStoreTest {
 
 		Vector fieldList = new Vector();
 
-		FormField textFormField = new FormField("age", "text_box");
+		FormFieldFactory formFieldFactory = new FormFieldFactory();
+		FormField textFormField = formFieldFactory .createFormField("age","text_box",null);
 		fieldList.add(textFormField);
 
 		Vector optionString = new Vector();
 		optionString.add("Approximate");
 		optionString.add("Exact");
 
-		FormField selectBoxFormField = new FormField("age_is", "select_box",
+		FormField selectBoxFormField = formFieldFactory.createFormField("age_is", "select_box",
 				optionString);
 		fieldList.add(selectBoxFormField);
 

@@ -21,7 +21,7 @@ import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.utilities.SettingsStore;
 
-public class LoginScreen extends Screen implements FieldChangeListener {
+public class LoginScreen extends CustomScreen implements FieldChangeListener {
 
 	private static final int MAX_SIZE = 200;
 	private static final XYEdges PADDING = new XYEdges(4, 4, 4, 4);

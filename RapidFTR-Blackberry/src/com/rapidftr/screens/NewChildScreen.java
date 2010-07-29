@@ -6,6 +6,7 @@ import java.util.Vector;
 import com.rapidftr.controllers.NewChildController;
 import com.rapidftr.model.Form;
 import com.rapidftr.model.FormField;
+import com.rapidftr.utilities.ImageCaptureListener;
 
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
@@ -18,7 +19,7 @@ import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-public class NewChildScreen extends Screen {
+public class NewChildScreen extends CustomScreen {
 
 	private Vector forms;
 	private Manager screenManager;
@@ -40,7 +41,8 @@ public class NewChildScreen extends Screen {
 	public void setForms(Vector forms) {
 		this.forms = forms;
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-			((Form) list.nextElement()).initializeLayout((NewChildController) controller);
+			((Form) list.nextElement())
+					.initializeLayout(this);
 		}
 	}
 
@@ -93,6 +95,13 @@ public class NewChildScreen extends Screen {
 			}
 
 		});
+
+	}
+
+	public void takePhoto(ImageCaptureListener imageCaptureListener) {
+
+		((NewChildController) controller)
+				.takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
 
 	}
 

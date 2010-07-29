@@ -1,131 +1,200 @@
 package com.rapidftr.screens;
 
-import java.io.IOException;
+import java.io.InputStream;
 
-import javax.microedition.media.Manager;
-import javax.microedition.media.MediaException;
-import javax.microedition.media.Player;
-import javax.microedition.media.control.VideoControl;
+import javax.microedition.io.Connector;
+import javax.microedition.io.file.FileConnection;
 
-import com.rapidftr.controls.BlankSeparatorField;
-import com.rapidftr.controls.Button;
-
+import net.rim.blackberry.api.invoke.CameraArguments;
+import net.rim.blackberry.api.invoke.Invoke;
+import net.rim.device.api.io.file.FileSystemJournal;
+import net.rim.device.api.io.file.FileSystemJournalEntry;
+import net.rim.device.api.io.file.FileSystemJournalListener;
+import net.rim.device.api.math.Fixed32;
+import net.rim.device.api.system.Bitmap;
+import net.rim.device.api.system.Characters;
+import net.rim.device.api.system.Display;
+import net.rim.device.api.system.EncodedImage;
+import net.rim.device.api.system.EventInjector.KeyEvent;
 import net.rim.device.api.ui.ContextMenu;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.Screen;
+import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
-import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.component.SeparatorField;
-import net.rim.device.api.ui.component.TextField;
-import net.rim.device.api.ui.container.HorizontalFieldManager;
 
-public class SnapshotScreen extends Screen implements FieldChangeListener {
+import com.rapidftr.controllers.SnapshotController;
 
-	private Button snapButton;
-	private VideoControl videoControll;
-	private Button fullScreenButton;
+public class SnapshotScreen extends CustomScreen {
+
+	private BitmapField bitmapField;
+	private String photoPath;
+	private boolean cameraHadBeenInvoked;
+	private static long lastUSN;
+	private Bitmap bitmap;
+	private EncodedImage encodedImage;
+	private FileSystemJournalListener listener;
 
 	public SnapshotScreen() {
 		super();
-		HorizontalFieldManager manager = new HorizontalFieldManager(
-				FIELD_HCENTER);
-		manager.add(new LabelField("Take Picture"));
-		add(manager);
-		add(new SeparatorField());
-		try {
-			Player player = Manager.createPlayer("capture://video");
-			player.realize();
-			player.prefetch();
-			player.start();
+		photoPath = null;
+		cameraHadBeenInvoked = false;
+		bitmapField = new BitmapField();
+		add(bitmapField);
+		listener = createFileSystemListener();
+		addMenuItem(new MenuItem("Save", 1, 1) {
+			public void run() {
+				onSaveClicked();
+			}
 
-			videoControll = (VideoControl) player.getControl("VideoControl");
-			Field viewFinder = (Field) videoControll.initDisplayMode(
-					VideoControl.USE_GUI_PRIMITIVE,
-					"net.rim.device.api.ui.Field");
-			add(viewFinder);
-			add(new BlankSeparatorField(20));
-			HorizontalFieldManager buttonManager = new HorizontalFieldManager(
-					FIELD_HCENTER);
+		});
 
-			snapButton = new Button("Snap");
-			snapButton.setChangeListener(this);
-			buttonManager.add(snapButton);
-			
-			fullScreenButton = new Button("Full Screen");
-			buttonManager.add(fullScreenButton);
-			fullScreenButton.setChangeListener(new FieldChangeListener() {
-				
-				public void fieldChanged(Field field, int context) {
-					if(videoControll!=null)
-					{
-						try {
-							videoControll.setDisplayFullScreen(true);
-						} catch (MediaException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			});
-			add(buttonManager);
-			videoControll.setVisible(true);
-		} catch (IOException e) {
+	}
 
-			Dialog.alert(e.toString());
+	private void onSaveClicked() {
+		cleanUp();
+		controller.popScreen();
+		((SnapshotController) controller)
+				.capturedImage(photoPath, encodedImage);
+	}
 
-		} catch (MediaException e) {
-
-			Dialog.alert(e.toString());
+	protected void onExposed() {
+		System.out.println("*********Ezxposed**********");
+		if (photoPath != null && cameraHadBeenInvoked) {
+			showImage();
+			bitmapField.setBitmap(bitmap);
 		}
 
+		if (cameraHadBeenInvoked && photoPath == null) {
+			System.out.println("pop screen called");
+			cleanUp();
+			controller.popScreen();
+		}
+
+		super.onExposed();
 	}
 
-	protected void makeContextMenu(ContextMenu contextMenu) {
-		
-		MenuItem snapMenu = new MenuItem("Snap", 1, 1) {
-			
-			public void run() {
-				takePicture();
-			}
-		};
-		contextMenu.addItem(snapMenu);
-		MenuItem fullScreenMenuItem = new MenuItem("Full Screen",1,2) {
-			
-			public void run() {
-				if(videoControll !=null)
-				{
-					try {
-						videoControll.setDisplayFullScreen(true);
-					} catch (MediaException e) {
-						// TODO Auto-genera;
-					}
-				}
-			}
-		};
-		contextMenu.addItem(fullScreenMenuItem);
-		super.makeContextMenu(contextMenu);
+	protected void onDisplay() {
+
+		System.out.println("********OnDisplay**********");
+		if (!cameraHadBeenInvoked) {
+			cameraHadBeenInvoked = true;
+			Invoke.invokeApplication(Invoke.APP_TYPE_CAMERA,
+					new CameraArguments());
+
+		}
+
+		super.onDisplay();
 	}
-	
 
 	public void cleanUp() {
-		// TODO Auto-generated method stub
-
+		System.out.println("**********OnCleanUp********");
+		cameraHadBeenInvoked = false;
+		photoPath = null;
+		UiApplication.getUiApplication().removeFileSystemJournalListener(
+				listener);
 	}
 
 	public void setUp() {
-
+		UiApplication.getUiApplication().addFileSystemJournalListener(listener);
 	}
 
-	private void takePicture()
-	{
-		
-	}
-	public void fieldChanged(Field field, int context) {
-		if (field.equals(snapButton)) {
-			takePicture();
+	private void showImage() {
+		try {
+			FileConnection fconn = (FileConnection) Connector.open("file://"
+					+ photoPath);
+
+			InputStream input = fconn.openInputStream();
+			byte[] data = new byte[(int) fconn.fileSize()];
+			input.read(data, 0, data.length);
+			encodedImage = EncodedImage
+					.createEncodedImage(data, 0, data.length);
+
+			int currentWidthFixed32 = Fixed32.toFP(encodedImage.getWidth());
+			int currentHeightFixed32 = Fixed32.toFP(encodedImage.getHeight());
+
+			int requiredWidthFixed32 = Fixed32.toFP(Display.getWidth());
+			int requiredHeightFixed32 = Fixed32.toFP(Display.getHeight() - 36);
+
+			int scaleXFixed32 = Fixed32.div(currentWidthFixed32,
+					requiredWidthFixed32);
+			int scaleYFixed32 = Fixed32.div(currentHeightFixed32,
+					requiredHeightFixed32);
+
+			bitmap = encodedImage.scaleImage32(scaleXFixed32, scaleYFixed32)
+					.getBitmap();
+
+		} catch (Exception e) {
+			System.out.println(e.toString());
 		}
+	}
+
+	protected void makeContextMenu(ContextMenu contextMenu) {
+		super.makeContextMenu(contextMenu);
+	}
+
+	private FileSystemJournalListener createFileSystemListener() {
+
+		lastUSN = FileSystemJournal.getNextUSN();
+		FileSystemJournalListener listener = new FileSystemJournalListener() {
+			public void fileJournalChanged() {
+
+				long USN = FileSystemJournal.getNextUSN();
+
+				for (long i = USN - 1; i >= lastUSN; --i) {
+
+					FileSystemJournalEntry entry = FileSystemJournal
+							.getEntry(i);
+
+					if (entry != null) {
+
+						if (entry.getEvent() == FileSystemJournalEntry.FILE_ADDED
+								|| entry.getEvent() == FileSystemJournalEntry.FILE_CHANGED
+								|| entry.getEvent() == FileSystemJournalEntry.FILE_RENAMED) {
+
+							if (entry.getPath().indexOf(".jpg") != -1) {
+								photoPath = entry.getPath();
+								injectKey(Characters.ESCAPE);
+								injectKey(Characters.ESCAPE);
+								System.out.println("photo path" + photoPath);
+
+								lastUSN = USN;
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			private void injectKey(char key) {
+				KeyEvent inject = new KeyEvent(KeyEvent.KEY_DOWN, key, 0);
+				inject.post();
+			}
+
+		};
+		return listener;
+	}
+
+	public boolean onClose() {
+
+		if (bitmap != null) {
+			int result = Dialog.ask(Dialog.D_SAVE);
+
+			if (result == Dialog.SAVE) {
+				onSaveClicked();
+				return true;
+			}
+		}
+
+		cleanUp();
+
+		return super.onClose();
 
 	}
 

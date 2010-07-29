@@ -20,7 +20,7 @@ import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.Border;
 import net.rim.device.api.ui.decor.BorderFactory;
 
-public class SynchronizeFormsScreen extends Screen implements
+public class SynchronizeFormsScreen extends CustomScreen implements
 		FieldChangeListener {
 
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);

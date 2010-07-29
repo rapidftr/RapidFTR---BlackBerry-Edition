@@ -10,7 +10,7 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controls.Button;
 
-public class HomeScreen extends Screen {
+public class HomeScreen extends CustomScreen {
 
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
 	private Button searchButton;

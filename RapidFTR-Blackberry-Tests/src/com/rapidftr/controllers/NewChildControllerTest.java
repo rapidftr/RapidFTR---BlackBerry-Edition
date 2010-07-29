@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.screens.NewChildScreen;
-import com.rapidftr.screens.Screen;
+import com.rapidftr.screens.CustomScreen;
 import com.rapidftr.screens.UiStack;
 
 public class NewChildControllerTest {

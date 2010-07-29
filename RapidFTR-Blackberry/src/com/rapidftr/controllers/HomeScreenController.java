@@ -1,11 +1,11 @@
 package com.rapidftr.controllers;
 
-import com.rapidftr.screens.Screen;
+import com.rapidftr.screens.CustomScreen;
 import com.rapidftr.screens.UiStack;
 
 public class HomeScreenController extends Controller {
 
-	public HomeScreenController(Screen screen, UiStack uiStack) {
+	public HomeScreenController(CustomScreen screen, UiStack uiStack) {
 		super(screen, uiStack);
 	}
 

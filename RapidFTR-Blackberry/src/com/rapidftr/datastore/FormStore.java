@@ -8,6 +8,7 @@ import org.json.me.JSONObject;
 
 import com.rapidftr.model.Form;
 import com.rapidftr.model.FormField;
+import com.rapidftr.model.FormFieldFactory;
 
 public class FormStore {
 
@@ -37,6 +38,7 @@ public class FormStore {
 
 	private Vector parseFormsFromJSON(String json) throws JSONException {
 
+		FormFieldFactory formFieldFactory = new FormFieldFactory();
 		JSONArray jsonForms = new JSONArray(json);
 		Vector forms = new Vector();
 		for (int i = 0; i < jsonForms.length(); i++) {
@@ -56,7 +58,7 @@ public class FormStore {
 
 				}
 
-				formFields.addElement(new FormField(jsonFormField
+				formFields.addElement(formFieldFactory.createFormField(jsonFormField
 						.getString("name"), jsonFormField.getString("type"),
 						optionStrings));
 			}

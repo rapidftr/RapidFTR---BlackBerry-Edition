@@ -5,7 +5,7 @@ import net.rim.device.api.ui.component.LabelField;
 
 import java.util.Enumeration;
 
-public class ViewChildScreen extends Screen {
+public class ViewChildScreen extends CustomScreen {
 
     public ViewChildScreen() {
     }

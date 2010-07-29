@@ -3,16 +3,14 @@ package com.rapidftr.model;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.container.VerticalFieldManager;
+
 import com.rapidftr.controllers.NewChildController;
 import com.rapidftr.controls.BlankSeparatorField;
+import com.rapidftr.screens.NewChildScreen;
 
-import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.XYEdges;
-import net.rim.device.api.ui.component.SeparatorField;
-import net.rim.device.api.ui.container.VerticalFieldManager;
-import net.rim.device.api.util.Persistable;
-
-public class Form  {
+public class Form {
 
 	private String name;
 	private final String id;
@@ -59,11 +57,11 @@ public class Form  {
 		return fieldList;
 	}
 
-	public void initializeLayout(NewChildController newChildController) {
+	public void initializeLayout(NewChildScreen newChildScreen) {
 		layoutManager = new VerticalFieldManager();
 		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
 			FormField formField = (FormField) list.nextElement();
-			formField.initializeLayout(newChildController);
+			formField.initializeLayout(newChildScreen);
 			layoutManager.add(formField.getLayout());
 			layoutManager.add(new BlankSeparatorField(10));
 		}
