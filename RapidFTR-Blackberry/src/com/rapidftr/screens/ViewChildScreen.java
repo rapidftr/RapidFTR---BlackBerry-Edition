@@ -17,12 +17,12 @@ public class ViewChildScreen extends CustomScreen {
 
     private void renderChildFields(Child child) {
 
-                Enumeration fieldNames = child.getFieldNames();
-                while (fieldNames.hasMoreElements()) {
-                    String fieldName = (String)fieldNames.nextElement();
-                    String fieldValue = child.getField(fieldName);
-                    add(new LabelField(fieldName + ": " + fieldValue));
-                }
+//                Enumeration fieldNames = child.getFieldNames();
+//                while (fieldNames.hasMoreElements()) {
+//                    String fieldName = (String)fieldNames.nextElement();
+//                    String fieldValue = child.getField(fieldName);
+//                    add(new LabelField(fieldName + ": " + fieldValue));
+//                }
 
     }
 

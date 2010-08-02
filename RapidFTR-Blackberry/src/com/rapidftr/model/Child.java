@@ -3,35 +3,47 @@ package com.rapidftr.model;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-public class Child {
+import net.rim.device.api.util.Persistable;
 
-    private final String name;
-    private final Hashtable fields = new Hashtable();
+public class Child implements Persistable {
 
-    public Child(String name) {
-        this.name = name;
-    }
+	private final Hashtable data;
 
-    public String toString() {
-        return "Child: " + name;
-    }
+	public Child(Hashtable data) {
+		this.data = data;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String toString() {
 
-    public String getField(String fieldName) {
-        return (String) fields.get(fieldName);
-    }
+		if (data == null)
+			return null;
 
-    public Enumeration getFieldNames() {
-        return fields.keys();
-    }
+		StringBuffer buffer = new StringBuffer();
 
-    public void setField(String fieldName, String fieldValue) {
-        fields.put(fieldName, fieldValue);
-    }
+		for (Enumeration list = data.elements(); list.hasMoreElements();) {
+			Hashtable formData = (Hashtable) list.nextElement();
 
+			buffer.append("[");
+				for (Enumeration keyList = formData.keys(); keyList
+						.hasMoreElements();) {
+					Object key = keyList.nextElement();
+					Object value;
+					if(key.equals(Form.FORM_NAME))
+					{
+						value = formData.get(key);
+					}
+					else
+					{
+						
+						value = ((Object[]) formData.get(key))[1];
+					}
+					buffer.append(key + ":" + value + ",");
+
+				}
+				buffer.append("],");
+		}
+
+		return buffer.toString();
+	}
 
 }
-

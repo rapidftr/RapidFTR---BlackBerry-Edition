@@ -1,9 +1,13 @@
 package com.rapidftr.screens;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import com.rapidftr.controllers.NewChildController;
+import com.rapidftr.controls.BlankSeparatorField;
+import com.rapidftr.controls.Button;
+import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
 import com.rapidftr.model.FormField;
 import com.rapidftr.utilities.ImageCaptureListener;
@@ -30,19 +34,14 @@ public class NewChildScreen extends CustomScreen {
 
 	public void setUp() {
 
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-				createScreenLayout();
-			}
-		});
+		createScreenLayout();
 
 	}
 
 	public void setForms(Vector forms) {
 		this.forms = forms;
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-			((Form) list.nextElement())
-					.initializeLayout(this);
+			((Form) list.nextElement()).initializeLayout(this);
 		}
 	}
 
@@ -63,13 +62,13 @@ public class NewChildScreen extends CustomScreen {
 
 		if (forms == null || forms.size() == 0) {
 			int result = Dialog.ask(Dialog.D_OK_CANCEL,
-					"There are no form details stores\n"
+					"There are no form details stored\n"
 							+ "press ok to synchronize forms with a server");
 
+			controller.popScreen();
 			if (result == Dialog.OK) {
 				((NewChildController) controller).synchronizeForms();
 			}
-			controller.popScreen();
 			return;
 		}
 
@@ -96,12 +95,57 @@ public class NewChildScreen extends CustomScreen {
 
 		});
 
+		screenManager.add(new BlankSeparatorField(15));
+
+		HorizontalFieldManager saveButtonManager = new HorizontalFieldManager(
+				FIELD_HCENTER);
+		Button saveButton = new Button("Save");
+		saveButton.setChangeListener(new FieldChangeListener() {
+
+			public void fieldChanged(Field field, int context) {
+				onSaveChildClicked();
+				controller.popScreen();
+			}
+		});
+		saveButtonManager.add(saveButton);
+		screenManager.add(saveButtonManager);
+
 	}
 
 	public void takePhoto(ImageCaptureListener imageCaptureListener) {
 
 		((NewChildController) controller)
 				.takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
+
+	}
+
+	public boolean onClose() {
+
+		int result = Dialog.ask(Dialog.D_SAVE);
+
+		if (result == Dialog.SAVE) {
+			onSaveChildClicked();
+		}
+
+		if (result == Dialog.CANCEL) {
+			return false;
+		}
+
+		controller.popScreen();
+
+		return true;
+	}
+
+	private void onSaveChildClicked() {
+
+		Hashtable data = new Hashtable();
+
+		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
+			Form form = (Form) list.nextElement();
+			data.put(form.getId(), form.getDetails());
+		}
+		Child child = new Child(data);
+		((NewChildController) controller).saveChild(child);
 
 	}
 

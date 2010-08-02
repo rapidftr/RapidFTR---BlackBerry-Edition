@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.rapidftr.model.Form;
 import com.rapidftr.model.FormField;
 import com.rapidftr.model.FormFieldFactory;
-import com.rapidftr.model.TextBoxField;
+import com.rapidftr.model.TextboxFormField;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Response;
@@ -40,15 +40,16 @@ public class FormStoreTest {
 		Vector fieldList = new Vector();
 
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField textFormField = formFieldFactory .createFormField("age","text_box",null);
+		FormField textFormField = formFieldFactory.createFormField("age",
+				"text_box", null);
 		fieldList.add(textFormField);
 
 		Vector optionString = new Vector();
 		optionString.add("Approximate");
 		optionString.add("Exact");
 
-		FormField selectBoxFormField = formFieldFactory.createFormField("age_is", "select_box",
-				optionString);
+		FormField selectBoxFormField = formFieldFactory.createFormField(
+				"age_is", "select_box", optionString);
 		fieldList.add(selectBoxFormField);
 
 		Form form = new Form("Basic_details", "basic_details", fieldList);
@@ -58,8 +59,6 @@ public class FormStoreTest {
 		assertEquals(formStore.getForms(), forms);
 
 	}
-	
-	
 
 	private String stubSuccessfulResponse() {
 		String jsonFormString = String

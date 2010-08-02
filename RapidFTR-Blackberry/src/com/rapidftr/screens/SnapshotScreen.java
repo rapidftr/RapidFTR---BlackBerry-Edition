@@ -31,7 +31,7 @@ public class SnapshotScreen extends CustomScreen {
 
 	private BitmapField bitmapField;
 	private String photoPath;
-	private boolean cameraHadBeenInvoked;
+	private boolean cameraHasBeenInvoked;
 	private static long lastUSN;
 	private Bitmap bitmap;
 	private EncodedImage encodedImage;
@@ -40,7 +40,7 @@ public class SnapshotScreen extends CustomScreen {
 	public SnapshotScreen() {
 		super();
 		photoPath = null;
-		cameraHadBeenInvoked = false;
+		cameraHasBeenInvoked = false;
 		bitmapField = new BitmapField();
 		add(bitmapField);
 		listener = createFileSystemListener();
@@ -54,20 +54,19 @@ public class SnapshotScreen extends CustomScreen {
 	}
 
 	private void onSaveClicked() {
+		((SnapshotController) controller)
+		.capturedImage(photoPath, encodedImage);
 		cleanUp();
 		controller.popScreen();
-		((SnapshotController) controller)
-				.capturedImage(photoPath, encodedImage);
 	}
 
 	protected void onExposed() {
-		System.out.println("*********Ezxposed**********");
-		if (photoPath != null && cameraHadBeenInvoked) {
+		if (photoPath != null && cameraHasBeenInvoked) {
 			showImage();
 			bitmapField.setBitmap(bitmap);
 		}
 
-		if (cameraHadBeenInvoked && photoPath == null) {
+		if (cameraHasBeenInvoked && photoPath == null) {
 			System.out.println("pop screen called");
 			cleanUp();
 			controller.popScreen();
@@ -78,9 +77,8 @@ public class SnapshotScreen extends CustomScreen {
 
 	protected void onDisplay() {
 
-		System.out.println("********OnDisplay**********");
-		if (!cameraHadBeenInvoked) {
-			cameraHadBeenInvoked = true;
+		if (!cameraHasBeenInvoked) {
+			cameraHasBeenInvoked = true;
 			Invoke.invokeApplication(Invoke.APP_TYPE_CAMERA,
 					new CameraArguments());
 
@@ -90,8 +88,7 @@ public class SnapshotScreen extends CustomScreen {
 	}
 
 	public void cleanUp() {
-		System.out.println("**********OnCleanUp********");
-		cameraHadBeenInvoked = false;
+		cameraHasBeenInvoked = false;
 		photoPath = null;
 		UiApplication.getUiApplication().removeFileSystemJournalListener(
 				listener);
@@ -116,7 +113,7 @@ public class SnapshotScreen extends CustomScreen {
 			int currentHeightFixed32 = Fixed32.toFP(encodedImage.getHeight());
 
 			int requiredWidthFixed32 = Fixed32.toFP(Display.getWidth());
-			int requiredHeightFixed32 = Fixed32.toFP(Display.getHeight() - 36);
+			int requiredHeightFixed32 = Fixed32.toFP(Display.getHeight() - 35);
 
 			int scaleXFixed32 = Fixed32.div(currentWidthFixed32,
 					requiredWidthFixed32);

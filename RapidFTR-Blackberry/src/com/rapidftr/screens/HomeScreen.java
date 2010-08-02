@@ -39,12 +39,12 @@ public class HomeScreen extends CustomScreen {
 				onSearchClicked();
 			}
 		});
-		Button loginButton = new Button("Login");
-		loginButton.setChangeListener(new FieldChangeListener() {
-			public void fieldChanged(Field field, int context) {
-				onLoginClicked();
-			}
-		});
+		// Button loginButton = new Button("Login");
+		// loginButton.setChangeListener(new FieldChangeListener() {
+		// public void fieldChanged(Field field, int context) {
+		// onLoginClicked();
+		// }
+		// });
 
 		Button syncFormsButton = new Button("Sync Forms");
 		syncFormsButton.setChangeListener(new FieldChangeListener() {
@@ -58,7 +58,7 @@ public class HomeScreen extends CustomScreen {
 		buttonGroup.addElement(viewChildrenButton);
 		buttonGroup.addElement(searchButton);
 		buttonGroup.addElement(syncFormsButton);
-		buttonGroup.addElement(loginButton);
+		// buttonGroup.addElement(loginButton);
 
 		Button.setOptimimWidthForButtonGroup(buttonGroup);
 
@@ -67,14 +67,14 @@ public class HomeScreen extends CustomScreen {
 
 		newChildButton.setPadding(PADDING);
 		manager.add(newChildButton);
-		
+
 		viewChildrenButton.setPadding(PADDING);
 		manager.add(viewChildrenButton);
 		searchButton.setPadding(PADDING);
 		manager.add(searchButton);
 
-		loginButton.setPadding(PADDING);
-		manager.add(loginButton);
+		// loginButton.setPadding(PADDING);
+		// manager.add(loginButton);
 
 		syncFormsButton.setPadding(PADDING);
 		manager.add(syncFormsButton);
@@ -87,9 +87,9 @@ public class HomeScreen extends CustomScreen {
 		((HomeScreenController) controller).viewChildren();
 	}
 
-	private void onLoginClicked() {
-		((HomeScreenController) controller).login();
-	}
+	// private void onLoginClicked() {
+	// ((HomeScreenController) controller).login();
+	// }
 
 	private void onSearchClicked() {
 	}
@@ -103,13 +103,11 @@ public class HomeScreen extends CustomScreen {
 	}
 
 	public void setUp() {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void cleanUp() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 }

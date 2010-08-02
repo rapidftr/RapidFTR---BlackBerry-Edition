@@ -21,6 +21,8 @@ abstract public class FormField {
 	abstract public void initializeLayout(NewChildScreen newChildScreen);
 
 	abstract public Manager getLayout();
+
+	public abstract Object getValue();
 	
 	
 

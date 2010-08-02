@@ -1,6 +1,7 @@
 package com.rapidftr.model;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import net.rim.device.api.ui.Manager;
@@ -12,6 +13,7 @@ import com.rapidftr.screens.NewChildScreen;
 
 public class Form {
 
+	public static final String FORM_NAME = "form_name";
 	private String name;
 	private final String id;
 	private final Vector fieldList;
@@ -36,7 +38,7 @@ public class Form {
 		Form form = (Form) obj;
 
 		try {
-			return name.equals(form.name) && id.equals(form.id)
+			return name.equals(form.name) && getId().equals(form.getId())
 					&& getFieldList().equals(form.getFieldList());
 		} catch (NullPointerException e) {
 			return false;
@@ -45,7 +47,7 @@ public class Form {
 
 	public String formatedSring() {
 
-		return "[" + name + "," + id + "," + getFieldList().toString();
+		return "[" + name + "," + getId() + "," + getFieldList().toString();
 	}
 
 	public String toString() {
@@ -70,5 +72,24 @@ public class Form {
 	public Manager getLayout() {
 		return layoutManager;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public Hashtable getDetails() {
+		
+		Hashtable data = new Hashtable();
+		
+		data.put(Form.FORM_NAME,name);
+		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
+			FormField field = (FormField) list.nextElement();
+			data.put(field.name,field.getValue());
+		}
+		
+		return data;
+	}
+	
+	
 
 }

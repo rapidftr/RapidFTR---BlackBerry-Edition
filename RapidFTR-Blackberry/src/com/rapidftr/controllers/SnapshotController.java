@@ -22,7 +22,6 @@ public class SnapshotController extends Controller {
 
 	public void setImageListener(ImageCaptureListener imageListener) {
 		this.imageListener = imageListener;
-
 	}
 
 }
