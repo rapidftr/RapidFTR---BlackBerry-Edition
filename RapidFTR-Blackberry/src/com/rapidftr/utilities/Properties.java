@@ -4,8 +4,8 @@ package com.rapidftr.utilities;
 public class Properties {
 
     private static final int DEFAULT_PORT = 3000;
+//	private static final String DEFAULT_HOST = "10.5.3.87";
 	private static final String DEFAULT_HOST = "dev.rapidftr.com";
-//	private static final String DEFAULT_HOST = "dev.sh.com";
 
     private static final int DEFAULT_HTTP_TIMEOUT = 10000;
 

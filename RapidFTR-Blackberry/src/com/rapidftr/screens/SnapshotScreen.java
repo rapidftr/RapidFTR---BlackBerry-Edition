@@ -106,6 +106,7 @@ public class SnapshotScreen extends CustomScreen {
 			InputStream input = fconn.openInputStream();
 			byte[] data = new byte[(int) fconn.fileSize()];
 			input.read(data, 0, data.length);
+			
 			encodedImage = EncodedImage
 					.createEncodedImage(data, 0, data.length);
 

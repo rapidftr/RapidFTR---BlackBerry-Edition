@@ -10,6 +10,7 @@ import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.*;
+import com.rapidftr.services.UploadChildRecordsService;
 import com.rapidftr.services.ChildService;
 import com.rapidftr.services.ChildService;
 import com.rapidftr.services.FormService;
@@ -56,7 +57,7 @@ public class Main extends UiApplication {
 
 		SettingsStore settings = new SettingsStore();
 
-		settings.setAuthorisationToken("invalid");
+	//	settings.setAuthorisationToken("invalid");
 		// System.out.println("***Authorization key from Persistent Store***");
 		// System.out.println(settings.getAuthorizationToken());
 		// System.out.println("*********");
@@ -72,8 +73,8 @@ public class Main extends UiApplication {
 		Vector children = childRecordStore.getAllChildren();
 
 		System.out.println(children);
-		HttpServer httpServer = new HttpServer(settings);
-		HttpService httpService = new HttpService(httpServer);
+		HttpServer httpServer = new HttpServer();
+		HttpService httpService = new HttpService(httpServer,settings);
 
 		LoginService loginService = new LoginService(httpService);
 		ChildService childService = new ChildService(httpService);
@@ -104,9 +105,13 @@ public class Main extends UiApplication {
 		NewChildScreen newChildScreen = new NewChildScreen();
 		NewChildController newChildController = new NewChildController(
 				newChildScreen, uiStack, formStore, childRecordStore);
+		UploadChildRecordsScreen uploadChildRecordsScreen = new UploadChildRecordsScreen();
+		
+		UploadChildRecordsService childRecordsUploadService = new UploadChildRecordsService(httpService,childRecordStore);
+		UploadChildRecordsController uploadChildRecordsController = new UploadChildRecordsController(uploadChildRecordsScreen, uiStack,childRecordsUploadService);
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,
 				loginController, viewChildrenController, viewChildController,
-				synchronizeFormsController, newChildController);
+				synchronizeFormsController, newChildController,uploadChildRecordsController);
 
 		dispatcher.homeScreen();
 

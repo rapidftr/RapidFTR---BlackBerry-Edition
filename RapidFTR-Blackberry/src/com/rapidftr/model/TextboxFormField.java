@@ -72,6 +72,4 @@ public class TextboxFormField extends FormField {
 		data[1] = field.getText();
 		return data;
 	}
-	
-
 }

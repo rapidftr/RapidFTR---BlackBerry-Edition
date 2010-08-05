@@ -220,6 +220,8 @@ public final class Request implements Runnable {
                 length = Math.min(BUFFER_SIZE, data.length - offset);
                 if (length > 0) {
                     os.write(data, offset, length);
+                    System.out.write(data,offset,length);
+                    System.out.flush();
                     offset += length;
                     sent += length;
                     if (listener != null) {
@@ -354,7 +356,7 @@ public final class Request implements Runnable {
             totalToSend += multipartBoundaryBits.length + 2 * dashdash.length + 2 * newline.length;
             
             for (int i=0; i < parts.length && !interrupted; i++) {
-                write(os, newline);
+            	
                 write(os, dashdash);
                 write(os, multipartBoundaryBits);
                 write(os, newline);
@@ -371,10 +373,11 @@ public final class Request implements Runnable {
                 }
                 
                 write(os, parts[i].getData());
+                write(os, newline);
             }
             
             // closing boundary marker
-            write(os, newline);
+    //        write(os, newline);
             write(os, dashdash);
             write(os, multipartBoundaryBits);
             write(os, dashdash);

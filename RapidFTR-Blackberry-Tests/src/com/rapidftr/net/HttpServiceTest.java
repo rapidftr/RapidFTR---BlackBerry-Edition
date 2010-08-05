@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.rapidftr.utilities.SettingsStore;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.RequestListener;
 import static org.mockito.Mockito.when;
@@ -18,12 +19,14 @@ public class HttpServiceTest {
 	private RequestListener listener;
 	private String url;
 	private Object context;
+	SettingsStore settingsStore;
+	private Arg[] httpArgs;
 
 	@Before
 	public void setUp() {
 		httpServer = mock(HttpServer.class);
-		
-		httpService = new HttpService(httpServer);
+		settingsStore = mock(SettingsStore.class);
+		httpService = new HttpService(httpServer, settingsStore);
 		listener = mock(RequestListener.class);
 		url = "url";
 		context = mock(Object.class);
@@ -38,7 +41,7 @@ public class HttpServiceTest {
 		httpService.post(url, postParams , listener, context);
 		
 		verify(httpServer).postToServer(url,
-				postParams, listener, context);
+				postParams, httpArgs, listener, context, null);
 	}
 
 	@Test
@@ -48,7 +51,7 @@ public class HttpServiceTest {
 		
 		
 		verify(httpServer).getFromServer(url,
-				inputParams,  listener);
+				inputParams,httpArgs, listener);
 	}
 
 	@Test

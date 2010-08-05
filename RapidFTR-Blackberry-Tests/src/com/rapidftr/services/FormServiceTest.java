@@ -4,23 +4,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Hashtable;
-import java.util.Vector;
-
 import javax.microedition.io.HttpConnection;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.rapidftr.controllers.SynchronizeFormsController;
-import com.rapidftr.model.Form;
-import com.rapidftr.model.FormField;
 import com.rapidftr.net.HttpService;
 import com.sun.me.web.path.Result;
-import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.RequestListener;
 import com.sun.me.web.request.Response;
-import static org.mockito.Mockito.when;
 
 public class FormServiceTest {
 

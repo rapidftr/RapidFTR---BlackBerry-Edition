@@ -39,12 +39,14 @@ public class HomeScreen extends CustomScreen {
 				onSearchClicked();
 			}
 		});
-		// Button loginButton = new Button("Login");
-		// loginButton.setChangeListener(new FieldChangeListener() {
-		// public void fieldChanged(Field field, int context) {
-		// onLoginClicked();
-		// }
-		// });
+		Button uploadChildRecordsButton = new Button("Upload Child Records");
+		uploadChildRecordsButton.setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				onUploadChildRecordsClicked();
+			}
+
+			
+		});
 
 		Button syncFormsButton = new Button("Sync Forms");
 		syncFormsButton.setChangeListener(new FieldChangeListener() {
@@ -58,7 +60,7 @@ public class HomeScreen extends CustomScreen {
 		buttonGroup.addElement(viewChildrenButton);
 		buttonGroup.addElement(searchButton);
 		buttonGroup.addElement(syncFormsButton);
-		// buttonGroup.addElement(loginButton);
+		buttonGroup.addElement(uploadChildRecordsButton);
 
 		Button.setOptimimWidthForButtonGroup(buttonGroup);
 
@@ -73,8 +75,8 @@ public class HomeScreen extends CustomScreen {
 		searchButton.setPadding(PADDING);
 		manager.add(searchButton);
 
-		// loginButton.setPadding(PADDING);
-		// manager.add(loginButton);
+		 uploadChildRecordsButton.setPadding(PADDING);
+		 manager.add(uploadChildRecordsButton);
 
 		syncFormsButton.setPadding(PADDING);
 		manager.add(syncFormsButton);
@@ -87,9 +89,9 @@ public class HomeScreen extends CustomScreen {
 		((HomeScreenController) controller).viewChildren();
 	}
 
-	// private void onLoginClicked() {
-	// ((HomeScreenController) controller).login();
-	// }
+	private void onUploadChildRecordsClicked() {
+		((HomeScreenController) controller).uploadChildRecords();
+	}
 
 	private void onSearchClicked() {
 	}

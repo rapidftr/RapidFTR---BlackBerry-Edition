@@ -1,24 +1,8 @@
 package com.rapidftr.services;
 
-import java.io.IOException;
-import java.util.Hashtable;
 import javax.microedition.io.HttpConnection;
 
-import net.rim.device.api.io.http.HttpServerConnection;
-
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
-
-import com.rapidftr.controllers.SynchronizeFormsController;
-import com.rapidftr.model.Child;
-import com.rapidftr.model.Form;
-import com.rapidftr.model.FormField;
-import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
-import com.sun.me.web.path.Result;
-import com.sun.me.web.path.ResultException;
-import com.sun.me.web.request.Request;
 import com.sun.me.web.request.RequestListener;
 import com.sun.me.web.request.Response;
 
@@ -44,7 +28,7 @@ public class FormService implements RequestListener {
 		}
 		if (result.getException() != null) {
 
-			formServiceListener.onDownloadComplete(sampleJsonForTesting()); // just form development purpose.
+			formServiceListener.onDownloadComplete(sampleJsonForTesting());	// // just form development purpose since the server doesn't return json as of now.
 			//formServiceListener.onDownloadFailed();
 			return;
 		}
@@ -70,6 +54,7 @@ public class FormService implements RequestListener {
 
 	public void cancelDownloadOfForms() {
 
+		httpService.cancelRequest();
 	}
 
 	public void setListener(FormServiceListener formServiceListener) {

@@ -1,20 +1,18 @@
 package com.rapidftr.controllers;
 
-import java.util.Hashtable;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.rapidftr.datastore.ChildRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.NewChildScreen;
-import com.rapidftr.screens.CustomScreen;
 import com.rapidftr.screens.UiStack;
 
 public class NewChildControllerTest {

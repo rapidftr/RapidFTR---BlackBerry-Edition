@@ -55,4 +55,16 @@ public class Part {
     public Arg[] getHeaders() {
         return headers;
     }
+    
+    public String toString() {
+    	
+    	StringBuffer buffer = new StringBuffer();
+    	for(int i=0;i<headers.length;i++)
+    	{
+    		buffer.append(headers[i]);
+    		buffer.append("\n");
+    	}
+    	buffer.append(content);
+    	return buffer.toString();
+    }
 }

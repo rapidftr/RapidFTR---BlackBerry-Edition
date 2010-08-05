@@ -4,24 +4,22 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import com.rapidftr.controllers.NewChildController;
-import com.rapidftr.controls.BlankSeparatorField;
-import com.rapidftr.controls.Button;
-import com.rapidftr.model.Child;
-import com.rapidftr.model.Form;
-import com.rapidftr.model.FormField;
-import com.rapidftr.utilities.ImageCaptureListener;
-
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.ObjectChoiceField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
+
+import com.rapidftr.controllers.NewChildController;
+import com.rapidftr.controls.BlankSeparatorField;
+import com.rapidftr.controls.Button;
+import com.rapidftr.model.Child;
+import com.rapidftr.model.Form;
+import com.rapidftr.utilities.ImageCaptureListener;
 
 public class NewChildScreen extends CustomScreen {
 
@@ -104,6 +102,8 @@ public class NewChildScreen extends CustomScreen {
 
 			public void fieldChanged(Field field, int context) {
 				onSaveChildClicked();
+				Dialog.alert("ChildRecord has been stored succesfully\n" +
+						"Please upload record to central server whenever you get Internet Access!!");
 				controller.popScreen();
 			}
 		});
@@ -145,7 +145,7 @@ public class NewChildScreen extends CustomScreen {
 			data.put(form.getId(), form.getDetails());
 		}
 		Child child = new Child(data);
-		((NewChildController) controller).saveChild(child);
+	    ((NewChildController) controller).saveChild(child);
 
 	}
 

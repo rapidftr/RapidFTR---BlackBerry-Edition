@@ -1,13 +1,5 @@
 package com.rapidftr.controllers;
 
-import java.util.Hashtable;
-
-import net.rim.device.api.math.Fixed32;
-import net.rim.device.api.system.Bitmap;
-import net.rim.device.api.system.Display;
-import net.rim.device.api.system.EncodedImage;
-
-import com.rapidftr.controls.Button;
 import com.rapidftr.datastore.ChildRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;

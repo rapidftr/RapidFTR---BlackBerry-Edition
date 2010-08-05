@@ -26,5 +26,10 @@ public class HomeScreenController extends Controller {
 		dispatcher.newChild();
 	}
 
+	public void uploadChildRecords() {
+		dispatcher.uploadChildRecords();
+		
+	}
+
 
 }

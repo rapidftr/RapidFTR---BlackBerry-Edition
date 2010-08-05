@@ -62,4 +62,18 @@ public class PostData {
     public String getBoundary() {
         return boundary;
     }
+    public String toString() {
+    	StringBuffer buffer = new StringBuffer();
+    	
+    	buffer.append(boundary+"\n");
+    	
+    	for(int i=0;i<parts.length;i++)
+    	{
+    		buffer.append(parts[i].toString());
+    		buffer.append("\n");
+    	}
+    	
+    	return buffer.toString();
+    }
+    
 }

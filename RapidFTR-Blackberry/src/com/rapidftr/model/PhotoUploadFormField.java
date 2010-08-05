@@ -16,7 +16,7 @@ import com.rapidftr.utilities.ImageUtility;
 
 public class PhotoUploadFormField extends FormField implements ImageCaptureListener {
 
-	private static final String TYPE = "photo_upload_box";
+	public static final String TYPE = "photo_upload_box";
 	
 	private Bitmap bitmap;
 	private VerticalFieldManager manager;
