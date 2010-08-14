@@ -2,7 +2,10 @@ package com.rapidftr.services;
 
 import javax.microedition.io.HttpConnection;
 
+import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
+import com.rapidftr.utilities.HttpUtility;
+import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.RequestListener;
 import com.sun.me.web.request.Response;
 
@@ -17,7 +20,9 @@ public class FormService implements RequestListener {
 
 	public void downloadForms() {
 
-		httpService.get("published_form_sections", null, this);
+		Arg[] httpArgs = new Arg[1];
+		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;		
+		httpService.get("published_form_sections",null,httpArgs,this);
 	}
 
 	public void done(Object context, Response result) throws Exception {
@@ -28,8 +33,8 @@ public class FormService implements RequestListener {
 		}
 		if (result.getException() != null) {
 
-			formServiceListener.onDownloadComplete(sampleJsonForTesting());	// // just form development purpose since the server doesn't return json as of now.
-			//formServiceListener.onDownloadFailed();
+			//formServiceListener.onDownloadComplete(sampleJsonForTesting());	// // just form development purpose since the server doesn't return json as of now.
+			formServiceListener.onDownloadFailed();
 			return;
 		}
 
@@ -37,9 +42,9 @@ public class FormService implements RequestListener {
 			formServiceListener.onConnectionProblem();
 			return;
 		}
+		
 
-		formServiceListener.onDownloadComplete(result.getResult().getAsString(
-				""));
+		formServiceListener.onDownloadComplete(result.getResult().toString());
 	}
 
 	public void readProgress(Object context, int bytes, int total) {

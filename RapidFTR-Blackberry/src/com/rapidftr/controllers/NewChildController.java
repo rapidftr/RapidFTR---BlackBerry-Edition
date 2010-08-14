@@ -1,6 +1,6 @@
 package com.rapidftr.controllers;
 
-import com.rapidftr.datastore.ChildRecordStore;
+import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.NewChildScreen;
@@ -11,10 +11,10 @@ import com.rapidftr.utilities.ImageCaptureListener;
 public class NewChildController extends Controller {
 
 	private final FormStore formStore;
-	private ChildRecordStore childRecordStore;
+	private ChildrenRecordStore childRecordStore;
 
 	public NewChildController(NewChildScreen screen, UiStack uiStack,
-			FormStore formStore, ChildRecordStore childRecordStore) {
+			FormStore formStore, ChildrenRecordStore childRecordStore) {
 		super(screen, uiStack);
 		this.formStore = formStore;
 		this.childRecordStore = childRecordStore;
@@ -39,7 +39,7 @@ public class NewChildController extends Controller {
 	}
 
 	public void saveChild(Child child) {
-		childRecordStore.save(child);
+		childRecordStore.addChild(child);
 	}
 
 }

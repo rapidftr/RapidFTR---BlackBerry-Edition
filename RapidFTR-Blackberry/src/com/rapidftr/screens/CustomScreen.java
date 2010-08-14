@@ -1,15 +1,12 @@
 package com.rapidftr.screens;
 
+import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.container.MainScreen;
+import net.rim.device.api.ui.decor.BackgroundFactory;
+
 import com.rapidftr.controllers.Controller;
 import com.rapidftr.controls.TitleField;
 import com.rapidftr.utilities.Styles;
-
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.UiApplication;
-import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.container.MainScreen;
-import net.rim.device.api.ui.decor.Background;
-import net.rim.device.api.ui.decor.BackgroundFactory;
 
 public abstract class CustomScreen extends MainScreen {
 
@@ -46,9 +43,7 @@ public abstract class CustomScreen extends MainScreen {
 	
 
 	public void popScreen(final UiStack uiStack) {
-		
-		final CustomScreen screen = this;
-		
+		final CustomScreen screen = this;		
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			
 			public void run() {

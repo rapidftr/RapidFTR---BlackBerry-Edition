@@ -9,8 +9,11 @@ import javax.microedition.io.HttpConnection;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
+import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.path.Result;
+import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.RequestListener;
 import com.sun.me.web.request.Response;
 
@@ -32,9 +35,11 @@ public class FormServiceTest {
 
 	@Test
 	public void shouldSendGetRequestToSever() {
-
 		formService.downloadForms();
-		verify(httpService).get("published_form_sections", null, formService);
+		Arg[] httpArgs = new Arg[1];
+		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
+		verify(httpService).get("published_form_sections", null, httpArgs,
+				formService);
 	}
 
 	@Test
@@ -54,7 +59,7 @@ public class FormServiceTest {
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_OK);
 
 		String json = "json response";
-		when(mockResult.getAsString("")).thenReturn(json);
+		when(mockResult.toString()).thenReturn(json);
 
 		((RequestListener) formService).done(context, response);
 

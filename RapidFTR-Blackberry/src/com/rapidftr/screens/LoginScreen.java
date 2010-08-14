@@ -9,7 +9,6 @@ import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BasicEditField;
 import net.rim.device.api.ui.component.BitmapField;
-import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.PasswordEditField;
@@ -127,10 +126,6 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener {
 			}
 		};
 		menu.add(changeHostMenuItem);
-	}
-
-	public void loginFailed() {
-		Dialog.alert("Login failed.");
 	}
 
 	public void setProgressMsg(String msg) {

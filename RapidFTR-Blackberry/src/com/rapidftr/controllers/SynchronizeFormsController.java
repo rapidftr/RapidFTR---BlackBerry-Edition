@@ -1,7 +1,5 @@
 package com.rapidftr.controllers;
 
-import java.util.Vector;
-
 import org.json.me.JSONException;
 
 import com.rapidftr.datastore.FormStore;
@@ -50,7 +48,7 @@ public class SynchronizeFormsController extends Controller implements
 			return;
 
 		downloadInProgress = false;
-		((SynchronizeFormsScreen) screen).onNotLoggedIn();
+		((SynchronizeFormsScreen) screen).onAuthenticationFailure();
 
 	}
 
@@ -66,17 +64,17 @@ public class SynchronizeFormsController extends Controller implements
 	public void onDownloadComplete(String jsonFormsAsString) {
 		if (!downloadInProgress)
 			return;
-		
+
 		downloadInProgress = false;
-		
+
 		try {
 			formStore.storeForms(jsonFormsAsString);
 		} catch (JSONException e) {
-			
+
 			((SynchronizeFormsScreen) screen).downloadFailed();
 			return;
 		}
-		
+
 		((SynchronizeFormsScreen) screen).downloadCompleted();
 
 	}
@@ -88,19 +86,16 @@ public class SynchronizeFormsController extends Controller implements
 		double size = ((double) received) / total;
 		((SynchronizeFormsScreen) screen)
 				.updateDownloadProgessBar((int) (size * 100));
-	//	System.out.println("Received :" + received);
 
 	}
-
 
 	public void onDownloadFailed() {
 		if (!downloadInProgress)
 			return;
-		
+
 		downloadInProgress = false;
 		((SynchronizeFormsScreen) screen).downloadFailed();
-		
+
 	}
 
-	
 }

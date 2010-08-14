@@ -1,33 +1,34 @@
 package com.rapidftr;
 
-import java.io.IOException;
-import java.util.Vector;
+import net.rim.device.api.applicationcontrol.ApplicationPermissions;
+import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
+import net.rim.device.api.ui.UiApplication;
 
-import com.rapidftr.controllers.*;
-import com.rapidftr.controls.Button;
-import com.rapidftr.datastore.ChildRecordStore;
+import com.rapidftr.controllers.Dispatcher;
+import com.rapidftr.controllers.HomeScreenController;
+import com.rapidftr.controllers.LoginController;
+import com.rapidftr.controllers.NewChildController;
+import com.rapidftr.controllers.SynchronizeFormsController;
+import com.rapidftr.controllers.UploadChildrenRecordsController;
+import com.rapidftr.controllers.ViewChildController;
+import com.rapidftr.controllers.ViewChildrenController;
+import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
-import com.rapidftr.screens.*;
-import com.rapidftr.services.UploadChildRecordsService;
-import com.rapidftr.services.ChildService;
+import com.rapidftr.screens.HomeScreen;
+import com.rapidftr.screens.LoginScreen;
+import com.rapidftr.screens.NewChildScreen;
+import com.rapidftr.screens.SynchronizeFormsScreen;
+import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.UploadChildrenRecordsScreen;
+import com.rapidftr.screens.ViewChildScreen;
+import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.services.ChildService;
 import com.rapidftr.services.FormService;
-import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
-import com.rapidftr.services.LoginService;
+import com.rapidftr.services.UploadChildrenRecordsService;
 import com.rapidftr.utilities.SettingsStore;
-import com.sun.me.web.request.Arg;
-import com.sun.me.web.request.Request;
-import com.sun.me.web.request.Response;
-
-import net.rim.device.api.applicationcontrol.ApplicationPermissions;
-import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.FieldChangeListener;
-import net.rim.device.api.ui.UiApplication;
-import net.rim.device.api.ui.container.MainScreen;
 
 public class Main extends UiApplication {
 
@@ -57,22 +58,10 @@ public class Main extends UiApplication {
 
 		SettingsStore settings = new SettingsStore();
 
-	//	settings.setAuthorisationToken("invalid");
-		// System.out.println("***Authorization key from Persistent Store***");
-		// System.out.println(settings.getAuthorizationToken());
-		// System.out.println("*********");
+	    FormStore formStore = new FormStore();
 
-		FormStore formStore = new FormStore();
-
-		 System.out.println("*******Form******");
-		 Vector v = formStore.getForms();
-		 System.out.println(v);
-
-		ChildRecordStore childRecordStore = new ChildRecordStore();
-
-		Vector children = childRecordStore.getAllChildren();
-
-		System.out.println(children);
+		ChildrenRecordStore childRecordStore = new ChildrenRecordStore();
+		
 		HttpServer httpServer = new HttpServer();
 		HttpService httpService = new HttpService(httpServer,settings);
 
@@ -105,10 +94,10 @@ public class Main extends UiApplication {
 		NewChildScreen newChildScreen = new NewChildScreen();
 		NewChildController newChildController = new NewChildController(
 				newChildScreen, uiStack, formStore, childRecordStore);
-		UploadChildRecordsScreen uploadChildRecordsScreen = new UploadChildRecordsScreen();
+		UploadChildrenRecordsScreen uploadChildRecordsScreen = new UploadChildrenRecordsScreen();
 		
-		UploadChildRecordsService childRecordsUploadService = new UploadChildRecordsService(httpService,childRecordStore);
-		UploadChildRecordsController uploadChildRecordsController = new UploadChildRecordsController(uploadChildRecordsScreen, uiStack,childRecordsUploadService);
+		UploadChildrenRecordsService childRecordsUploadService = new UploadChildrenRecordsService(httpService,childRecordStore);
+		UploadChildrenRecordsController uploadChildRecordsController = new UploadChildrenRecordsController(uploadChildRecordsScreen, uiStack,childRecordsUploadService);
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,
 				loginController, viewChildrenController, viewChildController,
 				synchronizeFormsController, newChildController,uploadChildRecordsController);

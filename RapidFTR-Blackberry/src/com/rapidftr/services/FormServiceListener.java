@@ -1,9 +1,5 @@
 package com.rapidftr.services;
 
-import java.util.Vector;
-
-import org.json.me.JSONArray;
-
 import com.rapidftr.net.HttpServiceListener;
 
 public interface FormServiceListener extends HttpServiceListener {

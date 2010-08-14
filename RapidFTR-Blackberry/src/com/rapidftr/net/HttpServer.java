@@ -1,7 +1,6 @@
 package com.rapidftr.net;
 
 import com.rapidftr.utilities.Properties;
-import com.rapidftr.utilities.SettingsStore;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
@@ -10,6 +9,7 @@ import com.sun.me.web.request.RequestListener;
 import com.sun.me.web.request.Response;
 
 public class HttpServer {
+
 
 	private Request request = null;
 
@@ -21,15 +21,10 @@ public class HttpServer {
 
 	}
 
-	public void postToServer(String url, Arg[] postParams, Arg[] httpArgs,
-			RequestListener listener, Object context) {
 
-		request = Request.post(buildFullyQualifiedUrl(url), postParams,
-				httpArgs, listener, null, context);
-	}
 
 	public void postToServer(String url, Arg[] postParams, Arg[] httpArgs,
-			RequestListener listener, Object context, PostData multiPart) {
+			RequestListener listener, PostData multiPart, Object context) {
 
 		request = Request.post(buildFullyQualifiedUrl(url), postParams,
 				httpArgs, listener, multiPart, context);

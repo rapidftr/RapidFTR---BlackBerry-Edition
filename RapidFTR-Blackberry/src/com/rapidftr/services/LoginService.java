@@ -5,8 +5,8 @@ import java.util.Hashtable;
 import javax.microedition.io.HttpConnection;
 
 import com.rapidftr.controllers.LoginController;
-import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
+import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.RequestListener;
@@ -29,12 +29,14 @@ public class LoginService implements RequestListener {
 		Hashtable context = new Hashtable();
 		context.put(LoginController.USER_NAME, userName);
 
-		httpService.post("sessions", postArgs, this, context);
+		Arg[] httpArgs = new Arg[1];
+		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
+		httpService.post("sessions", postArgs,httpArgs, this, null, context);
 	}
 
 	public void done(Object context, Response result) throws Exception {
 
-	//	HttpServer.printResponse(result);
+		// HttpServer.printResponse(result);
 
 		if (result.getException() != null) {
 			listener.onConnectionProblem();

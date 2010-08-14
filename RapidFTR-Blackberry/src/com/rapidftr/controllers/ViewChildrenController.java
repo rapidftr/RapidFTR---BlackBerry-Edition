@@ -2,8 +2,6 @@ package com.rapidftr.controllers;
 
 import java.io.IOException;
 
-import net.rim.device.api.ui.component.Dialog;
-
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildrenScreen;

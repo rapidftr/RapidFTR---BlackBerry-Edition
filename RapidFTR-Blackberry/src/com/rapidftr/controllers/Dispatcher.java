@@ -10,13 +10,13 @@ public class Dispatcher {
 	private ViewChildController viewChildController;
 	private SynchronizeFormsController synchronizeFormsController;
 	private NewChildController newChildController;
-	private UploadChildRecordsController uploadChildRecordsController;
+	private UploadChildrenRecordsController uploadChildRecordsController;
 
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController,
 			ViewChildrenController viewChildrenController,
 			ViewChildController viewChildController,
-			SynchronizeFormsController synchronizeFormsController,NewChildController newChildController,UploadChildRecordsController uploadChildRecordsController) {
+			SynchronizeFormsController synchronizeFormsController,NewChildController newChildController,UploadChildrenRecordsController uploadChildRecordsController) {
 
 		this.homeScreenController = homeScreenController;
 		this.loginController = loginController;

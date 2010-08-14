@@ -7,7 +7,6 @@ import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
 import com.rapidftr.model.Form;
-import com.rapidftr.model.FormField;
 import com.rapidftr.model.FormFieldFactory;
 
 public class FormStore {
@@ -26,9 +25,8 @@ public class FormStore {
 	public Vector getForms() {
 		String jsonString = (String) persistentStore.getContents();
 		try {
-			if (jsonString == null)
-			{
-				jsonString="";
+			if (jsonString == null) {
+				jsonString = "";
 			}
 			return parseFormsFromJSON(jsonString);
 		} catch (JSONException e) {
@@ -49,18 +47,26 @@ public class FormStore {
 				JSONObject jsonFormField = jsonFormFields.getJSONObject(j);
 				Vector optionStrings = new Vector();
 				try {
-					JSONArray jsonOptionString = jsonFormField
-							.getJSONArray("option_strings");
-					for (int k = 0; k < jsonOptionString.length(); k++) {
-						optionStrings.addElement(jsonOptionString.getString(k));
+					String name = jsonFormField.getString("name");
+					String type = jsonFormField.getString("type");
+
+					try {
+						JSONArray jsonOptionString = jsonFormField
+								.getJSONArray("option_strings");
+						for (int k = 0; k < jsonOptionString.length(); k++) {
+							optionStrings.addElement(jsonOptionString
+									.getString(k));
+						}
+					} catch (JSONException ex) {
+
 					}
+
+					formFields.addElement(formFieldFactory.createFormField(
+							name, type, optionStrings));
 				} catch (JSONException e) {
 
 				}
 
-				formFields.addElement(formFieldFactory.createFormField(jsonFormField
-						.getString("name"), jsonFormField.getString("type"),
-						optionStrings));
 			}
 			Form form = new Form(jsonForm.getString("name"), jsonForm
 					.getString("unique_id"), formFields);

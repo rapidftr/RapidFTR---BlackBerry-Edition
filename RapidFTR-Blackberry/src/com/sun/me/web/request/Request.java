@@ -220,8 +220,6 @@ public final class Request implements Runnable {
                 length = Math.min(BUFFER_SIZE, data.length - offset);
                 if (length > 0) {
                     os.write(data, offset, length);
-                    System.out.write(data,offset,length);
-                    System.out.flush();
                     offset += length;
                     sent += length;
                     if (listener != null) {
@@ -274,7 +272,6 @@ public final class Request implements Runnable {
                         final String value = httpArgs[i].getValue();
                         if (value != null) {
                             conn.setRequestProperty(httpArgs[i].getKey(), value);
-                            System.out.println("Setting Header"+httpArgs[i].getKey()+";"+ value);
                         }
                     }
                 }

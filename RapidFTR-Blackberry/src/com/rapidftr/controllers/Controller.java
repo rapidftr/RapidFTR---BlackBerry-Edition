@@ -1,7 +1,5 @@
 package com.rapidftr.controllers;
 
-import net.rim.device.api.ui.UiApplication;
-
 import com.rapidftr.screens.CustomScreen;
 import com.rapidftr.screens.UiStack;
 

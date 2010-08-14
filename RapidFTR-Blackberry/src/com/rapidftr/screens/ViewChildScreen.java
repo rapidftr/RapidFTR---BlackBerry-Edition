@@ -1,9 +1,6 @@
 package com.rapidftr.screens;
 
 import com.rapidftr.model.Child;
-import net.rim.device.api.ui.component.LabelField;
-
-import java.util.Enumeration;
 
 public class ViewChildScreen extends CustomScreen {
 

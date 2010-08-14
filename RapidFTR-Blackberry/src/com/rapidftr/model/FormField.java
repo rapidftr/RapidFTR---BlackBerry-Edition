@@ -1,10 +1,8 @@
 package com.rapidftr.model;
 
-import java.util.Vector;
+import net.rim.device.api.ui.Manager;
 
 import com.rapidftr.screens.NewChildScreen;
-
-import net.rim.device.api.ui.Manager;
 
 abstract public class FormField {
 

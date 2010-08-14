@@ -67,7 +67,6 @@ public class SnapshotScreen extends CustomScreen {
 		}
 
 		if (cameraHasBeenInvoked && photoPath == null) {
-			System.out.println("pop screen called");
 			cleanUp();
 			controller.popScreen();
 		}
@@ -156,8 +155,6 @@ public class SnapshotScreen extends CustomScreen {
 								photoPath = entry.getPath();
 								injectKey(Characters.ESCAPE);
 								injectKey(Characters.ESCAPE);
-								System.out.println("photo path" + photoPath);
-
 								lastUSN = USN;
 
 							}

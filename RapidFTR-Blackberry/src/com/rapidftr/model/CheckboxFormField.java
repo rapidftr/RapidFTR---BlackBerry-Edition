@@ -1,14 +1,11 @@
 package com.rapidftr.model;
 
-import java.util.Vector;
-
-import com.rapidftr.screens.NewChildScreen;
-
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.component.CheckboxField;
-import net.rim.device.api.ui.component.ObjectChoiceField;
 import net.rim.device.api.ui.container.VerticalFieldManager;
+
+import com.rapidftr.screens.NewChildScreen;
 
 public class CheckboxFormField extends FormField {
 

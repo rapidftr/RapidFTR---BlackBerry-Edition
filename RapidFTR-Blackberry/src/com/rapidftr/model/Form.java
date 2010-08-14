@@ -7,7 +7,6 @@ import java.util.Vector;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.rapidftr.controllers.NewChildController;
 import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.screens.NewChildScreen;
 
@@ -45,10 +44,6 @@ public class Form {
 		}
 	}
 
-	public String formatedSring() {
-
-		return "[" + name + "," + getId() + "," + getFieldList().toString();
-	}
 
 	public String toString() {
 

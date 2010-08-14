@@ -68,8 +68,6 @@ public class SettingsStore {
 		if (value == null) {
 			value = "";
 		}
-
-		System.out.println("Setting "+key + "="+ value);
 		contents.put(key, value);
 		persistentObject.commit();
 	}

@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.net.HttpService;
+import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
@@ -38,7 +39,6 @@ public class LoginServiceTest {
 
 		String userName = "xxxxx";
 		String password = "yyyyy";
-		loginService.login(userName, password);
 		Arg[] postParams = new Arg[] { new Arg("user_name", userName),
 				new Arg("password", password) };
 
@@ -46,10 +46,13 @@ public class LoginServiceTest {
 
 		context.put(LoginController.USER_NAME, userName);
 
-		final Arg acceptJson = new Arg("Accept", "application/json");
+		final Arg acceptJson = HttpUtility.HEADER_ACCEPT_JSON;
 		final Arg[] httpParams = { acceptJson };
+		
+		loginService.login(userName, password);
 
-		verify(httpService).post("sessions", postParams, loginService, context);
+
+		verify(httpService).post("sessions" ,postParams,httpParams,loginService, null, context);
 	}
 
 	@Test

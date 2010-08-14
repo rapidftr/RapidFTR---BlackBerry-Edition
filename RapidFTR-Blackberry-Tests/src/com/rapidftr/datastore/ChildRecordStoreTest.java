@@ -16,7 +16,7 @@ public class ChildRecordStoreTest {
 	public void saveShouldGetListOfChildrenFromPersistentStoreAndAppendTheNewChildAndPersistTheUpdataedList() {
 		final PersistentStore mockedPersistentStore = mock(PersistentStore.class);
 
-		ChildRecordStore recordStore = new ChildRecordStore() {
+		ChildrenRecordStore recordStore = new ChildrenRecordStore() {
 			protected void initilaize() {
 				persistentStore = mockedPersistentStore;
 			}
@@ -25,9 +25,11 @@ public class ChildRecordStoreTest {
 		Vector childrenListOld = mock(Vector.class);
 		when(mockedPersistentStore.getContents()).thenReturn(childrenListOld);
 		Child child2 = mock(Child.class);
-		recordStore.save(child2);
+		recordStore.addChild(child2);
 		verify(childrenListOld).addElement(child2);
 		verify(mockedPersistentStore).setContents(childrenListOld);
 	}
+	
+
 
 }
