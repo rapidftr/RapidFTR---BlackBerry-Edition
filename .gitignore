@@ -2,5 +2,7 @@ RapidFTR-Blackberry/bin/*
 RapidFTR-Blackberry/deliverables/*
 RapidFTR-Blackberry-Tests/bin/*
 RapidFTR-Blackberry-Tests/deliverables/*
+RapidFTR-Blackberry-Tests/.classpath
+RapidFTR-Blackberry/.classpath
 out/*
 .idea/workspace.xml
