@@ -22,9 +22,9 @@ public class ChildRecordStore {
 			return;
 		}
 		Vector children = (Vector) persistentStore.getContents();
-//		if (children == null) {
+		if (children == null) {
 			children = new Vector();
-//		}
+		}
 		children.addElement(child);
 		persistentStore.setContents(children);
 	}
