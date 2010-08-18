@@ -11,8 +11,7 @@ import com.rapidftr.services.FormServiceListener;
 public class SynchronizeFormsController extends Controller implements
 		FormServiceListener {
 
-	public static final Object CALLER = "caller";
-	FormStore formStore;
+    FormStore formStore;
 	FormService formService;
 	private boolean downloadInProgress = false;
 

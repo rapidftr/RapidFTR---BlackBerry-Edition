@@ -1,20 +1,18 @@
 package com.rapidftr.controllers;
 
-import java.util.Hashtable;
-
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.services.LoginService;
 import com.rapidftr.services.LoginServiceListener;
 import com.rapidftr.utilities.SettingsStore;
 
+import java.util.Hashtable;
+
 public class LoginController extends Controller implements LoginServiceListener {
 
 	public static final String USER_NAME = "user_name";
-	public static final String PASSWORD = "password";
-	public static final String CALLER = "caller";
 
-	private final LoginService loginService;
+    private final LoginService loginService;
 	private final SettingsStore settingsStore;
 	
 	private boolean requestInProgress = false;  // Needed to Synchronize between ui thread and request thread

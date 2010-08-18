@@ -1,15 +1,5 @@
 package com.rapidftr.services;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.util.Hashtable;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
@@ -17,6 +7,13 @@ import com.sun.me.web.path.Result;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Response;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.Hashtable;
+
+import static org.mockito.Mockito.*;
 
 public class LoginServiceTest {
 
@@ -100,10 +97,7 @@ public class LoginServiceTest {
 	private Response stubSuccessfulResponseWithToken(String authorizationToken)
 			throws ResultException {
 		Response response = mock(Response.class);
-		String jsonLoggedInString = String
-				.format(
-						"{\"session\":{\"link\":{\"uri\":\"/sessions/4b655b458549a8940675304082179c76\",\"rel\":\"session\"},\"token\":\"%s\"}}",
-						authorizationToken);
+        String jsonLoggedInString = "{\"session\":{\"link\":{\"uri\":\"/sessions/4b655b458549a8940675304082179c76\",\"rel\":\"session\"},\"token\":\"" + authorizationToken + "\"}}";
 		when(response.getResult()).thenReturn(
 				Result.fromContent(jsonLoggedInString, "application/json"));
 		when(response.getCode()).thenReturn(201);
