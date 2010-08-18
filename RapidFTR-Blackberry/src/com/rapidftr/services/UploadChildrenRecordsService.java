@@ -33,8 +33,7 @@ public class UploadChildrenRecordsService implements RequestListener {
 
 		childrenList = childRecordStore.getAllChildren();
 		index = 0;
-		if (childrenList == null)
-		{
+		if (childrenList == null) {
 			childRecordsUploadSeriviceListener.onUploadComplete();
 			return;
 		}
@@ -42,18 +41,19 @@ public class UploadChildrenRecordsService implements RequestListener {
 	}
 
 	private void uploadChildRecordAtIndex() {
-		childRecordsUploadSeriviceListener.updateUploadStatus(index, childrenList.size());
+		childRecordsUploadSeriviceListener.updateUploadStatus(index,
+				childrenList.size());
 		Child child = (Child) childrenList.elementAt(index);
-		if (child.getId() == null) {
+		if (child.getField("unique_identifier") == null) {
 			String boundary = "abced";
 			Part[] parts = child.getPostData();
 			PostData postData = new PostData(parts, boundary);
 			Arg multiPart = new Arg("Content-Type",
 					"multipart/form-data;boundary=" + postData.getBoundary());
-			Arg json =  HttpUtility.HEADER_ACCEPT_JSON;
+			Arg json = HttpUtility.HEADER_ACCEPT_JSON;
 			Arg[] httpArgs = { multiPart, json };
 
-			httpService.post("children",null, httpArgs, this, postData, null);
+			httpService.post("children", null, httpArgs, this, postData, null);
 			return;
 		}
 
@@ -62,7 +62,7 @@ public class UploadChildrenRecordsService implements RequestListener {
 			return;
 		}
 		index++;
-		uploadChildRecordAtIndex();		
+		uploadChildRecordAtIndex();
 
 	}
 
@@ -83,7 +83,7 @@ public class UploadChildrenRecordsService implements RequestListener {
 		}
 
 		Child child = (Child) childrenList.elementAt(index);
-		child.setId(result.getResult().getAsString("unique_identifier"));
+		child.setField("unique_identifier",result.getResult().getAsString("unique_identifier"));
 		childRecordStore.setContents(childrenList);
 
 		if (index == childrenList.size() - 1) {
@@ -102,7 +102,7 @@ public class UploadChildrenRecordsService implements RequestListener {
 	}
 
 	public void writeProgress(Object context, int bytes, int total) {
-		
+
 	}
 
 	public void cancelUploadOfChildRecords() {

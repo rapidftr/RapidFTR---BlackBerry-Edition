@@ -19,6 +19,7 @@ import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.controls.Button;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
+import com.rapidftr.model.FormField;
 import com.rapidftr.utilities.ImageCaptureListener;
 
 public class NewChildScreen extends CustomScreen {
@@ -138,13 +139,17 @@ public class NewChildScreen extends CustomScreen {
 
 	private void onSaveChildClicked() {
 
-		Hashtable data = new Hashtable();
-
+		Child child = new Child();
+       
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			Form form = (Form) list.nextElement();
-			data.put(form.getId(), form.getDetails());
+			for(Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();)
+			{
+					FormField field = (FormField) fields.nextElement();
+					child.setField(field.getName(),field.getValue());
+			}
+			    
 		}
-		Child child = new Child(data);
 	    ((NewChildController) controller).saveChild(child);
 
 	}

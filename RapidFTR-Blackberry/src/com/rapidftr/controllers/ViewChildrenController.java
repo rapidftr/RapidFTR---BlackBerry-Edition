@@ -24,7 +24,7 @@ public class ViewChildrenController extends Controller {
 			((ViewChildrenScreen) screen).setChildren(children);
 			uiStack.pushScreen(screen);
 		} catch (IOException e) {
-			//Alert user with proper error message
+			// Alert user with proper error message
 		}
 
 	}

@@ -66,10 +66,7 @@ public class TextboxFormField extends FormField {
 	
 	
 
-	public Object getValue() {
-		Object[] data = new Object[2];
-		data[0] = TYPE;
-		data[1] = field.getText();
-		return data;
+	public String getValue() {
+		return field.getText();
 	}
 }

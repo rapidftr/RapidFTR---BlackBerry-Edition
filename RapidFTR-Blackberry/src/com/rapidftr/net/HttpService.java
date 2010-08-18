@@ -1,10 +1,13 @@
 package com.rapidftr.net;
 
+import java.io.IOException;
+
 import com.rapidftr.utilities.Properties;
 import com.rapidftr.utilities.SettingsStore;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;
+import com.sun.me.web.request.Response;
 
 public class HttpService {
 
@@ -17,11 +20,25 @@ public class HttpService {
 		Properties.getInstance().getHttpRequestTimeout();
 	}
 
+	
+	/*
+	 * Pass Request listener to make asynchronous request
+	 */
 	public void get(String url, Arg[] inputArgs, Arg[] httpArgs,
 			RequestListener listener) {
 		httpArgs = appendAuthenticationToken(httpArgs);
 		httpServer.getFromServer(url, inputArgs, httpArgs, listener);
 	}
+	
+	/*
+	 * Use this for synchronous request
+	 */
+	
+	public Response get(String url, Arg[] inputArgs, Arg[] httpArgs) throws IOException {
+		httpArgs = appendAuthenticationToken(httpArgs);
+		return httpServer.getFromServer(url, inputArgs, httpArgs);
+	}
+	
 
 	private Arg[] appendAuthenticationToken(Arg[] args) {
 		Arg[] newArgs = new Arg[args.length + 1];

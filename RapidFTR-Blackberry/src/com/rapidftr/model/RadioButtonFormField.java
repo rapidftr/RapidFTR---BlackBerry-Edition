@@ -52,11 +52,9 @@ public class RadioButtonFormField extends FormField {
 
 	}
 
-	public Object getValue() {
-		Object[] data = new Object[2];
-		data[0] = TYPE;
-		data[1] = optionStrings.elementAt(group.getSelectedIndex());
-		return data;
+	public String getValue() {
+
+		return (String) optionStrings.elementAt(group.getSelectedIndex());
 	}
 
 	public boolean equals(Object obj) {
@@ -69,13 +67,14 @@ public class RadioButtonFormField extends FormField {
 		if (obj == this)
 			return true;
 
-		RadioButtonFormField radioButtonFormField= (RadioButtonFormField) obj;
-		return name.equals(radioButtonFormField.name) && optionStrings.equals(radioButtonFormField.optionStrings) ;
+		RadioButtonFormField radioButtonFormField = (RadioButtonFormField) obj;
+		return name.equals(radioButtonFormField.name)
+				&& optionStrings.equals(radioButtonFormField.optionStrings);
 	}
-	
+
 	public String toString() {
-		
-		return name + ":" + TYPE +":"+optionStrings;
+
+		return name + ":" + TYPE + ":" + optionStrings;
 	}
 
 }

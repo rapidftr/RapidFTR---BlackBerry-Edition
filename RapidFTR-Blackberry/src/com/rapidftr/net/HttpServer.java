@@ -1,5 +1,7 @@
 package com.rapidftr.net;
 
+import java.io.IOException;
+
 import com.rapidftr.utilities.Properties;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.request.Arg;
@@ -14,6 +16,8 @@ public class HttpServer {
 	private Request request = null;
 
 	private int requestTimeout;
+
+	private Response response;
 
 	public HttpServer() {
 
@@ -34,6 +38,12 @@ public class HttpServer {
 			RequestListener listener) {
 		request = Request.get(buildFullyQualifiedUrl(url), inputParams,
 				httpArgs, listener, null);
+	}
+	
+	public Response getFromServer(String url, Arg[] inputParams, Arg[] httpArgs) throws IOException {
+		 return  Request.get(buildFullyQualifiedUrl(url), inputParams,
+				httpArgs,null);
+		 
 	}
 
 	public void cancelRequest() {

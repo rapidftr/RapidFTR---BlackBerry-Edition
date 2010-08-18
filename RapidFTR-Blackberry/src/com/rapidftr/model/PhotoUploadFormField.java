@@ -14,10 +14,11 @@ import com.rapidftr.screens.NewChildScreen;
 import com.rapidftr.utilities.ImageCaptureListener;
 import com.rapidftr.utilities.ImageUtility;
 
-public class PhotoUploadFormField extends FormField implements ImageCaptureListener {
+public class PhotoUploadFormField extends FormField implements
+		ImageCaptureListener {
 
 	public static final String TYPE = "photo_upload_box";
-	
+
 	private Bitmap bitmap;
 	private VerticalFieldManager manager;
 	private String imageLocation;
@@ -76,13 +77,10 @@ public class PhotoUploadFormField extends FormField implements ImageCaptureListe
 
 	}
 
-	public Object getValue() {
-		Object[] data = new Object[2];
-		data[0] = TYPE;
-		data[1] = imageLocation;
-		return data;
+	public String getValue() {
+		return imageLocation;
 	}
-	
+
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
@@ -93,7 +91,7 @@ public class PhotoUploadFormField extends FormField implements ImageCaptureListe
 		if (!(obj instanceof PhotoUploadFormField))
 			return false;
 
-	    PhotoUploadFormField field = (PhotoUploadFormField) obj;
+		PhotoUploadFormField field = (PhotoUploadFormField) obj;
 		return name.equals(field.name);
 	}
 

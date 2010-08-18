@@ -37,14 +37,9 @@ public class CheckboxFormField extends FormField {
 		manager.add(field);
 	}
 
-	public Object getValue() {
+	public String getValue() {
 
-		Object[] data = new Object[2];
-
-		data[0] = TYPE;
-		data[1] = new Boolean(field.getChecked());
-
-		return data;
+		return new Boolean(field.getChecked()).toString();
 	}
 
 	public boolean equals(Object obj) {
@@ -61,8 +56,5 @@ public class CheckboxFormField extends FormField {
 
 		return name.equals(checkboxField.name);
 	}
-	
-	
-	
 
 }

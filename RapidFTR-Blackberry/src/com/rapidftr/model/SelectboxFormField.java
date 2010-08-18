@@ -44,11 +44,9 @@ public class SelectboxFormField extends FormField {
 
 	}
 
-	public Object getValue() {
-		Object[] data = new Object[2];
-		data[0] = TYPE;
-		data[1] = optionStrings.elementAt(field.getSelectedIndex());
-		return data;
+	public String getValue() {
+		
+		return (String) optionStrings.elementAt(field.getSelectedIndex());
 
 	}
 

@@ -8,8 +8,6 @@ abstract public class FormField {
 
 	protected String name;
 	protected String type;
-	
-	
 
 	protected FormField(String name, String type) {
 		this.name = name;
@@ -20,8 +18,10 @@ abstract public class FormField {
 
 	abstract public Manager getLayout();
 
-	public abstract Object getValue();
-	
-	
+	public abstract String getValue();
+
+	public String getName() {
+		return name;
+	}
 
 }
