@@ -9,7 +9,7 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.Border;
 import net.rim.device.api.ui.decor.BorderFactory;
 
-import com.rapidftr.screens.NewChildScreen;
+import com.rapidftr.screens.ChildCreateUpdateScreen;
 import com.rapidftr.utilities.Styles;
 
 public class TextboxFormField extends FormField {
@@ -22,7 +22,7 @@ public class TextboxFormField extends FormField {
 		super(name, TYPE);
 	}
 
-	public void initializeLayout(NewChildScreen newChildScreen) {
+	public void initializeLayout(ChildCreateUpdateScreen newChildScreen) {
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
 		manager.add(new LabelField(name));
 		field = new BasicEditField();
@@ -68,5 +68,10 @@ public class TextboxFormField extends FormField {
 
 	public String getValue() {
 		return field.getText();
+	}
+
+	public void setValue(String value) {
+		field.setText(value);
+		
 	}
 }

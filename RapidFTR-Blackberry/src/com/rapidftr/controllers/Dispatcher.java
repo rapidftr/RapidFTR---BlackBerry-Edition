@@ -49,6 +49,12 @@ public class Dispatcher {
 		viewChildController.show(child);
 	}
 
+	
+
+	public void editChild(Child child) {
+		newChildController.showEditScreenForChild(child);
+	}
+	
 	public void login() {
 		loginController.show();
 	}

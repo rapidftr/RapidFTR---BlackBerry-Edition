@@ -1,8 +1,9 @@
 package com.rapidftr.model;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
-import com.rapidftr.screens.NewChildScreen;
+import com.rapidftr.screens.ChildCreateUpdateScreen;
 
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Manager;
@@ -21,7 +22,7 @@ public class SelectboxFormField extends FormField {
 		this.optionStrings = optionStrings;
 	}
 
-	public void initializeLayout(NewChildScreen newChildScreen) {
+	public void initializeLayout(ChildCreateUpdateScreen newChildScreen) {
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
 		Object[] optionArray = new Object[optionStrings.size()];
 		optionStrings.copyInto(optionArray);
@@ -64,5 +65,13 @@ public class SelectboxFormField extends FormField {
 		return name.equals(selectboxFormField.name)
 				&& optionStrings.equals(selectboxFormField.optionStrings);
 	}
+
+	public void setValue(String value) {
+		int selectedIndex=0;
+		for (Enumeration list = optionStrings.elements(); list.hasMoreElements();) {
+			if(((String) list.nextElement()).equals(value)) break;
+			selectedIndex++;
+		}
+		field.setSelectedIndex(selectedIndex);	}
 
 }

@@ -30,7 +30,7 @@ public class ViewChildrenController extends Controller {
 	}
 
 	public void showChild(Child child) {
-		dispatcher.viewChild(child);
+		dispatcher.editChild(child);
 	}
 
 }

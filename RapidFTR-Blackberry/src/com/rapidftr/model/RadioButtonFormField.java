@@ -3,7 +3,7 @@ package com.rapidftr.model;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.rapidftr.screens.NewChildScreen;
+import com.rapidftr.screens.ChildCreateUpdateScreen;
 
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Manager;
@@ -23,7 +23,7 @@ public class RadioButtonFormField extends FormField {
 		this.optionStrings = optionStrings;
 	}
 
-	public void initializeLayout(NewChildScreen newChildScreen) {
+	public void initializeLayout(ChildCreateUpdateScreen newChildScreen) {
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
 		group = new RadioButtonGroup();
 		manager.add(new LabelField(name));
@@ -75,6 +75,16 @@ public class RadioButtonFormField extends FormField {
 	public String toString() {
 
 		return name + ":" + TYPE + ":" + optionStrings;
+	}
+
+	public void setValue(String value) {
+		int selectedIndex=0;
+		for (Enumeration list = optionStrings.elements(); list.hasMoreElements();) {
+			if(((String) list.nextElement()).equals(value)) break;
+			selectedIndex++;
+		}
+		group.setSelectedIndex(selectedIndex);
+		
 	}
 
 }

@@ -5,7 +5,7 @@ import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.component.CheckboxField;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.rapidftr.screens.NewChildScreen;
+import com.rapidftr.screens.ChildCreateUpdateScreen;
 
 public class CheckboxFormField extends FormField {
 
@@ -31,7 +31,7 @@ public class CheckboxFormField extends FormField {
 
 	}
 
-	public void initializeLayout(NewChildScreen newChildScreen) {
+	public void initializeLayout(ChildCreateUpdateScreen newChildScreen) {
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
 		field = new CheckboxField(name, false);
 		manager.add(field);
@@ -55,6 +55,10 @@ public class CheckboxFormField extends FormField {
 		CheckboxFormField checkboxField = (CheckboxFormField) obj;
 
 		return name.equals(checkboxField.name);
+	}
+
+	public void setValue(String value) {
+		field.setChecked(value.equalsIgnoreCase("True"));		
 	}
 
 }

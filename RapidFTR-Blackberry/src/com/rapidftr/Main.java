@@ -19,7 +19,7 @@ import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
-import com.rapidftr.screens.NewChildScreen;
+import com.rapidftr.screens.ChildCreateUpdateScreen;
 import com.rapidftr.screens.SynchronizeFormsScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.UploadChildrenRecordsScreen;
@@ -92,7 +92,7 @@ public class Main extends UiApplication {
 				new FormService(httpService), formStore, uiStack,
 				synchronizeFormsScreen);
 
-		NewChildScreen newChildScreen = new NewChildScreen();
+		ChildCreateUpdateScreen newChildScreen = new ChildCreateUpdateScreen();
 		NewChildController newChildController = new NewChildController(
 				newChildScreen, uiStack, formStore, childRecordStore);
 		UploadChildrenRecordsScreen uploadChildRecordsScreen = new UploadChildrenRecordsScreen();

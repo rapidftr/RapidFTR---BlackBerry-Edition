@@ -12,14 +12,14 @@ import org.junit.Test;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
-import com.rapidftr.screens.NewChildScreen;
+import com.rapidftr.screens.ChildCreateUpdateScreen;
 import com.rapidftr.screens.UiStack;
 
 public class NewChildControllerTest {
 
 	private FormStore formStore;
 	private UiStack uiStack;
-	private NewChildScreen newChildScreen;
+	private ChildCreateUpdateScreen newChildScreen;
 	private NewChildController newChildController;
 	private Vector forms;
 	private Dispatcher dispatcher;
@@ -32,7 +32,7 @@ public class NewChildControllerTest {
 		forms = mock(Vector.class);
 		ChildRecordStore = mock(ChildrenRecordStore.class);
 		when(formStore.getForms()).thenReturn(forms);
-		newChildScreen = mock(NewChildScreen.class);
+		newChildScreen = mock(ChildCreateUpdateScreen.class);
 		newChildController = new NewChildController(newChildScreen, uiStack,
 				formStore,ChildRecordStore);
 		dispatcher = mock(Dispatcher.class);

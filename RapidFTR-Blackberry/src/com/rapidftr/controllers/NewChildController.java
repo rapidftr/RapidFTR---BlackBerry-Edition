@@ -3,7 +3,7 @@ package com.rapidftr.controllers;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
-import com.rapidftr.screens.NewChildScreen;
+import com.rapidftr.screens.ChildCreateUpdateScreen;
 import com.rapidftr.screens.SnapshotScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.utilities.ImageCaptureListener;
@@ -13,7 +13,7 @@ public class NewChildController extends Controller {
 	private final FormStore formStore;
 	private ChildrenRecordStore childRecordStore;
 
-	public NewChildController(NewChildScreen screen, UiStack uiStack,
+	public NewChildController(ChildCreateUpdateScreen screen, UiStack uiStack,
 			FormStore formStore, ChildrenRecordStore childRecordStore) {
 		super(screen, uiStack);
 		this.formStore = formStore;
@@ -25,7 +25,13 @@ public class NewChildController extends Controller {
 	}
 
 	public void show() {
-		((NewChildScreen) screen).setForms(formStore.getForms());
+		((ChildCreateUpdateScreen) screen).setForms(formStore.getForms());
+		super.show();
+	}
+	
+
+	public void showEditScreenForChild(Child child) {
+		((ChildCreateUpdateScreen) screen).setEditForms(formStore.getForms(),child);
 		super.show();
 	}
 
