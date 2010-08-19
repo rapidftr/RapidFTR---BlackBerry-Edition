@@ -30,6 +30,8 @@ public class HomeScreenController extends Controller {
 		dispatcher.uploadChildRecords();
 		
 	}
-
+	public void syncAll(){
+		dispatcher.syncAll();
+	}
 
 }

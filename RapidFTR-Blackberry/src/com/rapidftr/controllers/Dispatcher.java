@@ -11,12 +11,12 @@ public class Dispatcher {
 	private SynchronizeFormsController synchronizeFormsController;
 	private NewChildController newChildController;
 	private UploadChildrenRecordsController uploadChildRecordsController;
-
+	private SyncAllController syncAllController;
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController,
 			ViewChildrenController viewChildrenController,
 			ViewChildController viewChildController,
-			SynchronizeFormsController synchronizeFormsController,NewChildController newChildController,UploadChildrenRecordsController uploadChildRecordsController) {
+			SynchronizeFormsController synchronizeFormsController,NewChildController newChildController,UploadChildrenRecordsController uploadChildRecordsController,SyncAllController syncAllController) {
 
 		this.homeScreenController = homeScreenController;
 		this.loginController = loginController;
@@ -63,6 +63,11 @@ public class Dispatcher {
 
 	public void uploadChildRecords() {
 		uploadChildRecordsController.uploadChildRecords();
+	}
+
+	public void syncAll() {
+		syncAllController.syncAll();
+		
 	}
 
 }

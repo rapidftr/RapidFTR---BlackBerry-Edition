@@ -18,7 +18,7 @@ public class DispatcherTests {
 	private Dispatcher dispatcher;
 	private NewChildController newChildController;
 	private UploadChildrenRecordsController uploadChildRecordsController;
-
+	private SyncAllController syncAllController;
 	@Before
 	public void setUp() {
 		homeScreenController = mock(HomeScreenController.class);
@@ -28,9 +28,11 @@ public class DispatcherTests {
 		synchronizeFormsController = mock(SynchronizeFormsController.class);
 		newChildController = mock(NewChildController.class);
 		uploadChildRecordsController = mock(UploadChildrenRecordsController.class);
+		syncAllController=mock(SyncAllController.class);
+		
 		dispatcher = new Dispatcher(homeScreenController, loginController,
 				viewChildrenController, viewChildController,
-				synchronizeFormsController, newChildController,uploadChildRecordsController);
+				synchronizeFormsController, newChildController,uploadChildRecordsController,syncAllController);
 
 	}
 
