@@ -54,14 +54,17 @@ public class HomeScreen extends CustomScreen {
 				onSyncFormsClicked();
 			}
 		});
-
+		
+		Button syncAllButton = new Button("Sync All");
+		
 		Vector buttonGroup = new Vector();
 		buttonGroup.addElement(newChildButton);
 		buttonGroup.addElement(viewChildrenButton);
 		buttonGroup.addElement(searchButton);
 		buttonGroup.addElement(syncFormsButton);
 		buttonGroup.addElement(uploadChildRecordsButton);
-
+		buttonGroup.addElement(syncAllButton);
+		
 		Button.setOptimimWidthForButtonGroup(buttonGroup);
 
 		VerticalFieldManager manager = new VerticalFieldManager(FIELD_HCENTER);
@@ -80,7 +83,10 @@ public class HomeScreen extends CustomScreen {
 
 		syncFormsButton.setPadding(PADDING);
 		manager.add(syncFormsButton);
-
+		
+		syncAllButton.setPadding(PADDING);
+		manager.add(syncAllButton);
+		
 		add(manager);
 
 	}

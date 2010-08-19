@@ -8,6 +8,7 @@ import com.rapidftr.controllers.Dispatcher;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controllers.NewChildController;
+import com.rapidftr.controllers.SyncAllController;
 import com.rapidftr.controllers.SynchronizeFormsController;
 import com.rapidftr.controllers.UploadChildrenRecordsController;
 import com.rapidftr.controllers.ViewChildController;
@@ -98,9 +99,12 @@ public class Main extends UiApplication {
 		
 		UploadChildrenRecordsService childRecordsUploadService = new UploadChildrenRecordsService(httpService,childRecordStore);
 		UploadChildrenRecordsController uploadChildRecordsController = new UploadChildrenRecordsController(uploadChildRecordsScreen, uiStack,childRecordsUploadService);
+		
+		SyncAllController syncAllController = new SyncAllController(uploadChildRecordsScreen, uiStack);
+		
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,
 				loginController, viewChildrenController, viewChildController,
-				synchronizeFormsController, newChildController,uploadChildRecordsController);
+				synchronizeFormsController, newChildController,uploadChildRecordsController,syncAllController);
 
 		dispatcher.homeScreen();
 

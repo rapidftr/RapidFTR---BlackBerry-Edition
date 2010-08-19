@@ -49,4 +49,9 @@ public class HomeScreenControllerTest {
 		verify(dispatcher).newChild();
 	}
 
+	@Test
+	public void shouldDelegateSyncAllActionToDispatcher() {
+		homeScreenController.syncAll();
+		verify(dispatcher).syncAll();
+	}
 }
