@@ -1,5 +1,11 @@
 package com.rapidftr.services;
 
+import java.io.IOException;
+
+import org.json.me.JSONArray;
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+
 import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
@@ -8,18 +14,13 @@ import com.sun.me.web.path.Result;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Response;
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
-
-import java.io.IOException;
 
 public class ChildService {
 
 	private final HttpService httpService;
 
-	public ChildService(HttpService httpService) {
-		this.httpService = httpService;
+	public ChildService(HttpService httpServer) {
+		this.httpService = httpServer;
 	}
 
 	public Child[] getAllChildren() throws IOException {
