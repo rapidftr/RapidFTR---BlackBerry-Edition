@@ -3,16 +3,20 @@ package com.rapidftr.screens;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
 
 import com.rapidftr.model.Child;
 
 public class ViewChildScreen extends CustomScreen {
 
+	Child child;
 	public ViewChildScreen() {
 	}
 
 	public void setChild(Child child) {
+		this.child = child;
 		clearFields();
 		renderChildFields(child);
 	}
@@ -43,5 +47,14 @@ public class ViewChildScreen extends CustomScreen {
 	public void cleanUp() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	protected void makeMenu(Menu menu, int instance) {
+		MenuItem editChildMenu = new MenuItem("Edit Child Detail", 1, 1) {
+			public void run() {
+				controller.dispatcher().editChild(child);
+			}
+		};
+		menu.add(editChildMenu);
 	}
 }
