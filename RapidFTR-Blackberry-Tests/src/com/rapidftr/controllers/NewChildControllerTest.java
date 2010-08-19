@@ -20,7 +20,7 @@ public class NewChildControllerTest {
 	private FormStore formStore;
 	private UiStack uiStack;
 	private ChildCreateUpdateScreen newChildScreen;
-	private NewChildController newChildController;
+	private ChildCreateUpdateController newChildController;
 	private Vector forms;
 	private Dispatcher dispatcher;
 	private ChildrenRecordStore ChildRecordStore;
@@ -33,7 +33,7 @@ public class NewChildControllerTest {
 		ChildRecordStore = mock(ChildrenRecordStore.class);
 		when(formStore.getForms()).thenReturn(forms);
 		newChildScreen = mock(ChildCreateUpdateScreen.class);
-		newChildController = new NewChildController(newChildScreen, uiStack,
+		newChildController = new ChildCreateUpdateController(newChildScreen, uiStack,
 				formStore,ChildRecordStore);
 		dispatcher = mock(Dispatcher.class);
 		newChildController.setDispatcher(dispatcher);

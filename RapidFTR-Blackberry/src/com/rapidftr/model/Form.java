@@ -70,11 +70,8 @@ public class Form {
 		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
 			FormField formField = (FormField) list.nextElement();
 			formField.initializeLayout(newChildScreen);
-			try{
-			formField.setValue(child.getField(formField.getName()).toString());
-			}catch (Exception e) {
-				// TODO: handle exception
-			}
+			Object fieldValue = child.getField(formField.getName());
+			formField.setValue((fieldValue!=null)?fieldValue.toString():"");
 			layoutManager.add(formField.getLayout());
 			layoutManager.add(new BlankSeparatorField(10));
 		}

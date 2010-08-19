@@ -78,13 +78,17 @@ public class RadioButtonFormField extends FormField {
 	}
 
 	public void setValue(String value) {
-		int selectedIndex=0;
-		for (Enumeration list = optionStrings.elements(); list.hasMoreElements();) {
-			if(((String) list.nextElement()).equals(value)) break;
+		int selectedIndex = 0;
+		for (Enumeration list = optionStrings.elements(); list
+				.hasMoreElements();) {
+			if (((String) list.nextElement()).equals(value))
+				break;
 			selectedIndex++;
 		}
-		group.setSelectedIndex(selectedIndex);
-		
+		if (selectedIndex < optionStrings.size()) {
+			group.setSelectedIndex(selectedIndex);
+		}
+
 	}
 
 }

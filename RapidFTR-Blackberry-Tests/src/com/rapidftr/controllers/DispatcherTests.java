@@ -16,7 +16,7 @@ public class DispatcherTests {
 	private ViewChildController viewChildController;
 	private SynchronizeFormsController synchronizeFormsController;
 	private Dispatcher dispatcher;
-	private NewChildController newChildController;
+	private ChildCreateUpdateController newChildController;
 	private UploadChildrenRecordsController uploadChildRecordsController;
 	private SyncAllController syncAllController;
 	@Before
@@ -26,7 +26,7 @@ public class DispatcherTests {
 		viewChildrenController = mock(ViewChildrenController.class);
 		viewChildController = mock(ViewChildController.class);
 		synchronizeFormsController = mock(SynchronizeFormsController.class);
-		newChildController = mock(NewChildController.class);
+		newChildController = mock(ChildCreateUpdateController.class);
 		uploadChildRecordsController = mock(UploadChildrenRecordsController.class);
 		syncAllController=mock(SyncAllController.class);
 		

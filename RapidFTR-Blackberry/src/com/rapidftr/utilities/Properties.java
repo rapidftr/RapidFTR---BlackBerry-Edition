@@ -4,7 +4,7 @@ public class Properties {
 
 	private static final int DEFAULT_PORT = 3000;
 	//private static final String DEFAULT_HOST = "127.0.0.1";
-	private static final String DEFAULT_HOST = "127.0.0.1";
+	private static final String DEFAULT_HOST = "dev.rapidftr.com";
 
 	private static final int DEFAULT_HTTP_TIMEOUT = 10000;
 

@@ -9,14 +9,14 @@ public class Dispatcher {
 	private ViewChildrenController viewChildrenController;
 	private ViewChildController viewChildController;
 	private SynchronizeFormsController synchronizeFormsController;
-	private NewChildController newChildController;
+	private ChildCreateUpdateController newChildController;
 	private UploadChildrenRecordsController uploadChildRecordsController;
 	private SyncAllController syncAllController;
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController,
 			ViewChildrenController viewChildrenController,
 			ViewChildController viewChildController,
-			SynchronizeFormsController synchronizeFormsController,NewChildController newChildController,UploadChildrenRecordsController uploadChildRecordsController,SyncAllController syncAllController) {
+			SynchronizeFormsController synchronizeFormsController,ChildCreateUpdateController newChildController,UploadChildrenRecordsController uploadChildRecordsController,SyncAllController syncAllController) {
 
 		this.homeScreenController = homeScreenController;
 		this.loginController = loginController;
