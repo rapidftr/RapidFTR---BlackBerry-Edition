@@ -4,5 +4,7 @@ RapidFTR-Blackberry-Tests/bin/*
 RapidFTR-Blackberry-Tests/deliverables/*
 RapidFTR-Blackberry-Tests/.classpath
 RapidFTR-Blackberry/.classpath
+RapidFTR-Blackberry-Tests/.classpath
+RapidFTR-Blackberry-Tests/.settings
 out/*
 .idea/workspace.xml
