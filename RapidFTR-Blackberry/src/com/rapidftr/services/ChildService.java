@@ -1,5 +1,6 @@
 package com.rapidftr.services;
 
+import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
@@ -13,21 +14,36 @@ import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 public class ChildService {
 
 	private final HttpService httpService;
+	private final ChildrenRecordStore childRecordStore;
 
-	public ChildService(HttpService httpService) {
+	public ChildService(HttpService httpService,
+			ChildrenRecordStore childRecordStore) {
 		this.httpService = httpService;
+		this.childRecordStore = childRecordStore;
+	}
+
+	public Child[] getAllLocallyStoredChildren() {
+		Vector allChildren = childRecordStore.getAllChildren();
+		Child[] children = new Child[allChildren.size()];
+		int selectedIndex = 0;
+		for (Enumeration list = allChildren.elements(); list.hasMoreElements();) {
+			children[selectedIndex++] = (Child) list.nextElement();
+		}
+
+		return children;
 	}
 
 	public Child[] getAllChildren() throws IOException {
 
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
-		Response response = httpService.get("children", null,
-				httpArgs);
+		Response response = httpService.get("children", null, httpArgs);
 		Result result = response.getResult();
 		HttpServer.printResponse(response);
 		try {

@@ -33,6 +33,14 @@ public class HomeScreen extends CustomScreen {
 				onViewChildrenClicked();
 			}
 		});
+		
+		Button viewLocallyStoredChildrenButton = new Button("View all Locally Stored children");
+		viewLocallyStoredChildrenButton.setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				onViewLocallyStoredChildren();
+			}
+		});
+		
 		searchButton = new Button("Search for a child");
 		searchButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
@@ -60,6 +68,7 @@ public class HomeScreen extends CustomScreen {
 		Vector buttonGroup = new Vector();
 		buttonGroup.addElement(newChildButton);
 		buttonGroup.addElement(viewChildrenButton);
+		buttonGroup.addElement(viewLocallyStoredChildrenButton);
 		buttonGroup.addElement(searchButton);
 		buttonGroup.addElement(syncFormsButton);
 		buttonGroup.addElement(uploadChildRecordsButton);
@@ -73,6 +82,9 @@ public class HomeScreen extends CustomScreen {
 		newChildButton.setPadding(PADDING);
 		manager.add(newChildButton);
 
+		viewLocallyStoredChildrenButton.setPadding(PADDING);
+		manager.add(viewLocallyStoredChildrenButton);
+		
 		viewChildrenButton.setPadding(PADDING);
 		manager.add(viewChildrenButton);
 		searchButton.setPadding(PADDING);
@@ -89,6 +101,10 @@ public class HomeScreen extends CustomScreen {
 		
 		add(manager);
 
+	}
+
+	private void onViewLocallyStoredChildren() {
+		((HomeScreenController) controller).viewLocallyStoredChildren();
 	}
 
 	private void onViewChildrenClicked() {

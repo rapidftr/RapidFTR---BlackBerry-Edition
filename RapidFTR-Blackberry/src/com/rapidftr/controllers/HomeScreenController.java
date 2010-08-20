@@ -34,5 +34,10 @@ public class HomeScreenController extends Controller {
 		dispatcher.syncAll();
 	}
 
+	public void viewLocallyStoredChildren() {
+		dispatcher.viewLocallyStoredChildren();
+		
+	}
+
 
 }

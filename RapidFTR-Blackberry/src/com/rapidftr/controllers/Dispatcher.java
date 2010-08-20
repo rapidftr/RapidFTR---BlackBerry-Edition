@@ -76,6 +76,10 @@ public class Dispatcher {
 		
 	}
 
+	public void viewLocallyStoredChildren() {
+		viewChildrenController.showLocallyStoredChildren();
+	}
+
 
 
 }

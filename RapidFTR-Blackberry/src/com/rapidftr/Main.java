@@ -67,7 +67,7 @@ public class Main extends UiApplication {
 		HttpService httpService = new HttpService(httpServer,settings);
 
 		LoginService loginService = new LoginService(httpService);
-		ChildService childService = new ChildService(httpService);
+		ChildService childService = new ChildService(httpService,childRecordStore);
 		UiStack uiStack = new UiStack(this);
 
 		LoginScreen loginScreen = new LoginScreen(settings);

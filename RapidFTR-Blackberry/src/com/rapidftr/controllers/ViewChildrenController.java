@@ -33,5 +33,10 @@ public class ViewChildrenController extends Controller {
 		dispatcher.viewChild(child);
 	}
 
+	public void showLocallyStoredChildren() {
+		((ViewChildrenScreen) screen).setChildren(childService.getAllLocallyStoredChildren());
+		uiStack.pushScreen(screen);	
+	}
+
 
 }
