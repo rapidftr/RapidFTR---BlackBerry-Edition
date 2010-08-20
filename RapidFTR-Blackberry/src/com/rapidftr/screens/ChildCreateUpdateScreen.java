@@ -44,8 +44,10 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 		}
 	}
 
+	private Child currentChild;
 
 	public void setEditForms(Vector forms,Child child) {
+		this.currentChild = child;
 		this.forms = forms;
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			((Form) list.nextElement()).initializeLayoutWithChild(this,child);
@@ -156,6 +158,13 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 					child.setField(field.getName(),field.getValue());
 			}
 			    
+		}
+		/*
+		 *TODO will change this implementation when fixing off line id generation for child
+		 */
+		if(currentChild!=null && currentChild.getField("_id")!=null){
+			child.setField("_id", currentChild.getField("_id"));
+			currentChild = null;
 		}
 	    ((ChildCreateUpdateController) controller).saveChild(child);
 
