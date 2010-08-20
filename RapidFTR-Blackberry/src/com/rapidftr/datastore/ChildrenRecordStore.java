@@ -21,6 +21,7 @@ public class ChildrenRecordStore {
 		if (child == null) {
 			return;
 		}
+		
 		Vector children = (Vector) persistentStore.getContents();
 		if (children == null) {
 			children = new Vector();
