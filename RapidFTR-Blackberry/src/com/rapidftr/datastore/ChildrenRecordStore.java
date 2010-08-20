@@ -17,7 +17,7 @@ public class ChildrenRecordStore {
 		persistentStore = new PersistentStore(KEY);
 	}
 
-	public void addChild(Child child) {
+	public void addOrUpdateChild(Child child) {
 		if (child == null) {
 			return;
 		}
@@ -26,7 +26,11 @@ public class ChildrenRecordStore {
 		if (children == null) {
 			children = new Vector();
 		}
+		if(children.contains(child)){
+			children.setElementAt(child, children.indexOf(child));
+		}else{
 		children.addElement(child);
+		}
 		persistentStore.setContents(children);
 	}
 

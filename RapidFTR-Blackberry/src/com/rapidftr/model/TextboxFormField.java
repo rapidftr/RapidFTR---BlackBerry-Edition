@@ -71,7 +71,6 @@ public class TextboxFormField extends FormField {
 	}
 
 	public void setValue(String value) {
-		field.setText(value);
-		
+		field.setText(value);		
 	}
 }

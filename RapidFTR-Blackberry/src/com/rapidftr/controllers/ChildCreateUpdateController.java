@@ -45,7 +45,7 @@ public class ChildCreateUpdateController extends Controller {
 	}
 
 	public void saveChild(Child child) {
-		childRecordStore.addChild(child);
+		childRecordStore.addOrUpdateChild(child);
 	}
 
 }
