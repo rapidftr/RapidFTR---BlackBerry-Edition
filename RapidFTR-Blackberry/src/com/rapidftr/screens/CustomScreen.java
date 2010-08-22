@@ -1,5 +1,6 @@
 package com.rapidftr.screens;
 
+import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.decor.BackgroundFactory;
@@ -14,8 +15,8 @@ public abstract class CustomScreen extends MainScreen {
 	private TitleField titleField;
 	
 
-	public CustomScreen() {
-
+	public CustomScreen() 
+	{
 		titleField = new TitleField();
 		setBackground(BackgroundFactory
 				.createSolidBackground(Styles.COLOR_SCREEN_BACKGROUND));

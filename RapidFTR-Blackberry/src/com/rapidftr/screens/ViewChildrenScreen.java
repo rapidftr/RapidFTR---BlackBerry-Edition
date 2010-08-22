@@ -1,5 +1,6 @@
 package com.rapidftr.screens;
 
+import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.ObjectListField;
 import net.rim.device.api.ui.component.SeparatorField;
@@ -10,7 +11,8 @@ import com.rapidftr.model.Child;
 public class ViewChildrenScreen extends CustomScreen {
   
     private ObjectListField childList;
-
+   
+    
     public ViewChildrenScreen() {
         super();
         layoutScreen();
