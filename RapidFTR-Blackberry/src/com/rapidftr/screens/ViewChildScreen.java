@@ -9,8 +9,11 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 
 import net.rim.device.api.system.Bitmap;
+import net.rim.device.api.system.Display;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.Font;
+import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
@@ -55,12 +58,33 @@ public class ViewChildScreen extends CustomScreen {
 		RichTextField richField[] = new RichTextField[data.size()];
 		info = new String[data.size()];
 		int i=0;
-		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) {
+		
+		int[] offset = new int[3];
+		
+		Font fonts[] = new Font[2];
+        fonts[0] = Font.getDefault();
+        fonts[1] = Font.getDefault().derive(Font.BOLD);
+        
+        byte[] attribute = new byte[2];
+        offset[0] = 0;
+        attribute[0] = 0;
+      
+     
+        
+		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) 
+		{
 			String key = (String) keyList.nextElement();
 			String value = (String) data.get(key);
 			//info[i++]=key + " : " + value;
 			key = key.replace('_', ' ');
-			richField[i] = new RichTextField(key + ":" + value);
+			String space = getSpacer(key,value);
+			offset[1] =key.length();
+		    attribute[1] = 1;
+		    
+		    offset[2] = key.length()+value.length()+1;
+			//richField[i] = new RichTextField(key + ":" + value);
+			
+		    richField[i] =new RichTextField(key + ":" + value, offset, attribute, fonts,RichTextField.USE_TEXT_WIDTH);
 			
 			add(richField[i]);
 			add(new SeparatorField());
@@ -71,6 +95,33 @@ public class ViewChildScreen extends CustomScreen {
 		
 
 	}
+
+	private String getSpacer(String key , String value) {
+		int keySize=key.length();
+		int valueSize=value.length();
+		int screenSize =Display.getWidth()/2;
+		int spaceWidth = screenSize - (keySize + valueSize);
+		//Get the default font.
+		Font font = Font.getDefault();
+
+		//Determine the size of a space in the
+		//default font.
+		int spaceSize = font.getAdvance(' ');
+
+		if(spaceWidth > (spaceWidth/spaceSize))
+		{
+			String spacer= new String();
+		
+			for(int i = 0 ;i < spaceWidth ; i=i+spaceSize)
+			{
+				spacer = spacer + " ";
+			}
+			return spacer;
+		}
+		else
+			return new String();
+	}
+	
 
 	private void renderBitmap(Hashtable data,HorizontalFieldManager hmanager) {
 		hmanager.setMargin(10, 10, 10, 10);
