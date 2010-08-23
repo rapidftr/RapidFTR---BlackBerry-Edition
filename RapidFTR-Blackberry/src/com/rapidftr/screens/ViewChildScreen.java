@@ -56,9 +56,10 @@ public class ViewChildScreen extends CustomScreen {
 		info = new String[data.size()];
 		int i=0;
 		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) {
-			Object key = keyList.nextElement();
-			Object value = data.get(key);
+			String key = (String) keyList.nextElement();
+			String value = (String) data.get(key);
 			//info[i++]=key + " : " + value;
+			key = key.replace('_', ' ');
 			richField[i] = new RichTextField(key + ":" + value);
 			
 			add(richField[i]);
