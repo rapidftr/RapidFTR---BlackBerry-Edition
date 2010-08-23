@@ -1,7 +1,8 @@
 package com.rapidftr.screens;
 
-import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.ObjectListField;
 import net.rim.device.api.ui.component.SeparatorField;
 
@@ -27,6 +28,7 @@ public class ViewChildrenScreen extends CustomScreen {
                 ((ViewChildrenController) controller).showChild(child);
                 return super.navigationClick(i, i1);   
             }
+            
         };
         add(childList);
     }
@@ -43,5 +45,13 @@ public class ViewChildrenScreen extends CustomScreen {
 	public void cleanUp() {
 		// TODO Auto-generated method stub
 		
+	}
+	protected void makeMenu(Menu menu, int instance) {
+		MenuItem editChildMenu = new MenuItem("Open Record", 1, 1) {
+			public void run() {
+				controller.dispatcher().viewChild((Child) childList.get(childList, childList.getSelectedIndex()));
+			}
+		};
+		menu.add(editChildMenu);
 	}
 }

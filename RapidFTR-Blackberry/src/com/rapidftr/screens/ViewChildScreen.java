@@ -11,6 +11,7 @@ import javax.microedition.io.file.FileConnection;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.LabelField;
@@ -29,7 +30,6 @@ public class ViewChildScreen extends CustomScreen {
 	
 	
 	public ViewChildScreen() {
-
 	}
 
 	public void setChild(Child child) {
@@ -45,10 +45,10 @@ public class ViewChildScreen extends CustomScreen {
 	private void renderChildFields(Child child) {
 		
 		Hashtable data = child.getKeyMap();
-		HorizontalFieldManager hmanager = new HorizontalFieldManager(Field.FIELD_VCENTER); 
+		HorizontalFieldManager hmanager = new HorizontalFieldManager(Manager.HORIZONTAL_SCROLLBAR); 
 		renderBitmap(data,hmanager);
 				
-		hmanager.add(new LabelField(data.get(new String("name"))));
+		hmanager.add(new LabelField("   " + data.get(new String("name"))));
 		add(hmanager);
 	    ObjectListField childInfo = new ObjectListField();
 		String info[];
@@ -59,9 +59,11 @@ public class ViewChildScreen extends CustomScreen {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
 			//info[i++]=key + " : " + value;
-			richField[i++] = new RichTextField(key + ":" + value);
-			//add(new SeparatorField());
-			add(richField[i-1]);
+			richField[i] = new RichTextField(key + ":" + value);
+			
+			add(richField[i]);
+			add(new SeparatorField());
+			i++;
 			
 		}
 		childInfo.set(info);
