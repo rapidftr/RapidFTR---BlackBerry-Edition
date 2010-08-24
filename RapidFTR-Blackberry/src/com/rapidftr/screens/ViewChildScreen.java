@@ -24,7 +24,7 @@ public class ViewChildScreen extends CustomScreen {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
 
-			add(new LabelField(key + ": " + value));
+			add(new LabelField(key + ": " + value, LabelField.FOCUSABLE));
 		}
 
 	}

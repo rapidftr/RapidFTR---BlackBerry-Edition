@@ -1,0 +1,34 @@
+package com.rapidftr.controllers;
+
+import java.io.IOException;
+
+import com.rapidftr.model.Child;
+import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.ViewChildrenScreen;
+import com.rapidftr.services.ChildService;
+import com.rapidftr.services.ChildStoreService;
+
+public class ViewChildrenController extends Controller {
+
+	private final ChildStoreService childStoreService;
+
+	public ViewChildrenController(ViewChildrenScreen screen, UiStack uiStack,
+			ChildStoreService childStoreService) {
+		super(screen, uiStack);
+		this.childStoreService = childStoreService;
+	}
+
+	public void show() {
+		Child[] children;
+			children = childStoreService.getAllChildrenFromPhoneStoredAsArray();
+			((ViewChildrenScreen) screen).setChildren(children);
+			uiStack.pushScreen(screen);
+		
+
+	}
+
+	public void showChild(Child child) {
+		dispatcher.viewChild(child);
+	}
+
+}
