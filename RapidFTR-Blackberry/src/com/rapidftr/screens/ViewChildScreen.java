@@ -65,7 +65,7 @@ public class ViewChildScreen extends CustomScreen {
 			String key = (String) keyList.nextElement();
 			String value = (String) data.get(key);
 			key = key.replace('_', ' ');
-		    richField[i] = BoldRichTextField.getSemiBoldRichTextField(key, value);
+		    richField[i] = BoldRichTextField.getSemiBoldRichTextField(key + " :", value);
 			
 			add(richField[i]);
 			add(new SeparatorField());
