@@ -53,10 +53,7 @@ public class ViewChildScreen extends CustomScreen {
 				
 		hmanager.add(new LabelField("   " + data.get(new String("name"))));
 		add(hmanager);
-	    ObjectListField childInfo = new ObjectListField();
-		String info[];
 		RichTextField richField[] = new RichTextField[data.size()];
-		info = new String[data.size()];
 		int i=0;
 		
 		int[] offset = new int[3];
@@ -91,7 +88,6 @@ public class ViewChildScreen extends CustomScreen {
 			i++;
 			
 		}
-		childInfo.set(info);
 		
 
 	}
