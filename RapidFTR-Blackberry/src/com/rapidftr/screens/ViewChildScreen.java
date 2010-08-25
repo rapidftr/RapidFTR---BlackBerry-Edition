@@ -31,8 +31,7 @@ import com.rapidftr.utilities.ImageUtility;
 public class ViewChildScreen extends CustomScreen {
 
 	Child child;
-	
-	
+
 	public ViewChildScreen() {
 	}
 
@@ -43,85 +42,77 @@ public class ViewChildScreen extends CustomScreen {
 		add(new LabelField("Child Details"));
 		add(new SeparatorField());
 		renderChildFields(child);
-		
+
 	}
 
 	private void renderChildFields(Child child) {
-		
+
 		Hashtable data = child.getKeyMap();
-		HorizontalFieldManager hmanager = new HorizontalFieldManager(Manager.HORIZONTAL_SCROLLBAR); 
-		renderBitmap(data,hmanager);
-				
-		hmanager.add(new LabelField("   " + data.get(new String("name"))));
+		HorizontalFieldManager hmanager = new HorizontalFieldManager(
+				Manager.HORIZONTAL_SCROLLBAR);
+		renderBitmap(data, hmanager);
+
+		hmanager.add(new BoldRichTextField("   " + data.get(new String("name"))));
 		add(hmanager);
 		RichTextField richField[] = new RichTextField[data.size()];
-		int i=0;
-		
-		
-     
-        
-		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) 
-		{
+		int i = 0;
+
+		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) {
 			String key = (String) keyList.nextElement();
 			String value = (String) data.get(key);
 			key = key.replace('_', ' ');
-		    richField[i] = BoldRichTextField.getSemiBoldRichTextField(key + " :", value);
-			
+			richField[i] = BoldRichTextField.getSemiBoldRichTextField(key
+					+ " :", value);
+
 			add(richField[i]);
 			add(new SeparatorField());
 			i++;
-			
+
 		}
-		
 
 	}
-	
 
-	private void renderBitmap(Hashtable data,HorizontalFieldManager manager) {
-		
+	private void renderBitmap(Hashtable data, HorizontalFieldManager manager) {
+
 		manager.setMargin(10, 10, 10, 10);
-		
-		String ImagePath = "res/default.jpg";
-		Bitmap image =  Bitmap.getBitmapResource(ImagePath );
-		
-		if(ImagePath==null || ImagePath.equals(""))
-		{
-			ImagePath = "res/default.jpg";
-		}
-		else
-		{
-			ImagePath = "file://" + (String) data.get(new String("current_photo_key"));
-			FileConnection fconn;
-	
-			try 
-				{
-					fconn = (FileConnection)Connector.open(ImagePath, Connector.READ);
-					if (fconn.exists()) 
-					  {           
-							byte[] imageBytes = new byte[(int) fconn.fileSize()];
-							InputStream inStream = fconn.openInputStream();
-							inStream.read(imageBytes);
-							inStream.close();
-							EncodedImage eimg = EncodedImage.createEncodedImage(imageBytes, 0, (int) fconn.fileSize());
-							image = eimg.getBitmap();
-							fconn.close();
 
-					  }
-					  
-				} 
-				catch (IOException e) 
-				{
-					e.printStackTrace();
-				} 
-				 
+		String ImagePath = "res/default.jpg";
+		Bitmap image = Bitmap.getBitmapResource(ImagePath);
+
+		if (ImagePath == null || ImagePath.equals("")) {
+			ImagePath = "res/default.jpg";
+		} else {
+			ImagePath = "file://"
+					+ (String) data.get(new String("current_photo_key"));
+			FileConnection fconn;
+
+			try {
+				fconn = (FileConnection) Connector.open(ImagePath,
+						Connector.READ);
+				if (fconn.exists()) {
+					byte[] imageBytes = new byte[(int) fconn.fileSize()];
+					InputStream inStream = fconn.openInputStream();
+					inStream.read(imageBytes);
+					inStream.close();
+					EncodedImage eimg = EncodedImage.createEncodedImage(
+							imageBytes, 0, (int) fconn.fileSize());
+					image = eimg.getBitmap();
+					fconn.close();
+
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
-		
-		// BitmapField			
-		Bitmap resize = ImageUtility.resizeBitmap(image, 70,70);	
+
+		// BitmapField
+		Bitmap resize = ImageUtility.resizeBitmap(image, 70, 70);
 		BitmapField bf = new BitmapField(resize, BitmapField.FOCUSABLE);
-		
+
 		manager.add(bf);
-	
+
 	}
 
 	private void clearFields() {
@@ -139,7 +130,7 @@ public class ViewChildScreen extends CustomScreen {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	protected void makeMenu(Menu menu, int instance) {
 		MenuItem editChildMenu = new MenuItem("Edit Child Detail", 1, 1) {
 			public void run() {
@@ -148,6 +139,5 @@ public class ViewChildScreen extends CustomScreen {
 		};
 		menu.add(editChildMenu);
 	}
-	
-	
+
 }
