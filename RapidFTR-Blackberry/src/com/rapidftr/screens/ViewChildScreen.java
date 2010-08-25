@@ -75,40 +75,14 @@ public class ViewChildScreen extends CustomScreen {
 		
 
 	}
-
-//	private String getSpacer(String key , String value) {
-//		int keySize=key.length();
-//		int valueSize=value.length();
-//		int screenSize =Display.getWidth()/2;
-//		int spaceWidth = screenSize - (keySize + valueSize);
-//		//Get the default font.
-//		Font font = Font.getDefault();
-//
-//		//Determine the size of a space in the
-//		//default font.
-//		int spaceSize = font.getAdvance(' ');
-//
-//		if(spaceWidth > (spaceWidth/spaceSize))
-//		{
-//			String spacer= new String();
-//		
-//			for(int i = 0 ;i < spaceWidth ; i=i+spaceSize)
-//			{
-//				spacer = spacer + " ";
-//			}
-//			return spacer;
-//		}
-//		else
-//			return new String();
-//	}
 	
 
-	private void renderBitmap(Hashtable data,HorizontalFieldManager hmanager) {
-		hmanager.setMargin(10, 10, 10, 10);
-		String ImagePath = "res/default.jpg";
-
-		Bitmap image =  Bitmap.getBitmapResource(ImagePath );
+	private void renderBitmap(Hashtable data,HorizontalFieldManager manager) {
 		
+		manager.setMargin(10, 10, 10, 10);
+		
+		String ImagePath = "res/default.jpg";
+		Bitmap image =  Bitmap.getBitmapResource(ImagePath );
 		
 		if(ImagePath==null || ImagePath.equals(""))
 		{
@@ -141,12 +115,12 @@ public class ViewChildScreen extends CustomScreen {
 				} 
 				 
 		}
-		// BitmapField			
 		
+		// BitmapField			
 		Bitmap resize = ImageUtility.resizeBitmap(image, 70,70);	
 		BitmapField bf = new BitmapField(resize, BitmapField.FOCUSABLE);
 		
-		hmanager.add(bf);
+		manager.add(bf);
 	
 	}
 

@@ -5,8 +5,6 @@ import net.rim.device.api.ui.component.RichTextField;
 
 public class BoldRichTextField extends RichTextField{
 
-
-	
    
 	public BoldRichTextField(String text) {
 		super(text);
