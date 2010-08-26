@@ -63,7 +63,7 @@ public class HomeScreen extends CustomScreen {
 			}
 		});
 		
-		Button syncAllButton = new Button("Sync All");
+
 		
 		Vector buttonGroup = new Vector();
 		buttonGroup.addElement(newChildButton);
@@ -72,7 +72,7 @@ public class HomeScreen extends CustomScreen {
 		buttonGroup.addElement(searchButton);
 		buttonGroup.addElement(syncFormsButton);
 		buttonGroup.addElement(uploadChildRecordsButton);
-		buttonGroup.addElement(syncAllButton);
+
 		
 		Button.setOptimimWidthForButtonGroup(buttonGroup);
 
@@ -95,9 +95,7 @@ public class HomeScreen extends CustomScreen {
 
 		syncFormsButton.setPadding(PADDING);
 		manager.add(syncFormsButton);
-		
-		syncAllButton.setPadding(PADDING);
-		manager.add(syncAllButton);
+
 		
 		add(manager);
 

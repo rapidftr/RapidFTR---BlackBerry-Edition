@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
+
 import com.rapidftr.controls.TitleField;
+import com.rapidftr.datastore.FormStore;
+
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 
@@ -25,6 +29,8 @@ import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 
 import com.rapidftr.model.Child;
+import com.rapidftr.model.Form;
+import com.rapidftr.model.FormField;
 import com.rapidftr.utilities.BoldRichTextField;
 import com.rapidftr.utilities.ImageUtility;
 
@@ -46,7 +52,7 @@ public class ViewChildScreen extends CustomScreen {
 	}
 
 	private void renderChildFields(Child child) {
-
+		updateChildFields(child);
 		Hashtable data = child.getKeyMap();
 		HorizontalFieldManager hmanager = new HorizontalFieldManager(
 				Manager.HORIZONTAL_SCROLLBAR);
@@ -70,6 +76,21 @@ public class ViewChildScreen extends CustomScreen {
 
 		}
 
+	}
+
+	private void updateChildFields(Child child) {
+		FormStore fstore = new FormStore();
+		Vector forms = fstore.getForms();
+
+		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
+			Form form = (Form) list.nextElement();
+			for(Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();)
+			{
+					FormField field = (FormField) fields.nextElement();
+					child.updateField(field.getName());
+			}
+			    
+		}
 	}
 
 	private void renderBitmap(Hashtable data, HorizontalFieldManager manager) {
