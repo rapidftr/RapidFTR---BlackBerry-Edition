@@ -21,9 +21,15 @@ public class ViewChildrenController extends Controller {
 
 	public void show() {
 		
-		Child[] children=getChildern();
-		((ViewChildrenScreen) screen).setChildren(children);
+		Child[] children;
+		try {
+			children = childService.getAllChildren();
+			((ViewChildrenScreen) screen).setChildren(children);
 			uiStack.pushScreen(screen);
+		} catch (IOException e) {
+			Dialog.alert("Network communication failed");
+		}
+		
 	}
 
 	public void showChild(Child child) {
@@ -35,12 +41,12 @@ public class ViewChildrenController extends Controller {
 		uiStack.pushScreen(screen);	
 	}
 
-	public Child[] getChildern()
+	public Child[] getLocalChildern()
 	{
 		Child[] children;
 		children = childService.getAllLocallyStoredChildren();
 		return children;
-		
+	
 	}
 
 }
