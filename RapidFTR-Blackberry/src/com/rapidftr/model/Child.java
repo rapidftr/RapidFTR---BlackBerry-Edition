@@ -2,13 +2,14 @@ package com.rapidftr.model;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Random;
 import java.util.Vector;
 
 import net.rim.device.api.util.Persistable;
 
-import com.rapidftr.services.FormService;
 import com.rapidftr.utilities.FileUtility;
 import com.rapidftr.utilities.HttpUtility;
+import com.rapidftr.utilities.RandomStringGenerator;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Part;
 
@@ -21,18 +22,14 @@ public class Child implements Persistable {
 	}
 
 	public String toFormatedString() {
-
 		StringBuffer buffer = new StringBuffer();
-
 		buffer.append("[");
-
 		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
 			buffer.append(key + ":" + value + ",");
 		}
 		buffer.append("]");
-
 		return buffer.toString();
 	}
 
@@ -94,6 +91,16 @@ public class Child implements Persistable {
 		return result;
 	}
 
+	public void createUniqueId(String userName) {
+		String unknownLocation = "xxx";
+		String blackBerryPrefix = "B*";
+		String truncatedLocation = data.get("last_known_location") == null ? unknownLocation
+				: data.get("last_known_location").toString().substring(0, 3)
+						.toLowerCase();
+		data.put("unique_identifier", blackBerryPrefix + userName
+				+ truncatedLocation + RandomStringGenerator.generate(5));
+	}
+
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -106,14 +113,17 @@ public class Child implements Persistable {
 			if (other.data != null)
 				return false;
 		} else {
-			if (data.get("_id") == null) {
-				return false;
-			}
-			if (!data.get("_id").equals((other.data.get("_id"))))
-				return false;
+			if (data.get("_id") != null && other.data.get("_id") != null
+					&& data.get("_id").equals((other.data.get("_id"))))
+				return true;
+			if (data.get("unique_identifier") != null
+					&& other.data.get("unique_identifier") != null
+					&& data.get("unique_identifier").equals(
+							(other.data.get("unique_identifier"))))
+				return true;
 		}
 
-		return true;
+		return false;
 	}
 
 }
