@@ -1,7 +1,6 @@
 package com.rapidftr.screens;
 
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import net.rim.device.api.ui.Field;
@@ -21,11 +20,17 @@ import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
 import com.rapidftr.model.FormField;
 import com.rapidftr.utilities.ImageCaptureListener;
+import com.rapidftr.utilities.SettingsStore;
 
 public class ChildCreateUpdateScreen extends CustomScreen {
 
 	private Vector forms;
 	private Manager screenManager;
+	SettingsStore settings;
+
+	public ChildCreateUpdateScreen(SettingsStore settings) {
+		this.settings = settings;
+	}
 
 	public void cleanUp() {
 
@@ -44,15 +49,16 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 		}
 	}
 
-	private Child currentChild;
+	private Child childInEditMode;
 
-	public void setEditForms(Vector forms,Child child) {
-		this.currentChild = child;
+	public void setEditForms(Vector forms, Child child) {
+		this.childInEditMode = child;
 		this.forms = forms;
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-			((Form) list.nextElement()).initializeLayoutWithChild(this,child);
+			((Form) list.nextElement()).initializeLayoutWithChild(this, child);
 		}
 	}
+
 	private void createScreenLayout() {
 
 		try {
@@ -112,8 +118,9 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 
 			public void fieldChanged(Field field, int context) {
 				onSaveChildClicked();
-				Dialog.alert("ChildRecord has been stored succesfully\n" +
-						"Please upload record to central server whenever you get Internet Access!!");
+				Dialog
+						.alert("ChildRecord has been stored succesfully\n"
+								+ "Please upload record to central server whenever you get Internet Access!!");
 				controller.popScreen();
 			}
 		});
@@ -147,27 +154,30 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 	}
 
 	private void onSaveChildClicked() {
-
 		Child child = new Child();
-       
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			Form form = (Form) list.nextElement();
-			for(Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();)
-			{
-					FormField field = (FormField) fields.nextElement();
-					child.setField(field.getName(),field.getValue());
+			for (Enumeration fields = form.getFieldList().elements(); fields
+					.hasMoreElements();) {
+				FormField field = null;
+				try {
+					 field = (FormField) fields.nextElement();
+					child.setField(field.getName(), field.getValue());
+				} catch (Exception e) {
+					System.out.print(field);
+				}
 			}
-			    
 		}
-		/*
-		 *TODO will change this implementation when fixing off line id generation for child
-		 */
-		if(currentChild!=null && currentChild.getField("_id")!=null){
-			child.setField("_id", currentChild.getField("_id"));
-			currentChild = null;
-		}
-	    ((ChildCreateUpdateController) controller).saveChild(child);
 
+		if (childInEditMode != null) {
+			if (childInEditMode.getField("_id") != null) {
+				child.setField("_id", childInEditMode.getField("_id"));
+				childInEditMode = null;
+			}
+		} else {
+			child.createUniqueId(settings.getCurrentlyLoggedIn());
+		}
+		((ChildCreateUpdateController) controller).saveChild(child);
 	}
 
 }

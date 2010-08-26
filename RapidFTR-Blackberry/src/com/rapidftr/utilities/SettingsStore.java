@@ -80,6 +80,9 @@ public class SettingsStore {
 		setString(CURRENT_USER, userName);
 	}
 
+	public String getCurrentlyLoggedIn() {
+		return getString(CURRENT_USER);
+	}
 	public String getAuthorizationToken() {
 
 		return getString(AUTHORISATION_TOKEN);

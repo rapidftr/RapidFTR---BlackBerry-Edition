@@ -92,7 +92,7 @@ public class Main extends UiApplication {
 				new FormService(httpService), formStore, uiStack,
 				synchronizeFormsScreen);
 
-		ChildCreateUpdateScreen newChildScreen = new ChildCreateUpdateScreen();
+		ChildCreateUpdateScreen newChildScreen = new ChildCreateUpdateScreen(settings);
 		ChildCreateUpdateController newChildController = new ChildCreateUpdateController(
 				newChildScreen, uiStack, formStore, childRecordStore);
 		UploadChildrenRecordsScreen uploadChildRecordsScreen = new UploadChildrenRecordsScreen();
