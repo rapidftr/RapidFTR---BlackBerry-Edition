@@ -8,6 +8,7 @@ import net.rim.device.api.ui.component.SeparatorField;
 
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.model.Child;
+import com.rapidftr.services.ChildService;
 
 public class ViewChildrenScreen extends CustomScreen {
   
@@ -53,5 +54,11 @@ public class ViewChildrenScreen extends CustomScreen {
 			}
 		};
 		menu.add(editChildMenu);
+	}
+	
+	protected void onExposed()
+	{
+		Child[] children=((ViewChildrenController)controller).getChildern();
+		setChildren(children);
 	}
 }

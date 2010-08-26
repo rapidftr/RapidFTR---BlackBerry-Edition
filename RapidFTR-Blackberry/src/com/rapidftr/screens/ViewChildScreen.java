@@ -134,6 +134,8 @@ public class ViewChildScreen extends CustomScreen {
 	protected void makeMenu(Menu menu, int instance) {
 		MenuItem editChildMenu = new MenuItem("Edit Child Detail", 1, 1) {
 			public void run() {
+				//Move from edit screen directly to the main menu application screen
+				controller.popScreen();
 				controller.dispatcher().editChild(child);
 			}
 		};

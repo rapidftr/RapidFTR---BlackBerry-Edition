@@ -2,6 +2,8 @@ package com.rapidftr.controllers;
 
 import java.io.IOException;
 
+import net.rim.device.api.ui.component.Dialog;
+
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildrenScreen;
@@ -18,15 +20,10 @@ public class ViewChildrenController extends Controller {
 	}
 
 	public void show() {
-		Child[] children;
-		try {
-			children = childService.getAllChildren();
-			((ViewChildrenScreen) screen).setChildren(children);
+		
+		Child[] children=getChildern();
+		((ViewChildrenScreen) screen).setChildren(children);
 			uiStack.pushScreen(screen);
-		} catch (IOException e) {
-			// Alert user with proper error message
-		}
-
 	}
 
 	public void showChild(Child child) {
@@ -38,5 +35,12 @@ public class ViewChildrenController extends Controller {
 		uiStack.pushScreen(screen);	
 	}
 
+	public Child[] getChildern()
+	{
+		Child[] children;
+		children = childService.getAllLocallyStoredChildren();
+		return children;
+		
+	}
 
 }
