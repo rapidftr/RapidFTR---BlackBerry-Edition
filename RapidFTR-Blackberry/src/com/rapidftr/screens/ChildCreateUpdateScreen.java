@@ -160,20 +160,19 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 			for (Enumeration fields = form.getFieldList().elements(); fields
 					.hasMoreElements();) {
 				FormField field = null;
-				try {
-					 field = (FormField) fields.nextElement();
-					child.setField(field.getName(), field.getValue());
-				} catch (Exception e) {
-					System.out.print(field);
-				}
+				field = (FormField) fields.nextElement();
+				child.setField(field.getName(), field.getValue());
 			}
 		}
 
 		if (childInEditMode != null) {
 			if (childInEditMode.getField("_id") != null) {
 				child.setField("_id", childInEditMode.getField("_id"));
-				childInEditMode = null;
 			}
+			if (childInEditMode.getField("unique_identifier") != null) {
+				child.setField("unique_identifier", childInEditMode.getField("unique_identifier"));
+			}
+			childInEditMode = null;
 		} else {
 			child.createUniqueId(settings.getCurrentlyLoggedIn());
 		}
