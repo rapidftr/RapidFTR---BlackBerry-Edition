@@ -125,5 +125,11 @@ public class Child implements Persistable {
 
 		return false;
 	}
-
+	public void updateField(String name) {
+		if(!data.containsKey(name))
+		{
+			data.put(name, "");
+		}
+		
+	}
 }
