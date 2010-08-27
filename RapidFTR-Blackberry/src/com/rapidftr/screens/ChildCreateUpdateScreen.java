@@ -6,8 +6,10 @@ import java.util.Vector;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.ObjectChoiceField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
@@ -160,5 +162,16 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 		}
 		((ChildCreateUpdateController) controller).saveChild(chilToEdit);
 	}
-
+	
+	protected void makeMenu(Menu menu, int instance) {
+		MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
+			public void run() {
+				onSaveChildClicked();
+				Dialog.alert("ChildRecord has been stored succesfully\n"
+								+ "Please upload record to central server whenever you get Internet Access!!");
+				controller.popScreen();
+			}
+		};
+		menu.add(saveChildMenu);
+	}
 }

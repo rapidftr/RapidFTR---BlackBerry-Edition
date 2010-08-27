@@ -6,32 +6,27 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import com.rapidftr.controls.TitleField;
-import com.rapidftr.datastore.FormStore;
-
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 
 import net.rim.device.api.system.Bitmap;
-import net.rim.device.api.system.Display;
 import net.rim.device.api.system.EncodedImage;
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.Font;
-import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.component.ObjectListField;
 import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 
+import com.rapidftr.controls.TitleField;
+import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
 import com.rapidftr.model.FormField;
 import com.rapidftr.utilities.BoldRichTextField;
+import com.rapidftr.utilities.ChildFieldIgnoreList;
 import com.rapidftr.utilities.ImageUtility;
 
 public class ViewChildScreen extends CustomScreen {
@@ -63,9 +58,14 @@ public class ViewChildScreen extends CustomScreen {
 		RichTextField richField[] = new RichTextField[data.size()];
 		int i = 0;
 
-		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) {
+		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) 
+		{
 			String key = (String) keyList.nextElement();
 			String value = (String) data.get(key);
+			if(ChildFieldIgnoreList.isInIgnoreList(key))
+			{
+				continue;
+			}
 			key = key.replace('_', ' ');
 			richField[i] = BoldRichTextField.getSemiBoldRichTextField(key
 					+ " :", value);
@@ -160,7 +160,14 @@ public class ViewChildScreen extends CustomScreen {
 				controller.dispatcher().editChild(child);
 			}
 		};
+		
+		MenuItem historyMenu = new MenuItem("View The Change Log", 2, 1) {
+			public void run() {
+				controller.dispatcher().viewChildHistory(child);
+			}
+		};
 		menu.add(editChildMenu);
+		menu.add(historyMenu);
 	}
 
 }

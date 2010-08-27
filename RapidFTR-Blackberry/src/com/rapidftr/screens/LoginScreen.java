@@ -23,7 +23,6 @@ import com.rapidftr.utilities.SettingsStore;
 public class LoginScreen extends CustomScreen implements FieldChangeListener {
 
 	private static final int MAX_SIZE = 200;
-	private static final XYEdges PADDING = new XYEdges(4, 4, 4, 4);
 
 	private final BasicEditField usernameField = new BasicEditField(
 			"Username:", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
@@ -93,16 +92,7 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener {
 		}
 	}
 
-	private void addLogo() {
-		Bitmap bitmap = Bitmap.getBitmapResource("res/logo.jpg");
-		if (bitmap == null) {
-			return;
-		}
-
-		BitmapField field = new BitmapField(bitmap, FIELD_HCENTER);
-		field.setPadding(PADDING);
-		add(field);
-	}
+	
 
 	private void addButtons() {
 		loginButton = new Button("Login");
