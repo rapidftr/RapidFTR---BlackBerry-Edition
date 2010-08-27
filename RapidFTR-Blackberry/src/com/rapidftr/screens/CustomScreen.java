@@ -1,7 +1,10 @@
 package com.rapidftr.screens;
 
+import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.XYEdges;
+import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.decor.BackgroundFactory;
 
@@ -13,7 +16,7 @@ public abstract class CustomScreen extends MainScreen {
 
 	Controller controller;
 	private TitleField titleField;
-	
+	protected static final XYEdges PADDING = new XYEdges(4, 4, 4, 4);
 
 	public CustomScreen() 
 	{
@@ -52,6 +55,17 @@ public abstract class CustomScreen extends MainScreen {
 			}
 		});
 		
+	}
+	
+	public void addLogo() {
+		Bitmap bitmap = Bitmap.getBitmapResource("res/logo.jpg");
+		if (bitmap == null) {
+			return;
+		}
+
+		BitmapField field = new BitmapField(bitmap, FIELD_HCENTER);
+		field.setPadding(PADDING);
+		add(field);
 	}
 
 
