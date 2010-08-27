@@ -23,6 +23,7 @@ public class Child implements Persistable {
 
 	public Child() {
 		data = new Hashtable();
+		data.put("_id", RandomStringGenerator.generate(32));
 	}
 
 	public String toFormatedString() {

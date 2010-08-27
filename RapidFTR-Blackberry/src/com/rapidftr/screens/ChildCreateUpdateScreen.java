@@ -154,7 +154,7 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 	private void onSaveChildClicked() {
 		if (chilToEdit == null) {
 			chilToEdit = Child.create(forms);
-			chilToEdit.createUniqueId(settings.getCurrentlyLoggedIn());
+			//chilToEdit.createUniqueId(settings.getCurrentlyLoggedIn());
 		}else{
 			chilToEdit.update(settings.getCurrentlyLoggedIn(),forms);
 		}
