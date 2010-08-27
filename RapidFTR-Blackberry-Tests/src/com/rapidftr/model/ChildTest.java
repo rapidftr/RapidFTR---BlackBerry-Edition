@@ -31,10 +31,10 @@ public class ChildTest {
 	public void setUp() {
 		forms = new Vector();
 		Vector fieldList = new Vector();
-    	FormField formField1 = mock(FormField.class);
-		when(formField1.getValue()).thenReturn("someName");
-		when(formField1.getName()).thenReturn("name");
-		fieldList.add(formField1);
+    	FormField nameTextField = mock(FormField.class);
+		when(nameTextField.getValue()).thenReturn("someName");
+		when(nameTextField.getName()).thenReturn("name");
+		fieldList.add(nameTextField);
 		Form form = new Form("Basic_details", "basic_details", fieldList);
 		forms.add(form);
 	}
