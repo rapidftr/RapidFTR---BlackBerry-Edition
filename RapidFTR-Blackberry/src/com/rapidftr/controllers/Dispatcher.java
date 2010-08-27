@@ -12,11 +12,15 @@ public class Dispatcher {
 	private ChildCreateUpdateController newChildController;
 	private UploadChildrenRecordsController uploadChildRecordsController;
 	private SyncAllController syncAllController;
+
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController,
 			ViewChildrenController viewChildrenController,
 			ViewChildController viewChildController,
-			SynchronizeFormsController synchronizeFormsController,ChildCreateUpdateController newChildController,UploadChildrenRecordsController uploadChildRecordsController,SyncAllController syncAllController) {
+			SynchronizeFormsController synchronizeFormsController,
+			ChildCreateUpdateController newChildController,
+			UploadChildrenRecordsController uploadChildRecordsController,
+			SyncAllController syncAllController) {
 
 		this.homeScreenController = homeScreenController;
 		this.loginController = loginController;
@@ -44,17 +48,14 @@ public class Dispatcher {
 		viewChildrenController.show();
 	}
 
-
 	public void viewChild(Child child) {
 		viewChildController.show(child);
 	}
 
-	
-
 	public void editChild(Child child) {
 		newChildController.showEditScreenForChild(child);
 	}
-	
+
 	public void login() {
 		loginController.show();
 	}
@@ -73,13 +74,15 @@ public class Dispatcher {
 
 	public void syncAll() {
 		syncAllController.syncAll();
-		
+
 	}
 
 	public void viewLocallyStoredChildren() {
 		viewChildrenController.showLocallyStoredChildren();
 	}
 
-
+	public void viewChildHistory(Child child) {
+		viewChildController.showHistory(child);
+	}
 
 }

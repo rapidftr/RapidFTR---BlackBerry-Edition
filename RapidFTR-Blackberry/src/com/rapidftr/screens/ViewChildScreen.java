@@ -160,7 +160,14 @@ public class ViewChildScreen extends CustomScreen {
 				controller.dispatcher().editChild(child);
 			}
 		};
+		
+		MenuItem historyMenu = new MenuItem("View The Change Log", 2, 1) {
+			public void run() {
+				controller.dispatcher().viewChildHistory(child);
+			}
+		};
 		menu.add(editChildMenu);
+		menu.add(historyMenu);
 	}
 
 }
