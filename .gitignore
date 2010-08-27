@@ -6,5 +6,6 @@ RapidFTR-Blackberry-Tests/.classpath
 RapidFTR-Blackberry/.classpath
 RapidFTR-Blackberry-Tests/.classpath
 RapidFTR-Blackberry-Tests/.settings
+RapidFTR-Blackberry/src/com/rapidftr/utilities/Properties.java
 out/*
 .idea/workspace.xml

@@ -18,7 +18,6 @@ import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.controls.Button;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
-import com.rapidftr.model.FormField;
 import com.rapidftr.utilities.ImageCaptureListener;
 import com.rapidftr.utilities.SettingsStore;
 
@@ -49,13 +48,14 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 		}
 	}
 
-	private Child childInEditMode;
+	private Child chilToEdit;
 
-	public void setEditForms(Vector forms, Child child) {
-		this.childInEditMode = child;
+	public void setEditForms(Vector forms, Child childToEdit) {
+		this.chilToEdit = childToEdit;
 		this.forms = forms;
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-			((Form) list.nextElement()).initializeLayoutWithChild(this, child);
+			((Form) list.nextElement()).initializeLayoutWithChild(this,
+					childToEdit);
 		}
 	}
 
@@ -137,7 +137,6 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 	}
 
 	public boolean onClose() {
-
 		int result = Dialog.ask(Dialog.D_SAVE);
 
 		if (result == Dialog.SAVE) {
@@ -149,34 +148,17 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 		}
 
 		controller.popScreen();
-
 		return true;
 	}
 
 	private void onSaveChildClicked() {
-		Child child = new Child();
-		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-			Form form = (Form) list.nextElement();
-			for (Enumeration fields = form.getFieldList().elements(); fields
-					.hasMoreElements();) {
-				FormField field = null;
-				field = (FormField) fields.nextElement();
-				child.setField(field.getName(), field.getValue());
-			}
+		if (chilToEdit == null) {
+			chilToEdit = Child.create(forms);
+			chilToEdit.createUniqueId(settings.getCurrentlyLoggedIn());
+		}else{
+			chilToEdit.update(settings.getCurrentlyLoggedIn(),forms);
 		}
-
-		if (childInEditMode != null) {
-			if (childInEditMode.getField("_id") != null) {
-				child.setField("_id", childInEditMode.getField("_id"));
-			}
-			if (childInEditMode.getField("unique_identifier") != null) {
-				child.setField("unique_identifier", childInEditMode.getField("unique_identifier"));
-			}
-			childInEditMode = null;
-		} else {
-			child.createUniqueId(settings.getCurrentlyLoggedIn());
-		}
-		((ChildCreateUpdateController) controller).saveChild(child);
+		((ChildCreateUpdateController) controller).saveChild(chilToEdit);
 	}
 
 }

@@ -31,7 +31,6 @@ public class SelectboxFormField extends FormField {
 	}
 
 	public Manager getLayout() {
-
 		return manager;
 	}
 
