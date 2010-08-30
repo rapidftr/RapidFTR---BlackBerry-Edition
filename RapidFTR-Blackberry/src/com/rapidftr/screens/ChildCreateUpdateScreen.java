@@ -28,7 +28,8 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 	private Vector forms;
 	private Manager screenManager;
 	SettingsStore settings;
-
+	private Child chilToEdit;
+	
 	public ChildCreateUpdateScreen(SettingsStore settings) {
 		this.settings = settings;
 	}
@@ -50,7 +51,6 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 		}
 	}
 
-	private Child chilToEdit;
 
 	public void setEditForms(Vector forms, Child childToEdit) {
 		this.chilToEdit = childToEdit;
