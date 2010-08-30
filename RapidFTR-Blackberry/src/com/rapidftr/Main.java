@@ -102,7 +102,7 @@ public class Main extends UiApplication {
 		UploadChildrenRecordsService childRecordsUploadService = new UploadChildrenRecordsService(httpService,childRecordStore);
 		UploadChildrenRecordsController uploadChildRecordsController = new UploadChildrenRecordsController(uploadChildRecordsScreen, uiStack,childRecordsUploadService);
 		
-		SyncAllController syncAllController = new SyncAllController(uploadChildRecordsScreen, uiStack);
+		SyncAllController syncAllController = new SyncAllController(uploadChildRecordsScreen, uiStack,childStoreService);
 		
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,
 				loginController, viewChildrenController, viewChildController,

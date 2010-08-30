@@ -29,7 +29,7 @@ public class Dispatcher {
 		this.synchronizeFormsController = synchronizeFormsController;
 		this.newChildController = newChildController;
 		this.uploadChildRecordsController = uploadChildRecordsController;
-
+		this.syncAllController = syncAllController;
 		homeScreenController.setDispatcher(this);
 		loginController.setDispatcher(this);
 		viewChildrenController.setDispatcher(this);
@@ -74,9 +74,7 @@ public class Dispatcher {
 
 	public void syncAll() {
 		syncAllController.syncAll();
-
 	}
-
 
 	public void viewChildHistory(Child child) {
 		viewChildController.showHistory(child);

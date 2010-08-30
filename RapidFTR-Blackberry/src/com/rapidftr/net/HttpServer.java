@@ -12,20 +12,12 @@ import com.sun.me.web.request.Response;
 
 public class HttpServer {
 
-
 	private Request request = null;
-
 	private int requestTimeout;
 
-	private Response response;
-
 	public HttpServer() {
-
 		requestTimeout = Properties.getInstance().getHttpRequestTimeout();
-
 	}
-
-
 
 	public void postToServer(String url, Arg[] postParams, Arg[] httpArgs,
 			RequestListener listener, PostData multiPart, Object context) {
@@ -43,11 +35,9 @@ public class HttpServer {
 	public Response getFromServer(String url, Arg[] inputParams, Arg[] httpArgs) throws IOException {
 		 return  Request.get(buildFullyQualifiedUrl(url), inputParams,
 				httpArgs,null);
-		 
 	}
 
 	public void cancelRequest() {
-
 		if (request != null)
 			request.cancel();
 	}

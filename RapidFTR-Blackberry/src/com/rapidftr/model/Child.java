@@ -99,15 +99,7 @@ public class Child implements Persistable {
 		return result;
 	}
 
-	public void createUniqueId(String userName) {
-		String unknownLocation = "xxx";
-		String blackBerryPrefix = "B*";
-		String truncatedLocation = data.get("last_known_location") == null ? unknownLocation
-				: data.get("last_known_location").toString().substring(0, 3)
-						.toLowerCase();
-		data.put("unique_identifier", blackBerryPrefix + userName
-				+ truncatedLocation + RandomStringGenerator.generate(5));
-	}
+
 
 	public boolean equals(Object obj) {
 		if (this == obj)

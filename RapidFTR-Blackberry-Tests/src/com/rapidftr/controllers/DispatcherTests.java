@@ -67,5 +67,11 @@ public class DispatcherTests {
 		dispatcher.newChild();
 		verify(newChildController).show();
 	}
+	
+	@Test
+	public void shouldPerformSyncAll() {
+		dispatcher.syncAll();
+		verify(syncAllController).syncAll();
+	}
 
 }
