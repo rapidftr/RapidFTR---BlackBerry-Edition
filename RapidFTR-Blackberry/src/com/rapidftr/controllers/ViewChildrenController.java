@@ -53,12 +53,9 @@ public class ViewChildrenController extends Controller {
 		dispatcher.viewChild(child);
 	}
 
-	public void showLocallyStoredChildren() {
-		((ViewChildrenScreen) screen).setChildren(childStoreService.getAllChildrenFromPhoneStoredAsArray());
-		uiStack.pushScreen(screen);	
-	}
 
-	public Child[] getLocalChildern()
+
+	public Child[] getAllStoredChildren()
 	{
 		return childStoreService.getAllChildrenFromPhoneStoredAsArray();
 	

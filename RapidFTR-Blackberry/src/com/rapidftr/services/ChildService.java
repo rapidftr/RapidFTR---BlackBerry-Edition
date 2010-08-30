@@ -1,6 +1,11 @@
 package com.rapidftr.services;
 
-import com.rapidftr.datastore.ChildrenRecordStore;
+import java.io.IOException;
+
+import org.json.me.JSONArray;
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+
 import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
@@ -9,40 +14,17 @@ import com.sun.me.web.path.Result;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Response;
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
-
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Vector;
 
 public class ChildService {
 
 	private final HttpService httpService;
-	private final ChildrenRecordStore childRecordStore;
-
-	public ChildService(HttpService httpService,
-			ChildrenRecordStore childRecordStore) {
-		this.httpService = httpService;
-		this.childRecordStore = childRecordStore;
-	}
 
 	public ChildService(HttpService httpService) {
 		this.httpService = httpService;
-		this.childRecordStore = null;
+
 	}
 	
-	public Child[] getAllLocallyStoredChildren() {
-		Vector allChildren = childRecordStore.getAllChildren();
-		Child[] children = new Child[allChildren.size()];
-		int selectedIndex = 0;
-		for (Enumeration list = allChildren.elements(); list.hasMoreElements();) {
-			children[selectedIndex++] = (Child) list.nextElement();
-		}
 
-		return children;
-	}
 
 	public Child[] getAllChildren() throws IOException {
 

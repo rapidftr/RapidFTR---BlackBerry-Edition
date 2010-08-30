@@ -63,7 +63,7 @@ public class ViewChildrenScreen extends CustomScreen {
 	
 	protected void onExposed()
 	{
-		Child[] children=((ViewChildrenController)controller).getLocalChildern();
+		Child[] children=((ViewChildrenController)controller).getAllStoredChildren();
 		setChildren(children);
 	}
 }
