@@ -47,7 +47,7 @@ public class ViewChildScreen extends CustomScreen {
 	}
 
 	private void renderChildFields(Child child) {
-		updateChildFields(child);
+		updateChildFieldsWithLatestForms(child);
 		Hashtable data = child.getKeyMap();
 		HorizontalFieldManager hmanager = new HorizontalFieldManager(
 				Manager.HORIZONTAL_SCROLLBAR);
@@ -66,21 +66,19 @@ public class ViewChildScreen extends CustomScreen {
 			{
 				continue;
 			}
+			
 			key = key.replace('_', ' ');
-			richField[i] = BoldRichTextField.getSemiBoldRichTextField(key
-					+ " :", value);
+			richField[i] = BoldRichTextField.getSemiBoldRichTextField(key + " :", value);
 
 			add(richField[i]);
 			add(new SeparatorField());
 			i++;
 
-			add(new LabelField(key + ": " + value, LabelField.FOCUSABLE));
-
 		}
 
 	}
 
-	private void updateChildFields(Child child) {
+	private void updateChildFieldsWithLatestForms(Child child) {
 		FormStore fstore = new FormStore();
 		Vector forms = fstore.getForms();
 
