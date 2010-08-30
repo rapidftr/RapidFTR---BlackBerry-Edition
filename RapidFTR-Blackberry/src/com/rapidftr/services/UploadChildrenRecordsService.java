@@ -84,7 +84,7 @@ public class UploadChildrenRecordsService implements RequestListener {
 
 		Child child = (Child) childrenList.elementAt(index);
 		child.setField("unique_identifier",result.getResult().getAsString("unique_identifier"));
-		childRecordStore.setContents(childrenList);
+		childRecordStore.storeChildren(childrenList);
 
 		if (index == childrenList.size() - 1) {
 			childRecordsUploadSeriviceListener.onUploadComplete();

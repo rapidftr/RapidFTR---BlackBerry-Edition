@@ -40,18 +40,6 @@ public class ChildTest {
 	}
 
 	@Test
-	public void shouldCreateUniqueIdOnEveryInvocationOfCreateUniqueIdMethod() {
-		String userName = "rapidFTR";
-		Child alice = new Child();
-		alice.setField("name", "Alice");
-		alice.setField("last_known_location", "Leh");
-		alice.createUniqueId(userName);
-		String firstId = alice.getField("unique_identifier").toString();
-		alice.createUniqueId(userName);
-		assertNotSame(firstId, alice.getField("unique_identifier").toString());
-	}
-
-	@Test
 	public void twoChildrenShouldBeSameIfHaveSameUniqueIdentifier() {
 		Child alice = new Child();
 		alice.setField("name", "Alice");

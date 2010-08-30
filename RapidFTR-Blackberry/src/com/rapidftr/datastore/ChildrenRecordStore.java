@@ -39,7 +39,7 @@ public class ChildrenRecordStore {
 		return (Vector) persistentStore.getContents();
 	}
 
-	public void setContents(Vector childrenList) {
+	public void storeChildren(Vector childrenList) {
 		persistentStore.setContents(childrenList);
 	}
 
