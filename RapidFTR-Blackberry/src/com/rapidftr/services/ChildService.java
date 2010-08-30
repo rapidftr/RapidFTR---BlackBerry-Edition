@@ -48,8 +48,10 @@ public class ChildService {
 		HttpServer.printResponse(response);
 		try {
 			JSONArray jsonChildren = result.getAsArray("");
-			Child[] children = new Child[jsonChildren.length()];
-			for (int i = 0; i < jsonChildren.length(); i++) {
+		//	Child[] children = new Child[jsonChildren.length()];
+			Child[] children = new Child[10];
+		//	for (int i = 0; i < jsonChildren.length(); i++) {
+			for (int i = 0; i < 10; i++) {
 				JSONObject jsonChild = (JSONObject) jsonChildren.get(i);
 				Child child = new Child();
 				JSONArray fieldNames = jsonChild.names();
