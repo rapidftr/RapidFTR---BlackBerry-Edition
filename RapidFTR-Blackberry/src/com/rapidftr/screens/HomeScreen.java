@@ -99,6 +99,7 @@ public class HomeScreen extends CustomScreen {
 	}
 
 	private void onSearchClicked() {
+		((HomeScreenController) controller).showSearch();
 	}
 
 	private void onNewChildClicked() {

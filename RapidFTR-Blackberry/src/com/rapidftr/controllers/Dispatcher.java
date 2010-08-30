@@ -1,6 +1,6 @@
 package com.rapidftr.controllers;
 
-import com.rapidftr.model.Child;
+import com.rapidftr.model.*;
 
 public class Dispatcher {
 
@@ -12,7 +12,8 @@ public class Dispatcher {
 	private ChildCreateUpdateController newChildController;
 	private UploadChildrenRecordsController uploadChildRecordsController;
 	private SyncAllController syncAllController;
-
+	private SearchChildController searchChildController;
+	
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController,
 			ViewChildrenController viewChildrenController,
@@ -20,7 +21,7 @@ public class Dispatcher {
 			SynchronizeFormsController synchronizeFormsController,
 			ChildCreateUpdateController newChildController,
 			UploadChildrenRecordsController uploadChildRecordsController,
-			SyncAllController syncAllController) {
+			SyncAllController syncAllController,SearchChildController searchChildController) {
 
 		this.homeScreenController = homeScreenController;
 		this.loginController = loginController;
@@ -29,6 +30,7 @@ public class Dispatcher {
 		this.synchronizeFormsController = synchronizeFormsController;
 		this.newChildController = newChildController;
 		this.uploadChildRecordsController = uploadChildRecordsController;
+		this.searchChildController=searchChildController;
 
 		homeScreenController.setDispatcher(this);
 		loginController.setDispatcher(this);
@@ -37,6 +39,7 @@ public class Dispatcher {
 		synchronizeFormsController.setDispatcher(this);
 		newChildController.setDispatcher(this);
 		uploadChildRecordsController.setDispatcher(this);
+		searchChildController.setDispatcher(this);
 
 	}
 
@@ -80,6 +83,14 @@ public class Dispatcher {
 
 	public void viewChildHistory(Child child) {
 		viewChildController.showHistory(child);
+	}
+
+	public void searchChild() {
+		searchChildController.show();
+	}
+	public void viewSearchResults(Child child[])
+	{
+		
 	}
 
 }

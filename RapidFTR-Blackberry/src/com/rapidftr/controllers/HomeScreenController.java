@@ -33,6 +33,9 @@ public class HomeScreenController extends Controller {
 	public void syncAll(){
 		dispatcher.syncAll();
 	}
-
+	public void showSearch()
+	{
+		dispatcher.searchChild();
+	}
 
 }

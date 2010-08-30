@@ -8,6 +8,7 @@ import com.rapidftr.controllers.ChildCreateUpdateController;
 import com.rapidftr.controllers.Dispatcher;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
+import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controllers.SyncAllController;
 import com.rapidftr.controllers.SynchronizeFormsController;
 import com.rapidftr.controllers.UploadChildrenRecordsController;
@@ -20,6 +21,7 @@ import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.ChildCreateUpdateScreen;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
+import com.rapidftr.screens.SearchChildScreen;
 import com.rapidftr.screens.SynchronizeFormsScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.UploadChildrenRecordsScreen;
@@ -104,9 +106,12 @@ public class Main extends UiApplication {
 		
 		SyncAllController syncAllController = new SyncAllController(uploadChildRecordsScreen, uiStack);
 		
+		SearchChildScreen searchChildScreen = new SearchChildScreen();
+		SearchChildController searchChildController = new SearchChildController(searchChildScreen, uiStack ,childStoreService);
+		
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,
 				loginController, viewChildrenController, viewChildController,
-				synchronizeFormsController, newChildController,uploadChildRecordsController,syncAllController);
+				synchronizeFormsController, newChildController,uploadChildRecordsController,syncAllController,searchChildController);
 
 		dispatcher.homeScreen();
 

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.rapidftr.model.Child;
+import com.rapidftr.model.SearchChildFilter;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -19,6 +20,7 @@ public class DispatcherTests {
 	private ChildCreateUpdateController newChildController;
 	private UploadChildrenRecordsController uploadChildRecordsController;
 	private SyncAllController syncAllController;
+	private SearchChildController searchChildController;
 	@Before
 	public void setUp() {
 		homeScreenController = mock(HomeScreenController.class);
@@ -29,10 +31,11 @@ public class DispatcherTests {
 		newChildController = mock(ChildCreateUpdateController.class);
 		uploadChildRecordsController = mock(UploadChildrenRecordsController.class);
 		syncAllController=mock(SyncAllController.class);
+		searchChildController=mock(SearchChildController.class);
 		
 		dispatcher = new Dispatcher(homeScreenController, loginController,
 				viewChildrenController, viewChildController,
-				synchronizeFormsController, newChildController,uploadChildRecordsController,syncAllController);
+				synchronizeFormsController, newChildController,uploadChildRecordsController,syncAllController,searchChildController);
 
 	}
 
@@ -68,4 +71,9 @@ public class DispatcherTests {
 		verify(newChildController).show();
 	}
 
+	@Test
+	public void shouldShowSearchChildScreen(){
+		dispatcher.searchChild();
+		verify(searchChildController).show();
+	}
 }

@@ -4,8 +4,6 @@ package com.rapidftr.controllers;
 import net.rim.device.api.util.Arrays;
 import net.rim.device.api.util.Comparator;
 
-import net.rim.device.api.ui.component.Dialog;
-
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildrenScreen;
@@ -28,6 +26,8 @@ public class ViewChildrenController extends Controller {
 		children = childStoreService.getAllChildrenFromPhoneStoredAsArray();
 		sortByLocationThenName(children);
 		((ViewChildrenScreen) screen).setChildren(children);
+		
+		//edit the below line to super();
 		uiStack.pushScreen(screen);
 
 	}
