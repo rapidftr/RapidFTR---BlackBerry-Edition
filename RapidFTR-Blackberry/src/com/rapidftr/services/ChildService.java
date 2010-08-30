@@ -28,6 +28,11 @@ public class ChildService {
 		this.childRecordStore = childRecordStore;
 	}
 
+	public ChildService(HttpService httpService) {
+		this.httpService = httpService;
+		this.childRecordStore = null;
+	}
+	
 	public Child[] getAllLocallyStoredChildren() {
 		Vector allChildren = childRecordStore.getAllChildren();
 		Child[] children = new Child[allChildren.size()];

@@ -26,6 +26,7 @@ import com.rapidftr.screens.UploadChildrenRecordsScreen;
 import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.services.ChildService;
+import com.rapidftr.services.ChildStoreService;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
 import com.rapidftr.services.UploadChildrenRecordsService;
@@ -67,7 +68,10 @@ public class Main extends UiApplication {
 		HttpService httpService = new HttpService(httpServer,settings);
 
 		LoginService loginService = new LoginService(httpService);
-		ChildService childService = new ChildService(httpService,childRecordStore);
+
+		ChildService childService = new ChildService(httpService);
+		ChildStoreService childStoreService = new ChildStoreService(childRecordStore);
+
 		UiStack uiStack = new UiStack(this);
 
 		LoginScreen loginScreen = new LoginScreen(settings);
@@ -85,7 +89,7 @@ public class Main extends UiApplication {
 
 		ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
 		ViewChildrenController viewChildrenController = new ViewChildrenController(
-				viewChildrenScreen, uiStack, childService);
+				viewChildrenScreen, uiStack, childStoreService);
 
 		SynchronizeFormsScreen synchronizeFormsScreen = new SynchronizeFormsScreen();
 		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(

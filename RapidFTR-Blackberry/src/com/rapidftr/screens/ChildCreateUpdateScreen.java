@@ -120,9 +120,9 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 
 			public void fieldChanged(Field field, int context) {
 				onSaveChildClicked();
-				Dialog
-						.alert("ChildRecord has been stored succesfully\n"
-								+ "Please upload record to central server whenever you get Internet Access!!");
+
+//				Dialog.alert("ChildRecord has been stored successfully\n" +
+//						"Please upload record to central server whenever you get Internet Access!!");
 				controller.popScreen();
 			}
 		});

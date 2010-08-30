@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="net.rim.ejde.launching.FledgeLaunchConfiguration">
+<booleanAttribute key="attr.debug.doNotStopExecution" value="false"/>
+<booleanAttribute key="attr.debug.interruptDebuggerOnDeadlock" value="false"/>
+<booleanAttribute key="attr.general.automaticallyUseDefaultValue" value="false"/>
+<stringAttribute key="attr.general.bundle" value="BlackBerry-SDK"/>
+<stringAttribute key="attr.general.configFile" value="8900"/>
+<stringAttribute key="attr.general.device" value="8900"/>
+<stringAttribute key="attr.general.deviceLocale" value=""/>
+<booleanAttribute key="attr.general.enableDeviceSecurity" value="false"/>
+<stringAttribute key="attr.general.esn" value=""/>
+<stringAttribute key="attr.general.keyboardLocale" value=""/>
+<stringAttribute key="attr.general.launchAppOnStartup" value=""/>
+<booleanAttribute key="attr.general.launchMDSCS" value="true"/>
+<stringAttribute key="attr.general.meid" value=""/>
+<stringAttribute key="attr.general.numberOfSecondsToWaitBeforeResponse" value=""/>
+<stringAttribute key="attr.general.pin" value="0x2100000A"/>
+<stringAttribute key="attr.general.simulatorDir" value="C:\Users\creade\Desktop\eclipse\plugins\net.rim.ejde.componentpack4.6.1_4.6.1.49\components\simulator"/>
+<intAttribute key="attr.jre.type" value="0"/>
+<stringAttribute key="attr.memory.appHeapSize" value=""/>
+<stringAttribute key="attr.memory.brandingData" value=""/>
+<booleanAttribute key="attr.memory.destroyExistingSDImage" value="false"/>
+<stringAttribute key="attr.memory.fileSystemSize" value=""/>
+<booleanAttribute key="attr.memory.formatSDOnStartup" value="false"/>
+<booleanAttribute key="attr.memory.noMultimediaCardSimulation" value="false"/>
+<booleanAttribute key="attr.memory.noSplitMMCPartitionIntoDifferentFiles" value="false"/>
+<booleanAttribute key="attr.memory.notCompactFSOnExit" value="false"/>
+<booleanAttribute key="attr.memory.notSaveFlashDataOnExit" value="false"/>
+<stringAttribute key="attr.memory.pcFileSystemPath" value=""/>
+<booleanAttribute key="attr.memory.resetFileSystemOnStartup" value="false"/>
+<booleanAttribute key="attr.memory.resetNVRAMOnStartup" value="false"/>
+<stringAttribute key="attr.memory.sdCardImage" value=""/>
+<stringAttribute key="attr.memory.sdCardSize" value=""/>
+<booleanAttribute key="attr.memory.simNoSDInserted" value="false"/>
+<booleanAttribute key="attr.memory.usePCFileForSDFiles" value="false"/>
+<booleanAttribute key="attr.network.autoAnswerOutgoingCall" value="false"/>
+<booleanAttribute key="attr.network.disableRegistration" value="true"/>
+<stringAttribute key="attr.network.iccid" value=""/>
+<booleanAttribute key="attr.network.ignoreUDPPortConflict" value="false"/>
+<stringAttribute key="attr.network.imei" value=""/>
+<stringAttribute key="attr.network.imsi" value=""/>
+<stringAttribute key="attr.network.ip" value=""/>
+<listAttribute key="attr.network.networks"/>
+<stringAttribute key="attr.network.pdePort" value=""/>
+<listAttribute key="attr.network.phoneNumbers"/>
+<booleanAttribute key="attr.network.saveSimCardData" value="false"/>
+<booleanAttribute key="attr.network.simulateSimNotPresent" value="false"/>
+<stringAttribute key="attr.network.smsDestinationPort" value=""/>
+<stringAttribute key="attr.network.smsSourcePort" value=""/>
+<booleanAttribute key="attr.network.startWithRadioOff" value="false"/>
+<stringAttribute key="attr.ports.bluetooth.port" value=""/>
+<booleanAttribute key="attr.ports.usbCableConnected" value="false"/>
+<listAttribute key="attr.projects.deployedProjects">
+<listEntry value="RapidFTR-Blackberry"/>
+</listAttribute>
+<booleanAttribute key="attr.view.backlightAlwaysOn" value="false"/>
+<booleanAttribute key="attr.view.disableAutoBacklightShutOff" value="false"/>
+<booleanAttribute key="attr.view.displayLCDOnly" value="false"/>
+<booleanAttribute key="attr.view.hideNetworkInformation" value="false"/>
+<stringAttribute key="attr.view.lcdZoom" value=""/>
+<booleanAttribute key="attr.view.notShowHelpForKeyMapping" value="false"/>
+<stringAttribute key="attr.view.pathToConfigPack" value=""/>
+<stringAttribute key="customizedCommandLine" value="&quot;C:\Users\creade\Desktop\eclipse\plugins\net.rim.ejde.componentpack4.6.1_4.6.1.49\components\simulator\fledge.exe&quot; /handheld=8900 /app-param=JvmAlxConfigFile:8900.xml /pin=0x2100000A /data-port=0x4d44 /data-port=0x4d4e /session=8900 /app=&quot;C:\Users\creade\Desktop\eclipse\plugins\net.rim.ejde.componentpack4.6.1_4.6.1.49\components\simulator\Jvm.dll&quot; /app-param=DisableRegistration"/>
+<stringAttribute key="customizedMDSDirectory" value="C:\Program Files (x86)\Research In Motion\BlackBerry Email and MDS Services Simulators 4.1.2\MDS"/>
+<stringAttribute key="customizedWorkingDirectory" value="C:\Users\creade\Desktop\eclipse\plugins\net.rim.ejde.componentpack4.6.1_4.6.1.49\components\simulator"/>
+<booleanAttribute key="notSimulateAuthenticRIMBattery" value="false"/>
+<booleanAttribute key="notUsePcNumpadForTrackball" value="false"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/RapidFTR-Blackberry"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="net.rim.ejde.sourcelookup.RIMSourcePathProvider"/>
+<booleanAttribute key="useCustomizedCommandLine" value="false"/>
+</launchConfiguration>

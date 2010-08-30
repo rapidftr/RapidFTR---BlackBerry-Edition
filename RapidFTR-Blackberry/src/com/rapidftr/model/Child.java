@@ -5,9 +5,11 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
+
 
 import net.rim.device.api.util.Persistable;
 
@@ -20,6 +22,7 @@ import com.sun.me.web.request.Part;
 public class Child implements Persistable {
 
 	private final Hashtable data;
+
 
 	public Child() {
 		data = new Hashtable();

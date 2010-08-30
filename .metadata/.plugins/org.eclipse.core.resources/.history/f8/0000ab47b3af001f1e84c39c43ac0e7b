@@ -1,0 +1,84 @@
+package com.rapidftr.controllers;
+
+import java.io.IOException;
+
+import com.rapidftr.model.Child;
+import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.ViewChildrenScreen;
+import com.rapidftr.services.ChildStoreService;
+import com.rapidftr.utilities.SettingsStore;
+import net.rim.device.api.util.Arrays;
+import net.rim.device.api.util.Comparator;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+
+
+public class ViewChildrenControllerTest {
+
+    private ChildStoreService childStoreService;
+    private ViewChildrenScreen viewChildrenScreen;
+    private UiStack uiStack;
+    private SettingsStore settingsStore;
+	private ViewChildrenController controller;
+	private Dispatcher dispatcher;
+	private Child child;
+
+    @Before
+    public void setup() {
+        childStoreService = mock(ChildStoreService.class);
+        viewChildrenScreen = mock(ViewChildrenScreen.class);
+        uiStack = mock(UiStack.class);
+        settingsStore = mock(SettingsStore.class);
+        dispatcher = mock(Dispatcher.class);
+        child = mock(Child.class);
+        controller = new ViewChildrenController(viewChildrenScreen, uiStack, childStoreService);
+        controller.setDispatcher(dispatcher);
+    }
+
+   
+	@Ignore
+    @Test
+    public void shouldFetchChildrenFromServiceAndPushIntoScreen() throws IOException {
+
+        Child[] children = new Child[] {child};
+        when(childStoreService.getAllChildrenFromStoreAsArray()).thenReturn(children);
+
+        controller.show();
+        
+        verify(childStoreService).getAllChildrenFromStoreAsArray();
+        verify(viewChildrenScreen).setChildren(children);
+    }
+
+    @Test
+    public void shouldShowChildDetailsWhenASingleChildIsClicked() {
+        controller.showChild(child);
+        verify(dispatcher).viewChild(child);
+    }
+    
+    //@Ignore
+    @Test
+    public void shouldSortChildrenArrayByLocationThenName () {
+    	Child child1 = mock(Child.class);
+    	Child child2 = mock(Child.class);
+    	Child child3 = mock(Child.class);
+    	Child[] children = {child3, child1, child2};
+    	
+    	when(child1.getLastKnownLocation()).thenReturn("AAAAAAA");
+    	when(child1.getName()).thenReturn("CCCCCCC");
+    	when(child2.getLastKnownLocation()).thenReturn("AAAAAAA");
+    	when(child2.getName()).thenReturn("BBBBBBB");
+    	when(child3.getLastKnownLocation()).thenReturn("ZZZZZZZ");
+    	when(child3.getName()).thenReturn("AAAAAAA");
+    	
+    	controller.sortByLocationThenName(children);
+    	
+    	assertTrue(children[0].equals((child2)));
+    	assertTrue(children[1].equals((child1)));
+    	assertTrue(children[2].equals((child3)));
+    }
+}

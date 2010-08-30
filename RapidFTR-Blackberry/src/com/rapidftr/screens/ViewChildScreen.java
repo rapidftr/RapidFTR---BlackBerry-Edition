@@ -74,6 +74,8 @@ public class ViewChildScreen extends CustomScreen {
 			add(new SeparatorField());
 			i++;
 
+			add(new LabelField(key + ": " + value, LabelField.FOCUSABLE));
+
 		}
 
 	}
