@@ -4,10 +4,10 @@ import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 
+import com.rapidftr.controllers.ChildCreateUpdateController;
 import com.rapidftr.controllers.Dispatcher;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
-import com.rapidftr.controllers.ChildCreateUpdateController;
 import com.rapidftr.controllers.SyncAllController;
 import com.rapidftr.controllers.SynchronizeFormsController;
 import com.rapidftr.controllers.UploadChildrenRecordsController;
@@ -17,15 +17,14 @@ import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
+import com.rapidftr.screens.ChildCreateUpdateScreen;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
-import com.rapidftr.screens.ChildCreateUpdateScreen;
 import com.rapidftr.screens.SynchronizeFormsScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.UploadChildrenRecordsScreen;
 import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.ViewChildrenScreen;
-import com.rapidftr.services.ChildService;
 import com.rapidftr.services.ChildStoreService;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
@@ -69,7 +68,6 @@ public class Main extends UiApplication {
 
 		LoginService loginService = new LoginService(httpService);
 
-		ChildService childService = new ChildService(httpService);
 		ChildStoreService childStoreService = new ChildStoreService(childRecordStore);
 
 		UiStack uiStack = new UiStack(this);

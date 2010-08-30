@@ -77,9 +77,6 @@ public class Dispatcher {
 
 	}
 
-	public void viewLocallyStoredChildren() {
-		viewChildrenController.showLocallyStoredChildren();
-	}
 
 	public void viewChildHistory(Child child) {
 		viewChildController.showHistory(child);
