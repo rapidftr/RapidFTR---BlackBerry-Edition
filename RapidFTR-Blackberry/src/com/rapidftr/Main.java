@@ -98,7 +98,7 @@ public class Main extends UiApplication {
 
 		ChildCreateUpdateScreen newChildScreen = new ChildCreateUpdateScreen(settings);
 		ChildCreateUpdateController newChildController = new ChildCreateUpdateController(
-				newChildScreen, uiStack, formStore, childRecordStore);
+				newChildScreen, uiStack, formStore, childStoreService);
 		UploadChildrenRecordsScreen uploadChildRecordsScreen = new UploadChildrenRecordsScreen();
 		
 		UploadChildrenRecordsService childRecordsUploadService = new UploadChildrenRecordsService(httpService,childRecordStore);

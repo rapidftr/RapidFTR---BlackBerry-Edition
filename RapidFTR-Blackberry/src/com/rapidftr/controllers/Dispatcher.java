@@ -14,7 +14,7 @@ public class Dispatcher {
 	private UploadChildrenRecordsController uploadChildRecordsController;
 	private SyncAllController syncAllController;
 	private SearchChildController searchChildController;
-	
+
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController,
 			ViewChildrenController viewChildrenController,
@@ -22,7 +22,8 @@ public class Dispatcher {
 			SynchronizeFormsController synchronizeFormsController,
 			ChildCreateUpdateController newChildController,
 			UploadChildrenRecordsController uploadChildRecordsController,
-			SyncAllController syncAllController,SearchChildController searchChildController) {
+			SyncAllController syncAllController,
+			SearchChildController searchChildController) {
 
 		this.homeScreenController = homeScreenController;
 		this.loginController = loginController;
@@ -31,7 +32,7 @@ public class Dispatcher {
 		this.synchronizeFormsController = synchronizeFormsController;
 		this.newChildController = newChildController;
 		this.uploadChildRecordsController = uploadChildRecordsController;
-		this.searchChildController=searchChildController;
+		this.searchChildController = searchChildController;
 
 		homeScreenController.setDispatcher(this);
 		loginController.setDispatcher(this);
@@ -81,7 +82,6 @@ public class Dispatcher {
 
 	}
 
-
 	public void viewChildHistory(Child child) {
 		viewChildController.showHistory(child);
 	}
@@ -91,8 +91,7 @@ public class Dispatcher {
 	}
 
 	public void searchAndDisplayChildren(SearchChildFilter searchChildFilter) {
-	viewChildrenController.searchAndDispalyChildren(searchChildFilter);	
+		viewChildrenController.searchAndDispalyChildren(searchChildFilter);
 	}
-	
 
 }

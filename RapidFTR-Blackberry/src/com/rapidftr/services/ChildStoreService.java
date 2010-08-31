@@ -22,7 +22,7 @@ public class ChildStoreService {
 		return childList;
 	}
 
-	public Child[] searchChild(SearchChildFilter searchChildFilter) {
+	public Child[] searchChildrenFromStore(SearchChildFilter searchChildFilter) {
 		Vector source = childRecordStore.getAllChildren();
 		Vector results = new Vector();
 		for (int i = 0; i < source.size(); i++) {
@@ -44,6 +44,10 @@ public class ChildStoreService {
 		}
 		return resultsArray;
 		
+	}
+
+	public void syncChildWithStore(Child child) {
+		childRecordStore.addOrUpdateChild(child);
 	}
 
 
