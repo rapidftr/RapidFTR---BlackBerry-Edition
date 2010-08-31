@@ -20,7 +20,7 @@ import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controllers.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
-import com.rapidftr.screens.ChildCreateUpdateScreen;
+import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.UiStack;
 
 public class ChildTest {

@@ -18,7 +18,7 @@ import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
-import com.rapidftr.screens.ChildCreateUpdateScreen;
+import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.SearchChildScreen;
@@ -96,7 +96,7 @@ public class Main extends UiApplication {
 				new FormService(httpService), formStore, uiStack,
 				synchronizeFormsScreen);
 
-		ChildCreateUpdateScreen newChildScreen = new ChildCreateUpdateScreen(settings);
+		ManageChildScreen newChildScreen = new ManageChildScreen(settings);
 		ManageChildController newChildController = new ManageChildController(
 				newChildScreen, uiStack, formStore, childStoreService);
 		UploadChildrenRecordsScreen uploadChildRecordsScreen = new UploadChildrenRecordsScreen();

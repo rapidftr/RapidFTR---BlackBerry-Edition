@@ -8,7 +8,7 @@ import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controls.BlankSeparatorField;
-import com.rapidftr.screens.ChildCreateUpdateScreen;
+import com.rapidftr.screens.ManageChildScreen;
 
 public class Form {
 
@@ -53,7 +53,7 @@ public class Form {
 		return fieldList;
 	}
 
-	public void initializeLayout(ChildCreateUpdateScreen newChildScreen) {
+	public void initializeLayout(ManageChildScreen newChildScreen) {
 		layoutManager = new VerticalFieldManager();
 		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
 			FormField formField = (FormField) list.nextElement();
@@ -64,7 +64,7 @@ public class Form {
 	}
 
 	public void initializeLayoutWithChild(
-			ChildCreateUpdateScreen newChildScreen, Child child) {
+			ManageChildScreen newChildScreen, Child child) {
 		layoutManager = new VerticalFieldManager();
 		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
 			FormField formField = (FormField) list.nextElement();

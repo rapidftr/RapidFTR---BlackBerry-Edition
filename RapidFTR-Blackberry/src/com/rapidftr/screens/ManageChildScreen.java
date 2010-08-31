@@ -23,14 +23,14 @@ import com.rapidftr.model.Form;
 import com.rapidftr.utilities.ImageCaptureListener;
 import com.rapidftr.utilities.SettingsStore;
 
-public class ChildCreateUpdateScreen extends CustomScreen {
+public class ManageChildScreen extends CustomScreen {
 
 	private Vector forms;
 	private Manager screenManager;
 	SettingsStore settings;
 	private Child chilToEdit;
 	
-	public ChildCreateUpdateScreen(SettingsStore settings) {
+	public ManageChildScreen(SettingsStore settings) {
 		this.settings = settings;
 	}
 
