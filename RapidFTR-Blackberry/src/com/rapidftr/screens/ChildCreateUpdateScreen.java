@@ -15,7 +15,7 @@ import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.rapidftr.controllers.ChildCreateUpdateController;
+import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.controls.Button;
 import com.rapidftr.model.Child;
@@ -83,7 +83,7 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 
 			controller.popScreen();
 			if (result == Dialog.OK) {
-				((ChildCreateUpdateController) controller).synchronizeForms();
+				((ManageChildController) controller).synchronizeForms();
 			}
 			return;
 		}
@@ -130,7 +130,7 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 
 	public void takePhoto(ImageCaptureListener imageCaptureListener) {
 
-		((ChildCreateUpdateController) controller)
+		((ManageChildController) controller)
 				.takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
 
 	}
@@ -157,7 +157,7 @@ public class ChildCreateUpdateScreen extends CustomScreen {
 		}else{
 			chilToEdit.update(settings.getCurrentlyLoggedIn(),forms);
 		}
-		((ChildCreateUpdateController) controller).saveChild(chilToEdit);
+		((ManageChildController) controller).saveChild(chilToEdit);
 	}
 	
 	protected void makeMenu(Menu menu, int instance) {

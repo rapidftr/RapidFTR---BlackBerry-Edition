@@ -16,7 +16,7 @@ public class DispatcherTests {
 	private ViewChildController viewChildController;
 	private SynchronizeFormsController synchronizeFormsController;
 	private Dispatcher dispatcher;
-	private ChildCreateUpdateController newChildController;
+	private ManageChildController newChildController;
 	private UploadChildrenRecordsController uploadChildRecordsController;
 	private SyncAllController syncAllController;
 	private SearchChildController searchChildController;
@@ -27,7 +27,7 @@ public class DispatcherTests {
 		viewChildrenController = mock(ViewChildrenController.class);
 		viewChildController = mock(ViewChildController.class);
 		synchronizeFormsController = mock(SynchronizeFormsController.class);
-		newChildController = mock(ChildCreateUpdateController.class);
+		newChildController = mock(ManageChildController.class);
 		uploadChildRecordsController = mock(UploadChildrenRecordsController.class);
 		syncAllController=mock(SyncAllController.class);
 		searchChildController = mock(SearchChildController.class);
@@ -52,7 +52,7 @@ public class DispatcherTests {
 
 	@Test
 	public void shouldShowViewChildernScreen() {
-		dispatcher.viewChildern();
+		dispatcher.viewChildren();
 		verify(viewChildrenController).show();
 	}
 

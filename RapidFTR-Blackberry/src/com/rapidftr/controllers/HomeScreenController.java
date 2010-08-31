@@ -14,12 +14,12 @@ public class HomeScreenController extends Controller {
 	}
 
 	public void viewChildren() {
-		dispatcher.viewChildern();
+		dispatcher.viewChildren();
 	}
 
 	public void synchronizeForms() {
 		dispatcher.synchronizeForms();
-		
+
 	}
 
 	public void newChild() {
@@ -28,13 +28,14 @@ public class HomeScreenController extends Controller {
 
 	public void uploadChildRecords() {
 		dispatcher.uploadChildRecords();
-		
+
 	}
-	public void syncAll(){
+
+	public void syncAll() {
 		dispatcher.syncAll();
 	}
-	public void showSearch()
-	{
+
+	public void showSearch() {
 		dispatcher.searchChild();
 	}
 

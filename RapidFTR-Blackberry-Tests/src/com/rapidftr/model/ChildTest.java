@@ -16,7 +16,7 @@ import org.json.me.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.rapidftr.controllers.ChildCreateUpdateController;
+import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controllers.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;

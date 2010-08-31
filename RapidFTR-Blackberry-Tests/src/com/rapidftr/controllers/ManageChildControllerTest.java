@@ -16,12 +16,12 @@ import com.rapidftr.screens.ChildCreateUpdateScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.services.ChildStoreService;
 
-public class childCreateUpdateControllerTest {
+public class ManageChildControllerTest {
 
 	private FormStore formStore;
 	private UiStack uiStack;
 	private ChildCreateUpdateScreen newChildScreen;
-	private ChildCreateUpdateController newChildController;
+	private ManageChildController newChildController;
 	private Vector forms;
 	private Dispatcher dispatcher;
 	private ChildStoreService childStoreService;
@@ -34,7 +34,7 @@ public class childCreateUpdateControllerTest {
 		childStoreService = mock(ChildStoreService.class);
 		when(formStore.getForms()).thenReturn(forms);
 		newChildScreen = mock(ChildCreateUpdateScreen.class);
-		newChildController = new ChildCreateUpdateController(newChildScreen, uiStack,
+		newChildController = new ManageChildController(newChildScreen, uiStack,
 				formStore,childStoreService);
 		dispatcher = mock(Dispatcher.class);
 		newChildController.setDispatcher(dispatcher);

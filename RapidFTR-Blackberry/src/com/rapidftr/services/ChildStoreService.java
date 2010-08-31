@@ -16,9 +16,7 @@ public class ChildStoreService {
 	public Child[] getAllChildrenFromPhoneStoredAsArray() {
 		Vector children = childRecordStore.getAllChildren();
 		Child[] childList = new Child[children.size()];
-		for (int i = 0; i < children.size(); i++) {
-			childList[i] = (Child) children.elementAt(i);
-		}
+		children.copyInto(childList);
 		return childList;
 	}
 
@@ -39,9 +37,7 @@ public class ChildStoreService {
 
 		}
 		Child resultsArray[] = new Child[results.size()];
-		for (int i = 0; i < results.size(); i++) {
-			resultsArray[i] = (Child) results.elementAt(i);
-		}
+		results.copyInto(resultsArray);
 		return resultsArray;
 		
 	}

@@ -1,7 +1,6 @@
 package com.rapidftr.screens;
 
 import net.rim.device.api.system.Bitmap;
-import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BitmapField;
@@ -9,6 +8,7 @@ import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.decor.BackgroundFactory;
 
 import com.rapidftr.controllers.Controller;
+import com.rapidftr.controllers.Dispatcher;
 import com.rapidftr.controls.TitleField;
 import com.rapidftr.utilities.Styles;
 
@@ -18,8 +18,7 @@ public abstract class CustomScreen extends MainScreen {
 	private TitleField titleField;
 	protected static final XYEdges PADDING = new XYEdges(4, 4, 4, 4);
 
-	public CustomScreen() 
-	{
+	public CustomScreen() {
 		titleField = new TitleField();
 		setBackground(BackgroundFactory
 				.createSolidBackground(Styles.COLOR_SCREEN_BACKGROUND));
@@ -43,20 +42,20 @@ public abstract class CustomScreen extends MainScreen {
 	}
 
 	public abstract void setUp();
+
 	public abstract void cleanUp();
-	
 
 	public void popScreen(final UiStack uiStack) {
-		final CustomScreen screen = this;		
+		final CustomScreen screen = this;
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			
+
 			public void run() {
 				uiStack.popScreen(screen);
 			}
 		});
-		
+
 	}
-	
+
 	public void addLogo() {
 		Bitmap bitmap = Bitmap.getBitmapResource("res/logo.jpg");
 		if (bitmap == null) {

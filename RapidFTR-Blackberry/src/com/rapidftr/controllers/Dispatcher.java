@@ -5,22 +5,22 @@ import com.rapidftr.model.SearchChildFilter;
 
 public class Dispatcher {
 
-	private HomeScreenController homeScreenController;
-	private LoginController loginController;
-	private ViewChildrenController viewChildrenController;
-	private ViewChildController viewChildController;
-	private SynchronizeFormsController synchronizeFormsController;
-	private ChildCreateUpdateController newChildController;
-	private UploadChildrenRecordsController uploadChildRecordsController;
-	private SyncAllController syncAllController;
-	private SearchChildController searchChildController;
+	private final HomeScreenController homeScreenController;
+	private final LoginController loginController;
+	private final ViewChildrenController viewChildrenController;
+	private final ViewChildController viewChildController;
+	private final SynchronizeFormsController synchronizeFormsController;
+	private final ManageChildController newChildController;
+	private final UploadChildrenRecordsController uploadChildRecordsController;
+	private final SyncAllController syncAllController;
+	private final SearchChildController searchChildController;
 
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController,
 			ViewChildrenController viewChildrenController,
 			ViewChildController viewChildController,
 			SynchronizeFormsController synchronizeFormsController,
-			ChildCreateUpdateController newChildController,
+			ManageChildController newChildController,
 			UploadChildrenRecordsController uploadChildRecordsController,
 			SyncAllController syncAllController,
 			SearchChildController searchChildController) {
@@ -33,7 +33,7 @@ public class Dispatcher {
 		this.newChildController = newChildController;
 		this.uploadChildRecordsController = uploadChildRecordsController;
 		this.searchChildController = searchChildController;
-
+		this.syncAllController = syncAllController;
 		homeScreenController.setDispatcher(this);
 		loginController.setDispatcher(this);
 		viewChildrenController.setDispatcher(this);
@@ -49,7 +49,7 @@ public class Dispatcher {
 		homeScreenController.show();
 	}
 
-	public void viewChildern() {
+	public void viewChildren() {
 		viewChildrenController.show();
 	}
 
@@ -79,7 +79,6 @@ public class Dispatcher {
 
 	public void syncAll() {
 		syncAllController.syncAll();
-
 	}
 
 	public void viewChildHistory(Child child) {

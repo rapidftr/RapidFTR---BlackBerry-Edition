@@ -4,7 +4,7 @@ import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 
-import com.rapidftr.controllers.ChildCreateUpdateController;
+import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controllers.Dispatcher;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
@@ -97,7 +97,7 @@ public class Main extends UiApplication {
 				synchronizeFormsScreen);
 
 		ChildCreateUpdateScreen newChildScreen = new ChildCreateUpdateScreen(settings);
-		ChildCreateUpdateController newChildController = new ChildCreateUpdateController(
+		ManageChildController newChildController = new ManageChildController(
 				newChildScreen, uiStack, formStore, childStoreService);
 		UploadChildrenRecordsScreen uploadChildRecordsScreen = new UploadChildrenRecordsScreen();
 		

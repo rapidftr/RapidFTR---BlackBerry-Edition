@@ -44,7 +44,6 @@ public class Form {
 		}
 	}
 
-
 	public String toString() {
 
 		return name;
@@ -64,18 +63,20 @@ public class Form {
 		}
 	}
 
-	
-	public void initializeLayoutWithChild(ChildCreateUpdateScreen newChildScreen,Child child) {
+	public void initializeLayoutWithChild(
+			ChildCreateUpdateScreen newChildScreen, Child child) {
 		layoutManager = new VerticalFieldManager();
 		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
 			FormField formField = (FormField) list.nextElement();
 			formField.initializeLayout(newChildScreen);
 			Object fieldValue = child.getField(formField.getName());
-			formField.setValue((fieldValue!=null)?fieldValue.toString():"");
+			formField.setValue((fieldValue != null) ? fieldValue.toString()
+					: "");
 			layoutManager.add(formField.getLayout());
 			layoutManager.add(new BlankSeparatorField(10));
 		}
 	}
+
 	public Manager getLayout() {
 		return layoutManager;
 	}
@@ -85,18 +86,13 @@ public class Form {
 	}
 
 	public Hashtable getDetails() {
-		
 		Hashtable data = new Hashtable();
-		
-		data.put(Form.FORM_NAME,name);
+		data.put(Form.FORM_NAME, name);
 		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
 			FormField field = (FormField) list.nextElement();
-			data.put(field.name,field.getValue());
+			data.put(field.name, field.getValue());
 		}
-		
 		return data;
 	}
-	
-	
 
 }
