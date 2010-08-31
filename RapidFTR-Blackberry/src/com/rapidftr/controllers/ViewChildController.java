@@ -22,4 +22,12 @@ public class ViewChildController extends Controller {
 		uiStack.pushScreen(historyScreen);
 		historyScreen.setUp();
 	}
+
+	public void editChild(Child child) {
+		dispatcher.editChild(child);
+	}
+
+	public void viewChildHistory(Child child) {
+		dispatcher.viewChildHistory(child);
+	}
 }

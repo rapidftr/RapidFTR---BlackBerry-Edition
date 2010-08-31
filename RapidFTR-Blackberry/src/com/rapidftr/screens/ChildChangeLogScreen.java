@@ -3,6 +3,7 @@ package com.rapidftr.screens;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.Dialog;
@@ -30,10 +31,16 @@ public class ChildChangeLogScreen extends CustomScreen {
 
 				add(new SeparatorField());
 			}
-		} catch (Exception e) {
-			Dialog.alert("Error Occured while displaying child history "
-					+ e.getMessage());
+		} catch (final Exception e) {
 
+			UiApplication.getUiApplication().invokeLater(new Runnable() {
+				public void run() {
+					Dialog.alert("Error Occured while displaying change log "
+							+ e.getMessage());
+					controller.popScreen();
+
+				}
+			});
 		}
 	}
 

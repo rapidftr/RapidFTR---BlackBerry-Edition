@@ -68,4 +68,8 @@ public class ViewChildrenController extends Controller {
 		super.show();
 		}
 
+	public void viewChild(Child child) {
+		dispatcher.viewChild(child);		
+	}
+
 }

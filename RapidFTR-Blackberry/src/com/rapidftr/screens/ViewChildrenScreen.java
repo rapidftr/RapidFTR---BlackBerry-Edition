@@ -58,17 +58,19 @@ public class ViewChildrenScreen extends CustomScreen {
 	}
 
 	protected void makeMenu(Menu menu, int instance) {
+
 		if (childrenArray.length > 0) {
+
 			MenuItem editChildMenu = new MenuItem("Open Record", 1, 1) {
 				public void run() {
 					int selectedIndex = childrenListField.getSelectedIndex();
-					Child child = (Child) childrenListField.get(
-							childrenListField, selectedIndex);
-					controller.dispatcher().viewChild(child);
+					Child child = (Child) childrenListField.get(childrenListField, selectedIndex);
+					((ViewChildrenController) controller).viewChild(child);
 				}
 			};
 			menu.add(editChildMenu);
 		}
+
 	}
 
 	protected void onExposed() {

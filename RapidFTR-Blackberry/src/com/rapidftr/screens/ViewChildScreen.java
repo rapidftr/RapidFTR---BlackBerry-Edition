@@ -28,7 +28,7 @@ import com.rapidftr.model.FormField;
 import com.rapidftr.utilities.BoldRichTextField;
 import com.rapidftr.utilities.ChildFieldIgnoreList;
 import com.rapidftr.utilities.ImageUtility;
-
+import com.rapidftr.controllers.ViewChildController;
 public class ViewChildScreen extends CustomScreen {
 
 	Child child;
@@ -153,13 +153,13 @@ public class ViewChildScreen extends CustomScreen {
 			public void run() {
 				//Move from edit screen directly to the main menu application screen
 				controller.popScreen();
-				controller.dispatcher().editChild(child);
+				((ViewChildController)controller).editChild(child);
 			}
 		};
 		
 		MenuItem historyMenu = new MenuItem("View The Change Log", 2, 1) {
 			public void run() {
-				controller.dispatcher().viewChildHistory(child);
+				((ViewChildController)controller).viewChildHistory(child);
 			}
 		};
 		menu.add(editChildMenu);
