@@ -65,8 +65,7 @@ public class ViewChildrenController extends Controller {
 	public void searchAndDispalyChildren(SearchChildFilter searchChildFilter) {
 		Child children[] = childStoreService.searchChild(searchChildFilter);
 		((ViewChildrenScreen) screen).setChildren(children);
-		//edit the below line to super();
-		uiStack.pushScreen(screen);
+		super.show();
 		}
 
 }

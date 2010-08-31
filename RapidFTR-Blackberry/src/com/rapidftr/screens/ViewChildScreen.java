@@ -136,11 +136,7 @@ public class ViewChildScreen extends CustomScreen {
 
 	}
 
-	private void clearFields() {
-		int fieldCount = this.getFieldCount();
-		if (fieldCount > 0)
-			this.deleteRange(0, fieldCount);
-	}
+	
 
 	public void setUp() {
 		// TODO Auto-generated method stub

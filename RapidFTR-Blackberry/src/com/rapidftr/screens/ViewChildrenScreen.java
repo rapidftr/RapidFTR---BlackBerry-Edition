@@ -15,7 +15,7 @@ public class ViewChildrenScreen extends CustomScreen {
 
 	  
     private ChildrenListField childrenListField;
-
+    private Child[] childrenArray;
 
     public ViewChildrenScreen() {
         super();
@@ -37,6 +37,8 @@ public class ViewChildrenScreen extends CustomScreen {
     }
 
     public void setChildren(Child[] children) {
+    	
+    	childrenArray=children;
     	childrenListField.set(children);
     
     }
@@ -63,7 +65,7 @@ public class ViewChildrenScreen extends CustomScreen {
 	
 	protected void onExposed()
 	{
-		Child[] children=((ViewChildrenController)controller).getAllStoredChildren();
-		setChildren(children);
+	//	Child[] children=((ViewChildrenController)controller).getAllStoredChildren();
+		setChildren(childrenArray);
 	}
 }

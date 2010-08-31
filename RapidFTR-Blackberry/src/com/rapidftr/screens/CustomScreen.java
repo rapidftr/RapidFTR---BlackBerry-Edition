@@ -67,6 +67,12 @@ public abstract class CustomScreen extends MainScreen {
 		field.setPadding(PADDING);
 		add(field);
 	}
+	
+	protected void clearFields() {
+		int fieldCount = this.getFieldCount();
+		if (fieldCount > 0)
+			this.deleteRange(0, fieldCount);
+	}
 
 
 }

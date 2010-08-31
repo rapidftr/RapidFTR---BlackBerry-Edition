@@ -2,7 +2,6 @@ package com.rapidftr.controllers;
 
 import com.rapidftr.model.SearchChildFilter;
 import com.rapidftr.screens.CustomScreen;
-import com.rapidftr.screens.SearchChildScreen;
 import com.rapidftr.screens.UiStack;
 
 public class SearchChildController extends Controller {
@@ -13,12 +12,6 @@ public class SearchChildController extends Controller {
 
 	public void search(SearchChildFilter searchChildFilter) {
 		dispatcher.searchAndDisplayChildren(searchChildFilter);
-	}
-
-	public void show()
-	{
-			((SearchChildScreen) screen).showSearch();
-			super.show();
 	}
 	
 }

@@ -11,7 +11,6 @@ import net.rim.device.api.ui.container.HorizontalFieldManager;
 
 import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controls.Button;
-import com.rapidftr.model.Child;
 import com.rapidftr.model.SearchChildFilter;
 
 public class SearchChildScreen extends CustomScreen implements FieldChangeListener{
@@ -29,16 +28,16 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 	public SearchChildScreen()
 	{
 		super();
-	}
-	public void showSearch(){
-		add(new LabelField("Search Child"));
-		add(new SeparatorField());
-		add(new LabelField(""));
 		layoutScreen();
 		nameField.setFocus();
 	}
 	
 	private void layoutScreen() {
+		
+		add(new LabelField("Search Child"));
+		add(new SeparatorField());
+		add(new LabelField(""));
+		
 		nameField.setPadding(PADDING);
 		add(nameField);
 		idField.setPadding(PADDING);
@@ -81,7 +80,8 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 
 	private void onResetButtonClicked() {
 		
-		
+		nameField.setText("");
+		idField.setText("");
 		
 	}
 
