@@ -91,6 +91,8 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 		((SearchChildController) controller).search(searchChildFilter);
 		
 	}
-	
+	protected boolean onSavePrompt() {
+		return true;
+	}
 
 }
