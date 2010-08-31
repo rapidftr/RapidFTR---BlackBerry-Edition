@@ -112,7 +112,6 @@ public class UploadChildrenRecordsService implements RequestListener {
 	public void setListener(
 			UploadChildrenRecordsSeriviceListener childRecordsUploadSeriviceListener) {
 		this.childRecordsUploadSeriviceListener = childRecordsUploadSeriviceListener;
-
 	}
 
 }

@@ -16,13 +16,11 @@ public class ChildStoreService {
 	public Child[] getAllChildrenFromPhoneStoredAsArray() {
 		Vector children = childRecordStore.getAllChildren();
 		Child[] childList = new Child[children.size()];
-		for (int i = 0; i < children.size(); i++) {
-			childList[i] = (Child) children.elementAt(i);
-		}
+		children.copyInto(childList);
 		return childList;
 	}
 
-	public Child[] searchChild(SearchChildFilter searchChildFilter) {
+	public Child[] searchChildrenFromStore(SearchChildFilter searchChildFilter) {
 		Vector source = childRecordStore.getAllChildren();
 		Vector results = new Vector();
 		String childName = searchChildFilter.getName().toLowerCase();
@@ -46,13 +44,11 @@ public class ChildStoreService {
 		}
 		
 		Child resultsArray[] = new Child[results.size()];
-		
-		for (int i = 0; i < results.size(); i++) {
-			resultsArray[i] = (Child) results.elementAt(i);
-		}
+		results.copyInto(resultsArray);
 		return resultsArray;
 
 	}
+
 
 	private void searchByName(Vector results, Vector source, String childName) {
 		for (int i = 0; i < source.size(); i++) {
@@ -87,5 +83,10 @@ public class ChildStoreService {
 
 		}
 	}
+
+	public void syncChildWithStore(Child child) {
+		childRecordStore.addOrUpdateChild(child);
+	}
+
 
 }

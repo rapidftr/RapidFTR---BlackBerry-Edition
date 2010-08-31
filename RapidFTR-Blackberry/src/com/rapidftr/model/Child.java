@@ -5,13 +5,11 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import net.rim.device.api.util.Persistable;
 
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
-
-
-import net.rim.device.api.util.Persistable;
 
 import com.rapidftr.utilities.FileUtility;
 import com.rapidftr.utilities.HttpUtility;
@@ -22,7 +20,6 @@ import com.sun.me.web.request.Part;
 public class Child implements Persistable {
 
 	private final Hashtable data;
-
 
 	public Child() {
 		data = new Hashtable();
@@ -98,8 +95,6 @@ public class Child implements Persistable {
 				+ ((data == null) ? 0 : data.get("_id").hashCode());
 		return result;
 	}
-
-
 
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -180,7 +175,49 @@ public class Child implements Persistable {
 			}
 			setField("histories", histories.toString());
 		} catch (JSONException e) {
-			throw new RuntimeException("Invalid  History" + e.getMessage());
+			throw new RuntimeException("Invalid  History Format"
+					+ e.getMessage());
 		}
+	}
+
+	public Vector getHistory() {
+		Vector historyLogs = new Vector();
+		try {
+			JSONArray histories = new JSONArray(getField("histories")
+					.toString());
+			for (int i = 0; i < histories.length(); i++) {
+				JSONObject history = null;
+				history = histories.getJSONObject(i);
+				JSONObject changes = history.getJSONObject("changes");
+				Enumeration changedFields = changes.keys();
+				while (changedFields.hasMoreElements()) {
+					String changedFieldName = (String) changedFields
+							.nextElement();
+					JSONObject changedFieldObject = changes
+							.getJSONObject(changedFieldName);
+					String changeDateTime = history.getString("datetime");
+					String oldValue = changedFieldObject.getString("from");
+					String newalue = changedFieldObject.getString("to");
+					if (oldValue.equals("")) {
+						historyLogs.addElement(changeDateTime + " "
+								+ changedFieldName + " intialized to "
+								+ newalue + " By "
+								+ history.getString("user_name"));
+					} else {
+						historyLogs.addElement(changeDateTime + " "
+								+ changedFieldName + " changed from "
+								+ oldValue + " to " + newalue + " By "
+								+ history.getString("user_name"));
+
+					}
+				}
+
+			}
+		} catch (JSONException e) {
+			throw new RuntimeException("Invalid  History Format"
+					+ e.getMessage());
+		}
+
+		return historyLogs;
 	}
 }

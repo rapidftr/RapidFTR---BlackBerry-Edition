@@ -2,7 +2,7 @@ package com.rapidftr.model;
 
 import net.rim.device.api.ui.Manager;
 
-import com.rapidftr.screens.ChildCreateUpdateScreen;
+import com.rapidftr.screens.ManageChildScreen;
 
 abstract public class FormField {
 
@@ -14,7 +14,7 @@ abstract public class FormField {
 		this.type = type;
 	}
 
-	abstract public void initializeLayout(ChildCreateUpdateScreen newChildScreen);
+	abstract public void initializeLayout(ManageChildScreen newChildScreen);
 
 	abstract public Manager getLayout();
 

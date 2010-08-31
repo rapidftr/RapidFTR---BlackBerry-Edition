@@ -33,7 +33,7 @@ public class HomeScreen extends CustomScreen {
 				onViewChildrenClicked();
 			}
 		});
-		
+
 		searchButton = new Button("Search for a child");
 		searchButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
@@ -46,7 +46,6 @@ public class HomeScreen extends CustomScreen {
 				onUploadChildRecordsClicked();
 			}
 
-			
 		});
 
 		Button syncFormsButton = new Button("Sync Forms");
@@ -55,40 +54,45 @@ public class HomeScreen extends CustomScreen {
 				onSyncFormsClicked();
 			}
 		});
-	
+
+		Button syncAllButton = new Button("Sync All");
+		syncAllButton.setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				onSyncAllClicked();
+			}
+		});
+
 		Vector buttonGroup = new Vector();
 		buttonGroup.addElement(newChildButton);
 		buttonGroup.addElement(viewChildrenButton);
 		buttonGroup.addElement(searchButton);
 		buttonGroup.addElement(syncFormsButton);
 		buttonGroup.addElement(uploadChildRecordsButton);
+		buttonGroup.addElement(syncAllButton);
 
-		
 		Button.setOptimimWidthForButtonGroup(buttonGroup);
-
 		VerticalFieldManager manager = new VerticalFieldManager(FIELD_HCENTER);
 		manager.setPadding(PADDING);
-
 		newChildButton.setPadding(PADDING);
 		manager.add(newChildButton);
-	
 		viewChildrenButton.setPadding(PADDING);
 		manager.add(viewChildrenButton);
 		searchButton.setPadding(PADDING);
 		manager.add(searchButton);
-
-		 uploadChildRecordsButton.setPadding(PADDING);
-		 manager.add(uploadChildRecordsButton);
-
+		uploadChildRecordsButton.setPadding(PADDING);
+		manager.add(uploadChildRecordsButton);
 		syncFormsButton.setPadding(PADDING);
 		manager.add(syncFormsButton);
+		syncAllButton.setPadding(PADDING);
+		manager.add(syncAllButton);
 
-		
 		add(manager);
 
 	}
 
-
+	protected void onSyncAllClicked() {
+		((HomeScreenController) controller).syncAll();
+	}
 
 	private void onViewChildrenClicked() {
 		((HomeScreenController) controller).viewChildren();

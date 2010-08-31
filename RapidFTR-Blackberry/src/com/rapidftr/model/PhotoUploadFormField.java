@@ -10,7 +10,7 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controls.Button;
-import com.rapidftr.screens.ChildCreateUpdateScreen;
+import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.utilities.ImageCaptureListener;
 import com.rapidftr.utilities.ImageUtility;
 
@@ -28,7 +28,7 @@ public class PhotoUploadFormField extends FormField implements
 		super(name, TYPE);
 	}
 
-	public void initializeLayout(final ChildCreateUpdateScreen newChildScreen) {
+	public void initializeLayout(final ManageChildScreen newChildScreen) {
 
 		final ImageCaptureListener imageChanageListener = this;
 

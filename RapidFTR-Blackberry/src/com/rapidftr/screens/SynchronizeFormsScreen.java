@@ -1,7 +1,5 @@
 package com.rapidftr.screens;
 
-
-
 import com.rapidftr.controllers.SynchronizeFormsController;
 import com.rapidftr.controls.Button;
 
@@ -123,7 +121,6 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 
 	public void setUp() {
 
-		
 	}
 
 	public void fieldChanged(Field field, int context) {
@@ -149,7 +146,7 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 	}
 
 	public void onAuthenticationFailure() {
-		
+
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 
@@ -157,33 +154,28 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 						"You are not logged in.\n Press ok to  login");
 				downloadProgressBar.setValue(0);
 
-				
 				controller.popScreen();
-				
+
 				if (result == Dialog.OK) {
-					((SynchronizeFormsController) controller)
-							.login();
+					((SynchronizeFormsController) controller).login();
 					return;
 				}
-				
-				
 
-				
 			}
 		});
 
 	}
 
 	public void cleanUp() {
-		
+
 		((SynchronizeFormsController) controller).stopSynchronizingForms();
-		
+
 	}
-	
+
 	public boolean onClose() {
-	
+
 		cleanUp();
-		
+
 		return super.onClose();
 	}
 

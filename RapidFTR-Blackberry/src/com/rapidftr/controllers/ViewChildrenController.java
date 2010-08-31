@@ -63,7 +63,7 @@ public class ViewChildrenController extends Controller {
 	}
 
 	public void searchAndDispalyChildren(SearchChildFilter searchChildFilter) {
-		Child children[] = childStoreService.searchChild(searchChildFilter);
+		Child children[] = childStoreService.searchChildrenFromStore(searchChildFilter);
 		((ViewChildrenScreen) screen).setChildren(children);
 		super.show();
 		}

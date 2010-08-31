@@ -33,7 +33,7 @@ public class HomeScreenControllerTest {
 	@Test
 	public void shouldDelegateViewChildrenActionToDispatcher() {
 		homeScreenController.viewChildren();
-		verify(dispatcher).viewChildern();
+		verify(dispatcher).viewChildren();
 
 	}
 

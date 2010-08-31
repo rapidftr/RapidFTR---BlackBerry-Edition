@@ -1,23 +1,23 @@
 package com.rapidftr.controllers;
 
-import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
-import com.rapidftr.screens.ChildCreateUpdateScreen;
+import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.SnapshotScreen;
 import com.rapidftr.screens.UiStack;
+import com.rapidftr.services.ChildStoreService;
 import com.rapidftr.utilities.ImageCaptureListener;
 
-public class ChildCreateUpdateController extends Controller {
+public class ManageChildController extends Controller {
 
 	private final FormStore formStore;
-	private ChildrenRecordStore childRecordStore;
+	private final ChildStoreService childStoreService;
 
-	public ChildCreateUpdateController(ChildCreateUpdateScreen screen, UiStack uiStack,
-			FormStore formStore, ChildrenRecordStore childRecordStore) {
+	public ManageChildController(ManageChildScreen screen, UiStack uiStack,
+			FormStore formStore, ChildStoreService childStoreService) {
 		super(screen, uiStack);
 		this.formStore = formStore;
-		this.childRecordStore = childRecordStore;
+		this.childStoreService = childStoreService;
 	}
 
 	public void synchronizeForms() {
@@ -25,13 +25,13 @@ public class ChildCreateUpdateController extends Controller {
 	}
 
 	public void show() {
-		((ChildCreateUpdateScreen) screen).setForms(formStore.getForms());
+		((ManageChildScreen) screen).setForms(formStore.getForms());
 		super.show();
 	}
 	
 
 	public void showEditScreenForChild(Child child) {
-		((ChildCreateUpdateScreen) screen).setEditForms(formStore.getForms(),child);
+		((ManageChildScreen) screen).setEditForms(formStore.getForms(),child);
 		super.show();
 	}
 
@@ -45,7 +45,7 @@ public class ChildCreateUpdateController extends Controller {
 	}
 
 	public void saveChild(Child child) {
-		childRecordStore.addOrUpdateChild(child);
+		childStoreService.syncChildWithStore(child);
 	}
 
 }
