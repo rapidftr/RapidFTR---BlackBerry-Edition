@@ -37,6 +37,7 @@ public class ChildStoreService {
 		{
 			searchByName(results, source, childName);
 		}
+		
 		//If none empty then search only on ID
 		else if(!"".equals(childId)&& !"".equals(childName))
 		{

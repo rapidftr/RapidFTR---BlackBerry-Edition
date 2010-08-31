@@ -4,6 +4,7 @@ import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.component.BasicEditField;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.TextField;
@@ -88,7 +89,15 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 	private void onSearchButtonClicked() {	
 		searchChildFilter.setName(nameField.getText());
 		searchChildFilter.setId(idField.getText());
-		((SearchChildController) controller).search(searchChildFilter);
+		if(!"".equals(nameField.getText()) || !"".equals(idField.getText()))
+		{
+			((SearchChildController) controller).search(searchChildFilter);
+		}
+		else
+		{
+			Dialog.alert("Please enter either Name or Id");
+		}
+			
 		
 	}
 	protected boolean onSavePrompt() {
