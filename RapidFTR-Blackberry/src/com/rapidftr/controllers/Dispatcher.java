@@ -1,6 +1,7 @@
 package com.rapidftr.controllers;
 
-import com.rapidftr.model.*;
+import com.rapidftr.model.Child;
+import com.rapidftr.model.SearchChildFilter;
 
 public class Dispatcher {
 
@@ -88,9 +89,10 @@ public class Dispatcher {
 	public void searchChild() {
 		searchChildController.show();
 	}
-	public void viewSearchResults(Child child[])
-	{
-		
+
+	public void searchAndDisplayChildren(SearchChildFilter searchChildFilter) {
+	viewChildrenController.searchAndDispalyChildren(searchChildFilter);	
 	}
+	
 
 }

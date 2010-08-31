@@ -104,10 +104,10 @@ public class Main extends UiApplication {
 		UploadChildrenRecordsService childRecordsUploadService = new UploadChildrenRecordsService(httpService,childRecordStore);
 		UploadChildrenRecordsController uploadChildRecordsController = new UploadChildrenRecordsController(uploadChildRecordsScreen, uiStack,childRecordsUploadService);
 		
-		SyncAllController syncAllController = new SyncAllController(uploadChildRecordsScreen, uiStack);
+		SyncAllController syncAllController = new SyncAllController(uploadChildRecordsScreen, uiStack, childStoreService);
 		
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
-		SearchChildController searchChildController = new SearchChildController(searchChildScreen, uiStack ,childStoreService);
+		SearchChildController searchChildController = new SearchChildController(searchChildScreen, uiStack);
 		
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,
 				loginController, viewChildrenController, viewChildController,

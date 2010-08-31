@@ -1,25 +1,25 @@
 package com.rapidftr.model;
 
 public class SearchChildFilter {
-	private String Name;
+	private String name;
 	private String id;
 	
 	public SearchChildFilter(String Name, String id) {
-		this.Name=Name;
+		this.name=Name;
 		this.id=id;
 	}
 
 	public SearchChildFilter() {
-		Name="";
+		name="";
 		id="";
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public String getId() {

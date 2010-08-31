@@ -25,7 +25,6 @@ public class ChildStoreService {
 	public Child[] searchChild(SearchChildFilter searchChildFilter) {
 		Vector source = childRecordStore.getAllChildren();
 		Vector results = new Vector();
-		Child resultsArray[] = null;
 		for (int i = 0; i < source.size(); i++) {
 			Child child = (Child) source.elementAt(i);
 			if ((!searchChildFilter.getName().equals("") && searchChildFilter
@@ -39,6 +38,7 @@ public class ChildStoreService {
 			}
 
 		}
+		Child resultsArray[] = new Child[results.size()];
 		for (int i = 0; i < results.size(); i++) {
 			resultsArray[i] = (Child) results.elementAt(i);
 		}
@@ -46,8 +46,5 @@ public class ChildStoreService {
 		
 	}
 
-	private void searchChildById(String id) {
-
-	}
 
 }

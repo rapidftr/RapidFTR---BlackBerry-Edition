@@ -5,6 +5,7 @@ import net.rim.device.api.util.Arrays;
 import net.rim.device.api.util.Comparator;
 
 import com.rapidftr.model.Child;
+import com.rapidftr.model.SearchChildFilter;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.services.ChildStoreService;
@@ -60,5 +61,12 @@ public class ViewChildrenController extends Controller {
 		return childStoreService.getAllChildrenFromPhoneStoredAsArray();
 	
 	}
+
+	public void searchAndDispalyChildren(SearchChildFilter searchChildFilter) {
+		Child children[] = childStoreService.searchChild(searchChildFilter);
+		((ViewChildrenScreen) screen).setChildren(children);
+		//edit the below line to super();
+		uiStack.pushScreen(screen);
+		}
 
 }
