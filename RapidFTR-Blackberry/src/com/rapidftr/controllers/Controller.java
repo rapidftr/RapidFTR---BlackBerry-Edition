@@ -29,8 +29,5 @@ abstract public class Controller {
 	public void popScreen() {
 		screen.popScreen(uiStack);
 	}
-	
-	public Dispatcher dispatcher() {
-		return dispatcher;
-	}
+
 }

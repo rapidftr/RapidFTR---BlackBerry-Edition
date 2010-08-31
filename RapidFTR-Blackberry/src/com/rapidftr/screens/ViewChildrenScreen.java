@@ -57,7 +57,7 @@ public class ViewChildrenScreen extends CustomScreen {
 			public void run() {
 				int selectedIndex = childrenListField.getSelectedIndex();
 				Child child = (Child) childrenListField.get(childrenListField, selectedIndex);
-				controller.dispatcher().viewChild(child);
+				((ViewChildrenController) controller).viewChild(child);
 			}
 		};
 		menu.add(editChildMenu);
