@@ -17,10 +17,10 @@ import com.rapidftr.model.SearchChildFilter;
 public class SearchChildScreen extends CustomScreen implements FieldChangeListener{
 	private static final int MAX_SIZE = 200;
 	
-	private final BasicEditField nameField = new BasicEditField(
-			"Name:", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
-	private final BasicEditField idField = new BasicEditField(
-			"id:", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
+	private final BasicEditField searchTextField = new BasicEditField(
+			"", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
+//	private final BasicEditField idField = new BasicEditField(
+//			"id:", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
 	
 	private Button searchButton;
 	private Button resetButton;
@@ -30,7 +30,7 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 	{
 		super();
 		layoutScreen();
-		nameField.setFocus();
+		searchTextField.setFocus();
 	}
 	
 	private void layoutScreen() {
@@ -39,10 +39,9 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 		add(new SeparatorField());
 		add(new LabelField(""));
 		
-		nameField.setPadding(PADDING);
-		add(nameField);
-		idField.setPadding(PADDING);
-		add(idField);
+		searchTextField.setPadding(PADDING);
+		add(searchTextField);
+		
 		add(new SeparatorField());
 		addButtons();
 	}
@@ -81,15 +80,15 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 
 	private void onResetButtonClicked() {
 		
-		nameField.setText("");
-		idField.setText("");
+		searchTextField.setText("");
+//		idField.setText("");
 		
 	}
 
 	private void onSearchButtonClicked() {	
-		searchChildFilter.setName(nameField.getText());
-		searchChildFilter.setId(idField.getText());
-		if(!"".equals(nameField.getText()) || !"".equals(idField.getText()))
+		searchChildFilter.setName(searchTextField.getText());
+//		searchChildFilter.setId(idField.getText());
+		if(!"".equals(searchTextField.getText()))
 		{
 			((SearchChildController) controller).search(searchChildFilter);
 		}

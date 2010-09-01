@@ -23,27 +23,34 @@ public class ChildStoreService {
 	public Child[] searchChildrenFromStore(SearchChildFilter searchChildFilter) {
 		Vector source = childRecordStore.getAllChildren();
 		Vector results = new Vector();
-		String childName = searchChildFilter.getName().toLowerCase();
-		String childId = searchChildFilter.getId().toLowerCase();
+		String queryString = searchChildFilter.getName().toLowerCase();
+//		String childId = searchChildFilter.getId().toLowerCase();
 
-		//If name empty search by id
-		if("".equals(childName) && !"".equals(childId))
-		{
-			searchById(results, source, childId);
-		}
 		
-		//If name empty search by Name
-		else if("".equals(childId)&& !"".equals(childName))
-		{
-			searchByName(results, source, childName);
+		for (int i = 0; i < source.size(); i++) {
+
+			Child child = (Child) source.elementAt(i);
+			
+			String id = (String)child.getField("unique_identifier");
+			if(id == null)
+			{
+				id="";
+			}
+			
+			String name = (String) child.getField("name");
+			if(name==null)
+			{
+				name="";
+			}
+			
+			if ((!"".equals(queryString)
+					&& (id.equalsIgnoreCase(queryString)))||(!"".equals(queryString) && name.toString().toLowerCase().indexOf(queryString) != -1)) {
+
+				results.addElement(child);
+			}
+
 		}
-		
-		//If none empty then search only on ID
-		else if(!"".equals(childId)&& !"".equals(childName))
-		{
-			searchById(results, source, childId);
-		}
-		
+
 		Child resultsArray[] = new Child[results.size()];
 		results.copyInto(resultsArray);
 		return resultsArray;
@@ -51,39 +58,41 @@ public class ChildStoreService {
 	}
 
 
-	private void searchByName(Vector results, Vector source, String childName) {
-		for (int i = 0; i < source.size(); i++) {
-
-			Child child = (Child) source.elementAt(i);
-
-			if ((!"".equals(childName) && child.getField("name").toString()
-					.toLowerCase().indexOf(childName) != -1)) {
-
-				results.addElement(child);
-			}
-
-		}
-
-	}
-
-	private void searchById(Vector results, Vector source, String childId) {
-		for (int i = 0; i < source.size(); i++) {
-
-			Child child = (Child) source.elementAt(i);
-
-			String field = (String)child.getField("unique_identifier");
-			if(field==null)
-			{
-				continue;
-			}
-			if (!"".equals(childId)
-					&& (field.equalsIgnoreCase(childId))) {
-
-				results.addElement(child);
-			}
-
-		}
-	}
+//	private void searchByName(Vector results, Vector source, String childName) {
+//		for (int i = 0; i < source.size(); i++) {
+//
+//			Child child = (Child) source.elementAt(i);
+//			
+//			String field = (String)child.getField("unique_identifier");
+//			String name = child.getField("name").toString().toLowerCase();
+//			
+//			if ((!"".equals(childName) && name.indexOf(childName) != -1)) {
+//
+//				results.addElement(child);
+//			}
+//
+//		}
+//
+//	}
+//
+//	private void searchById(Vector results, Vector source, String childId) {
+//		for (int i = 0; i < source.size(); i++) {
+//
+//			Child child = (Child) source.elementAt(i);
+//
+//			String field = (String)child.getField("unique_identifier");
+//			if(field==null)
+//			{
+//				continue;
+//			}
+//			if (!"".equals(childId)
+//					&& (field.equalsIgnoreCase(childId))) {
+//
+//				results.addElement(child);
+//			}
+//
+//		}
+//	}
 
 	public void syncChildWithStore(Child child) {
 		childRecordStore.addOrUpdateChild(child);

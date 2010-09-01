@@ -144,7 +144,6 @@ public class ViewChildScreen extends CustomScreen {
 	}
 
 	public void cleanUp() {
-		// TODO Auto-generated method stub
 
 	}
 
