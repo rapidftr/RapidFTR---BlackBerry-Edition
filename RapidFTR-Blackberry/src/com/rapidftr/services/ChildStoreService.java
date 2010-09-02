@@ -88,5 +88,8 @@ public class ChildStoreService {
 		childRecordStore.addOrUpdateChild(child);
 	}
 
+	public void syncAllChildrenWithStore(Vector children){		
+		childRecordStore.storeChildren(children);		
+	}
 
 }

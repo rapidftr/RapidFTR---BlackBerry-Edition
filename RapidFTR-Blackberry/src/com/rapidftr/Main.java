@@ -27,6 +27,7 @@ import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.UploadChildrenRecordsScreen;
 import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.ViewChildrenScreen;
+import com.rapidftr.services.ChildService;
 import com.rapidftr.services.ChildStoreService;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
@@ -103,8 +104,8 @@ public class Main extends UiApplication {
 		
 		UploadChildrenRecordsService childRecordsUploadService = new UploadChildrenRecordsService(httpService,childRecordStore);
 		UploadChildrenRecordsController uploadChildRecordsController = new UploadChildrenRecordsController(uploadChildRecordsScreen, uiStack,childRecordsUploadService);
-		
-		SyncAllController syncAllController = new SyncAllController(uploadChildRecordsScreen, uiStack, childStoreService);
+		ChildService childService = new ChildService(httpService);
+		SyncAllController syncAllController = new SyncAllController(uploadChildRecordsScreen, uiStack, childStoreService,childRecordsUploadService,childService);
 		
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
 		SearchChildController searchChildController = new SearchChildController(searchChildScreen, uiStack);
