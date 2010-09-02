@@ -136,14 +136,14 @@ public class ManageChildScreen extends CustomScreen {
 	}
 
 	public boolean onClose() {
-		int result = Dialog.ask(Dialog.D_SAVE);
+		int result = Dialog.ask(Dialog.D_YES_NO,"Do you want to save the changes before closing?",Dialog.YES);
 
-		if (result == Dialog.SAVE) {
+		if (result == Dialog.YES) {
 			onSaveChildClicked();
 		}
 
-		if (result == Dialog.CANCEL) {
-			return false;
+		if (result == Dialog.NO) {
+			//Don't  do anything just exit
 		}
 
 		controller.popScreen();
@@ -169,6 +169,14 @@ public class ManageChildScreen extends CustomScreen {
 				controller.popScreen();
 			}
 		};
+
+		MenuItem CloseMenu = new MenuItem("Close", 2, 1) {
+			public void run() {
+				onClose();
+			}
+		};
+		
 		menu.add(saveChildMenu);
+		menu.add(CloseMenu);
 	}
 }
