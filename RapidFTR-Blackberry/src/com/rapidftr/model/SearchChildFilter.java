@@ -2,16 +2,16 @@ package com.rapidftr.model;
 
 public class SearchChildFilter {
 	private String name;
-	private String id;
+//	private String id;
 	
 	public SearchChildFilter(String Name, String id) {
 		this.name=Name;
-		this.id=id;
+		//this.id=id;
 	}
 
 	public SearchChildFilter() {
 		name="";
-		id="";
+	//	id="";
 	}
 
 	public String getName() {
@@ -22,12 +22,12 @@ public class SearchChildFilter {
 		this.name = name;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+//	public String getId() {
+//		return id;
+//	}
+//
+//	public void setId(String id) {
+//		this.id = id;
+//	}
 
 }

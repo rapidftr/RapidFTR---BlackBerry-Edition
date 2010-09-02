@@ -3,11 +3,14 @@ package com.rapidftr.screens;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BasicEditField;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.decor.BorderFactory;
 
 import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controls.Button;
@@ -16,20 +19,23 @@ import com.rapidftr.model.SearchChildFilter;
 public class SearchChildScreen extends CustomScreen implements FieldChangeListener{
 	private static final int MAX_SIZE = 200;
 	
-	private final BasicEditField nameField = new BasicEditField(
-			"Name:", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
-	private final BasicEditField idField = new BasicEditField(
-			"id:", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
+	private final BasicEditField searchTextField = new BasicEditField(
+			"", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
+//	private final BasicEditField idField = new BasicEditField(
+//			"id:", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
 	
 	private Button searchButton;
 	private Button resetButton;
 	private Manager buttonManager;
 	private SearchChildFilter searchChildFilter = new SearchChildFilter();
+	//Use screen paramters instead if hardcore values
+	private XYEdges border = new XYEdges(2, 2, 2, 2);
+	
 	public SearchChildScreen()
 	{
-		super();
+		super();	
 		layoutScreen();
-		nameField.setFocus();
+		searchTextField.setFocus();
 	}
 	
 	private void layoutScreen() {
@@ -38,11 +44,10 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 		add(new SeparatorField());
 		add(new LabelField(""));
 		
-		nameField.setPadding(PADDING);
-		add(nameField);
-		idField.setPadding(PADDING);
-		add(idField);
-		add(new SeparatorField());
+		//searchTextField.setPadding(PADDING);
+		searchTextField.setBorder(BorderFactory.createSimpleBorder(border));
+		add(searchTextField);
+		add(new LabelField(""));
 		addButtons();
 	}
 	
@@ -80,15 +85,23 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 
 	private void onResetButtonClicked() {
 		
-		nameField.setText("");
-		idField.setText("");
+		searchTextField.setText("");
+//		idField.setText("");
 		
 	}
 
 	private void onSearchButtonClicked() {	
-		searchChildFilter.setName(nameField.getText());
-		searchChildFilter.setId(idField.getText());
-		((SearchChildController) controller).search(searchChildFilter);
+		searchChildFilter.setName(searchTextField.getText());
+//		searchChildFilter.setId(idField.getText());
+		if(!"".equals(searchTextField.getText()))
+		{
+			((SearchChildController) controller).search(searchChildFilter);
+		}
+		else
+		{
+			Dialog.alert("Please enter either Name or Id");
+		}
+			
 		
 	}
 	protected boolean onSavePrompt() {
