@@ -3,12 +3,14 @@ package com.rapidftr.screens;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BasicEditField;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.decor.BorderFactory;
 
 import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controls.Button;
@@ -26,9 +28,12 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 	private Button resetButton;
 	private Manager buttonManager;
 	private SearchChildFilter searchChildFilter = new SearchChildFilter();
+	//Use screen paramters instead if hardcore values
+	private XYEdges border = new XYEdges(2, 2, 2, 2);
+	
 	public SearchChildScreen()
 	{
-		super();
+		super();	
 		layoutScreen();
 		searchTextField.setFocus();
 	}
@@ -39,10 +44,10 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 		add(new SeparatorField());
 		add(new LabelField(""));
 		
-		searchTextField.setPadding(PADDING);
+		//searchTextField.setPadding(PADDING);
+		searchTextField.setBorder(BorderFactory.createSimpleBorder(border));
 		add(searchTextField);
-		
-		add(new SeparatorField());
+		add(new LabelField(""));
 		addButtons();
 	}
 	
