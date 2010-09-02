@@ -44,7 +44,7 @@ public class UploadChildrenRecordsService implements RequestListener {
 		childRecordsUploadSeriviceListener.updateUploadStatus(index,
 				childrenList.size());
 		Child child = (Child) childrenList.elementAt(index);
-		if (child.getField("unique_identifier") == null) {
+		//if (child.getField("unique_identifier") == null) {
 			String boundary = "abced";
 			Part[] parts = child.getPostData();
 			PostData postData = new PostData(parts, boundary);
@@ -54,8 +54,8 @@ public class UploadChildrenRecordsService implements RequestListener {
 			Arg[] httpArgs = { multiPart, json };
 
 			httpService.post("children", null, httpArgs, this, postData, null);
-			return;
-		}
+		//	return;
+		//}
 
 		if (index == childrenList.size() - 1) {
 			childRecordsUploadSeriviceListener.onUploadComplete();

@@ -1,25 +1,39 @@
 package com.rapidftr.controllers;
 
+import java.io.IOException;
+
 import com.rapidftr.screens.CustomScreen;
 import com.rapidftr.screens.UiStack;
+import com.rapidftr.services.ChildService;
 import com.rapidftr.services.ChildStoreService;
+import com.rapidftr.services.UploadChildrenRecordsService;
 
 public class SyncAllController extends Controller {
 
-	ChildStoreService childStoreService;
+	private final ChildStoreService childStoreService;
+	private final UploadChildrenRecordsService childRecordsUploadService;
+	private final ChildService childService;
 
+	
 	public SyncAllController(CustomScreen screen, UiStack uiStack,
-			ChildStoreService childStoreService) {
+			ChildStoreService childStoreService,
+			UploadChildrenRecordsService childRecordsUploadService,
+			ChildService childService) {
 		super(screen, uiStack);
 		this.childStoreService = childStoreService;
+		this.childRecordsUploadService = childRecordsUploadService;
+		this.childService = childService;
 	}
 
+
 	public void syncAll() {
-		// TODO it will do 3 functions
-		// •Send new local records to the database #148
-		// •Send updated records to the database #173
-		// •Get records from the database #174
-		// childStoreService.syncAllChildrenRecordsWithServer();
+		childRecordsUploadService.uploadChildRecords();
+//		try {
+//			childStoreService.syncAllChildrenWithStore(childService.getAllChildren());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 }

@@ -1,6 +1,8 @@
 package com.rapidftr.services;
 
 import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Vector;
 
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
@@ -23,10 +25,8 @@ public class ChildService {
 		this.httpService = httpService;
 
 	}
-	
 
-
-	public Child[] getAllChildren() throws IOException {
+	public Vector getAllChildren() throws IOException {
 
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
@@ -35,10 +35,8 @@ public class ChildService {
 		HttpServer.printResponse(response);
 		try {
 			JSONArray jsonChildren = result.getAsArray("");
-		//	Child[] children = new Child[jsonChildren.length()];
-			Child[] children = new Child[10];
-		//	for (int i = 0; i < jsonChildren.length(); i++) {
-			for (int i = 0; i < 10; i++) {
+			Vector children  = new  Vector();
+			for (int i = 0; i < jsonChildren.length(); i++) {
 				JSONObject jsonChild = (JSONObject) jsonChildren.get(i);
 				Child child = new Child();
 				JSONArray fieldNames = jsonChild.names();
@@ -48,7 +46,7 @@ public class ChildService {
 					child.setField(fieldName, fieldValue);
 				}
 
-				children[i] = child;
+				children.addElement(child);
 			}
 			return children;
 		} catch (ResultException e) {
