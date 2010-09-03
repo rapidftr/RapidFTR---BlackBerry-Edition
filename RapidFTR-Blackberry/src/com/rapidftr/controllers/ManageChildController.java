@@ -48,4 +48,9 @@ public class ManageChildController extends Controller {
 		childStoreService.syncChildWithStore(child);
 	}
 
+	public void syncChild(Child child) {
+		dispatcher.syncChild(child);
+		
+	}
+
 }

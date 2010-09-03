@@ -21,7 +21,7 @@ public class UploadChildrenRecordsService implements RequestListener {
 	private final ChildrenRecordStore childRecordStore;
 
 	int index = 0;
-	private Vector childrenList;
+	private Vector childrenList = new Vector();
 
 	public UploadChildrenRecordsService(HttpService httpService,
 			ChildrenRecordStore childRecordStore) {
@@ -112,6 +112,17 @@ public class UploadChildrenRecordsService implements RequestListener {
 	public void setListener(
 			UploadChildrenRecordsSeriviceListener childRecordsUploadSeriviceListener) {
 		this.childRecordsUploadSeriviceListener = childRecordsUploadSeriviceListener;
+	}
+
+	public void uploadChildRecord(Child child) {
+		childrenList.addElement(child);
+		index = 0;
+		if (childrenList == null) {
+			childRecordsUploadSeriviceListener.onUploadComplete();
+			return;
+		}
+		uploadChildRecordAtIndex();
+		
 	}
 
 }

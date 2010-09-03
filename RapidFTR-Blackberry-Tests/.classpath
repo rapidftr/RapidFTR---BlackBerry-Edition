@@ -5,6 +5,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/RapidFTR-Blackberry"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/mockito-all-1.8.5.jar"/>
-	<classpathentry kind="lib" path="E:/eclipse3.5/eclipse/plugins/net.rim.ejde.componentpack4.6.1_4.6.1.49/components/lib/net_rim_api.jar"/>
+	<classpathentry kind="lib" path="E:/ide/bb/bb eclipse/plugins/net.rim.ejde.componentpack4.7.0_4.7.0.57/components/lib/net_rim_api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -28,7 +28,7 @@ public class ManageChildScreen extends CustomScreen {
 	private Vector forms;
 	private Manager screenManager;
 	SettingsStore settings;
-	private Child chilToEdit;
+	private Child childToEdit;
 	
 	public ManageChildScreen(SettingsStore settings) {
 		this.settings = settings;
@@ -53,7 +53,7 @@ public class ManageChildScreen extends CustomScreen {
 
 
 	public void setEditForms(Vector forms, Child childToEdit) {
-		this.chilToEdit = childToEdit;
+		this.childToEdit = childToEdit;
 		this.forms = forms;
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			((Form) list.nextElement()).initializeLayoutWithChild(this,
@@ -151,13 +151,12 @@ public class ManageChildScreen extends CustomScreen {
 	}
 
 	private void onSaveChildClicked() {
-		if (chilToEdit == null) {
-			chilToEdit = Child.create(forms);
-			//chilToEdit.createUniqueId(settings.getCurrentlyLoggedIn());
+		if (childToEdit == null) {
+			childToEdit = Child.create(forms);
 		}else{
-			chilToEdit.update(settings.getCurrentlyLoggedIn(),forms);
+			childToEdit.update(settings.getCurrentlyLoggedIn(),forms);
 		}
-		((ManageChildController) controller).saveChild(chilToEdit);
+		((ManageChildController) controller).saveChild(childToEdit);
 	}
 	
 	protected void makeMenu(Menu menu, int instance) {
@@ -167,8 +166,19 @@ public class ManageChildScreen extends CustomScreen {
 				Dialog.alert("ChildRecord has been stored succesfully\n"
 								+ "Please upload record to central server whenever you get Internet Access!!");
 				controller.popScreen();
+				childToEdit =  null;
+			}
+		};
+		
+		MenuItem syncChildMenu = new MenuItem("Sync Record ", 2, 2) {
+			public void run() {
+				onSaveChildClicked();
+				((ManageChildController) controller).syncChild(childToEdit);
+				childToEdit = null;
+				//controller.popScreen();
 			}
 		};
 		menu.add(saveChildMenu);
+		menu.add(syncChildMenu);
 	}
 }

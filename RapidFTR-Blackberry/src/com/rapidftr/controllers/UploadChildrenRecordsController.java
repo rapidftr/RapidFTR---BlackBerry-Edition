@@ -1,5 +1,6 @@
 package com.rapidftr.controllers;
 
+import com.rapidftr.model.Child;
 import com.rapidftr.screens.CustomScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.UploadChildrenRecordsScreen;
@@ -79,6 +80,13 @@ public class UploadChildrenRecordsController extends Controller implements
 
 	public void login() {
 		dispatcher.login();
+	}
+
+	public void uploadChildRecord(Child child) {
+		uploadInProgress = true;
+		childRecordsUploadService.uploadChildRecord(child);
+		((UploadChildrenRecordsScreen) screen).resetProgressBar();
+		show();
 	}
 
 }

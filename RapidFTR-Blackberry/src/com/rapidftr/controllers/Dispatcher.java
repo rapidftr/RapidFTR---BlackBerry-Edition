@@ -93,4 +93,9 @@ public class Dispatcher {
 		viewChildrenController.searchAndDispalyChildren(searchChildFilter);
 	}
 
+	public void syncChild(Child child) {
+		uploadChildRecordsController.uploadChildRecord(child);
+		
+	}
+
 }
