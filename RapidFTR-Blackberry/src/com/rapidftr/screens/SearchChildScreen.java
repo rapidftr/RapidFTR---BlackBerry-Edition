@@ -21,8 +21,6 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 	
 	private final BasicEditField searchTextField = new BasicEditField(
 			"", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
-//	private final BasicEditField idField = new BasicEditField(
-//			"id:", "", MAX_SIZE, USE_ALL_WIDTH | TextField.NO_NEWLINE);
 	
 	private Button searchButton;
 	private Button resetButton;
@@ -43,8 +41,6 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 		add(new LabelField("Search Child"));
 		add(new SeparatorField());
 		add(new LabelField(""));
-		
-		//searchTextField.setPadding(PADDING);
 		searchTextField.setBorder(BorderFactory.createSimpleBorder(border));
 		add(searchTextField);
 		add(new LabelField(""));
@@ -86,13 +82,11 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 	private void onResetButtonClicked() {
 		
 		searchTextField.setText("");
-//		idField.setText("");
 		
 	}
 
 	private void onSearchButtonClicked() {	
 		searchChildFilter.setName(searchTextField.getText());
-//		searchChildFilter.setId(idField.getText());
 		if(!"".equals(searchTextField.getText()))
 		{
 			((SearchChildController) controller).search(searchChildFilter);

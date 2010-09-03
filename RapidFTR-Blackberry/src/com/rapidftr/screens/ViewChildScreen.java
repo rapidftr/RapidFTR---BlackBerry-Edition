@@ -161,8 +161,16 @@ public class ViewChildScreen extends CustomScreen {
 				((ViewChildController)controller).viewChildHistory(child);
 			}
 		};
+		
+		MenuItem CloseMenu = new MenuItem("Close", 2, 1) {
+			public void run() {
+				controller.popScreen();
+			}
+		};
+		
 		menu.add(editChildMenu);
 		menu.add(historyMenu);
+		menu.add(CloseMenu);
 	}
 
 }

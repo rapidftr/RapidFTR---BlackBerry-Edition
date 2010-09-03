@@ -24,7 +24,6 @@ public class ChildStoreService {
 		Vector source = childRecordStore.getAllChildren();
 		Vector results = new Vector();
 		String queryString = searchChildFilter.getName().toLowerCase();
-//		String childId = searchChildFilter.getId().toLowerCase();
 
 		
 		for (int i = 0; i < source.size(); i++) {
@@ -57,42 +56,6 @@ public class ChildStoreService {
 
 	}
 
-
-//	private void searchByName(Vector results, Vector source, String childName) {
-//		for (int i = 0; i < source.size(); i++) {
-//
-//			Child child = (Child) source.elementAt(i);
-//			
-//			String field = (String)child.getField("unique_identifier");
-//			String name = child.getField("name").toString().toLowerCase();
-//			
-//			if ((!"".equals(childName) && name.indexOf(childName) != -1)) {
-//
-//				results.addElement(child);
-//			}
-//
-//		}
-//
-//	}
-//
-//	private void searchById(Vector results, Vector source, String childId) {
-//		for (int i = 0; i < source.size(); i++) {
-//
-//			Child child = (Child) source.elementAt(i);
-//
-//			String field = (String)child.getField("unique_identifier");
-//			if(field==null)
-//			{
-//				continue;
-//			}
-//			if (!"".equals(childId)
-//					&& (field.equalsIgnoreCase(childId))) {
-//
-//				results.addElement(child);
-//			}
-//
-//		}
-//	}
 
 	public void syncChildWithStore(Child child) {
 		childRecordStore.addOrUpdateChild(child);

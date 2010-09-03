@@ -27,9 +27,7 @@ public class ViewChildrenController extends Controller {
 		children = childStoreService.getAllChildrenFromPhoneStoredAsArray();
 		sortByLocationThenName(children);
 		((ViewChildrenScreen) screen).setChildren(children);
-		
-		//edit the below line to super();
-		uiStack.pushScreen(screen);
+		super.show();
 
 	}
 	
