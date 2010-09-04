@@ -30,6 +30,11 @@ public class FormFieldFactory {
 
 		if (field != null)
 			return field;
+		
+		field= AudioField.createdFormField(name, type);
+		
+		if(field!=null)
+			return field;
 
 		return null;
 
