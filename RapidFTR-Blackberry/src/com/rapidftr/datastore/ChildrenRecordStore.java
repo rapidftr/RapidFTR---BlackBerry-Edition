@@ -43,8 +43,6 @@ public class ChildrenRecordStore {
 	public void storeChildren(Vector childrenList) {
 		Enumeration enumeration = childrenList.elements();
 		while (enumeration.hasMoreElements())
-
 			addOrUpdateChild((Child) enumeration.nextElement());
-	}
-
+	   }
 }

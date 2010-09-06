@@ -79,4 +79,19 @@ public class ChildTest {
 		alice.update("rapidftr", forms);		
 		assertEquals("someName", alice.getField("name"));
 	}
+	
+	@Test
+	public void isNewChildShouldReturnTrueIfChildHaveNullUniqueIdentifier() {
+		Child joy = new Child();
+		joy.setField("name", "joy");
+		assertTrue(joy.isNewChild());
+	}
+	
+	@Test
+	public void isNewChildShouldReturnFalseIfChildHaveSomeUniqueIdentifier() {
+		Child joy = new Child();
+		joy.setField("name", "joy");
+		joy.setField("unique_identifier", "unique_identifier");
+		assertFalse(joy.isNewChild());
+	}
 }

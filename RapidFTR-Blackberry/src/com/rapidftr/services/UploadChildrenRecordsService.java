@@ -44,18 +44,20 @@ public class UploadChildrenRecordsService implements RequestListener {
 		childRecordsUploadSeriviceListener.updateUploadStatus(index,
 				childrenList.size());
 		Child child = (Child) childrenList.elementAt(index);
-		//if (child.getField("unique_identifier") == null) {
-			String boundary = "abced";
-			Part[] parts = child.getPostData();
-			PostData postData = new PostData(parts, boundary);
-			Arg multiPart = new Arg("Content-Type",
-					"multipart/form-data;boundary=" + postData.getBoundary());
-			Arg json = HttpUtility.HEADER_ACCEPT_JSON;
-			Arg[] httpArgs = { multiPart, json };
-
+		PostData postData = child.getPostData();;
+		Arg multiPart = new Arg("Content-Type",
+				"multipart/form-data;boundary=" + postData.getBoundary());
+		//Arg putRequest = new Arg("X-HTTP-Method-Override","PUT");
+		Arg json = HttpUtility.HEADER_ACCEPT_JSON;
+		Arg[] httpArgs = { multiPart, json };
+		
+		if (child.isNewChild()) {
 			httpService.post("children", null, httpArgs, this, postData, null);
-		//	return;
-		//}
+		}else{
+			Arg putRequest = new Arg("X-HTTP-Method-Override","PUT");
+			Arg[] putHttpArgs = { multiPart, json,putRequest };
+			httpService.post("children/"+child.getField("_id"), null, putHttpArgs, this, postData, null);
+		}
 
 		if (index == childrenList.size() - 1) {
 			childRecordsUploadSeriviceListener.onUploadComplete();
@@ -84,11 +86,13 @@ public class UploadChildrenRecordsService implements RequestListener {
 
 		Child child = (Child) childrenList.elementAt(index);
 		child.setField("unique_identifier",result.getResult().getAsString("unique_identifier"));
+		child.setField("_id",result.getResult().getAsString("_id"));
+		child.setField("_rev",result.getResult().getAsString("_rev"));
+		child.setField("histories",result.getResult().getAsString("histories"));
+		child.clearEditHistory();
 		childRecordStore.storeChildren(childrenList);
-
 		if (index == childrenList.size() - 1) {
 			childRecordsUploadSeriviceListener.onUploadComplete();
-
 			return;
 		}
 
@@ -121,8 +125,7 @@ public class UploadChildrenRecordsService implements RequestListener {
 			childRecordsUploadSeriviceListener.onUploadComplete();
 			return;
 		}
-		uploadChildRecordAtIndex();
-		
+		uploadChildRecordAtIndex();		
 	}
 
 }
