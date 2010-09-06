@@ -1,6 +1,5 @@
 package com.rapidftr.model;
 
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -16,12 +15,15 @@ import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.RandomStringGenerator;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Part;
+import com.sun.me.web.request.PostData;
 
 public class Child implements Persistable {
 
 	private final Hashtable data;
+	private final Hashtable changedFields;
 
 	public Child() {
+		changedFields = new Hashtable();
 		data = new Hashtable();
 		data.put("_id", RandomStringGenerator.generate(32));
 	}
@@ -42,15 +44,15 @@ public class Child implements Persistable {
 		return (String) data.get("name");
 	}
 
-	public Part[] getPostData() {
+	public PostData getPostData() {
 
 		Vector parts = new Vector();
+		Enumeration keyList = isNewChild() ? data.keys() : getChangedFields();
 
-		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) {
+		while (keyList.hasMoreElements()) {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
-
-			if (key.equals("current_photo_key")) {
+			if (isNewChild()&&key.equals("current_photo_key") && value != null) {
 				Arg[] headers = new Arg[2];
 				headers[0] = new Arg("Content-Disposition",
 						"form-data; name=\"child[" + "photo" + "]\"");
@@ -60,24 +62,34 @@ public class Child implements Persistable {
 				parts.addElement(part);
 				continue;
 			}
-
 			Arg[] headers = new Arg[1];
 			headers[0] = new Arg("Content-Disposition",
 					"form-data; name=\"child[" + key + "]\"");
-
 			Part part = new Part(value.toString().getBytes(), headers);
-
 			parts.addElement(part);
-
 		}
 
 		Part[] anArray = new Part[parts.size()];
 		parts.copyInto(anArray);
-		return anArray;
+		String boundary = "abced";
+
+		PostData postData = new PostData(anArray, boundary);
+		return postData;
+	}
+
+	private Enumeration getChangedFields() {
+		return changedFields.keys();
 	}
 
 	public void setField(String name, Object value) {
+		if (!isNewChild()) {
+		 Object oldValue=	getField(name);
+		 if(oldValue!=null&&!oldValue.equals(value)){
+			changedFields.put(name, value);
+		 }
+		}
 		data.put(name, value);
+
 	}
 
 	public Object getField(String key) {
@@ -129,55 +141,60 @@ public class Child implements Persistable {
 	}
 
 	public static Child create(Vector forms) {
-		Child child = new Child();
+		return updateChildDetails(new Child(), forms);
+	}
+
+	private static Child updateChildDetails(Child child, Vector forms) {
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			Form form = (Form) list.nextElement();
 			for (Enumeration fields = form.getFieldList().elements(); fields
 					.hasMoreElements();) {
 				FormField field = (FormField) fields.nextElement();
 				child.setField(field.getName(), field.getValue());
+
 			}
 		}
 		return child;
 	}
 
 	public void update(String userName, Vector forms) {
-		try {
-			JSONArray histories = getField("histories") != null ? new JSONArray(
-					getField("histories").toString())
-					: new JSONArray();
-			boolean isSomeFieldchanged = false;
-			JSONObject history = new JSONObject();
-			history.put("datetime", new Date());
-			history.put("user_name", userName);
-			JSONObject historyItems = new JSONObject();
-			for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-				Form form = (Form) list.nextElement();
-				for (Enumeration fields = form.getFieldList().elements(); fields
-						.hasMoreElements();) {
-					FormField field = (FormField) fields.nextElement();
-					Object previousValue = getField(field.getName().toString());
-					if (previousValue != null
-							&& !previousValue.equals(field.getValue())) {
-						isSomeFieldchanged = true;
-						setField(field.getName(), field.getValue());
-						JSONObject historyItem = new JSONObject();
-						historyItem.put("from", previousValue.toString());
-						historyItem.put("to", field.getValue().toString());
-						historyItems.put(field.getName(), historyItem);
-					}
-				}
-			}
-
-			if (isSomeFieldchanged) {
-				history.put("changes", historyItems);
-				histories.put(history);
-			}
-			setField("histories", histories.toString());
-		} catch (JSONException e) {
-			throw new RuntimeException("Invalid  History Format"
-					+ e.getMessage());
-		}
+		updateChildDetails(this, forms);
+		// try {
+		// JSONArray histories = getField("histories") != null ? new JSONArray(
+		// getField("histories").toString())
+		// : new JSONArray();
+		// boolean isSomeFieldchanged = false;
+		// JSONObject history = new JSONObject();
+		// history.put("datetime", new Date());
+		// history.put("user_name", userName);
+		// JSONObject historyItems = new JSONObject();
+		// for (Enumeration list = forms.elements(); list.hasMoreElements();) {
+		// Form form = (Form) list.nextElement();
+		// for (Enumeration fields = form.getFieldList().elements(); fields
+		// .hasMoreElements();) {
+		// FormField field = (FormField) fields.nextElement();
+		// Object previousValue = getField(field.getName().toString());
+		// if (previousValue != null
+		// && !previousValue.equals(field.getValue())) {
+		// isSomeFieldchanged = true;
+		// setField(field.getName(), field.getValue());
+		// JSONObject historyItem = new JSONObject();
+		// historyItem.put("from", previousValue.toString());
+		// historyItem.put("to", field.getValue().toString());
+		// historyItems.put(field.getName(), historyItem);
+		// }
+		// }
+		// }
+		//
+		// if (isSomeFieldchanged) {
+		// history.put("changes", historyItems);
+		// histories.put(history);
+		// }
+		// setField("histories", histories.toString());
+		// } catch (JSONException e) {
+		// throw new RuntimeException("Invalid  History Format"
+		// + e.getMessage());
+		// }
 	}
 
 	public Vector getHistory() {
@@ -219,5 +236,13 @@ public class Child implements Persistable {
 		}
 
 		return historyLogs;
+	}
+
+	public boolean isNewChild() {
+		return getField("unique_identifier") == null;
+	}
+	
+	public void clearEditHistory() {
+		changedFields.clear();
 	}
 }

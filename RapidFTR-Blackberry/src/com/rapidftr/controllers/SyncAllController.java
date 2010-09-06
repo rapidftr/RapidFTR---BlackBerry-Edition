@@ -1,6 +1,7 @@
 package com.rapidftr.controllers;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import com.rapidftr.screens.CustomScreen;
 import com.rapidftr.screens.UiStack;
@@ -27,13 +28,14 @@ public class SyncAllController extends Controller {
 
 
 	public void syncAll() {
-		childRecordsUploadService.uploadChildRecords();
-//		try {
-//			childStoreService.syncAllChildrenWithStore(childService.getAllChildren());
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		//childRecordsUploadService.uploadChildRecords();
+		try {
+			childStoreService.syncAllChildrenWithStore(new Vector());
+			childStoreService.syncAllChildrenWithStore(childService.getAllChildren());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
