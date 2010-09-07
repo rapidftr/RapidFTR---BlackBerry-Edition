@@ -170,12 +170,12 @@ public class ManageChildScreen extends CustomScreen {
 			}
 		};
 		
-		MenuItem syncChildMenu = new MenuItem("Sync Record ", 2, 2) {
+		MenuItem syncChildMenu = new MenuItem("Save and Sync Record ", 2, 2) {
 			public void run() {
+				controller.popScreen();
 				onSaveChildClicked();
 				((ManageChildController) controller).syncChild(childToEdit);
 				childToEdit = null;
-				//controller.popScreen();
 			}
 		};
 
