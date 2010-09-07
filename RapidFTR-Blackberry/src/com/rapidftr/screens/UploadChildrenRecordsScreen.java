@@ -11,11 +11,12 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.BorderFactory;
 
+import com.rapidftr.controllers.ScreenCallBack;
 import com.rapidftr.controllers.UploadChildrenRecordsController;
 import com.rapidftr.controls.Button;
 
 public class UploadChildrenRecordsScreen extends CustomScreen implements
-		FieldChangeListener {
+		FieldChangeListener,ScreenCallBack {
 
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
 	private Button okButton;
@@ -72,15 +73,6 @@ public class UploadChildrenRecordsScreen extends CustomScreen implements
 
 	}
 
-	public void updateUploadProgessBar(final int value) {
-
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-				uploadProgressBar.setValue(value);
-			}
-		});
-
-	}
 
 	public void uploadCompleted() {
 
@@ -142,8 +134,20 @@ public class UploadChildrenRecordsScreen extends CustomScreen implements
 
 	}
 
-	public void authenticationFailure() {
 
+
+	public void cleanUp() {
+		((UploadChildrenRecordsController) controller).cancelUpload();
+	}
+
+	public boolean onClose() {
+		cleanUp();
+		return super.onClose();
+	}
+
+
+
+	public void handleAuthenticationFailure() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 
@@ -160,19 +164,10 @@ public class UploadChildrenRecordsScreen extends CustomScreen implements
 
 			}
 		});
-
+		
 	}
 
-	public void cleanUp() {
-		((UploadChildrenRecordsController) controller).cancelUpload();
-	}
-
-	public boolean onClose() {
-		cleanUp();
-		return super.onClose();
-	}
-
-	public void connectionProblem() {
+	public void handleConnectionProblem() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 				Dialog
@@ -181,7 +176,17 @@ public class UploadChildrenRecordsScreen extends CustomScreen implements
 
 			}
 		});
+		
+	}
 
+	public void updateRequestProgress(final int progress) {
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				uploadProgressBar.setValue(progress);
+			}
+		});
+
+		
 	}
 
 }

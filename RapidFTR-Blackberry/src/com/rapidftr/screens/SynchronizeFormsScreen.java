@@ -1,5 +1,6 @@
 package com.rapidftr.screens;
 
+import com.rapidftr.controllers.ScreenCallBack;
 import com.rapidftr.controllers.SynchronizeFormsController;
 import com.rapidftr.controls.Button;
 
@@ -15,7 +16,7 @@ import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.BorderFactory;
 
 public class SynchronizeFormsScreen extends CustomScreen implements
-		FieldChangeListener {
+		FieldChangeListener,ScreenCallBack {
 
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
 	private Button okButton;
@@ -74,15 +75,6 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 
 	}
 
-	public void updateDownloadProgessBar(final int value) {
-
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-				downloadProgressBar.setValue(value);
-			}
-		});
-
-	}
 
 	public void downloadCompleted() {
 
@@ -145,7 +137,7 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 
 	}
 
-	public void onAuthenticationFailure() {
+	public void handleAuthenticationFailure() {
 
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
@@ -177,6 +169,18 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 		cleanUp();
 
 		return super.onClose();
+	}
+
+	public void handleConnectionProblem() {
+		downloadFailed();		
+	}
+
+	public void updateRequestProgress(final int size) {
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				downloadProgressBar.setValue(size);
+			}
+		});
 	}
 
 }

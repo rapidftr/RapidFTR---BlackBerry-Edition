@@ -4,20 +4,22 @@ import java.util.Vector;
 
 import javax.microedition.io.HttpConnection;
 
+import com.rapidftr.controllers.ControllerCallback;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
+import com.rapidftr.net.HttpRequestHandler;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
+import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
-import com.sun.me.web.request.Part;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;
 import com.sun.me.web.request.Response;
 
-public class UploadChildrenRecordsService implements RequestListener {
+public class UploadChildrenRecordsService implements ControllerCallback {
 
 	private HttpService httpService;
-	private UploadChildrenRecordsSeriviceListener childRecordsUploadSeriviceListener;
+	private HttpRequestHandler listener;
 	private final ChildrenRecordStore childRecordStore;
 
 	int index = 0;
@@ -34,14 +36,14 @@ public class UploadChildrenRecordsService implements RequestListener {
 		childrenList = childRecordStore.getAllChildren();
 		index = 0;
 		if (childrenList == null) {
-			childRecordsUploadSeriviceListener.onUploadComplete();
+			listener.markProcessComplete();
 			return;
 		}
 		uploadChildRecordAtIndex();
 	}
 
 	private void uploadChildRecordAtIndex() {
-		childRecordsUploadSeriviceListener.updateUploadStatus(index,
+		listener.updateRequestProgress(index,
 				childrenList.size());
 		Child child = (Child) childrenList.elementAt(index);
 		PostData postData = child.getPostData();;
@@ -52,15 +54,15 @@ public class UploadChildrenRecordsService implements RequestListener {
 		Arg[] httpArgs = { multiPart, json };
 		
 		if (child.isNewChild()) {
-			httpService.post("children", null, httpArgs, this, postData, null);
+			httpService.post("children", null, httpArgs, listener, postData, null);
 		}else{
 			Arg putRequest = new Arg("X-HTTP-Method-Override","PUT");
 			Arg[] putHttpArgs = { multiPart, json,putRequest };
-			httpService.post("children/"+child.getField("_id"), null, putHttpArgs, this, postData, null);
+			httpService.post("children/"+child.getField("_id"), null, putHttpArgs, listener, postData, null);
 		}
 
 		if (index == childrenList.size() - 1) {
-			childRecordsUploadSeriviceListener.onUploadComplete();
+			listener.markProcessComplete();
 			return;
 		}
 		index++;
@@ -68,23 +70,34 @@ public class UploadChildrenRecordsService implements RequestListener {
 
 	}
 
-	public void done(Object context, Response result) throws Exception {
+	
+	public void cancelUploadOfChildRecords() {
+		httpService.cancelRequest();
+	}
 
-		if (result.getCode() == HttpConnection.HTTP_UNAUTHORIZED) {
-			childRecordsUploadSeriviceListener.onAuthenticationFailure();
+	public void setListener(
+			HttpRequestHandler listener) {
+		this.listener = listener;
+	}
+
+	public void uploadChildRecord(Child child) {
+		childrenList.addElement(child);
+		index = 0;
+		if (childrenList == null) {
+			listener.markProcessComplete();
 			return;
 		}
-		if (result.getException() != null) {
-			childRecordsUploadSeriviceListener.onUploadFailed();
-			return;
-		}
+		uploadChildRecordAtIndex();		
+	}
 
-		if (result.getCode() != HttpConnection.HTTP_OK) {
-			childRecordsUploadSeriviceListener.onConnectionProblem();
-			return;
-		}
+	public void onRequestFailure(Exception exception) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	public void onRequestSuccess(Object context, Response result) {
 		Child child = (Child) childrenList.elementAt(index);
+		try {
 		child.setField("unique_identifier",result.getResult().getAsString("unique_identifier"));
 		child.setField("_id",result.getResult().getAsString("_id"));
 		child.setField("_rev",result.getResult().getAsString("_rev"));
@@ -92,40 +105,17 @@ public class UploadChildrenRecordsService implements RequestListener {
 		child.clearEditHistory();
 		childRecordStore.storeChildren(childrenList);
 		if (index == childrenList.size() - 1) {
-			childRecordsUploadSeriviceListener.onUploadComplete();
+			listener.markProcessComplete();
 			return;
+		}
+		} catch (ResultException e) {
+			//FIX mE
+			throw new RuntimeException();
 		}
 
 		index++;
 		uploadChildRecordAtIndex();
-
-	}
-
-	public void readProgress(Object context, int bytes, int total) {
-
-	}
-
-	public void writeProgress(Object context, int bytes, int total) {
-
-	}
-
-	public void cancelUploadOfChildRecords() {
-		httpService.cancelRequest();
-	}
-
-	public void setListener(
-			UploadChildrenRecordsSeriviceListener childRecordsUploadSeriviceListener) {
-		this.childRecordsUploadSeriviceListener = childRecordsUploadSeriviceListener;
-	}
-
-	public void uploadChildRecord(Child child) {
-		childrenList.addElement(child);
-		index = 0;
-		if (childrenList == null) {
-			childRecordsUploadSeriviceListener.onUploadComplete();
-			return;
-		}
-		uploadChildRecordAtIndex();		
+		
 	}
 
 }

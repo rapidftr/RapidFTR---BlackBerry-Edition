@@ -3,17 +3,19 @@ package com.rapidftr.controllers;
 import org.json.me.JSONException;
 
 import com.rapidftr.datastore.FormStore;
+import com.rapidftr.net.HttpRequestHandler;
 import com.rapidftr.screens.SynchronizeFormsScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.services.FormService;
-import com.rapidftr.services.FormServiceListener;
+import com.rapidftr.services.RequestCallBackImpl;
+import com.sun.me.web.request.Response;
 
 public class SynchronizeFormsController extends Controller implements
-		FormServiceListener {
+		ControllerCallback {
 
-    FormStore formStore;
+	FormStore formStore;
 	FormService formService;
-	private boolean downloadInProgress = false;
+	HttpRequestHandler listener;
 
 	public SynchronizeFormsController(FormService formService,
 			FormStore formStore, UiStack uiStack,
@@ -21,79 +23,41 @@ public class SynchronizeFormsController extends Controller implements
 		super(synchronizeFormsScreen, uiStack);
 		this.formStore = formStore;
 		this.formService = formService;
-		formService.setListener(this);
+		RequestCallBackImpl callback = new RequestCallBackImpl((ScreenCallBack) screen,this);
+		listener = new HttpRequestHandler(callback);
+		formService.setListener(listener);
 	}
 
 	public void synchronizeForms() {
-		downloadInProgress = true;
+		listener.setRequestInProgress();
 		formService.downloadForms();
 		((SynchronizeFormsScreen) screen).resetProgressBar();
 		show();
 	}
 
 	public void stopSynchronizingForms() {
-		downloadInProgress = false;
+		listener.cancelRequestInProgress();
 		formService.cancelDownloadOfForms();
 	}
 
 	public void login() {
-		downloadInProgress = false;
+		listener.cancelRequestInProgress();
 		dispatcher.login();
 	}
 
-	public void onAuthenticationFailure() {
-
-		if (!downloadInProgress)
-			return;
-
-		downloadInProgress = false;
-		((SynchronizeFormsScreen) screen).onAuthenticationFailure();
-
-	}
-
-	public void onConnectionProblem() {
-		if (!downloadInProgress)
-			return;
-
-		downloadInProgress = false;
+	public void onRequestFailure(Exception exception) {
 		((SynchronizeFormsScreen) screen).downloadFailed();
-
 	}
 
-	public void onDownloadComplete(String jsonFormsAsString) {
-		if (!downloadInProgress)
-			return;
-
-		downloadInProgress = false;
-
+	public void onRequestSuccess(Object context, Response result) {
 		try {
-			formStore.storeForms(jsonFormsAsString);
+			formStore.storeForms(result.getResult().toString());
 		} catch (JSONException e) {
 
 			((SynchronizeFormsScreen) screen).downloadFailed();
 			return;
 		}
-
 		((SynchronizeFormsScreen) screen).downloadCompleted();
-
-	}
-
-	public void updateDownloadStatus(int received, int total) {
-		if (!downloadInProgress)
-			return;
-
-		double size = ((double) received) / total;
-		((SynchronizeFormsScreen) screen)
-				.updateDownloadProgessBar((int) (size * 100));
-
-	}
-
-	public void onDownloadFailed() {
-		if (!downloadInProgress)
-			return;
-
-		downloadInProgress = false;
-		((SynchronizeFormsScreen) screen).downloadFailed();
 
 	}
 

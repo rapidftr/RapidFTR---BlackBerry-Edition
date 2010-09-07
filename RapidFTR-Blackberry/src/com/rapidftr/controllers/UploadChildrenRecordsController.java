@@ -1,80 +1,40 @@
 package com.rapidftr.controllers;
 
 import com.rapidftr.model.Child;
+import com.rapidftr.net.HttpRequestHandler;
 import com.rapidftr.screens.CustomScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.UploadChildrenRecordsScreen;
-import com.rapidftr.services.UploadChildrenRecordsSeriviceListener;
+import com.rapidftr.services.RequestCallBackImpl;
 import com.rapidftr.services.UploadChildrenRecordsService;
+import com.sun.me.web.request.Response;
 
 public class UploadChildrenRecordsController extends Controller implements
-		UploadChildrenRecordsSeriviceListener {
+		ControllerCallback {
 
-	private boolean uploadInProgress = false;
+	
 	private UploadChildrenRecordsService childRecordsUploadService;
-
+	HttpRequestHandler listener;
 	public UploadChildrenRecordsController(CustomScreen screen, UiStack uiStack,
 			UploadChildrenRecordsService childRecordsUploadService) {
 		super(screen, uiStack);
 		this.childRecordsUploadService = childRecordsUploadService;
-		childRecordsUploadService.setListener(this);
+		RequestCallBackImpl callback = new RequestCallBackImpl((ScreenCallBack) screen,this);
+		listener = new HttpRequestHandler(callback);
+		childRecordsUploadService.setListener(listener);
 		screen.setController(this);
 	}
 
 	public void uploadChildRecords() {
-		uploadInProgress = true;
+		listener.setRequestInProgress();
 		childRecordsUploadService.uploadChildRecords();
 		((UploadChildrenRecordsScreen) screen).resetProgressBar();
 		show();
 	}
 
-	public void onUploadComplete() {
-
-		((UploadChildrenRecordsScreen) screen).uploadCompleted();
-	}
-
-	public void onUploadFailed() {
-
-		if (!uploadInProgress)
-			return;
-
-		uploadInProgress = false;
-		((UploadChildrenRecordsScreen) screen).uploadFailed();
-
-	}
-
-	public void updateUploadStatus(int bytes, int total) {
-
-		if (!uploadInProgress)
-			return;
-
-		double size = ((double) bytes) / total;
-		((UploadChildrenRecordsScreen) screen)
-				.updateUploadProgessBar((int) (size * 100));
-
-	}
-
-	public void onAuthenticationFailure() {
-		if (!uploadInProgress)
-			return;
-
-		uploadInProgress = false;
-
-		((UploadChildrenRecordsScreen) screen).authenticationFailure();
-
-	}
-
-	public void onConnectionProblem() {
-		if (!uploadInProgress)
-			return;
-
-		uploadInProgress = false;
-		((UploadChildrenRecordsScreen) screen).connectionProblem();
-
-	}
 
 	public void cancelUpload() {
-		uploadInProgress = false;
+		listener.cancelRequestInProgress();
 		childRecordsUploadService.cancelUploadOfChildRecords();
 	}
 
@@ -83,10 +43,20 @@ public class UploadChildrenRecordsController extends Controller implements
 	}
 
 	public void uploadChildRecord(Child child) {
-		uploadInProgress = true;
+		listener.setRequestInProgress();
 		childRecordsUploadService.uploadChildRecord(child);
 		((UploadChildrenRecordsScreen) screen).resetProgressBar();
 		show();
+	}
+
+	public void onRequestFailure(Exception exception) {
+		((UploadChildrenRecordsScreen) screen).uploadFailed();
+		
+	}
+
+	public void onRequestSuccess(Object context, Response result) {
+		((UploadChildrenRecordsScreen) screen).uploadCompleted();
+		
 	}
 
 }

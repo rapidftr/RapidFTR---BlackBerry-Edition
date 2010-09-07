@@ -45,4 +45,8 @@ public class ChildrenRecordStore {
 		while (enumeration.hasMoreElements())
 			addOrUpdateChild((Child) enumeration.nextElement());
 	   }
+	
+	public void deleteAllChildren() {
+		persistentStore.setContents(new Vector());
+	}
 }
