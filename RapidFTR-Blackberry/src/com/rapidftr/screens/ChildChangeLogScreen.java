@@ -14,7 +14,7 @@ public class ChildChangeLogScreen extends CustomScreen {
 
 	public ChildChangeLogScreen(Child child) {
 		Vector history = child.getHistory();
-		if (history.size() == 0) {
+		if (history==null || history.size() == 0) {
 			add(new RichTextField("No History Logs Present"));
 
 		} else {
