@@ -1,8 +1,8 @@
 package com.rapidftr.services;
 
-import com.rapidftr.controllers.ControllerCallback;
-import com.rapidftr.controllers.ScreenCallBack;
+import com.rapidftr.net.ControllerCallback;
 import com.rapidftr.net.RequestCallBack;
+import com.rapidftr.net.ScreenCallBack;
 import com.sun.me.web.request.Response;
 
 public class RequestCallBackImpl implements RequestCallBack {
@@ -43,13 +43,12 @@ public class RequestCallBackImpl implements RequestCallBack {
 	}
 
 	public void onProcessComplete() {
-		// TODO Auto-generated method stub
+		screenCallback.onProcessComplete();
 		
 	}
 
-	public void onProcessFailed() {
-		// TODO Auto-generated method stub
-		
+	public void onProcessFail() {
+		screenCallback.onProcessFail();		
 	}
 
 }

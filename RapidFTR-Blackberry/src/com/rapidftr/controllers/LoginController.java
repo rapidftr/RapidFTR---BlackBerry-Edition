@@ -1,5 +1,6 @@
 package com.rapidftr.controllers;
 
+import com.rapidftr.net.ControllerCallback;
 import com.rapidftr.net.HttpRequestHandler;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.UiStack;

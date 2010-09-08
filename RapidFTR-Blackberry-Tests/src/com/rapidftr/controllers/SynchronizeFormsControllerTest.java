@@ -79,10 +79,9 @@ public class SynchronizeFormsControllerTest {
 	@Test
 	public void shouldSendDownloadCompletedMessageToSynchronizeFormsScreenOnDownloadComplete() {
 		synchronizeFormsController.synchronizeForms();
-		String jsonResult = new String("json");
 		synchronizeFormsController.onRequestSuccess(new Object(), response);
-		verify(synchronizeFormsScreen).downloadCompleted();
-	}
+		verify(synchronizeFormsScreen).onProcessComplete();
+		}
 
 	@Test
 	public void shouldSendDownloadFaileddMessageToSynchronizeFormsScreenOnJsonExceptionFormStore()
@@ -92,8 +91,8 @@ public class SynchronizeFormsControllerTest {
 		doThrow(new JSONException("Json Exception")).when(formStore)
 				.storeForms(jsonResult);
 		synchronizeFormsController.onRequestSuccess(new Object(), response);
-		verify(synchronizeFormsScreen, never()).downloadCompleted();
-		verify(synchronizeFormsScreen).downloadFailed();
+		verify(synchronizeFormsScreen, never()).onProcessComplete();
+		//verify(synchronizeFormsScreen).onProcessFail();
 
 	}
 

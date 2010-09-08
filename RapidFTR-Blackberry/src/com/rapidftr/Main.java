@@ -4,35 +4,32 @@ import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 
-import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controllers.Dispatcher;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
+import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controllers.SearchChildController;
-import com.rapidftr.controllers.SyncAllController;
 import com.rapidftr.controllers.SynchronizeFormsController;
-import com.rapidftr.controllers.UploadChildrenRecordsController;
+import com.rapidftr.controllers.SyncChildController;
 import com.rapidftr.controllers.ViewChildController;
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
-import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
+import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.SearchChildScreen;
-import com.rapidftr.screens.SyncAllScreen;
 import com.rapidftr.screens.SynchronizeFormsScreen;
 import com.rapidftr.screens.UiStack;
-import com.rapidftr.screens.UploadChildrenRecordsScreen;
+import com.rapidftr.screens.SyncAllScreen;
 import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.ViewChildrenScreen;
-import com.rapidftr.services.ChildService;
 import com.rapidftr.services.ChildStoreService;
+import com.rapidftr.services.ChildSyncService;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
-import com.rapidftr.services.UploadChildrenRecordsService;
 import com.rapidftr.utilities.SettingsStore;
 
 public class Main extends UiApplication {
@@ -101,21 +98,17 @@ public class Main extends UiApplication {
 		ManageChildScreen newChildScreen = new ManageChildScreen(settings);
 		ManageChildController newChildController = new ManageChildController(
 				newChildScreen, uiStack, formStore, childStoreService);
-		UploadChildrenRecordsScreen uploadChildRecordsScreen = new UploadChildrenRecordsScreen();
+		SyncAllScreen uploadChildRecordsScreen = new SyncAllScreen();
 		
-		UploadChildrenRecordsService childRecordsUploadService = new UploadChildrenRecordsService(httpService,childRecordStore);
-		UploadChildrenRecordsController uploadChildRecordsController = new UploadChildrenRecordsController(uploadChildRecordsScreen, uiStack,childRecordsUploadService);
-		ChildService childService = new ChildService(httpService);
-		
-		SyncAllScreen syncAllScreen = new SyncAllScreen();
-		SyncAllController syncAllController = new SyncAllController(syncAllScreen, uiStack, childStoreService,childRecordsUploadService,childService);
+		ChildSyncService childRecordsUploadService = new ChildSyncService(httpService,childRecordStore);
+		SyncChildController uploadChildRecordsController = new SyncChildController(uploadChildRecordsScreen, uiStack,childRecordsUploadService);
 		
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
 		SearchChildController searchChildController = new SearchChildController(searchChildScreen, uiStack);
 		
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,
 				loginController, viewChildrenController, viewChildController,
-				synchronizeFormsController, newChildController,uploadChildRecordsController,syncAllController,searchChildController);
+				synchronizeFormsController, newChildController,uploadChildRecordsController,searchChildController);
 
 		dispatcher.homeScreen();
 

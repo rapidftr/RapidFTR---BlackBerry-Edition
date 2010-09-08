@@ -24,7 +24,7 @@ public class HttpRequestHandler implements RequestListener {
 			requestCallBack.handleException(result.getException());
 		} else if (result.getCode() == HttpConnection.HTTP_UNAUTHORIZED) {
 			requestCallBack.handleUnauthorized();
-		} else if (result.getCode() != HttpConnection.HTTP_OK) {
+		} else if (result.getCode() != HttpConnection.HTTP_OK && result.getCode() != HttpConnection.HTTP_CREATED ) {
 			requestCallBack.handleConnectionProblem();
 			return;
 		} else {
@@ -51,7 +51,7 @@ public class HttpRequestHandler implements RequestListener {
 	}
 	
 	public void markProcessFailed() {
-		requestCallBack.onProcessFailed();
+		requestCallBack.onProcessFail();
 	}
 
 	public boolean isRequestInProgress() {

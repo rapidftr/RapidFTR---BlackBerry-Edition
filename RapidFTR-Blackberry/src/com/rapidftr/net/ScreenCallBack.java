@@ -1,4 +1,4 @@
-package com.rapidftr.controllers;
+package com.rapidftr.net;
 
 public interface ScreenCallBack {
 
@@ -8,4 +8,9 @@ public interface ScreenCallBack {
 
 	void updateRequestProgress(int progress);
 
+	void onProcessComplete();
+
+	void onProcessFail();
+
+	void setProgressMessage(String message);
 }

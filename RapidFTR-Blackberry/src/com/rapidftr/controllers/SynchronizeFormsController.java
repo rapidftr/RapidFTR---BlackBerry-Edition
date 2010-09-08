@@ -1,9 +1,9 @@
 package com.rapidftr.controllers;
 
-import org.json.me.JSONException;
-
 import com.rapidftr.datastore.FormStore;
+import com.rapidftr.net.ControllerCallback;
 import com.rapidftr.net.HttpRequestHandler;
+import com.rapidftr.net.ScreenCallBack;
 import com.rapidftr.screens.SynchronizeFormsScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.services.FormService;
@@ -46,18 +46,18 @@ public class SynchronizeFormsController extends Controller implements
 	}
 
 	public void onRequestFailure(Exception exception) {
-		((SynchronizeFormsScreen) screen).downloadFailed();
+		((ScreenCallBack)screen).onProcessFail();
 	}
 
 	public void onRequestSuccess(Object context, Response result) {
 		try {
 			formStore.storeForms(result.getResult().toString());
-		} catch (JSONException e) {
+		} catch (Exception e) {
 
-			((SynchronizeFormsScreen) screen).downloadFailed();
+			((ScreenCallBack)screen).onProcessFail();
 			return;
 		}
-		((SynchronizeFormsScreen) screen).downloadCompleted();
+		((ScreenCallBack)screen).onProcessComplete();
 
 	}
 

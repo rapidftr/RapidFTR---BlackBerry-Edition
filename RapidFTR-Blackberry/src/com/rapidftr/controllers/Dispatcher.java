@@ -11,8 +11,7 @@ public class Dispatcher {
 	private final ViewChildController viewChildController;
 	private final SynchronizeFormsController synchronizeFormsController;
 	private final ManageChildController newChildController;
-	private final UploadChildrenRecordsController uploadChildRecordsController;
-	private final SyncAllController syncAllController;
+	private final SyncChildController syncChildController;
 	private final SearchChildController searchChildController;
 
 	public Dispatcher(HomeScreenController homeScreenController,
@@ -21,8 +20,7 @@ public class Dispatcher {
 			ViewChildController viewChildController,
 			SynchronizeFormsController synchronizeFormsController,
 			ManageChildController newChildController,
-			UploadChildrenRecordsController uploadChildRecordsController,
-			SyncAllController syncAllController,
+			SyncChildController uploadChildRecordsController,
 			SearchChildController searchChildController) {
 
 		this.homeScreenController = homeScreenController;
@@ -31,9 +29,8 @@ public class Dispatcher {
 		this.viewChildController = viewChildController;
 		this.synchronizeFormsController = synchronizeFormsController;
 		this.newChildController = newChildController;
-		this.uploadChildRecordsController = uploadChildRecordsController;
+		this.syncChildController = uploadChildRecordsController;
 		this.searchChildController = searchChildController;
-		this.syncAllController = syncAllController;
 		homeScreenController.setDispatcher(this);
 		loginController.setDispatcher(this);
 		viewChildrenController.setDispatcher(this);
@@ -74,11 +71,11 @@ public class Dispatcher {
 	}
 
 	public void uploadChildRecords() {
-		uploadChildRecordsController.uploadChildRecords();
+		syncChildController.uploadChildRecords();
 	}
 
 	public void syncAll() {
-		syncAllController.syncAll();
+		syncChildController.syncAllChildRecords();
 	}
 
 	public void viewChildHistory(Child child) {
@@ -94,8 +91,7 @@ public class Dispatcher {
 	}
 
 	public void syncChild(Child child) {
-		uploadChildRecordsController.uploadChildRecord(child);
-		
+		syncChildController.uploadChildRecord(child);		
 	}
 
 }

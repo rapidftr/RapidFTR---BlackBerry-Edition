@@ -14,8 +14,8 @@ import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 
 import com.rapidftr.controllers.LoginController;
-import com.rapidftr.controllers.ScreenCallBack;
 import com.rapidftr.controls.Button;
+import com.rapidftr.net.ScreenCallBack;
 import com.rapidftr.utilities.SettingsStore;
 
 public class LoginScreen extends CustomScreen implements FieldChangeListener,
@@ -215,6 +215,21 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 
 	public void updateRequestProgress(int progress) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	public void onProcessComplete() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onProcessFail() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setProgressMessage(String message) {
+		setProgressMsg(message);
 		
 	}
 

@@ -1,8 +1,8 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.controllers.ScreenCallBack;
 import com.rapidftr.controllers.SynchronizeFormsController;
 import com.rapidftr.controls.Button;
+import com.rapidftr.net.ScreenCallBack;
 
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
@@ -76,7 +76,7 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 	}
 
 
-	public void downloadCompleted() {
+	private void downloadCompleted() {
 
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
@@ -89,7 +89,7 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 
 	}
 
-	public void downloadFailed() {
+	private void downloadFailed() {
 
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
@@ -181,6 +181,19 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 				downloadProgressBar.setValue(size);
 			}
 		});
+	}
+
+	public void onProcessComplete() {
+		downloadCompleted();
+	}
+
+	public void onProcessFail() {
+		downloadFailed();		
+	}
+
+	public void setProgressMessage(String message) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
