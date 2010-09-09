@@ -54,6 +54,9 @@ public class ChildSyncService extends RequestAwareService {
 						httpArgs, requestHandler, postData, null);
 			}
 		}
+		if(requestHandler.isProcessCompleted()){
+			requestHandler.markProcessComplete();
+		}
 	}
 
 	
