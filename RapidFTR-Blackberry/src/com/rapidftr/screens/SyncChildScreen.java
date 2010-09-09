@@ -85,10 +85,11 @@ public class SyncChildScreen extends CustomScreen implements
 		}
 		if (field.equals(cancelButton)) {
 			int result = Dialog.ask(Dialog.D_YES_NO,
-					"Are you sure want to cacel uploading?");
-			uploadProgressBar.setValue(0);
+					"Are you sure want to cacel Sync?");
+			//uploadProgressBar.setValue(0);
 
 			if (result == Dialog.YES) {
+				uploadProgressBar.setValue(0);
 				((SyncChildController) controller).cancelUpload();
 				controller.popScreen();
 				return;
@@ -164,7 +165,7 @@ public class SyncChildScreen extends CustomScreen implements
 			public void run() {
 
 				int result = Dialog.ask(Dialog.D_YES_NO,
-						"Upload Failed.\n Do you want to Retry?");
+						"Sync Failed.\n Do you want to Retry?");
 				uploadProgressBar.setValue(0);
 
 				if (result == Dialog.YES) {

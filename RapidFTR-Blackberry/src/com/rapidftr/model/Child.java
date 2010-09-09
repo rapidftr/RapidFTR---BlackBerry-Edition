@@ -52,7 +52,7 @@ public class Child implements Persistable {
 		while (keyList.hasMoreElements()) {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
-			if (isNewChild()&& key.equals("current_photo_key") && value != null && value != "") {
+			if (isNewChild()&& key.equals("current_photo_key") && value != null && value.equals("")) {
 				Arg[] headers = new Arg[2];
 				headers[0] = new Arg("Content-Disposition",
 						"form-data; name=\"child[" + "photo" + "]\"");
