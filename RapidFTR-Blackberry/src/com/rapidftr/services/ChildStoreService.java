@@ -61,11 +61,11 @@ public class ChildStoreService {
 	}
 
 
-	public void syncChildWithStore(Child child) {
+	public void saveChildInLocalStore(Child child) {
 		childRecordStore.addOrUpdateChild(child);
 	}
 
-	public void syncAllChildrenWithStore(Vector children){		
+	public void saveChildrenInLocalStore(Vector children){	
 		childRecordStore.storeChildren(children);		
 	}
 

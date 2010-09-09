@@ -78,6 +78,7 @@ public class Button extends Field {
 			this.getChangeListener().fieldChanged(this, context);
 		} catch (Exception e) {
 			System.out.println(e.toString());
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 

@@ -1,70 +1,32 @@
 package com.rapidftr.services;
 
-import javax.microedition.io.HttpConnection;
-
-import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.RequestListener;
-import com.sun.me.web.request.Response;
 
-public class FormService implements RequestListener {
+public class FormService {
 
 	private HttpService httpService;
-	private FormServiceListener formServiceListener;
+	private RequestListener listener;
 
 	public FormService(HttpService httpService) {
 		this.httpService = httpService;
 	}
 
 	public void downloadForms() {
-
 		Arg[] httpArgs = new Arg[1];
-		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;		
-		httpService.get("published_form_sections",null,httpArgs,this);
+		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
+		httpService.get("published_form_sections", null, httpArgs, listener);
 	}
 
-	public void done(Object context, Response result) throws Exception {
-
-		if (result.getCode() == HttpConnection.HTTP_UNAUTHORIZED) {
-			formServiceListener.onAuthenticationFailure();
-			return;
-		}
-		if (result.getException() != null) {
-
-			//formServiceListener.onDownloadComplete(sampleJsonForTesting());	// // just form development purpose since the server doesn't return json as of now.
-			formServiceListener.onDownloadFailed();
-			return;
-		}
-
-		if (result.getCode() != HttpConnection.HTTP_OK) {
-			formServiceListener.onConnectionProblem();
-			return;
-		}
-		
-
-		formServiceListener.onDownloadComplete(result.getResult().toString());
-	}
-
-	public void readProgress(Object context, int bytes, int total) {
-
-		formServiceListener.updateDownloadStatus(bytes, total);
-
-	}
-
-	public void writeProgress(Object context, int bytes, int total) {
+	public void setListener(RequestListener listener) {
+		this.listener = listener;
 
 	}
 
 	public void cancelDownloadOfForms() {
-
 		httpService.cancelRequest();
-	}
-
-	public void setListener(FormServiceListener formServiceListener) {
-		this.formServiceListener = formServiceListener;
-
 	}
 
 	public String sampleJsonForTesting() {

@@ -9,8 +9,9 @@ import javax.microedition.io.HttpConnection;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.rapidftr.net.HttpServer;
+import com.rapidftr.net.HttpRequestHandler;
 import com.rapidftr.net.HttpService;
+import com.rapidftr.net.RequestCallBack;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.request.Arg;
@@ -21,15 +22,17 @@ public class FormServiceTest {
 
 	private HttpService httpService;
 	private FormService formService;
-	private FormServiceListener formServiceListener;
+	private  HttpRequestHandler listener;
 	private Object context;
+	private RequestCallBack requestCallback;
 
 	@Before
 	public void setUp() {
 		httpService = mock(HttpService.class);
 		formService = new FormService(httpService);
-		formServiceListener = mock(FormServiceListener.class);
-		formService.setListener(formServiceListener);
+		requestCallback = mock(RequestCallBackImpl.class);
+		listener = new HttpRequestHandler(requestCallback);
+		formService.setListener(listener);
 		context = mock(Object.class);
 	}
 
@@ -39,15 +42,16 @@ public class FormServiceTest {
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
 		verify(httpService).get("published_form_sections", null, httpArgs,
-				formService);
+				listener);
 	}
 
 	@Test
 	public void shouldSendDownloadStatusToServiceListener() {
 		int received = 10;
 		int total = 100;
-		((RequestListener) formService).readProgress(context, received, total);
-		verify(formServiceListener).updateDownloadStatus(received, total);
+		listener.setRequestInProgress();
+		listener.readProgress(context, received, total);
+		verify(requestCallback).updateRequestProgress(10);
 	}
 
 	@Test
@@ -57,13 +61,11 @@ public class FormServiceTest {
 		Result mockResult = mock(Result.class);
 		when(response.getResult()).thenReturn(mockResult);
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_OK);
-
 		String json = "json response";
 		when(mockResult.toString()).thenReturn(json);
-
-		((RequestListener) formService).done(context, response);
-
-		verify(formServiceListener).onDownloadComplete(json);
+		listener.setRequestInProgress();
+		listener.done(context, response);
+		verify(requestCallback).onSuccess(context, response);
 	}
 
 	@Test
@@ -71,8 +73,9 @@ public class FormServiceTest {
 			throws Exception {
 		Response response = mock(Response.class);
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_UNAUTHORIZED);
-		((RequestListener) formService).done(context, response);
-		verify(formServiceListener).onAuthenticationFailure();
+		listener.setRequestInProgress();
+		listener.done(context, response);
+		verify(requestCallback).handleUnauthorized();
 	}
 
 	@Test
@@ -80,9 +83,9 @@ public class FormServiceTest {
 			throws Exception {
 		Response response = mock(Response.class);
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_CLIENT_TIMEOUT);
-
-		((RequestListener) formService).done(context, response);
-		verify(formServiceListener).onConnectionProblem();
+		listener.setRequestInProgress();
+		listener.done(context, response);
+		verify(requestCallback).handleConnectionProblem();
 	}
 
 	@Test
@@ -90,8 +93,9 @@ public class FormServiceTest {
 			throws Exception {
 		Response response = mock(Response.class);
 		when(response.getException()).thenReturn(new Exception());
-		((RequestListener) formService).done(context, response);
-		verify(formServiceListener).onDownloadFailed();
+		listener.setRequestInProgress();
+		listener.done(context, response);
+		verify(requestCallback).handleException(response.getException());
 
 	}
 

@@ -2,47 +2,63 @@ package com.rapidftr.controllers;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.rapidftr.net.HttpRequestHandler;
 import com.rapidftr.screens.UiStack;
-import com.rapidftr.screens.UploadChildrenRecordsScreen;
-import com.rapidftr.services.UploadChildrenRecordsService;
+import com.rapidftr.screens.SyncAllScreen;
+import com.rapidftr.services.ChildSyncService;
+import com.rapidftr.services.RequestCallBackImpl;
+import com.sun.me.web.path.Result;
+import com.sun.me.web.request.Response;
 
 public class UploadChildrenRecordsControllerTests {
 
-	private UploadChildrenRecordsScreen uploadChildRecordsScreen;
+	private SyncAllScreen uploadChildRecordsScreen;
 	private UiStack uiStack;
-	private UploadChildrenRecordsService uploadChildRecordsService;
-	private UploadChildrenRecordsController uploadChildRecordsController;
+	private ChildSyncService childSyncService;
+	private SyncChildController uploadChildRecordsController;
+	private  HttpRequestHandler listener;
+	private RequestCallBackImpl requestCallback;
+	private Response response;
+	private Result result;
 
 	@Before
 	public void setUp() {
-		uploadChildRecordsScreen = mock(UploadChildrenRecordsScreen.class);
+		uploadChildRecordsScreen = mock(SyncAllScreen.class);
 		uiStack = mock(UiStack.class);
-		uploadChildRecordsService = mock(UploadChildrenRecordsService.class);
-		uploadChildRecordsController = new UploadChildrenRecordsController(
-				uploadChildRecordsScreen, uiStack, uploadChildRecordsService);
+		childSyncService = mock(ChildSyncService.class);
+		uploadChildRecordsController = new SyncChildController(
+				uploadChildRecordsScreen, uiStack, childSyncService);
+		requestCallback = new RequestCallBackImpl(uploadChildRecordsScreen,uploadChildRecordsController);
+		listener = new HttpRequestHandler(requestCallback);
+		childSyncService.setListener(listener);
+		response = mock(Response.class);
+		result = mock(Result.class);
+		when(response.getResult()).thenReturn(result);
+		when(result.toString()).thenReturn("json");
 	}
 
 	@Test
 	public void shouldUploadChildRecords() {
 		uploadChildRecordsController.uploadChildRecords();
-		verify(uploadChildRecordsService).uploadChildRecords();
+		verify(childSyncService).uploadChildRecords();
 	}
 
 	@Test
 	public void shouldCancelUploadChildRecords() {
 		uploadChildRecordsController.cancelUpload();
-		verify(uploadChildRecordsService).cancelUploadOfChildRecords();
+		verify(childSyncService).cancelUploadOfChildRecords();
 	}
 
 	@Test
 	public void shouldUpdateScreenOnConnectionProblem() {
 		uploadChildRecordsController.uploadChildRecords();
-		uploadChildRecordsController.onConnectionProblem();
-		verify(uploadChildRecordsScreen).connectionProblem();
+		requestCallback.handleConnectionProblem();
+		verify(uploadChildRecordsScreen).handleConnectionProblem();
 	}
 
 	@Test
@@ -50,8 +66,8 @@ public class UploadChildrenRecordsControllerTests {
 		uploadChildRecordsController.uploadChildRecords();
 		int bytes = 2;
 		int total = 3;
-		uploadChildRecordsController.updateUploadStatus(bytes, total);
-		verify(uploadChildRecordsScreen).updateUploadProgessBar(
+		listener.updateRequestProgress(bytes, total);
+		verify(uploadChildRecordsScreen).updateRequestProgress(
 				(int) ((((double) bytes) / total) * 100));
 	}
 
@@ -66,22 +82,23 @@ public class UploadChildrenRecordsControllerTests {
 	@Test
 	public void shouldAlertUserOnAuthenticationFailure() {
 		uploadChildRecordsController.uploadChildRecords();
-		uploadChildRecordsController.onAuthenticationFailure();
-		verify(uploadChildRecordsScreen).authenticationFailure();
+		requestCallback.handleUnauthorized();
+		verify(uploadChildRecordsScreen).handleAuthenticationFailure();
 	}
 
 	@Test
 	public void shouldAlertUserOnUploadComplete() {
 		uploadChildRecordsController.uploadChildRecords();
-		uploadChildRecordsController.onUploadComplete();
-		verify(uploadChildRecordsScreen).uploadCompleted();
+		requestCallback.onSuccess(new Object(), response);
+		verify(uploadChildRecordsScreen).onProcessComplete();
 	}
 
 	@Test
 	public void shouldAlertUserOnUploadFailed() {
 		uploadChildRecordsController.uploadChildRecords();
-		uploadChildRecordsController.onUploadFailed();
-		verify(uploadChildRecordsScreen).uploadFailed();
+		Exception exception = mock(Exception.class);
+		requestCallback.handleException(exception);
+		verify(uploadChildRecordsScreen).onProcessFail();
 	}
 
 }

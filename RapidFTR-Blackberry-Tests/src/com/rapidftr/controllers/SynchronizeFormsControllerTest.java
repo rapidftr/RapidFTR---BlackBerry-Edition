@@ -1,21 +1,26 @@
 package com.rapidftr.controllers;
 
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
-import java.util.Vector;
+import java.util.Hashtable;
 
 import org.json.me.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.rapidftr.datastore.FormStore;
+import com.rapidftr.net.HttpRequestHandler;
 import com.rapidftr.screens.SynchronizeFormsScreen;
 import com.rapidftr.screens.UiStack;
 import com.rapidftr.services.FormService;
-import com.rapidftr.services.FormServiceListener;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.stub;
-
-import static org.mockito.Mockito.*;
+import com.rapidftr.services.RequestCallBackImpl;
+import com.sun.me.web.path.Result;
+import com.sun.me.web.request.Response;
 
 public class SynchronizeFormsControllerTest {
 
@@ -24,7 +29,10 @@ public class SynchronizeFormsControllerTest {
 	private SynchronizeFormsScreen synchronizeFormsScreen;
 	private FormStore formStore;
 	private SynchronizeFormsController synchronizeFormsController;
-
+	private  HttpRequestHandler listener;
+	private RequestCallBackImpl requestCallback;
+	private Response response;
+	private Result result;
 	@Before
 	public void setUp() {
 		formService = mock(FormService.class);
@@ -33,13 +41,15 @@ public class SynchronizeFormsControllerTest {
 		formStore = mock(FormStore.class);
 		synchronizeFormsController = new SynchronizeFormsController(
 				formService, formStore, uiStack, synchronizeFormsScreen);
+		requestCallback = new RequestCallBackImpl(synchronizeFormsScreen,synchronizeFormsController);
+		listener = new HttpRequestHandler(requestCallback);
+		formService.setListener(listener);
+		response = mock(Response.class);
+		result = mock(Result.class);
+		when(response.getResult()).thenReturn(result);
+		when(result.toString()).thenReturn("json");
 	}
 
-	@Test
-	public void shouldSetFormSerivceListenerOnFormService() {
-		verify(formService).setListener(
-				(FormServiceListener) synchronizeFormsController);
-	}
 
 	@Test
 	public void shouldDownloadFormsFromFormService() throws IOException {
@@ -62,17 +72,16 @@ public class SynchronizeFormsControllerTest {
 	@Test
 	public void shouldUpdateProgressBarValueOnScreen() {
 		synchronizeFormsController.synchronizeForms();
-		synchronizeFormsController.updateDownloadStatus(10, 100);
-		verify(synchronizeFormsScreen).updateDownloadProgessBar(10);
+		listener.updateRequestProgress(10, 100);
+		verify(synchronizeFormsScreen).updateRequestProgress(10);
 	}
 
 	@Test
 	public void shouldSendDownloadCompletedMessageToSynchronizeFormsScreenOnDownloadComplete() {
 		synchronizeFormsController.synchronizeForms();
-		String jsonResult = new String("json");
-		synchronizeFormsController.onDownloadComplete(jsonResult);
-		verify(synchronizeFormsScreen).downloadCompleted();
-	}
+		synchronizeFormsController.onRequestSuccess(new Object(), response);
+		verify(synchronizeFormsScreen).onProcessComplete();
+		}
 
 	@Test
 	public void shouldSendDownloadFaileddMessageToSynchronizeFormsScreenOnJsonExceptionFormStore()
@@ -81,17 +90,17 @@ public class SynchronizeFormsControllerTest {
 		String jsonResult = new String("json");
 		doThrow(new JSONException("Json Exception")).when(formStore)
 				.storeForms(jsonResult);
-		synchronizeFormsController.onDownloadComplete(jsonResult);
-		verify(synchronizeFormsScreen, never()).downloadCompleted();
-		verify(synchronizeFormsScreen).downloadFailed();
+		synchronizeFormsController.onRequestSuccess(new Object(), response);
+		verify(synchronizeFormsScreen, never()).onProcessComplete();
+		//verify(synchronizeFormsScreen).onProcessFail();
 
 	}
 
 	@Test
 	public void shouldSendDownloadFailedErrorMessageToScreen() {
 		synchronizeFormsController.synchronizeForms();
-		synchronizeFormsController.onConnectionProblem();
-		verify(synchronizeFormsScreen).downloadFailed();
+		requestCallback.handleConnectionProblem();
+		verify(synchronizeFormsScreen).handleConnectionProblem();
 	}
 
 }

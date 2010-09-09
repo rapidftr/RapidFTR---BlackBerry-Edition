@@ -11,11 +11,12 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.BorderFactory;
 
-import com.rapidftr.controllers.UploadChildrenRecordsController;
+import com.rapidftr.controllers.SyncChildController;
 import com.rapidftr.controls.Button;
+import com.rapidftr.net.ScreenCallBack;
 
 public class SyncAllScreen extends CustomScreen implements
-		FieldChangeListener {
+		FieldChangeListener, ScreenCallBack {
 
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
 	private Button okButton;
@@ -65,55 +66,10 @@ public class SyncAllScreen extends CustomScreen implements
 	}
 
 	public void resetProgressBar() {
-		uploadProgressBar.setLabel("Uploading ..");
+		uploadProgressBar.setLabel("Syncing ..");
 		uploadProgressBar.setValue(0);
 		hButtonManager.deleteAll();
 		hButtonManager.add(cancelButton);
-
-	}
-
-	public void updateUploadProgessBar(final int value) {
-
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-				uploadProgressBar.setValue(value);
-			}
-		});
-
-	}
-
-	public void uploadCompleted() {
-
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-				uploadProgressBar.setLabel("Complete");
-				uploadProgressBar.setValue(100);
-				hButtonManager.deleteAll();
-				hButtonManager.add(okButton);
-			}
-		});
-
-	}
-
-	public void uploadFailed() {
-
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-
-				int result = Dialog.ask(Dialog.D_YES_NO,
-						"Upload Failed.\n Do you want to Retry?");
-				uploadProgressBar.setValue(0);
-
-				if (result == Dialog.YES) {
-					((UploadChildrenRecordsController) controller)
-							.uploadChildRecords();
-					return;
-				}
-
-				controller.popScreen();
-
-			}
-		});
 
 	}
 
@@ -133,7 +89,7 @@ public class SyncAllScreen extends CustomScreen implements
 			uploadProgressBar.setValue(0);
 
 			if (result == Dialog.YES) {
-				((UploadChildrenRecordsController) controller).cancelUpload();
+				((SyncChildController) controller).cancelUpload();
 				controller.popScreen();
 				return;
 			}
@@ -142,8 +98,16 @@ public class SyncAllScreen extends CustomScreen implements
 
 	}
 
-	public void authenticationFailure() {
+	public void cleanUp() {
+		((SyncChildController) controller).cancelUpload();
+	}
 
+	public boolean onClose() {
+		cleanUp();
+		return super.onClose();
+	}
+
+	public void handleAuthenticationFailure() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 
@@ -154,7 +118,7 @@ public class SyncAllScreen extends CustomScreen implements
 				controller.popScreen();
 
 				if (result == Dialog.OK) {
-					((UploadChildrenRecordsController) controller).login();
+					((SyncChildController) controller).login();
 					return;
 				}
 
@@ -163,16 +127,7 @@ public class SyncAllScreen extends CustomScreen implements
 
 	}
 
-	public void cleanUp() {
-		((UploadChildrenRecordsController) controller).cancelUpload();
-	}
-
-	public boolean onClose() {
-		cleanUp();
-		return super.onClose();
-	}
-
-	public void connectionProblem() {
+	public void handleConnectionProblem() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 				Dialog
@@ -183,4 +138,49 @@ public class SyncAllScreen extends CustomScreen implements
 		});
 
 	}
+
+	public void updateRequestProgress(final int progress) {
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				uploadProgressBar.setValue(progress);
+			}
+		});
+
+	}
+
+	public void onProcessComplete() {
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				uploadProgressBar.setLabel("Complete");
+				uploadProgressBar.setValue(100);
+				hButtonManager.deleteAll();
+				hButtonManager.add(okButton);
+			}
+		});
+	}
+
+	public void onProcessFail() {
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+
+				int result = Dialog.ask(Dialog.D_YES_NO,
+						"Upload Failed.\n Do you want to Retry?");
+				uploadProgressBar.setValue(0);
+
+				if (result == Dialog.YES) {
+					((SyncChildController) controller).uploadChildRecords();
+					return;
+				}
+
+				controller.popScreen();
+
+			}
+		});
+
+	}
+
+	public void setProgressMessage(String message) {
+		uploadProgressBar.setLabel(message);
+	}
+
 }

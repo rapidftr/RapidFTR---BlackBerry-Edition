@@ -1,14 +1,11 @@
 package com.rapidftr.screens;
 
-import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.UiApplication;
-import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BasicEditField;
-import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.PasswordEditField;
@@ -18,9 +15,11 @@ import net.rim.device.api.ui.container.HorizontalFieldManager;
 
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
+import com.rapidftr.net.ScreenCallBack;
 import com.rapidftr.utilities.SettingsStore;
 
-public class LoginScreen extends CustomScreen implements FieldChangeListener {
+public class LoginScreen extends CustomScreen implements FieldChangeListener,
+		ScreenCallBack {
 
 	private static final int MAX_SIZE = 200;
 
@@ -92,8 +91,6 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener {
 		}
 	}
 
-	
-
 	private void addButtons() {
 		loginButton = new Button("Login");
 		loginButton.setChangeListener(this);
@@ -141,27 +138,6 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener {
 		} catch (IllegalArgumentException ex) {
 
 		}
-
-	}
-
-	public void onLoginFailed() {
-
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-				setProgressMsg("Login Failed");
-				setLoginButton();
-			}
-		});
-
-	}
-
-	public void onConnectionProblem() {
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-				setProgressMsg("Connection Problem");
-				setLoginButton();
-			}
-		});
 
 	}
 
@@ -214,6 +190,47 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener {
 		removeProgressMsgIfExist();
 		setLoginButton();
 		((LoginController) controller).loginCancelled();
+	}
+
+	public void handleAuthenticationFailure() {
+
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				setProgressMsg("Login Failed");
+				setLoginButton();
+			}
+		});
+
+	}
+
+
+	public void handleConnectionProblem() {
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				setProgressMsg("Connection Problem");
+				setLoginButton();
+			}
+		});
+	}
+
+	public void updateRequestProgress(int progress) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onProcessComplete() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onProcessFail() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setProgressMessage(String message) {
+		setProgressMsg(message);
+		
 	}
 
 }

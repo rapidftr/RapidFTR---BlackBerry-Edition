@@ -1,6 +1,7 @@
 package com.rapidftr.datastore;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import com.rapidftr.model.Child;
@@ -16,6 +17,12 @@ public class ChildrenRecordStore {
 
 	protected void initilaize() {
 		persistentStore = new PersistentStore(KEY);
+
+		if (persistentStore.getContents() == null) {
+			persistentStore.setContents(new Vector());
+
+		}
+
 	}
 
 	public void addOrUpdateChild(Child child) {
@@ -40,9 +47,14 @@ public class ChildrenRecordStore {
 		return (Vector) persistentStore.getContents();
 	}
 
+
 	public void storeChildren(Vector childrenList) {
 		Enumeration enumeration = childrenList.elements();
 		while (enumeration.hasMoreElements())
 			addOrUpdateChild((Child) enumeration.nextElement());
-	   }
+	}
+
+	public void deleteAllChildren() {
+		persistentStore.setContents(new Vector());
+	}
 }

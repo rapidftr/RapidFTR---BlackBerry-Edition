@@ -45,7 +45,7 @@ public class ManageChildController extends Controller {
 	}
 
 	public void saveChild(Child child) {
-		childStoreService.syncChildWithStore(child);
+		childStoreService.saveChildInLocalStore(child);
 	}
 
 	public void syncChild(Child child) {
