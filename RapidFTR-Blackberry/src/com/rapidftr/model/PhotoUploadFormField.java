@@ -21,9 +21,9 @@ public class PhotoUploadFormField extends FormField implements
 
 	private Bitmap bitmap;
 	private VerticalFieldManager manager;
-	private String imageLocation;
+	private String imageLocation= "";
 	private Button capturePhoto;
-
+	private Child child;
 	private PhotoUploadFormField(String name) {
 		super(name, TYPE);
 	}
@@ -31,9 +31,29 @@ public class PhotoUploadFormField extends FormField implements
 	public void initializeLayout(final ManageChildScreen newChildScreen) {
 
 		final ImageCaptureListener imageChanageListener = this;
-
+		child = newChildScreen.getChild();
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
-		bitmap = Bitmap.getBitmapResource("res/head.png");
+		if(child == null || child.getField("current_photo_key")=="")
+		{
+			bitmap = Bitmap.getBitmapResource("res/head.png");
+		}
+		else
+		{
+			String imageLocation = (String) child.getField("current_photo_key");
+			EncodedImage fullSizeImage = ImageUtility.getBitmapImageForPath(imageLocation);
+			
+			if(fullSizeImage != null)
+			{
+				int requiredWidth = Fixed32.toFP(Bitmap.getBitmapResource("res/head.png").getWidth());
+				int requiredHeight = Fixed32.toFP(Bitmap.getBitmapResource("res/head.png").getHeight());
+				bitmap =ImageUtility.scaleImage(fullSizeImage, requiredWidth, requiredHeight);
+			}
+			else
+			{
+				bitmap = Bitmap.getBitmapResource("res/head.png");
+			}
+			
+		}
 		capturePhoto = new Button(bitmap);
 
 		capturePhoto.setChangeListener(new FieldChangeListener() {
@@ -65,15 +85,15 @@ public class PhotoUploadFormField extends FormField implements
 
 		this.imageLocation = imageLocation;
 
-		ImageUtility imageUtility = new ImageUtility();
 
 		int requiredWidth = Fixed32.toFP(bitmap.getWidth());
 		int requiredHeight = Fixed32.toFP(bitmap.getHeight());
 
-		bitmap = imageUtility.scaleImage(encodedImage, requiredWidth,
+		bitmap = ImageUtility.scaleImage(encodedImage, requiredWidth,
 				requiredHeight);
 
 		capturePhoto.setBitmap(bitmap);
+		//this.imageLocation="";
 
 	}
 
@@ -98,5 +118,4 @@ public class PhotoUploadFormField extends FormField implements
 	public void setValue(String value) {
 		imageLocation = value;		
 	}
-
 }

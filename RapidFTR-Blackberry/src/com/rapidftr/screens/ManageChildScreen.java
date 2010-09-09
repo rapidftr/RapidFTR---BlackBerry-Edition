@@ -29,7 +29,7 @@ public class ManageChildScreen extends CustomScreen {
 	private Manager screenManager;
 	SettingsStore settings;
 	private Child childToEdit;
-	
+	private Child childToSave;
 	public ManageChildScreen(SettingsStore settings) {
 		this.settings = settings;
 	}
@@ -54,6 +54,7 @@ public class ManageChildScreen extends CustomScreen {
 
 	public void setEditForms(Vector forms, Child childToEdit) {
 		this.childToEdit = childToEdit;
+		this.childToSave = childToEdit;
 		this.forms = forms;
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			((Form) list.nextElement()).initializeLayoutWithChild(this,
@@ -120,6 +121,7 @@ public class ManageChildScreen extends CustomScreen {
 
 			public void fieldChanged(Field field, int context) {
 				onSaveChildClicked();
+				childToEdit =  null;
 				controller.popScreen();
 			}
 		});
@@ -157,6 +159,7 @@ public class ManageChildScreen extends CustomScreen {
 			childToEdit.update(settings.getCurrentlyLoggedIn(),forms);
 		}
 		((ManageChildController) controller).saveChild(childToEdit);
+		//childToEdit =  null;
 	}
 	
 	protected void makeMenu(Menu menu, int instance) {
@@ -170,7 +173,7 @@ public class ManageChildScreen extends CustomScreen {
 			}
 		};
 		
-		MenuItem syncChildMenu = new MenuItem("Save and Sync Record ", 2, 2) {
+		MenuItem syncChildMenu = new MenuItem("Sync Record ", 2, 2) {
 			public void run() {
 				controller.popScreen();
 				onSaveChildClicked();
@@ -188,5 +191,10 @@ public class ManageChildScreen extends CustomScreen {
 		menu.add(saveChildMenu);
 		menu.add(syncChildMenu);
 		menu.add(CloseMenu);
+	}
+	
+	public Child getChild()
+	{
+		return childToEdit;
 	}
 }

@@ -46,7 +46,15 @@ public class SelectboxFormField extends FormField {
 
 	public String getValue() {
 
-		return (String) optionStrings.elementAt(field.getSelectedIndex());
+		int selectedIndex = field.getSelectedIndex();
+		if(selectedIndex > 0)
+		{
+			return (String) optionStrings.elementAt(selectedIndex);
+		}
+		else
+		{
+			return "";
+		}
 
 	}
 

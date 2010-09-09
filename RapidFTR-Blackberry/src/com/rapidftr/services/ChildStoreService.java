@@ -15,6 +15,10 @@ public class ChildStoreService {
 
 	public Child[] getAllChildrenFromPhoneStoredAsArray() {
 		Vector children = childRecordStore.getAllChildren();
+		if(children == null)
+		{
+			return new Child[0];
+		}
 		Child[] childList = new Child[children.size()];
 		children.copyInto(childList);
 		return childList;

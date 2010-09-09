@@ -125,7 +125,28 @@ public class UploadChildrenRecordsService implements RequestListener {
 			childRecordsUploadSeriviceListener.onUploadComplete();
 			return;
 		}
-		uploadChildRecordAtIndex();		
+		uploadSingleChild(child);
 	}
 
+	private void uploadSingleChild(Child child)
+	{
+			childRecordsUploadSeriviceListener.updateUploadStatus(index,
+					childrenList.size());
+			
+			PostData postData = child.getPostData();
+			Arg multiPart = new Arg("Content-Type",
+					"multipart/form-data;boundary=" + postData.getBoundary());
+			//Arg putRequest = new Arg("X-HTTP-Method-Override","PUT");
+			Arg json = HttpUtility.HEADER_ACCEPT_JSON;
+			Arg[] httpArgs = { multiPart, json };
+			
+			if (child.isNewChild()) {
+				httpService.post("children", null, httpArgs, this, postData, null);
+			}else{
+				Arg putRequest = new Arg("X-HTTP-Method-Override","PUT");
+				Arg[] putHttpArgs = { multiPart, json,putRequest };
+				httpService.post("children/"+child.getField("_id"), null, putHttpArgs, this, postData, null);
+			}
+		
+	}
 }

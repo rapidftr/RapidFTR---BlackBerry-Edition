@@ -13,13 +13,19 @@ import com.rapidftr.model.Child;
 public class ChildChangeLogScreen extends CustomScreen {
 
 	public ChildChangeLogScreen(Child child) {
-		Vector history = child.getHistory();
-		if (history==null || history.size() == 0) {
+		if(child != null)
+		{	Vector history = child.getHistory();
+			if (history==null || history.size() == 0) {
+				add(new RichTextField("No History Logs Present"));
+	
+			} else {
+				layoutScreen(history);
+	
+			}
+		}
+		else
+		{
 			add(new RichTextField("No History Logs Present"));
-
-		} else {
-			layoutScreen(history);
-
 		}
 	}
 
