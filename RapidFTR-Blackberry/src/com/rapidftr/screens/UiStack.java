@@ -18,6 +18,9 @@ public class UiStack {
 	}
 
     public void popScreen(MainScreen screen) {
-        application.popScreen(screen);
+    	if(application.getActiveScreen()==screen)
+    		{
+    			application.popScreen(screen);
+    		}
     }
 }
