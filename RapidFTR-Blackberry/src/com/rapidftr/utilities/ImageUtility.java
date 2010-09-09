@@ -1,5 +1,11 @@
 package com.rapidftr.utilities;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.microedition.io.Connector;
+import javax.microedition.io.file.FileConnection;
+
 import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
@@ -51,5 +57,33 @@ public class ImageUtility {
 			}
 		}
 		return out;
+	}
+	
+	public static EncodedImage getBitmapImageForPath(String Path)
+	{
+		String ImagePath = "file://"+ Path;
+		
+	FileConnection fconn;
+
+	try {
+		fconn = (FileConnection) Connector.open(ImagePath,
+				Connector.READ);
+		if (fconn.exists()) {
+			byte[] imageBytes = new byte[(int) fconn.fileSize()];
+			InputStream inStream = fconn.openInputStream();
+			inStream.read(imageBytes);
+			inStream.close();
+			EncodedImage eimg= EncodedImage.createEncodedImage(
+					imageBytes, 0, (int) fconn.fileSize());
+			fconn.close();
+			return eimg;
+
+		}
+
+	} catch (IOException e) {
+		e.printStackTrace();
+		return  null ;
+	}
+	return null;
 	}
 }

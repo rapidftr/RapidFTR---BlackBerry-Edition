@@ -52,7 +52,7 @@ public class Child implements Persistable {
 		while (keyList.hasMoreElements()) {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
-			if (isNewChild()&&key.equals("current_photo_key") && value != null) {
+			if (isNewChild()&& key.equals("current_photo_key") && value != null && value != "") {
 				Arg[] headers = new Arg[2];
 				headers[0] = new Arg("Content-Disposition",
 						"form-data; name=\"child[" + "photo" + "]\"");
@@ -146,12 +146,28 @@ public class Child implements Persistable {
 
 	private static Child updateChildDetails(Child child, Vector forms) {
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-			Form form = (Form) list.nextElement();
-			for (Enumeration fields = form.getFieldList().elements(); fields
-					.hasMoreElements();) {
-				FormField field = (FormField) fields.nextElement();
-				child.setField(field.getName(), field.getValue());
-
+			
+			Object nextElement = list.nextElement();
+			if(nextElement!=null)
+			{			
+					Form form = (Form) nextElement;
+					System.out.println(form.FORM_NAME);
+					for (Enumeration fields = form.getFieldList().elements(); fields
+							.hasMoreElements();) 
+					{
+						
+						Object nextFormfieldElement = fields.nextElement();
+						if(nextFormfieldElement!=null)
+						{
+							FormField field = (FormField) nextFormfieldElement;
+							System.out.println(field.name);
+							if(field.name.equals("dropdown"))
+							{
+								System.out.println(field.name);
+							}
+							child.setField(field.getName(), field.getValue());
+						}
+					}
 			}
 		}
 		return child;
@@ -200,35 +216,38 @@ public class Child implements Persistable {
 	public Vector getHistory() {
 		Vector historyLogs = new Vector();
 		try {
-			JSONArray histories = new JSONArray(getField("histories")
-					.toString());
-			for (int i = 0; i < histories.length(); i++) {
-				JSONObject history = null;
-				history = histories.getJSONObject(i);
-				JSONObject changes = history.getJSONObject("changes");
-				Enumeration changedFields = changes.keys();
-				while (changedFields.hasMoreElements()) {
-					String changedFieldName = (String) changedFields
-							.nextElement();
-					JSONObject changedFieldObject = changes
-							.getJSONObject(changedFieldName);
-					String changeDateTime = history.getString("datetime");
-					String oldValue = changedFieldObject.getString("from");
-					String newalue = changedFieldObject.getString("to");
-					if (oldValue.equals("")) {
-						historyLogs.addElement(changeDateTime + " "
-								+ changedFieldName + " intialized to "
-								+ newalue + " By "
-								+ history.getString("user_name"));
-					} else {
-						historyLogs.addElement(changeDateTime + " "
-								+ changedFieldName + " changed from "
-								+ oldValue + " to " + newalue + " By "
-								+ history.getString("user_name"));
+			Object JsonHistories = getField("histories");
+			if(JsonHistories != null)
+			{
+				JSONArray histories = new JSONArray(JsonHistories.toString());
+					for (int i = 0; i < histories.length(); i++) {
+						JSONObject history = null;
+						history = histories.getJSONObject(i);
+						JSONObject changes = history.getJSONObject("changes");
+						Enumeration changedFields = changes.keys();
+						while (changedFields.hasMoreElements()) {
+							String changedFieldName = (String) changedFields
+									.nextElement();
+							JSONObject changedFieldObject = changes
+									.getJSONObject(changedFieldName);
+							String changeDateTime = history.getString("datetime");
+							String oldValue = changedFieldObject.getString("from");
+							String newalue = changedFieldObject.getString("to");
+							if (oldValue.equals("")) {
+								historyLogs.addElement(changeDateTime + " "
+										+ changedFieldName + " intialized to "
+										+ newalue + " By "
+										+ history.getString("user_name"));
+							} else {
+								historyLogs.addElement(changeDateTime + " "
+										+ changedFieldName + " changed from "
+										+ oldValue + " to " + newalue + " By "
+										+ history.getString("user_name"));
+		
+							}
+						}
 
 					}
-				}
-
 			}
 		} catch (JSONException e) {
 			throw new RuntimeException("Invalid  History Format"

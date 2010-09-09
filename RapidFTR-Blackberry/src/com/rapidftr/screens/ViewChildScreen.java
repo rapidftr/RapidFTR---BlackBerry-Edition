@@ -14,6 +14,7 @@ import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.RichTextField;
@@ -86,8 +87,13 @@ public class ViewChildScreen extends CustomScreen {
 			Form form = (Form) list.nextElement();
 			for(Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();)
 			{
-					FormField field = (FormField) fields.nextElement();
-					child.updateField(field.getName());
+					Object nextElement = fields.nextElement();
+					
+					if(nextElement != null)
+					{	
+						FormField field = (FormField) nextElement;
+						child.updateField(field.getName());
+					}
 			}
 			    
 		}
@@ -96,21 +102,29 @@ public class ViewChildScreen extends CustomScreen {
 	private void renderBitmap(Hashtable data, HorizontalFieldManager manager) {
 
 		manager.setMargin(10, 10, 10, 10);
-
-		String ImagePath = "res/default.jpg";
-		Bitmap image = Bitmap.getBitmapResource(ImagePath);
-
+		
+		String ImagePath=(String)data.get("current_photo_key");
+		Bitmap image=null;
+		
+		
+		
 		if (ImagePath == null || ImagePath.equals("")) {
 			ImagePath = "res/default.jpg";
-		} else {
+			image = Bitmap.getBitmapResource(ImagePath);
+		} 
+		else 
+		{
+			image = Bitmap.getBitmapResource("res/default.jpg");
 			ImagePath = "file://"
 					+ (String) data.get(new String("current_photo_key"));
 			FileConnection fconn;
 
 			try {
+				
 				fconn = (FileConnection) Connector.open(ImagePath,
 						Connector.READ);
-				if (fconn.exists()) {
+				if (fconn.exists()) 
+				{
 					byte[] imageBytes = new byte[(int) fconn.fileSize()];
 					InputStream inStream = fconn.openInputStream();
 					inStream.read(imageBytes);
@@ -122,10 +136,11 @@ public class ViewChildScreen extends CustomScreen {
 
 				}
 
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
-
+			catch (IOException e) 
+			{
+				Dialog.alert("Unable to open the image file , using default image");
+			}
 		}
 
 		// BitmapField

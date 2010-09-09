@@ -30,15 +30,16 @@ public class FormStore {
 			}
 			return parseFormsFromJSON(jsonString);
 		} catch (JSONException e) {
-			return null;
+			return new Vector();
 		}
 	}
 
 	private Vector parseFormsFromJSON(String json) throws JSONException {
-
+		Vector forms = new Vector();
+		try{
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
 		JSONArray jsonForms = new JSONArray(json);
-		Vector forms = new Vector();
+		
 		for (int i = 0; i < jsonForms.length(); i++) {
 			JSONObject jsonForm = (JSONObject) jsonForms.get(i);
 			Vector formFields = new Vector();
@@ -49,28 +50,37 @@ public class FormStore {
 				try {
 					String name = jsonFormField.getString("name");
 					String type = jsonFormField.getString("type");
+				//	if(jsonFormField.getJSONArray("option_strings")!=null){
+								try {
+									JSONArray jsonOptionString = jsonFormField
+											.getJSONArray("option_strings");
+									for (int k = 0; k < jsonOptionString.length(); k++) {
+										optionStrings.addElement(jsonOptionString
+												.getString(k));
+									}
+								} catch (JSONException ex) {
+									ex.printStackTrace();
+								}
+				//	}
 
-					try {
-						JSONArray jsonOptionString = jsonFormField
-								.getJSONArray("option_strings");
-						for (int k = 0; k < jsonOptionString.length(); k++) {
-							optionStrings.addElement(jsonOptionString
-									.getString(k));
-						}
-					} catch (JSONException ex) {
-
-					}
-
-					formFields.addElement(formFieldFactory.createFormField(
-							name, type, optionStrings));
-				} catch (JSONException e) {
-
+					formFields.addElement(formFieldFactory.createFormField(name, type, optionStrings));
 				}
+				catch (JSONException e) {
+					e.printStackTrace();
+				}
+				
 
 			}
+			
 			Form form = new Form(jsonForm.getString("name"), jsonForm
 					.getString("unique_id"), formFields);
 			forms.addElement(form);
+	
+		}
+		}
+		catch(Error e)
+		{
+			e.printStackTrace();
 		}
 		return forms;
 	}
