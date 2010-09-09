@@ -9,26 +9,36 @@ public class HttpRequestHandler implements RequestListener {
 
 	RequestCallBack requestCallBack;
 	protected boolean requestInProgress;
-
+	private int activeRequests = 0;
+	private int totalRequests = 0;
 	public HttpRequestHandler(RequestCallBack requestCallBack) {
 		super();
 		this.requestCallBack = requestCallBack;
 	}
 
 	public void done(Object context, Response result) throws Exception {
-		
-		if (!requestInProgress)
-			return;
-		requestInProgress = false;
+		if(activeRequests>0){
+		activeRequests--;
+		}
+		updateRequestProgress(totalRequests-activeRequests, totalRequests);
+//		if (!requestInProgress)
+//			return;
+//		requestInProgress = false;
 		if (result.getException() != null) {
 			requestCallBack.handleException(result.getException());
+			return;
 		} else if (result.getCode() == HttpConnection.HTTP_UNAUTHORIZED) {
 			requestCallBack.handleUnauthorized();
+			return;
 		} else if (result.getCode() != HttpConnection.HTTP_OK && result.getCode() != HttpConnection.HTTP_CREATED ) {
 			requestCallBack.handleConnectionProblem();
 			return;
 		} else {
 			requestCallBack.onSuccess(context, result);
+		}
+		
+		if(isProcessCompleted()){
+			markProcessComplete();
 		}
 	}
 
@@ -75,4 +85,16 @@ public class HttpRequestHandler implements RequestListener {
 		}
 	}
 
+	public RequestCallBack getRequestCallBack() {
+		return requestCallBack;
+	}
+
+	public void incrementActiveRequests(int requests){
+		activeRequests+=requests;
+		totalRequests +=requests;
+	}
+	
+	public boolean isProcessCompleted(){
+		return activeRequests==0;
+	}
 }

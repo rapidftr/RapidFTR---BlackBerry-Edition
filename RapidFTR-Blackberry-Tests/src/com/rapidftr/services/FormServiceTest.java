@@ -9,6 +9,7 @@ import javax.microedition.io.HttpConnection;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpRequestHandler;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.net.RequestCallBack;
@@ -22,17 +23,14 @@ public class FormServiceTest {
 
 	private HttpService httpService;
 	private FormService formService;
-	private  HttpRequestHandler listener;
 	private Object context;
-	private RequestCallBack requestCallback;
+	private FormStore formStore;
 
 	@Before
 	public void setUp() {
 		httpService = mock(HttpService.class);
-		formService = new FormService(httpService);
-		requestCallback = mock(RequestCallBackImpl.class);
-		listener = new HttpRequestHandler(requestCallback);
-		formService.setListener(listener);
+		formStore = mock(FormStore.class);
+		formService = new FormService(httpService,formStore);
 		context = mock(Object.class);
 	}
 
@@ -42,20 +40,12 @@ public class FormServiceTest {
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
 		verify(httpService).get("published_form_sections", null, httpArgs,
-				listener);
+				formService.requestHandler);
 	}
 
-	@Test
-	public void shouldSendDownloadStatusToServiceListener() {
-		int received = 10;
-		int total = 100;
-		listener.setRequestInProgress();
-		listener.readProgress(context, received, total);
-		verify(requestCallback).updateRequestProgress(10);
-	}
 
 	@Test
-	public void shouldSendFormsToSynchronizeServiceListenerOnDownloadComplete()
+	public void shouldSendFormsToFormStoreOnDownloadComplete()
 			throws Exception {
 		Response response = mock(Response.class);
 		Result mockResult = mock(Result.class);
@@ -63,40 +53,9 @@ public class FormServiceTest {
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_OK);
 		String json = "json response";
 		when(mockResult.toString()).thenReturn(json);
-		listener.setRequestInProgress();
-		listener.done(context, response);
-		verify(requestCallback).onSuccess(context, response);
-	}
-
-	@Test
-	public void shouldSendAuthenticationFailureMesssageToServiceListener()
-			throws Exception {
-		Response response = mock(Response.class);
-		when(response.getCode()).thenReturn(HttpConnection.HTTP_UNAUTHORIZED);
-		listener.setRequestInProgress();
-		listener.done(context, response);
-		verify(requestCallback).handleUnauthorized();
-	}
-
-	@Test
-	public void shoudlSendDownloadFailedErrorMessageToServiceListenerOnFailure()
-			throws Exception {
-		Response response = mock(Response.class);
-		when(response.getCode()).thenReturn(HttpConnection.HTTP_CLIENT_TIMEOUT);
-		listener.setRequestInProgress();
-		listener.done(context, response);
-		verify(requestCallback).handleConnectionProblem();
-	}
-
-	@Test
-	public void shouldSendDownloadFailedErrorMessageToServiceListenerOnAnyException()
-			throws Exception {
-		Response response = mock(Response.class);
-		when(response.getException()).thenReturn(new Exception());
-		listener.setRequestInProgress();
-		listener.done(context, response);
-		verify(requestCallback).handleException(response.getException());
-
+		formService.requestHandler.setRequestInProgress();
+		formService.requestHandler.done(context, response);
+		verify(formStore).storeForms(response.getResult().toString());
 	}
 
 }

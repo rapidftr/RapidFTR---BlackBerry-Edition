@@ -84,7 +84,7 @@ public class Child implements Persistable {
 	public void setField(String name, Object value) {
 		if (!isNewChild()) {
 		 Object oldValue=	getField(name);
-		 if(oldValue!=null&&!oldValue.equals(value)){
+		 if(oldValue!=null&&!oldValue.equals(value)&&!name.equals("_id")){
 			changedFields.put(name, value);
 		 }
 		}
@@ -242,6 +242,9 @@ public class Child implements Persistable {
 		return getField("unique_identifier") == null;
 	}
 	
+	public boolean isUpdated() {
+		return changedFields.size() > 0;
+	}
 	public void clearEditHistory() {
 		changedFields.clear();
 	}

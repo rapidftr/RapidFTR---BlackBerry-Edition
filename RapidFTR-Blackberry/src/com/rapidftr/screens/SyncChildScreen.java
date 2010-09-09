@@ -15,7 +15,7 @@ import com.rapidftr.controllers.SyncChildController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.net.ScreenCallBack;
 
-public class SyncAllScreen extends CustomScreen implements
+public class SyncChildScreen extends CustomScreen implements
 		FieldChangeListener, ScreenCallBack {
 
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
@@ -26,13 +26,13 @@ public class SyncAllScreen extends CustomScreen implements
 	private Manager hButtonManager;
 	private Button cancelButton;
 
-	public SyncAllScreen() {
+	public SyncChildScreen() {
 		layoutScreen();
 	}
 
 	private void layoutScreen() {
 		try {
-			LabelField labelField = new LabelField("Uploading Child Records");
+			LabelField labelField = new LabelField("Syncing Child Records");
 			Manager hManager = new HorizontalFieldManager(FIELD_HCENTER);
 			hManager.add(labelField);
 			hManager.setPadding(PADDING);
@@ -168,11 +168,11 @@ public class SyncAllScreen extends CustomScreen implements
 				uploadProgressBar.setValue(0);
 
 				if (result == Dialog.YES) {
-					((SyncChildController) controller).uploadChildRecords();
+					((SyncChildController) controller).syncAllChildRecords();
 					return;
 				}
 
-				controller.popScreen();
+			//	controller.popScreen();
 
 			}
 		});

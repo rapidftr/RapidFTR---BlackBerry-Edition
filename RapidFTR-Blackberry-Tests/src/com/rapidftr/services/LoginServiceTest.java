@@ -1,42 +1,61 @@
 package com.rapidftr.services;
 
-import com.rapidftr.controllers.LoginController;
-import com.rapidftr.net.HttpRequestHandler;
-import com.rapidftr.net.HttpService;
-import com.rapidftr.net.RequestCallBack;
-import com.rapidftr.utilities.HttpUtility;
-import com.sun.me.web.path.Result;
-import com.sun.me.web.path.ResultException;
-import com.sun.me.web.request.Arg;
-import com.sun.me.web.request.Response;
-import org.junit.Before;
-import org.junit.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.Hashtable;
 
 import javax.microedition.io.HttpConnection;
 
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.rapidftr.net.HttpRequestHandler;
+import com.rapidftr.net.HttpService;
+import com.rapidftr.net.RequestCallBack;
+import com.rapidftr.utilities.HttpUtility;
+import com.rapidftr.utilities.SettingsStore;
+import com.sun.me.web.path.Result;
+import com.sun.me.web.path.ResultException;
+import com.sun.me.web.request.Arg;
+import com.sun.me.web.request.Response;
 
 public class LoginServiceTest {
 
 	private LoginService loginService;
-	private HttpRequestHandler listener;
 	private HttpService httpService;
-	private Object context;
-	private RequestCallBack requestCallback;
-
+	private SettingsStore settingsStore;
 	@Before
 	public void setUp() {
 		httpService = mock(HttpService.class);
-		loginService = new LoginService(httpService);
-		requestCallback = mock(RequestCallBackImpl.class);
-		listener = new HttpRequestHandler(requestCallback);
-		loginService.setListener(listener);
-		context = mock(Object.class);
+		settingsStore = mock(SettingsStore.class);
+		loginService = new LoginService(httpService,settingsStore);
 	}
 
+
+	@Test
+	public void shouldSaveTheLastEnteredUsernameAndAuthorizationTokenAndPopOutLoginScreenInorderToGetBackToHomeScreen() throws Exception {
+
+		loginService.login("abcd", "abcd"); // Just to make the
+												// isRequestInProgress flag to
+												// set
+		Hashtable context = new Hashtable();
+		String userName = "name";
+		context.put(LoginService.USER_NAME, userName);
+
+		String authorisationToken = "token";
+		//loginController.on(context, authorisationToken);
+		Response response = mock(Response.class);
+		Result result = mock(Result.class);
+		when(response.getResult()).thenReturn(result);
+		when(result.getAsString("session.token")).thenReturn("token");
+		loginService.onRequestSuccess(context, response);
+
+		verify(settingsStore).setLastUsedUsername(userName);
+		verify(settingsStore).setAuthorisationToken(authorisationToken);
+	}
 	@Test
 	public void shouldPostToServerWithProperUrlAndParams() {
 
@@ -47,7 +66,7 @@ public class LoginServiceTest {
 
 		Hashtable context = new Hashtable();
 
-		context.put(LoginController.USER_NAME, userName);
+		context.put(LoginService.USER_NAME, userName);
 
 		final Arg acceptJson = HttpUtility.HEADER_ACCEPT_JSON;
 		final Arg[] httpParams = { acceptJson };
@@ -55,44 +74,34 @@ public class LoginServiceTest {
 		loginService.login(userName, password);
 
 
-		verify(httpService).post("sessions" ,postParams,httpParams,listener, null, context);
+		verify(httpService).post("sessions" ,postParams,httpParams,loginService.requestHandler, null, context);
 	}
 
-	@Test
-	public void shouldSendAuthoriFailedMessageToLoginSerivceListenerOnFailure()
-			throws Exception {
+//	@Test
+//	public void shouldSendAuthoriFailedMessageToLoginSerivceListenerOnFailure()
+//			throws Exception {
+//
+//		Response failedLoginResponse = stubFailedLoginResponse();
+//        listener.setRequestInProgress();
+//		listener.done(new Object(), failedLoginResponse);
+//		verify(requestCallback).handleUnauthorized();
+//	}
 
-		Response failedLoginResponse = stubFailedLoginResponse();
-        listener.setRequestInProgress();
-		listener.done(new Object(), failedLoginResponse);
-		verify(requestCallback).handleUnauthorized();
-	}
+//	@Test
+//	public void shouldSendAuthorizationTokenToLoginControllerOnSucees()
+//			throws Exception {
+//
+//		String authorizationToken = "token";
+//		Response successfulLoginResponse = stubSuccessfulResponseWithToken(authorizationToken);
+//        listener.setRequestInProgress();
+//		listener.done(context, successfulLoginResponse);
+//		verify(requestCallback).onSuccess(context, successfulLoginResponse);
+//	}
 
-	@Test
-	public void shouldSendAuthorizationTokenToLoginControllerOnSucees()
-			throws Exception {
-
-		String authorizationToken = "token";
-		Response successfulLoginResponse = stubSuccessfulResponseWithToken(authorizationToken);
-        listener.setRequestInProgress();
-		listener.done(context, successfulLoginResponse);
-		verify(requestCallback).onSuccess(context, successfulLoginResponse);
-	}
-
-	@Test
-	public void shouldSendConnectionProblemMessageToLoginControllerOnIoException()
-			throws Exception {
-
-		Response response = mock(Response.class);
-		when(response.getException()).thenReturn(new IOException());
-        listener.setRequestInProgress();
-		listener.done(context, response);
-		verify(requestCallback).handleException(response.getException());
-	}
-
+	
 	@Test
 	public void shouldCancelRequest() {
-		loginService.cancelLogin();
+		loginService.cancelRequest();
 		verify(httpService).cancelRequest();
 	}
 

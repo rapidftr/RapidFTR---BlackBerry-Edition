@@ -70,9 +70,6 @@ public class Dispatcher {
 		newChildController.show();
 	}
 
-	public void uploadChildRecords() {
-		syncChildController.uploadChildRecords();
-	}
 
 	public void syncAll() {
 		syncChildController.syncAllChildRecords();
@@ -91,7 +88,7 @@ public class Dispatcher {
 	}
 
 	public void syncChild(Child child) {
-		syncChildController.uploadChildRecord(child);		
+		syncChildController.syncChildRecord(child);		
 	}
 
 }

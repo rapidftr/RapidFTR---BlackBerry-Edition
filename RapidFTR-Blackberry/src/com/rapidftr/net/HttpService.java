@@ -20,7 +20,6 @@ public class HttpService {
 		Properties.getInstance().getHttpRequestTimeout();
 	}
 
-	
 	/*
 	 * Pass Request listener to make asynchronous request
 	 */
@@ -29,16 +28,16 @@ public class HttpService {
 		httpArgs = appendAuthenticationToken(httpArgs);
 		httpServer.getFromServer(url, inputArgs, httpArgs, listener);
 	}
-	
+
 	/*
 	 * Use this for synchronous request
 	 */
-	
-	public Response get(String url, Arg[] inputArgs, Arg[] httpArgs) throws IOException {
+
+	public Response get(String url, Arg[] inputArgs, Arg[] httpArgs)
+			throws IOException {
 		httpArgs = appendAuthenticationToken(httpArgs);
 		return httpServer.getFromServer(url, inputArgs, httpArgs);
 	}
-	
 
 	private Arg[] appendAuthenticationToken(Arg[] args) {
 		Arg[] newArgs = new Arg[args.length + 1];
@@ -48,11 +47,22 @@ public class HttpService {
 		return newArgs;
 	}
 
-	public void post(String url,Arg[] postArgs,Arg[] httpArgs,
-			RequestListener listener, PostData postData, Object context){
+	public void post(String url, Arg[] postArgs, Arg[] httpArgs,
+			RequestListener listener, PostData postData, Object context) {
 		httpArgs = appendAuthenticationToken(httpArgs);
 		httpServer.postToServer(url, postArgs, httpArgs, listener, postData,
 				context);
+	}
+
+	public void put(String url, Arg[] postArgs, Arg[] httpArgs,
+			RequestListener listener, PostData postData, Object context) {
+		int httpArgLenght = httpArgs != null ? httpArgs.length + 1 : 1;
+		Arg[] args = new Arg[httpArgLenght];
+		if (httpArgs != null) {
+			System.arraycopy(httpArgs, 0, args, 0, httpArgs.length);
+		}
+		args[httpArgLenght - 1] = new Arg("X-HTTP-Method-Override", "PUT");
+		post(url, postArgs, args, listener, postData, context);
 	}
 
 	public void cancelRequest() {

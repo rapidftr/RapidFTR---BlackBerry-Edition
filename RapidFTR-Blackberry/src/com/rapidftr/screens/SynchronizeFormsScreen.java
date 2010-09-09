@@ -16,7 +16,7 @@ import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.BorderFactory;
 
 public class SynchronizeFormsScreen extends CustomScreen implements
-		FieldChangeListener,ScreenCallBack {
+		FieldChangeListener, ScreenCallBack {
 
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
 	private Button okButton;
@@ -72,42 +72,6 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 		downloadProgressBar.setValue(0);
 		hButtonManager.deleteAll();
 		hButtonManager.add(cancelButton);
-
-	}
-
-
-	private void downloadCompleted() {
-
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-				downloadProgressBar.setLabel("Complete");
-				downloadProgressBar.setValue(100);
-				hButtonManager.deleteAll();
-				hButtonManager.add(okButton);
-			}
-		});
-
-	}
-
-	private void downloadFailed() {
-
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-
-				int result = Dialog.ask(Dialog.D_YES_NO,
-						"Download Failed.\n Do you want to Retry?");
-				downloadProgressBar.setValue(0);
-
-				if (result == Dialog.YES) {
-					((SynchronizeFormsController) controller)
-							.synchronizeForms();
-					return;
-				}
-
-				controller.popScreen();
-
-			}
-		});
 
 	}
 
@@ -172,7 +136,7 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 	}
 
 	public void handleConnectionProblem() {
-		downloadFailed();		
+		onProcessFail();
 	}
 
 	public void updateRequestProgress(final int size) {
@@ -184,16 +148,40 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 	}
 
 	public void onProcessComplete() {
-		downloadCompleted();
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				downloadProgressBar.setLabel("Complete");
+				downloadProgressBar.setValue(100);
+				hButtonManager.deleteAll();
+				hButtonManager.add(okButton);
+			}
+		});
 	}
 
 	public void onProcessFail() {
-		downloadFailed();		
+
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+
+				int result = Dialog.ask(Dialog.D_YES_NO,
+						"Download Failed.\n Do you want to Retry?");
+				downloadProgressBar.setValue(0);
+
+				if (result == Dialog.YES) {
+					((SynchronizeFormsController) controller)
+							.synchronizeForms();
+					return;
+				}
+
+				controller.popScreen();
+
+			}
+		});
 	}
 
 	public void setProgressMessage(String message) {
-		// TODO Auto-generated method stub
-		
+		downloadProgressBar.setLabel(message);
+
 	}
 
 }

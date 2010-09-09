@@ -13,6 +13,8 @@ public interface RequestCallBack {
 	void onSuccess(Object context, Response result);
 
 	void updateRequestProgress(int size);
+	
+	void updateProgressMessage(String msg);
 
 	void writeProgress(Object context, int bytes, int total);
 

@@ -1,35 +1,42 @@
 package com.rapidftr.services;
 
 import com.rapidftr.net.ControllerCallback;
+import com.rapidftr.net.ServiceCallback;
 import com.rapidftr.net.RequestCallBack;
 import com.rapidftr.net.ScreenCallBack;
 import com.sun.me.web.request.Response;
 
 public class RequestCallBackImpl implements RequestCallBack {
 	private ScreenCallBack screenCallback;
+	private ServiceCallback serviceCallback;
 	private ControllerCallback controllerCallback;
 
-	public RequestCallBackImpl(ScreenCallBack screenCallback,
-			ControllerCallback controllerCallback) {
-		super();
-		this.screenCallback = screenCallback;
-		this.controllerCallback = controllerCallback;
+	public RequestCallBackImpl() {
+
 	}
 
 	public void handleConnectionProblem() {
-		screenCallback.handleConnectionProblem();
+		if (ifScreenCallbackExists()) {
+			screenCallback.handleConnectionProblem();
+		}
 	}
 
 	public void handleException(Exception exception) {
-		controllerCallback.onRequestFailure(exception);
+		if (ifScreenCallbackExists()) {
+			serviceCallback.onRequestFailure(exception);
+		}
 	}
 
 	public void handleUnauthorized() {
-		screenCallback.handleAuthenticationFailure();
+		if (ifScreenCallbackExists()) {
+			screenCallback.handleAuthenticationFailure();
+		}
 	}
 
 	public void onSuccess(Object context, Response result) {
-		controllerCallback.onRequestSuccess(context, result);
+		if (ifServiceCallbackExists()) {
+			serviceCallback.onRequestSuccess(context, result);
+		}
 	}
 
 	public void writeProgress(Object context, int bytes, int total) {
@@ -38,17 +45,53 @@ public class RequestCallBackImpl implements RequestCallBack {
 	}
 
 	public void updateRequestProgress(int size) {
-		screenCallback.updateRequestProgress(size);
-
+		if (ifScreenCallbackExists()) {
+			screenCallback.updateRequestProgress(size);
+		}
 	}
 
 	public void onProcessComplete() {
-		screenCallback.onProcessComplete();
-		
+		if (ifScreenCallbackExists()) {
+			screenCallback.onProcessComplete();
+		}
+		if (ifControllerCallbackExists()) {
+			controllerCallback.afterProcessComplete();
+		}
 	}
 
 	public void onProcessFail() {
-		screenCallback.onProcessFail();		
+		if (ifScreenCallbackExists()) {
+			screenCallback.onProcessFail();
+		}
+	}
+
+	public void setScreenCallback(ScreenCallBack screenCallback) {
+		this.screenCallback = screenCallback;
+	}
+
+	public void setServiceCallback(ServiceCallback serviceCallback) {
+		this.serviceCallback = serviceCallback;
+	}
+
+	public void setControllerCallback(ControllerCallback controllerCallback) {
+		this.controllerCallback = controllerCallback;
+	}
+
+	private boolean ifScreenCallbackExists() {
+		return screenCallback != null;
+	}
+
+	private boolean ifServiceCallbackExists() {
+		return serviceCallback != null;
+	}
+
+	private boolean ifControllerCallbackExists() {
+		return controllerCallback != null;
+	}
+
+	public void updateProgressMessage(String msg) {
+		screenCallback.setProgressMessage(msg);
+		
 	}
 
 }

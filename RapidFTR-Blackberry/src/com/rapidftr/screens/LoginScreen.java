@@ -193,14 +193,7 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	public void handleAuthenticationFailure() {
-
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-				setProgressMsg("Login Failed");
-				setLoginButton();
-			}
-		});
-
+     onProcessFail();
 	}
 
 
@@ -219,18 +212,21 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	public void onProcessComplete() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public void onProcessFail() {
-		// TODO Auto-generated method stub
-		
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				setProgressMsg("Login Failed");
+				setLoginButton();
+			}
+		});		
 	}
 
 	public void setProgressMessage(String message) {
-		setProgressMsg(message);
-		
+		setProgressMsg(message);		
 	}
 
 }
