@@ -32,6 +32,7 @@ public class ChildTest {
 		forms = new Vector();
 		Vector fieldList = new Vector();
     	FormField nameTextField = mock(FormField.class);
+    	nameTextField.name="name";
 		when(nameTextField.getValue()).thenReturn("someName");
 		when(nameTextField.getName()).thenReturn("name");
 		fieldList.add(nameTextField);
