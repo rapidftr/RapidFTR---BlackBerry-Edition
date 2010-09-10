@@ -120,7 +120,13 @@ public class ManageChildScreen extends CustomScreen {
 		saveButton.setChangeListener(new FieldChangeListener() {
 
 			public void fieldChanged(Field field, int context) {
-				onSaveChildClicked();
+			
+				int saveSuccess=onSaveChildClicked();
+				if(saveSuccess == -1)
+				{
+					Dialog.alert("Please input last known loaction , it is a mandatory field");
+					return;
+				}
 				childToEdit =  null;
 				controller.popScreen();
 			}
@@ -141,7 +147,12 @@ public class ManageChildScreen extends CustomScreen {
 		int result = Dialog.ask(Dialog.D_YES_NO,"Do you want to save the changes before closing?",Dialog.YES);
 
 		if (result == Dialog.YES) {
-			onSaveChildClicked();
+			int saveSuccess=onSaveChildClicked();
+			if(saveSuccess==-1)
+			{
+				Dialog.alert("Please input last known loaction , it is a mandatory field");
+				return false;
+			}
 		}
 
 		if (result == Dialog.NO) {
@@ -152,20 +163,33 @@ public class ManageChildScreen extends CustomScreen {
 		return true;
 	}
 
-	private void onSaveChildClicked() {
+	private int onSaveChildClicked() {
 		if (childToEdit == null) {
 			childToEdit = Child.create(forms);
 		}else{
 			childToEdit.update(settings.getCurrentlyLoggedIn(),forms);
 		}
+		if(areValidFieldsEmpty()){
+			return -1;
+		}
 		((ManageChildController) controller).saveChild(childToEdit);
+		return 0;
 		//childToEdit =  null;
+	}
+
+	private boolean areValidFieldsEmpty() {
+		return childToEdit.getField("last_known_location")==null || childToEdit.getField("last_known_location").toString().equals("");
 	}
 	
 	protected void makeMenu(Menu menu, int instance) {
 		MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
 			public void run() {
-				onSaveChildClicked();
+				int saveSuccess=onSaveChildClicked();
+				if(saveSuccess==-1)
+				{
+					Dialog.alert("Please input last known loaction , it is a mandatory field");
+					return;
+				}
 				Dialog.alert("ChildRecord has been stored succesfully\n"
 								+ "Please upload record to central server whenever you get Internet Access!!");
 				controller.popScreen();
@@ -176,7 +200,12 @@ public class ManageChildScreen extends CustomScreen {
 		MenuItem syncChildMenu = new MenuItem("Sync Record ", 2, 2) {
 			public void run() {
 				controller.popScreen();
-				onSaveChildClicked();
+				int saveSuccess=onSaveChildClicked();
+				if(saveSuccess==-1)
+				{
+					Dialog.alert("Please input last known loaction , it is a mandatory field");
+					return ;
+				}
 				((ManageChildController) controller).syncChild(childToEdit);
 				childToEdit = null;
 			}
