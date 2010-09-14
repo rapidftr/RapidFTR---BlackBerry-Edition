@@ -87,7 +87,7 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 		}
 		if (field.equals(cancelButton)) {
 			int result = Dialog.ask(Dialog.D_YES_NO,
-					"Are you sure want to cacel synchronize?");
+					"Are you sure want to cancel form synchronization?");
 			downloadProgressBar.setValue(0);
 
 			if (result == Dialog.YES) {

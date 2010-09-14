@@ -49,6 +49,5 @@ public class LoginService extends RequestAwareService{
 		settingsStore.setLastUsedUsername(userName);
 		settingsStore.setAuthorisationToken(parseAuthorizationToken(result));
 		settingsStore.setCurrentlyLoggedIn(userName);
-		requestHandler.markProcessComplete();
 	}
 }

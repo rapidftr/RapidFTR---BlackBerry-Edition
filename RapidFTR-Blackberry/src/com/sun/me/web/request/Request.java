@@ -59,7 +59,7 @@ public final class Request implements Runnable {
     private Arg[] inputArgs = null;
     private PostData multiPart = null;
     private RequestListener listener = null;
-    
+    RequestPool pool = RequestPool.getInstance();
     private Thread thread = null;
     private boolean interrupted = false;
     
@@ -129,7 +129,7 @@ public final class Request implements Runnable {
         
         return async(HttpConnection.POST, url, inputArgs, httpArgs, listener, multiPart, context);
     }
-    
+   
     private static Request async(
         final String method,
         final String url,
@@ -149,8 +149,9 @@ public final class Request implements Runnable {
         request.multiPart = multiPart;
         
         // TODO: implement more sophisticated pooling, queuing and scheduling strategies
-        request.thread = new Thread(request);
-        request.thread.start();
+       // request.thread = new Thread(request);
+       // request.thread.start();
+        request.pool.execute(request);
         return request;
     }
     
@@ -178,9 +179,11 @@ public final class Request implements Runnable {
             }
         } catch (Exception ex) {
             response.ex = ex;
+            pool.execute(this);
         } finally {
             if (listener != null) {
                 try {
+                	pool.decrementActiveThreadCount();
                     listener.done(context, response);
                 } catch (Throwable th) {
                     if (DEBUG) {
