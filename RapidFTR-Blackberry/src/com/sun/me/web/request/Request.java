@@ -178,7 +178,8 @@ public final class Request implements Runnable {
             }
         } catch (Exception ex) {
             response.ex = ex;
-            pool.execute(this);
+            //TODO check for time out and add this request in pool again 
+           // pool.execute(this);
         } finally {
          	pool.decrementActiveThreadCount();
             if (listener != null) {
