@@ -11,7 +11,7 @@ public class RequestPool implements Runnable {
 	WorkQueue requestQueue;
 
 	private RequestPool() {
-		requestQueue = new WorkQueue(this);
+		requestQueue = new WorkQueue();
 		new Thread(this).start();
 	}
 

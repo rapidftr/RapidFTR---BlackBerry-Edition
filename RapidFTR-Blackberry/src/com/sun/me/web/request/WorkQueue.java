@@ -10,7 +10,7 @@ public class WorkQueue {
 
 	private static final int INITIAL_CAPACITY = 10;
 
-	public WorkQueue(RequestPool requestPool) {
+	public WorkQueue() {
 		threads = new Thread[INITIAL_CAPACITY];
 		makeEmpty();
 	}
