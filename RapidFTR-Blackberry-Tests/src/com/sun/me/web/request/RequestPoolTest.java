@@ -1,32 +1,29 @@
 package com.sun.me.web.request;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 
 public class RequestPoolTest {
 	private RequestPool requestPool;
-	@Mock
-	private WorkQueue requestQueue;
 	Request request;
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		requestPool = RequestPool.getInstance();
-		requestPool.requestQueue = requestQueue;
-		request = mock(Request.class);
+		request = Request.post(Request.DEMO_URL, null, null, null, null, null);
 	}
-	
+
 	@Test
-	public void onExecuteRequestShouldSubmittedToWorkQueue(){
-		requestPool.execute(request);
-		verify(requestQueue).addRequest(request);
-		
+	public void atAnyTimeActiveThreadsShouldNotBeMoreThenMaximumActiveThreads() {
+		for (int i = 0; i < RequestPool.MAXIMUM_ACTIVE_THREADS * 10; i++) {
+			requestPool.execute(request);
+			Assert
+					.assertTrue(requestPool.activeThreads <= RequestPool.MAXIMUM_ACTIVE_THREADS);
+		}
 	}
 
 }

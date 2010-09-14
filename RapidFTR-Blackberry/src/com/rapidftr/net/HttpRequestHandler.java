@@ -43,7 +43,7 @@ public class HttpRequestHandler implements RequestListener {
 	}
 
 	public void readProgress(Object context, int bytes, int total) {
-		updateRequestProgress(bytes, total);
+		//updateRequestProgress(bytes, total);
 	}
 
 	public void writeProgress(Object context, int bytes, int total) {

@@ -59,8 +59,7 @@ public final class Request implements Runnable {
     private Arg[] inputArgs = null;
     private PostData multiPart = null;
     private RequestListener listener = null;
-    RequestPool pool = RequestPool.getInstance();
-    private Thread thread = null;
+    private RequestPool pool = RequestPool.getInstance();
     private boolean interrupted = false;
     
     private int totalToSend = 0;
@@ -181,10 +180,10 @@ public final class Request implements Runnable {
             response.ex = ex;
             pool.execute(this);
         } finally {
+         	pool.decrementActiveThreadCount();
             if (listener != null) {
                 try {
-                	pool.decrementActiveThreadCount();
-                    listener.done(context, response);
+                       listener.done(context, response);
                 } catch (Throwable th) {
                     if (DEBUG) {
                         System.err.println("Uncaught throwable in listener: ");

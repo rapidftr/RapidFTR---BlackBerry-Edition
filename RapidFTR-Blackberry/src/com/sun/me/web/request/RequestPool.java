@@ -4,9 +4,9 @@ public class RequestPool implements Runnable {
 	// a simple implementation of singleton
 	private static RequestPool _instance = new RequestPool();
 
-	private static final int MAXIMUM_ACTIVE_THREADS = 5;
+	static final int MAXIMUM_ACTIVE_THREADS = 5;
 
-	private int activeThreads = 0;
+	int activeThreads = 0;
 
 	WorkQueue requestQueue;
 
@@ -51,6 +51,10 @@ public class RequestPool implements Runnable {
 			requestQueue.notify();
 		}
 	
+	}
+	
+	public void cancelAllRequests(){
+	   requestQueue.makeEmpty();
 	}
 
 }
