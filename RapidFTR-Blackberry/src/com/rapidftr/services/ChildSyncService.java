@@ -25,7 +25,9 @@ import com.sun.me.web.request.Response;
 
 public class ChildSyncService extends RequestAwareService {
 
-	private final ChildrenRecordStore childRecordStore;
+	private static final String FILE_STORE_HOME_USER = "file:///store/home/user";
+	
+    private final ChildrenRecordStore childRecordStore;
 
 	public ChildSyncService(HttpService httpService, ChildrenRecordStore childRecordStore) {
 		super(httpService);
@@ -84,7 +86,20 @@ public class ChildSyncService extends RequestAwareService {
 				httpArgs[0] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
 				Response response = httpService.get("children/" + child.getField("_id") + "/thumbnail", null, httpArgs);
 				byte[] data = response.getResult().getData();
-				String imagePath = "file:///SDCard/Blackberry/pictures/" + (String) child.getField("current_photo_key") + ".jpg";
+				
+				String storePath = "";
+				try {
+				    String sdCardPath = "file:///SDCard/Blackberry";
+				    FileConnection fc = (FileConnection) Connector.open(sdCardPath);
+				    if (fc.exists())
+				        storePath = sdCardPath;
+				    else 
+				        storePath = FILE_STORE_HOME_USER;
+				} catch (IOException ex) {
+				    storePath = FILE_STORE_HOME_USER;
+				}
+				
+				String imagePath = storePath + "/pictures/" + (String) child.getField("current_photo_key") + ".jpg";
 				FileConnection fc = (FileConnection) Connector.open(imagePath);
 				if (!fc.exists()) {
 					fc.create(); // create the file if it doesn't exist
