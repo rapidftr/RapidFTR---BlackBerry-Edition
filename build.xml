@@ -19,11 +19,13 @@
 			<fileset dir="${output.dir}/unzipped" includes="**/*" />
 			<fileset dir="${report.dir}" includes="**/*" />
 			<fileset dir="${tests-output.dir}" includes="**/*" />
+		    <fileset dir="${release.dir}" includes="**/*" />
 		</delete>
 	</target>
 
 	<target name="init">
 		<mkdir dir="${output.dir}" />
+		<mkdir dir="${release.dir}" />
 		<mkdir dir="${tests-output.dir}" />
 		<mkdir dir="${report.dir}" />
 		<mkdir dir="${output.dir}/unzipped" />
@@ -40,6 +42,17 @@
 			<arg line=" -a -p ${signing.code} -c -C  *.cod" />
 		</java>
 	</target>
+	
+  <target name="release" depends="sign">
+	<alx destdir="${release.dir}" filename="${output.file}.alx">
+     <application id="com.rapidftr" name="${title}">
+      <codset>
+         <fileset dir="${output.dir}" includes="*.cod" />
+      </codset>
+     </application>
+    </alx>
+  </target>
+
 
 	<!-- Load to device -->
 	<target name="load" depends="sign">
