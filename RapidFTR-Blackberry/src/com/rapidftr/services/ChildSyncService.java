@@ -84,6 +84,7 @@ public class ChildSyncService extends RequestAwareService {
 			childRecordStore.addOrUpdateChild(child);
 
 		} catch (JSONException e) {
+			//SumitG TODO  to handle this by  maintaining error queue  
 			//e.printStackTrace();
 		}
 		
