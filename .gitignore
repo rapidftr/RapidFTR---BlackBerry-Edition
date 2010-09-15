@@ -9,3 +9,6 @@ RapidFTR-Blackberry-Tests/.settings
 RapidFTR-Blackberry/src/com/rapidftr/utilities/Properties.java
 out/*
 .idea/workspace.xml
+bb-build/**
+bb-test/**
+release/**
