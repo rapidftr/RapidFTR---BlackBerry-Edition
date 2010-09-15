@@ -52,10 +52,9 @@ public class Child implements Persistable {
 		while (keyList.hasMoreElements()) {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
-			if (isNewChild()&& key.equals("current_photo_key") && value != null && !value.equals("")) {
+			if (key.equals("current_photo_key") && value != null && !value.equals("")) {
 				Arg[] headers = new Arg[2];
-				headers[0] = new Arg("Content-Disposition",
-						"form-data; name=\"child[" + "photo" + "]\"");
+				headers[0] = new Arg("Content-Disposition", "form-data; name=\"child[" + "photo" + "]\"");
 				headers[1] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
 				byte[] imageData = FileUtility.getByteArray(value.toString());
 				Part part = new Part(imageData, headers);
@@ -63,8 +62,7 @@ public class Child implements Persistable {
 				continue;
 			}
 			Arg[] headers = new Arg[1];
-			headers[0] = new Arg("Content-Disposition",
-					"form-data; name=\"child[" + key + "]\"");
+			headers[0] = new Arg("Content-Disposition", "form-data; name=\"child[" + key + "]\"");
 			Part part = new Part(value.toString().getBytes(), headers);
 			parts.addElement(part);
 		}
@@ -83,10 +81,10 @@ public class Child implements Persistable {
 
 	public void setField(String name, Object value) {
 		if (!isNewChild()) {
-		 Object oldValue=	getField(name);
-		 if(oldValue!=null&&!oldValue.equals(value)&&!name.equals("_id")){
-			changedFields.put(name, value);
-		 }
+			Object oldValue = getField(name);
+			if (oldValue != null && !oldValue.equals(value) && !name.equals("_id")) {
+				changedFields.put(name, value);
+			}
 		}
 		data.put(name, value);
 
@@ -103,8 +101,7 @@ public class Child implements Persistable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((data == null) ? 0 : data.get("_id").hashCode());
+		result = prime * result + ((data == null) ? 0 : data.get("_id").hashCode());
 		return result;
 	}
 
@@ -120,13 +117,9 @@ public class Child implements Persistable {
 			if (other.data != null)
 				return false;
 		} else {
-			if (data.get("_id") != null && other.data.get("_id") != null
-					&& data.get("_id").equals((other.data.get("_id"))))
+			if (data.get("_id") != null && other.data.get("_id") != null && data.get("_id").equals((other.data.get("_id"))))
 				return true;
-			if (data.get("unique_identifier") != null
-					&& other.data.get("unique_identifier") != null
-					&& data.get("unique_identifier").equals(
-							(other.data.get("unique_identifier"))))
+			if (data.get("unique_identifier") != null && other.data.get("unique_identifier") != null && data.get("unique_identifier").equals((other.data.get("unique_identifier"))))
 				return true;
 		}
 
@@ -146,28 +139,23 @@ public class Child implements Persistable {
 
 	private static Child updateChildDetails(Child child, Vector forms) {
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-			
+
 			Object nextElement = list.nextElement();
-			if(nextElement!=null)
-			{			
-					Form form = (Form) nextElement;
-					System.out.println(form.FORM_NAME);
-					for (Enumeration fields = form.getFieldList().elements(); fields
-							.hasMoreElements();) 
-					{
-						
-						Object nextFormfieldElement = fields.nextElement();
-						if(nextFormfieldElement!=null)
-						{
-							FormField field = (FormField) nextFormfieldElement;
+			if (nextElement != null) {
+				Form form = (Form) nextElement;
+				System.out.println(form.FORM_NAME);
+				for (Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();) {
+
+					Object nextFormfieldElement = fields.nextElement();
+					if (nextFormfieldElement != null) {
+						FormField field = (FormField) nextFormfieldElement;
+						System.out.println(field.name);
+						if (field.name.equals("dropdown")) {
 							System.out.println(field.name);
-							if(field.name.equals("dropdown"))
-							{
-								System.out.println(field.name);
-							}
-							child.setField(field.getName(), field.getValue());
 						}
+						child.setField(field.getName(), field.getValue());
 					}
+				}
 			}
 		}
 		return child;
@@ -217,41 +205,31 @@ public class Child implements Persistable {
 		Vector historyLogs = new Vector();
 		try {
 			Object JsonHistories = getField("histories");
-			if(JsonHistories != null)
-			{
+			if (JsonHistories != null) {
 				JSONArray histories = new JSONArray(JsonHistories.toString());
-					for (int i = 0; i < histories.length(); i++) {
-						JSONObject history = null;
-						history = histories.getJSONObject(i);
-						JSONObject changes = history.getJSONObject("changes");
-						Enumeration changedFields = changes.keys();
-						while (changedFields.hasMoreElements()) {
-							String changedFieldName = (String) changedFields
-									.nextElement();
-							JSONObject changedFieldObject = changes
-									.getJSONObject(changedFieldName);
-							String changeDateTime = history.getString("datetime");
-							String oldValue = changedFieldObject.getString("from");
-							String newalue = changedFieldObject.getString("to");
-							if (oldValue.equals("")) {
-								historyLogs.addElement(changeDateTime + " "
-										+ changedFieldName + " intialized to "
-										+ newalue + " By "
-										+ history.getString("user_name"));
-							} else {
-								historyLogs.addElement(changeDateTime + " "
-										+ changedFieldName + " changed from "
-										+ oldValue + " to " + newalue + " By "
-										+ history.getString("user_name"));
-		
-							}
-						}
+				for (int i = 0; i < histories.length(); i++) {
+					JSONObject history = null;
+					history = histories.getJSONObject(i);
+					JSONObject changes = history.getJSONObject("changes");
+					Enumeration changedFields = changes.keys();
+					while (changedFields.hasMoreElements()) {
+						String changedFieldName = (String) changedFields.nextElement();
+						JSONObject changedFieldObject = changes.getJSONObject(changedFieldName);
+						String changeDateTime = history.getString("datetime");
+						String oldValue = changedFieldObject.getString("from");
+						String newalue = changedFieldObject.getString("to");
+						if (oldValue.equals("")) {
+							historyLogs.addElement(changeDateTime + " " + changedFieldName + " intialized to " + newalue + " By " + history.getString("user_name"));
+						} else {
+							historyLogs.addElement(changeDateTime + " " + changedFieldName + " changed from " + oldValue + " to " + newalue + " By " + history.getString("user_name"));
 
+						}
 					}
+
+				}
 			}
 		} catch (JSONException e) {
-			throw new RuntimeException("Invalid  History Format"
-					+ e.getMessage());
+			throw new RuntimeException("Invalid  History Format" + e.getMessage());
 		}
 
 		return historyLogs;
@@ -260,10 +238,11 @@ public class Child implements Persistable {
 	public boolean isNewChild() {
 		return getField("unique_identifier") == null;
 	}
-	
+
 	public boolean isUpdated() {
 		return changedFields.size() > 0;
 	}
+
 	public void clearEditHistory() {
 		changedFields.clear();
 	}

@@ -1,5 +1,6 @@
 package com.rapidftr.screens;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -7,20 +8,19 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.microedition.io.Connector;
-import javax.microedition.io.file.FileConnection;
 
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.BitmapField;
-import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 
+import com.rapidftr.controllers.ViewChildController;
 import com.rapidftr.controls.TitleField;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
@@ -29,7 +29,7 @@ import com.rapidftr.model.FormField;
 import com.rapidftr.utilities.BoldRichTextField;
 import com.rapidftr.utilities.ChildFieldIgnoreList;
 import com.rapidftr.utilities.ImageUtility;
-import com.rapidftr.controllers.ViewChildController;
+
 public class ViewChildScreen extends CustomScreen {
 
 	Child child;
@@ -50,8 +50,7 @@ public class ViewChildScreen extends CustomScreen {
 	private void renderChildFields(Child child) {
 		updateChildFieldsWithLatestForms(child);
 		Hashtable data = child.getKeyMap();
-		HorizontalFieldManager hmanager = new HorizontalFieldManager(
-				Manager.HORIZONTAL_SCROLLBAR);
+		HorizontalFieldManager hmanager = new HorizontalFieldManager(Manager.HORIZONTAL_SCROLLBAR);
 		renderBitmap(data, hmanager);
 
 		hmanager.add(new BoldRichTextField("   " + data.get(new String("name"))));
@@ -59,15 +58,13 @@ public class ViewChildScreen extends CustomScreen {
 		RichTextField richField[] = new RichTextField[data.size()];
 		int i = 0;
 
-		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) 
-		{
+		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) {
 			String key = (String) keyList.nextElement();
 			String value = (String) data.get(key);
-			if(ChildFieldIgnoreList.isInIgnoreList(key))
-			{
+			if (ChildFieldIgnoreList.isInIgnoreList(key)) {
 				continue;
 			}
-			
+
 			key = key.replace('_', ' ');
 			richField[i] = BoldRichTextField.getSemiBoldRichTextField(key + " :", value);
 
@@ -85,77 +82,34 @@ public class ViewChildScreen extends CustomScreen {
 
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			Form form = (Form) list.nextElement();
-			for(Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();)
-			{
-					Object nextElement = fields.nextElement();
-					
-					if(nextElement != null)
-					{	
-						FormField field = (FormField) nextElement;
-						child.updateField(field.getName());
-					}
+			for (Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();) {
+				Object nextElement = fields.nextElement();
+
+				if (nextElement != null) {
+					FormField field = (FormField) nextElement;
+					child.updateField(field.getName());
+				}
 			}
-			    
+
 		}
 	}
 
 	private void renderBitmap(Hashtable data, HorizontalFieldManager manager) {
-
 		manager.setMargin(10, 10, 10, 10);
-		
-		String ImagePath=(String)data.get("current_photo_key");
-		Bitmap image=null;
-		
-		
-		
-		if (ImagePath == null || ImagePath.equals("")) {
-			ImagePath = "res/default.jpg";
-			image = Bitmap.getBitmapResource(ImagePath);
-		} 
-		else 
-		{
-			image = Bitmap.getBitmapResource("res/default.jpg");
-			ImagePath = "file://"
-					+ (String) data.get(new String("current_photo_key"));
-			FileConnection fconn;
 
-			try {
-				
-				fconn = (FileConnection) Connector.open(ImagePath,
-						Connector.READ);
-				if (fconn.exists()) 
-				{
-					byte[] imageBytes = new byte[(int) fconn.fileSize()];
-					InputStream inStream = fconn.openInputStream();
-					inStream.read(imageBytes);
-					inStream.close();
-					EncodedImage eimg = EncodedImage.createEncodedImage(
-							imageBytes, 0, (int) fconn.fileSize());
-					image = eimg.getBitmap();
-					fconn.close();
+		Bitmap image = getChildImage((String) data.get("current_photo_key"));
 
-				}
+		if (image == null)
+			image = getChildImage("res/default.jpg");
 
-			}
-			catch (IOException e) 
-			{
-				Dialog.alert("Unable to open the image file , using default image");
-			}
+		if (image != null) {
+			BitmapField bf = new BitmapField(image, BitmapField.FOCUSABLE);
+			manager.add(bf);
 		}
-
-		// BitmapField
-		Bitmap resize = ImageUtility.resizeBitmap(image, 70, 70);
-		BitmapField bf = new BitmapField(resize, BitmapField.FOCUSABLE);
-
-		manager.add(bf);
-
 	}
-
-	
 
 	public void setUp() {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void cleanUp() {
@@ -165,27 +119,48 @@ public class ViewChildScreen extends CustomScreen {
 	protected void makeMenu(Menu menu, int instance) {
 		MenuItem editChildMenu = new MenuItem("Edit Child Detail", 1, 1) {
 			public void run() {
-				//Move from edit screen directly to the main menu application screen
+				// Move from edit screen directly to the main menu application screen
 				controller.popScreen();
-				((ViewChildController)controller).editChild(child);
+				((ViewChildController) controller).editChild(child);
 			}
 		};
-		
+
 		MenuItem historyMenu = new MenuItem("View The Change Log", 2, 1) {
 			public void run() {
-				((ViewChildController)controller).viewChildHistory(child);
+				((ViewChildController) controller).viewChildHistory(child);
 			}
 		};
-		
+
 		MenuItem CloseMenu = new MenuItem("Close", 2, 1) {
 			public void run() {
 				controller.popScreen();
 			}
 		};
-		
+
 		menu.add(editChildMenu);
 		menu.add(historyMenu);
 		menu.add(CloseMenu);
 	}
 
+	private Bitmap getChildImage(String ImagePath) {
+		try {
+			InputStream inputStream = Connector.openInputStream(ImagePath);
+
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			int i = 0;
+			while ((i = inputStream.read()) != -1)
+				outputStream.write(i);
+
+			byte[] data = outputStream.toByteArray();
+			EncodedImage eimg = EncodedImage.createEncodedImage(data, 0, data.length);
+			Bitmap image = eimg.getBitmap();
+			inputStream.close();
+
+			return ImageUtility.resizeBitmap(image, 70, 70);
+		} catch (IOException e) {
+			return null;
+		} catch (IllegalArgumentException ex) {
+			return null;
+		}
+	}
 }

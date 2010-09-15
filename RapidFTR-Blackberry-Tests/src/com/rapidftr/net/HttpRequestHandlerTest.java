@@ -27,16 +27,15 @@ public class HttpRequestHandlerTest {
 		requestHandler = new HttpRequestHandler(requestCallBack);
 	}
 
-
-	@Test
-	public void shouldSendProgressStatusToRequestCallback() {
-		int received = 10;
-		int total = 100;
-		requestHandler.setRequestInProgress();
-		requestHandler.readProgress(context, received, total);
-		verify(requestCallBack).updateRequestProgress(10);
-	}
-
+//
+//	@Test
+//	public void shouldSendProgressStatusToRequestCallback() {
+//		int received = 10;
+//		int total = 100;
+//		requestHandler.setRequestInProgress();
+//		requestHandler.readProgress(context, received, total);
+//		verify(requestCallBack).updateRequestProgress(10);
+//	}
 
 
 	@Test
