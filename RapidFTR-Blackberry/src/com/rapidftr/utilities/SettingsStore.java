@@ -87,4 +87,10 @@ public class SettingsStore {
 
 		return getString(AUTHORISATION_TOKEN);
 	}
+
+	public void clearState() {
+		persistentObject.setContents(new Hashtable());
+		contents = new Hashtable();
+		persistentObject.commit();
+	}
 }

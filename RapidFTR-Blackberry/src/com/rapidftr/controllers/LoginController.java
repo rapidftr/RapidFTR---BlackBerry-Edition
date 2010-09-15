@@ -24,4 +24,8 @@ public class LoginController extends RequestAwareController {
 		popScreen();
 	}
 
+	public void clearLoginState() {
+		((LoginService)service).clearLoginState();
+	}
+
 }

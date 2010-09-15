@@ -35,4 +35,8 @@ public class HomeScreenController extends Controller {
 		dispatcher.searchChild();
 	}
 
+	public void cleanAll() {
+		dispatcher.cleanAll();		
+	}
+
 }

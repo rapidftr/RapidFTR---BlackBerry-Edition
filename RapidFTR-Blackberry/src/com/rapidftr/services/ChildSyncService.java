@@ -256,4 +256,9 @@ public class ChildSyncService extends RequestAwareService {
 		return child;
 	}
 
+	public void clearState() {
+		childRecordStore.deleteAllChildren();
+		
+	}
+
 }

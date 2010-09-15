@@ -91,4 +91,10 @@ public class Dispatcher {
 		syncChildController.syncChildRecord(child);		
 	}
 
+	public void cleanAll() {
+		syncChildController.clearOfflineData();
+		loginController.clearLoginState();
+		synchronizeFormsController.clearOfflineData();
+	}
+
 }

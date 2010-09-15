@@ -5,6 +5,7 @@ import java.util.Vector;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.XYEdges;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controllers.HomeScreenController;
@@ -54,6 +55,16 @@ public class HomeScreen extends CustomScreen {
 				onSyncAllClicked();
 			}
 		});
+		
+		
+		Button cleanAllButton = new Button("Clean Device");
+		cleanAllButton.setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				((HomeScreenController) controller).cleanAll();
+				Dialog.alert("Device successfully cleaned");
+			}
+		});
+
 
 		Vector buttonGroup = new Vector();
 		buttonGroup.addElement(newChildButton);
@@ -61,6 +72,7 @@ public class HomeScreen extends CustomScreen {
 		buttonGroup.addElement(searchButton);
 		buttonGroup.addElement(syncFormsButton);
 		buttonGroup.addElement(syncAllButton);
+		buttonGroup.addElement(cleanAllButton);
 
 		Button.setOptimimWidthForButtonGroup(buttonGroup);
 		VerticalFieldManager manager = new VerticalFieldManager(FIELD_HCENTER);
@@ -78,6 +90,9 @@ public class HomeScreen extends CustomScreen {
 		syncAllButton.setPadding(PADDING);
 		manager.add(syncAllButton);
 
+		cleanAllButton.setPadding(PADDING);
+		manager.add(cleanAllButton);
+		
 		add(manager);
 
 	}

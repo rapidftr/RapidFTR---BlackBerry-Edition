@@ -90,4 +90,8 @@ public class FormStore {
 		persistentStore.setContents(forms);
 	}
 
+	public void clearState() {
+		persistentStore.setContents("");	
+	}
+
 }

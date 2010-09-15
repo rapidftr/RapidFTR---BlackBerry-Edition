@@ -50,4 +50,8 @@ public class LoginService extends RequestAwareService{
 		settingsStore.setAuthorisationToken(parseAuthorizationToken(result));
 		settingsStore.setCurrentlyLoggedIn(userName);
 	}
+
+	public void clearLoginState() {
+		settingsStore.clearState();
+	}
 }

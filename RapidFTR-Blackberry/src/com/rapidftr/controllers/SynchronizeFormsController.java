@@ -27,5 +27,9 @@ public class SynchronizeFormsController extends RequestAwareController {
 		dispatcher.login();
 	}
 
+	public void clearOfflineData() {
+		((FormService) service).clearState();
+	}
+
 
 }

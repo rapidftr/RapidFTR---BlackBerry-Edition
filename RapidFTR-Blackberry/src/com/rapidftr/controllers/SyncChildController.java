@@ -36,4 +36,8 @@ public class SyncChildController extends RequestAwareController {
 		}
 	}
 
+	public void clearOfflineData() {
+		((ChildSyncService) service).clearState();		
+	}
+
 }

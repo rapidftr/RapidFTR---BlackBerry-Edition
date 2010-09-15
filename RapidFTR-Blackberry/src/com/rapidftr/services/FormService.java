@@ -38,4 +38,8 @@ public class FormService extends RequestAwareService{
 		requestHandler.markProcessComplete();		
 	}
 
+	public void clearState() {
+	formStore.clearState();
+	}
+
 }

@@ -57,4 +57,5 @@ public class ChildrenRecordStore {
 	public void deleteAllChildren() {
 		persistentStore.setContents(new Vector());
 	}
+
 }
