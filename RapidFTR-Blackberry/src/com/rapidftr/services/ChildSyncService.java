@@ -1,9 +1,13 @@
 package com.rapidftr.services;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+
+import javax.microedition.io.Connector;
+import javax.microedition.io.file.FileConnection;
 
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
@@ -23,14 +27,13 @@ public class ChildSyncService extends RequestAwareService {
 
 	private final ChildrenRecordStore childRecordStore;
 
-	public ChildSyncService(HttpService httpService,
-			ChildrenRecordStore childRecordStore) {
+	public ChildSyncService(HttpService httpService, ChildrenRecordStore childRecordStore) {
 		super(httpService);
 		this.childRecordStore = childRecordStore;
 	}
 
 	public void uploadChildRecords() {
-		uploadChildren( childRecordStore.getAllChildren());
+		uploadChildren(childRecordStore.getAllChildren());
 	}
 
 	private void uploadChildren(Vector childrenList) {
@@ -40,26 +43,21 @@ public class ChildSyncService extends RequestAwareService {
 		while (children.hasMoreElements()) {
 			Child child = (Child) children.nextElement();
 			PostData postData = child.getPostData();
-			Arg multiPart = new Arg("Content-Type",
-					"multipart/form-data;boundary=" + postData.getBoundary());
+			Arg multiPart = new Arg("Content-Type", "multipart/form-data;boundary=" + postData.getBoundary());
 			Arg json = HttpUtility.HEADER_ACCEPT_JSON;
 			Arg[] httpArgs = { multiPart, json };
 			if (child.isNewChild()) {
 				requestHandler.incrementActiveRequests(1);
-				httpService.post("children", null, httpArgs, requestHandler,
-						postData, null);
-			} else if(child.isUpdated()){
+				httpService.post("children", null, httpArgs, requestHandler, postData, null);
+			} else if (child.isUpdated()) {
 				requestHandler.incrementActiveRequests(1);
-				httpService.put("children/" + child.getField("_id"), null,
-						httpArgs, requestHandler, postData, null);
+				httpService.put("children/" + child.getField("_id"), null, httpArgs, requestHandler, postData, null);
 			}
 		}
-		if(requestHandler.isProcessCompleted()){
+		if (requestHandler.isProcessCompleted()) {
 			requestHandler.markProcessComplete();
 		}
 	}
-
-	
 
 	public void uploadChildRecord(Child child) {
 
@@ -80,34 +78,57 @@ public class ChildSyncService extends RequestAwareService {
 				String fieldValue = jsonChild.getString(fieldName);
 				child.setField(fieldName, fieldValue);
 			}
+
+			try {
+				Arg[] httpArgs = new Arg[1];
+				httpArgs[0] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
+				Response response = httpService.get("children/" + child.getField("_id") + "/thumbnail", null, httpArgs);
+				byte[] data = response.getResult().getData();
+				String imagePath = "file:///SDCard/Blackberry/pictures/" + (String) child.getField("current_photo_key") + ".jpg";
+				FileConnection fc = (FileConnection) Connector.open(imagePath);
+				if (!fc.exists()) {
+					fc.create(); // create the file if it doesn't exist
+				}
+				fc.setWritable(true);
+				OutputStream outStream = fc.openOutputStream();
+				outStream.write(data);
+				outStream.close();
+				fc.close();
+
+				child.setField("current_photo_key", imagePath);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 			child.clearEditHistory();
 			childRecordStore.addOrUpdateChild(child);
-
 		} catch (JSONException e) {
 			//SumitG TODO  to handle this by  maintaining error queue  
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
-		
 
 	}
 
 	public void syncAllChildRecords() throws ServiceException {
-		new Thread(){public void run() {requestHandler.setRequestInProgress();
-		uploadChildRecords();
-	
-		try {
-			downloadNewChildRecords();
-		} catch (IOException e) {
-			requestHandler.markProcessFailed();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			requestHandler.markProcessFailed();
-	}
-		if(requestHandler.isProcessCompleted()){
-			requestHandler.markProcessComplete();
-		}};}.start();
-		
-	
+		new Thread() {
+			public void run() {
+				requestHandler.setRequestInProgress();
+				uploadChildRecords();
+
+				try {
+					downloadNewChildRecords();
+				} catch (IOException e) {
+					requestHandler.markProcessFailed();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					requestHandler.markProcessFailed();
+				}
+				if (requestHandler.isProcessCompleted()) {
+					requestHandler.markProcessComplete();
+				}
+			};
+		}.start();
+
 	}
 
 	private void downloadNewChildRecords() throws IOException, JSONException {
@@ -118,9 +139,8 @@ public class ChildSyncService extends RequestAwareService {
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
 		while (items.hasMoreElements()) {
 			requestHandler.incrementActiveRequests(1);
-			httpService.get("children/" + items
-					.nextElement().toString(), null, httpArgs, requestHandler);
-    	}
+			httpService.get("children/" + items.nextElement().toString(), null, httpArgs, requestHandler);
+		}
 
 	}
 
@@ -129,24 +149,20 @@ public class ChildSyncService extends RequestAwareService {
 		Hashtable offlineIdRevXREF = getOfflineStoredChildrenIdRevMapping();
 		Hashtable onlineIdRevXREF;
 
-			onlineIdRevXREF = getOnlineStoredChildrenIdRevMapping();
-		
+		onlineIdRevXREF = getOnlineStoredChildrenIdRevMapping();
 
 		Enumeration items = onlineIdRevXREF.keys();
 
 		while (items.hasMoreElements()) {
 			String key = (String) items.nextElement();
-			if ((!offlineIdRevXREF.containsKey(key))
-					|| (offlineIdRevXREF.containsKey(key) && !offlineIdRevXREF
-							.get(key).equals(onlineIdRevXREF.get(key)))) {
+			if ((!offlineIdRevXREF.containsKey(key)) || (offlineIdRevXREF.containsKey(key) && !offlineIdRevXREF.get(key).equals(onlineIdRevXREF.get(key)))) {
 				childNeedToDownload.addElement(key);
 			}
 		}
 		return childNeedToDownload;
 	}
 
-	public Vector getAllChildrenFromOnlineStore() throws IOException,
-			JSONException {
+	public Vector getAllChildrenFromOnlineStore() throws IOException, JSONException {
 
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
@@ -180,13 +196,12 @@ public class ChildSyncService extends RequestAwareService {
 		Response response = httpService.get("children-ids", null, httpArgs);
 		Result result = response.getResult();
 		HttpServer.printResponse(response);
-			JSONArray jsonChildren = result.getAsArray("");
-			for (int i = 0; i < jsonChildren.length(); i++) {
-				JSONObject jsonChild = (JSONObject) jsonChildren.get(i);
-				mapping.put(jsonChild.getString("id"), jsonChild
-						.getString("rev"));
-			}
-		
+		JSONArray jsonChildren = result.getAsArray("");
+		for (int i = 0; i < jsonChildren.length(); i++) {
+			JSONObject jsonChild = (JSONObject) jsonChildren.get(i);
+			mapping.put(jsonChild.getString("id"), jsonChild.getString("rev"));
+		}
+
 		return mapping;
 	}
 
@@ -205,7 +220,6 @@ public class ChildSyncService extends RequestAwareService {
 		return mapping;
 	}
 
-
 	public Child getChildFromOnlineStore(String id) throws IOException {
 		Child child = new Child();
 		Arg[] httpArgs = new Arg[1];
@@ -222,8 +236,7 @@ public class ChildSyncService extends RequestAwareService {
 				child.setField(fieldName, fieldValue);
 			}
 		} catch (JSONException e) {
-			throw new ServiceException(
-					"JSON returned from get children is in unexpected format");
+			throw new ServiceException("JSON returned from get children is in unexpected format");
 		}
 		return child;
 	}

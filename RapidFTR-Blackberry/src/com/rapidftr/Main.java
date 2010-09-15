@@ -52,73 +52,61 @@ public class Main extends UiApplication {
 
 	/**
 	 * <p>
-	 * The default constructor. Creates all of the RIM UI components and pushes
-	 * the application's root screen onto the UI stack.
+	 * The default constructor. Creates all of the RIM UI components and pushes the application's root screen onto the UI stack.
 	 */
 	public Main() {
-		enableEventInjection();
+		enablePermission(ApplicationPermissions.PERMISSION_INPUT_SIMULATION);
+		enablePermission(ApplicationPermissions.PERMISSION_FILE_API);
 
 		SettingsStore settings = new SettingsStore();
 
-	    FormStore formStore = new FormStore();
+		FormStore formStore = new FormStore();
 
 		ChildrenRecordStore childRecordStore = new ChildrenRecordStore();
-		
-		HttpServer httpServer = new HttpServer();
-		HttpService httpService = new HttpService(httpServer,settings);
 
-		LoginService loginService = new LoginService(httpService,settings);
+		HttpServer httpServer = new HttpServer();
+		HttpService httpService = new HttpService(httpServer, settings);
+
+		LoginService loginService = new LoginService(httpService, settings);
 
 		ChildStoreService childStoreService = new ChildStoreService(childRecordStore);
 
 		UiStack uiStack = new UiStack(this);
 
 		LoginScreen loginScreen = new LoginScreen(settings);
-		LoginController loginController = new LoginController(loginScreen,
-				uiStack, loginService);
+		LoginController loginController = new LoginController(loginScreen, uiStack, loginService);
 		loginScreen.setController(loginController);
 
 		HomeScreen homeScreen = new HomeScreen();
-		HomeScreenController homeScreenController = new HomeScreenController(
-				homeScreen, uiStack);
+		HomeScreenController homeScreenController = new HomeScreenController(homeScreen, uiStack);
 
 		ViewChildScreen viewChildScreen = new ViewChildScreen();
-		ViewChildController viewChildController = new ViewChildController(
-				viewChildScreen, uiStack);
+		ViewChildController viewChildController = new ViewChildController(viewChildScreen, uiStack);
 
 		ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
-		ViewChildrenController viewChildrenController = new ViewChildrenController(
-				viewChildrenScreen, uiStack, childStoreService);
+		ViewChildrenController viewChildrenController = new ViewChildrenController(viewChildrenScreen, uiStack, childStoreService);
 
 		SynchronizeFormsScreen synchronizeFormsScreen = new SynchronizeFormsScreen();
-		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(
-				new FormService(httpService,formStore), uiStack,
-				synchronizeFormsScreen);
+		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(new FormService(httpService, formStore), uiStack, synchronizeFormsScreen);
 
 		ManageChildScreen newChildScreen = new ManageChildScreen(settings);
-		ManageChildController newChildController = new ManageChildController(
-				newChildScreen, uiStack, formStore, childStoreService);
+		ManageChildController newChildController = new ManageChildController(newChildScreen, uiStack, formStore, childStoreService);
 		SyncChildScreen uploadChildRecordsScreen = new SyncChildScreen();
-		
-		ChildSyncService childRecordsUploadService = new ChildSyncService(httpService,childRecordStore);
-		SyncChildController uploadChildRecordsController = new SyncChildController(uploadChildRecordsScreen, uiStack,childRecordsUploadService);
-		
+
+		ChildSyncService childRecordsUploadService = new ChildSyncService(httpService, childRecordStore);
+		SyncChildController uploadChildRecordsController = new SyncChildController(uploadChildRecordsScreen, uiStack, childRecordsUploadService);
+
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
 		SearchChildController searchChildController = new SearchChildController(searchChildScreen, uiStack);
-		
-		Dispatcher dispatcher = new Dispatcher(homeScreenController,
-				loginController, viewChildrenController, viewChildController,
-				synchronizeFormsController, newChildController,uploadChildRecordsController,searchChildController);
+
+		Dispatcher dispatcher = new Dispatcher(homeScreenController, loginController, viewChildrenController, viewChildController, synchronizeFormsController, newChildController, uploadChildRecordsController, searchChildController);
 
 		dispatcher.homeScreen();
 
 	}
 
-	private void enableEventInjection() {
-		ApplicationPermissionsManager manager = ApplicationPermissionsManager
-				.getInstance();
-
-		int permission = ApplicationPermissions.PERMISSION_EVENT_INJECTOR;
+	private void enablePermission(int permission) {
+		ApplicationPermissionsManager manager = ApplicationPermissionsManager.getInstance();
 
 		if (manager.getApplicationPermissions().getPermission(permission) == ApplicationPermissions.VALUE_ALLOW) {
 			System.out.println("Got correct permissions");
@@ -131,7 +119,6 @@ public class Main extends UiApplication {
 			requestedPermissions.addPermission(permission);
 		}
 
-		ApplicationPermissionsManager.getInstance().invokePermissionsRequest(
-				requestedPermissions);
+		ApplicationPermissionsManager.getInstance().invokePermissionsRequest(requestedPermissions);
 	}
 }
