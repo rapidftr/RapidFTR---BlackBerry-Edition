@@ -1,0 +1,75 @@
+<project name="RapidFTR---BlackBerry-Edition" default="compile">
+	<property file="build.properties" />
+
+	<taskdef resource="bb-ant-defs.xml" classpath="${bb-ant-tools-jar}" />
+
+	<path id="build.classpath">
+		<fileset dir="RapidFTR-Blackberry-Tests\\lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${output.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<target name="clean">
+		<delete failonerror="false">
+			<fileset dir="${output.dir}" includes="**/*" />
+			<fileset dir="${output.dir}/unzipped" includes="**/*" />
+			<fileset dir="${report.dir}" includes="**/*" />
+			<fileset dir="${tests-output.dir}" includes="**/*" />
+		</delete>
+	</target>
+
+	<target name="init">
+		<mkdir dir="${output.dir}" />
+		<mkdir dir="${tests-output.dir}" />
+		<mkdir dir="${report.dir}" />
+		<mkdir dir="${output.dir}/unzipped" />
+	</target>
+
+	<target name="compile" depends="init">
+		<rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}">
+			<jdp title="${title}" vendor="${vendor}" version="1.0" type="cldc" />
+		</rapc>
+	</target>
+
+	<target name="sign" depends="compile">
+		<java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
+			<arg line=" -a -p ${signing.code} -c -C  *.cod" />
+		</java>
+	</target>
+
+	<!-- Load to device -->
+	<target name="load" depends="sign">
+		<exec executable="${jde.home}/bin/JavaLoader.exe" dir="." failonerror="true">
+			<arg value="-u" />
+			<arg value="load" />
+			<arg value="output/tocod/${output.file}.cod" />
+		</exec>
+	</target>
+
+	<target name="compile-tests" depends="compile">
+		<javac srcdir="${tests-src.dir}" destdir="${tests-output.dir}" classpathref="build.classpath" />
+	</target>
+
+	<target name="junit" depends="compile-tests">
+		<junit printsummary="yes">
+			<classpath refid="build.classpath">
+			</classpath>
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${report.dir}">
+				<fileset dir="${tests-src.dir}" />
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="junitreport" depends="junit">
+		<junitreport todir="${report.dir}">
+			<fileset dir="${report.dir}" includes="TEST-*.xml" />
+			<report todir="${report.dir}" />
+		</junitreport>
+	</target>
+
+
+</project>
