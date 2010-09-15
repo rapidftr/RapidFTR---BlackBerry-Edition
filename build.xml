@@ -1,3 +1,4 @@
+<!--It Required Blackberry Ant Tools (http://bb-ant-tools.sourceforge.net/)  -->
 <project name="RapidFTR---BlackBerry-Edition" default="compile">
 	<property file="build.properties" />
 
