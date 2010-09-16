@@ -61,7 +61,8 @@ public class ImageUtility {
 	
 	public static EncodedImage getBitmapImageForPath(String Path)
 	{
-		String ImagePath = "file://"+ Path;
+	//	String ImagePath = "file://"+ Path;
+	    String ImagePath = Path;
 		
 	FileConnection fconn;
 
