@@ -25,205 +25,188 @@ import com.rapidftr.utilities.SettingsStore;
 
 public class ManageChildScreen extends CustomScreen {
 
-	private Vector forms;
-	private Manager screenManager;
-	SettingsStore settings;
-	private Child childToEdit;
-	private Child childToSave;
-	public ManageChildScreen(SettingsStore settings) {
-		this.settings = settings;
-	}
+    private Vector forms;
+    private Manager screenManager;
+    SettingsStore settings;
+    private Child childToEdit;
 
-	public void cleanUp() {
+    private static String[] REQUIRED_FIELDS = { "last_known_location", "current_photo_key" };
 
-	}
+    public ManageChildScreen(SettingsStore settings) {
+        this.settings = settings;
+    }
 
-	public void setUp() {
+    public void cleanUp() {
 
-		createScreenLayout();
+    }
 
-	}
+    public void setUp() {
+        createScreenLayout();
+    }
 
-	public void setForms(Vector forms) {
-		this.forms = forms;
-		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-			((Form) list.nextElement()).initializeLayout(this);
-		}
-	}
+    public void setForms(Vector forms) {
+        this.forms = forms;
+        for (Enumeration list = forms.elements(); list.hasMoreElements();) {
+            ((Form) list.nextElement()).initializeLayout(this);
+        }
+    }
 
+    public void setEditForms(Vector forms, Child childToEdit) {
+        this.childToEdit = childToEdit;
+        this.forms = forms;
+        for (Enumeration list = forms.elements(); list.hasMoreElements();) {
+            ((Form) list.nextElement()).initializeLayoutWithChild(this, childToEdit);
+        }
+    }
 
-	public void setEditForms(Vector forms, Child childToEdit) {
-		this.childToEdit = childToEdit;
-		this.childToSave = childToEdit;
-		this.forms = forms;
-		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-			((Form) list.nextElement()).initializeLayoutWithChild(this,
-					childToEdit);
-		}
-	}
+    private void createScreenLayout() {
 
-	private void createScreenLayout() {
+        try {
+            delete(screenManager);
+        } catch (Exception ex) {
 
-		try {
-			delete(screenManager);
-		} catch (Exception ex) {
+        }
+        screenManager = new VerticalFieldManager();
+        Manager titleManager = new HorizontalFieldManager(FIELD_HCENTER);
+        LabelField screenTitle = new LabelField("Create New Child");
+        titleManager.add(screenTitle);
+        screenManager.add(titleManager);
+        screenManager.add(new SeparatorField());
+        add(screenManager);
 
-		}
-		screenManager = new VerticalFieldManager();
-		Manager titleManager = new HorizontalFieldManager(FIELD_HCENTER);
-		LabelField screenTitle = new LabelField("Create New Child");
-		titleManager.add(screenTitle);
-		screenManager.add(titleManager);
-		screenManager.add(new SeparatorField());
-		add(screenManager);
+        if (forms == null || forms.size() == 0) {
+            int result = Dialog.ask(Dialog.D_OK_CANCEL, "There are no form details stored\n" + "press ok to synchronize forms with a server");
 
-		if (forms == null || forms.size() == 0) {
-			int result = Dialog.ask(Dialog.D_OK_CANCEL,
-					"There are no form details stored\n"
-							+ "press ok to synchronize forms with a server");
+            controller.popScreen();
+            if (result == Dialog.OK) {
+                ((ManageChildController) controller).synchronizeForms();
+            }
+            return;
+        }
 
-			controller.popScreen();
-			if (result == Dialog.OK) {
-				((ManageChildController) controller).synchronizeForms();
-			}
-			return;
-		}
+        final Object[] formArray = new Object[forms.size()];
+        forms.copyInto(formArray);
+        final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
+        final ObjectChoiceField availableForms = new ObjectChoiceField("Choose form", formArray);
+        formsManager.add(availableForms);
+        screenManager.add(formsManager);
 
-		final Object[] formArray = new Object[forms.size()];
-		forms.copyInto(formArray);
-		final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
-		final ObjectChoiceField availableForms = new ObjectChoiceField(
-				"Choose form", formArray);
-		formsManager.add(availableForms);
-		screenManager.add(formsManager);
+        final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
+        formManager.add(((Form) formArray[0]).getLayout());
+        screenManager.add(formManager);
+        availableForms.setChangeListener(new FieldChangeListener() {
 
-		final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
-		formManager.add(((Form) formArray[0]).getLayout());
-		screenManager.add(formManager);
-		availableForms.setChangeListener(new FieldChangeListener() {
+            public void fieldChanged(Field field, int context) {
+                formManager.deleteAll();
+                formManager.add(((Form) formArray[availableForms.getSelectedIndex()]).getLayout());
 
-			public void fieldChanged(Field field, int context) {
+            }
 
-				formManager.deleteAll();
-				formManager.add(((Form) formArray[availableForms
-						.getSelectedIndex()]).getLayout());
+        });
 
-			}
+        screenManager.add(new BlankSeparatorField(15));
 
-		});
+        HorizontalFieldManager saveButtonManager = new HorizontalFieldManager(FIELD_HCENTER);
+        Button saveButton = new Button("Save");
+        saveButton.setChangeListener(new FieldChangeListener() {
+            public void fieldChanged(Field field, int context) {
+                if (!validateOnSave())
+                    return;
+                childToEdit = null;
+                controller.popScreen();
+            }
+        });
+        saveButtonManager.add(saveButton);
+        screenManager.add(saveButtonManager);
 
-		screenManager.add(new BlankSeparatorField(15));
+    }
 
-		HorizontalFieldManager saveButtonManager = new HorizontalFieldManager(
-				FIELD_HCENTER);
-		Button saveButton = new Button("Save");
-		saveButton.setChangeListener(new FieldChangeListener() {
+    public void takePhoto(ImageCaptureListener imageCaptureListener) {
 
-			public void fieldChanged(Field field, int context) {
-			
-				int saveSuccess=onSaveChildClicked();
-				if(saveSuccess == -1)
-				{
-					Dialog.alert("Please input last known loaction , it is a mandatory field");
-					return;
-				}
-				childToEdit =  null;
-				controller.popScreen();
-			}
-		});
-		saveButtonManager.add(saveButton);
-		screenManager.add(saveButtonManager);
+        ((ManageChildController) controller).takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
 
-	}
+    }
 
-	public void takePhoto(ImageCaptureListener imageCaptureListener) {
+    public boolean onClose() {
+        int result = Dialog.ask(Dialog.D_YES_NO, "Do you want to save the changes before closing?", Dialog.YES);
 
-		((ManageChildController) controller)
-				.takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
+        if (result == Dialog.YES) {
+            if (!validateOnSave())
+                return false;
+        }
 
-	}
+        if (result == Dialog.NO) {
+            // Don't do anything just exit
+        }
 
-	public boolean onClose() {
-		int result = Dialog.ask(Dialog.D_YES_NO,"Do you want to save the changes before closing?",Dialog.YES);
+        controller.popScreen();
+        return true;
+    }
 
-		if (result == Dialog.YES) {
-			int saveSuccess=onSaveChildClicked();
-			if(saveSuccess==-1)
-			{
-				Dialog.alert("Please input last known loaction , it is a mandatory field");
-				return false;
-			}
-		}
+    private boolean validateOnSave() {
+        String invalidDataField = onSaveChildClicked();
+        if (invalidDataField != null) {
+            Dialog.alert("Please input " + invalidDataField + "it is a mandatory field");
+            return false;
+        }
+        return true;
+    }
 
-		if (result == Dialog.NO) {
-			//Don't  do anything just exit
-		}
+    private String onSaveChildClicked() {
+        if (childToEdit == null) {
+            childToEdit = Child.create(forms);
+        } else {
+            childToEdit.update(settings.getCurrentlyLoggedIn(), forms);
+        }
+        String invalidDataField = null;
+        if ((invalidDataField = validateRequiredFields()) != null) {
+            return invalidDataField;
+        }
+        ((ManageChildController) controller).saveChild(childToEdit);
+        return null;
+    }
 
-		controller.popScreen();
-		return true;
-	}
+    private String validateRequiredFields() {
+        for (int i = 0; i < REQUIRED_FIELDS.length; i++) {
+            if (childToEdit.getField(REQUIRED_FIELDS[i]) == null || childToEdit.getField(REQUIRED_FIELDS[i]).toString().equals(""))
+                return REQUIRED_FIELDS[i];
+        }
+        return null;
+    }
 
-	private int onSaveChildClicked() {
-		if (childToEdit == null) {
-			childToEdit = Child.create(forms);
-		}else{
-			childToEdit.update(settings.getCurrentlyLoggedIn(),forms);
-		}
-		if(areValidFieldsEmpty()){
-			return -1;
-		}
-		((ManageChildController) controller).saveChild(childToEdit);
-		return 0;
-		//childToEdit =  null;
-	}
+    protected void makeMenu(Menu menu, int instance) {
+        MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
+            public void run() {
+                if (!validateOnSave())
+                    return;
+                Dialog.alert("ChildRecord has been stored succesfully\n" + "Please upload record to central server whenever you get Internet Access!!");
+                controller.popScreen();
+                childToEdit = null;
+            }
+        };
 
-	private boolean areValidFieldsEmpty() {
-		return childToEdit.getField("last_known_location")==null || childToEdit.getField("last_known_location").toString().equals("");
-	}
-	
-	protected void makeMenu(Menu menu, int instance) {
-		MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
-			public void run() {
-				int saveSuccess=onSaveChildClicked();
-				if(saveSuccess==-1)
-				{
-					Dialog.alert("Please input last known loaction , it is a mandatory field");
-					return;
-				}
-				Dialog.alert("ChildRecord has been stored succesfully\n"
-								+ "Please upload record to central server whenever you get Internet Access!!");
-				controller.popScreen();
-				childToEdit =  null;
-			}
-		};
-		
-		MenuItem syncChildMenu = new MenuItem("Sync Record ", 2, 2) {
-			public void run() {
-				controller.popScreen();
-				int saveSuccess=onSaveChildClicked();
-				if(saveSuccess==-1)
-				{
-					Dialog.alert("Please input last known loaction , it is a mandatory field");
-					return ;
-				}
-				((ManageChildController) controller).syncChild(childToEdit);
-				childToEdit = null;
-			}
-		};
+        MenuItem syncChildMenu = new MenuItem("Sync Record ", 2, 2) {
+            public void run() {
+                controller.popScreen();
+                if (!validateOnSave())
+                    return;
+                ((ManageChildController) controller).syncChild(childToEdit);
+                childToEdit = null;
+            }
+        };
 
-		MenuItem CloseMenu = new MenuItem("Close", 3, 1) {
-			public void run() {
-				onClose();
-			}
-		};
-		
-		menu.add(saveChildMenu);
-		menu.add(syncChildMenu);
-		menu.add(CloseMenu);
-	}
-	
-	public Child getChild()
-	{
-		return childToEdit;
-	}
+        MenuItem CloseMenu = new MenuItem("Close", 3, 1) {
+            public void run() {
+                onClose();
+            }
+        };
+
+        menu.add(saveChildMenu);
+        menu.add(syncChildMenu);
+        menu.add(CloseMenu);
+    }
+
+    public Child getChild() {
+        return childToEdit;
+    }
 }
