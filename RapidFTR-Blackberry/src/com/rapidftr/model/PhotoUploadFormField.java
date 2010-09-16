@@ -83,7 +83,7 @@ public class PhotoUploadFormField extends FormField implements
 
 	public void onImagedSaved(String imageLocation, EncodedImage encodedImage) {
 
-		this.imageLocation = imageLocation;
+		this.imageLocation = "file://" + imageLocation;
 
 
 		int requiredWidth = Fixed32.toFP(bitmap.getWidth());
