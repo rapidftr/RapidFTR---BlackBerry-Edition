@@ -27,9 +27,9 @@ public class HttpServer {
 	}
 
 	public void getFromServer(String url, Arg[] inputParams, Arg[] httpArgs,
-			RequestListener listener) {
+			RequestListener listener,Object context) {
 		request = Request.get(buildFullyQualifiedUrl(url), inputParams,
-				httpArgs, listener, null);
+				httpArgs, listener, context);
 	}
 	
 	public Response getFromServer(String url, Arg[] inputParams, Arg[] httpArgs) throws IOException {

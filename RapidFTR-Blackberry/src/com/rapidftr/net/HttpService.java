@@ -24,9 +24,9 @@ public class HttpService {
 	 * Pass Request listener to make asynchronous request
 	 */
 	public void get(String url, Arg[] inputArgs, Arg[] httpArgs,
-			RequestListener listener) {
+			RequestListener listener,Object context) {
 		httpArgs = appendAuthenticationToken(httpArgs);
-		httpServer.getFromServer(url, inputArgs, httpArgs, listener);
+		httpServer.getFromServer(url, inputArgs, httpArgs, listener,context);
 	}
 
 	/*

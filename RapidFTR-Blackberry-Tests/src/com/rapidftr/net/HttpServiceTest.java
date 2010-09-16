@@ -56,9 +56,9 @@ public class HttpServiceTest {
 	@Test
 	public void shouldSendGetRequestToHttpServer() {
 		Arg[] inputParams = new Arg[0];
-		httpService.get(url, inputParams, httpArgs, listener);
+		httpService.get(url, inputParams, httpArgs, listener,null);
 		verify(httpServer).getFromServer(url, inputParams,
-				httpArgsWithAuthToken, listener);
+				httpArgsWithAuthToken, listener,null);
 	}
 
 	@Test

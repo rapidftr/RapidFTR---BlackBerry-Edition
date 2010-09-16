@@ -26,6 +26,8 @@ import com.sun.me.web.request.Response;
 public class ChildSyncService extends RequestAwareService {
 
 	private static final String FILE_STORE_HOME_USER = "file:///store/home/user";
+
+	private static final String PROCESS_STATE = "process_state";
 	
     private final ChildrenRecordStore childRecordStore;
 
@@ -40,9 +42,11 @@ public class ChildSyncService extends RequestAwareService {
 
 	private void uploadChildren(Vector childrenList) {
 		requestHandler.setRequestInProgress();
-		requestHandler.getRequestCallBack().updateProgressMessage("Uploading Records");
 		Enumeration children = childrenList.elements();
+		int index=0;
 		while (children.hasMoreElements()) {
+			Hashtable context = new Hashtable();
+			context.put(PROCESS_STATE, "Uploading ["+(++index)+"/"+childrenList.size()+"]");
 			Child child = (Child) children.nextElement();
 			PostData postData = child.getPostData();
 			Arg multiPart = new Arg("Content-Type", "multipart/form-data;boundary=" + postData.getBoundary());
@@ -50,25 +54,22 @@ public class ChildSyncService extends RequestAwareService {
 			Arg[] httpArgs = { multiPart, json };
 			if (child.isNewChild()) {
 				requestHandler.incrementActiveRequests(1);
-				httpService.post("children", null, httpArgs, requestHandler, postData, null);
+				httpService.post("children", null, httpArgs, requestHandler, postData, context);
 			} else if (child.isUpdated()) {
 				requestHandler.incrementActiveRequests(1);
-				httpService.put("children/" + child.getField("_id"), null, httpArgs, requestHandler, postData, null);
+				httpService.put("children/" + child.getField("_id"), null, httpArgs, requestHandler, postData, context);
 			}
-		}
-		if (requestHandler.isProcessCompleted()) {
-			requestHandler.markProcessComplete();
 		}
 	}
 
 	public void uploadChildRecord(Child child) {
-
 		Vector childrenList = new Vector();
 		childrenList.addElement(child);
 		uploadChildren(childrenList);
 	}
 
 	public void onRequestSuccess(Object context, Response result) {
+		requestHandler.getRequestCallBack().updateProgressMessage(((Hashtable)context).get(PROCESS_STATE).toString());
 		// sync child with local store
 		Child child = new Child();
 		try {
@@ -147,14 +148,17 @@ public class ChildSyncService extends RequestAwareService {
 	}
 
 	private void downloadNewChildRecords() throws IOException, JSONException {
-		requestHandler.getRequestCallBack().updateProgressMessage("Downloading Records");
 		Vector childNeedToDownload = childRecordsNeedToBeDownload();
 		Enumeration items = childNeedToDownload.elements();
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
+		int index=0;
 		while (items.hasMoreElements()) {
+			index++;
+			Hashtable context = new Hashtable();
+			context.put(PROCESS_STATE, "Downloading ["+index+"/"+childNeedToDownload.size()+"]");
 			requestHandler.incrementActiveRequests(1);
-			httpService.get("children/" + items.nextElement().toString(), null, httpArgs, requestHandler);
+			httpService.get("children/" + items.nextElement().toString(), null, httpArgs, requestHandler,context);
 		}
 
 	}

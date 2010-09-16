@@ -1,6 +1,7 @@
 package com.rapidftr.model;
 
 import net.rim.device.api.system.Display;
+import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.DrawStyle;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
@@ -39,7 +40,6 @@ public class ChildrenListField extends ObjectListField {
     	Child child = (Child) this.get(listField, index);
     	
     	listField.setRowHeight(this.titleFont.getHeight()*4);
-    	
     	graphics.setFont(titleFont);
     	graphics.drawText((String) child.getField("name"),firstrowPostion, y, (DrawStyle.LEFT|DrawStyle.ELLIPSIS|DrawStyle.TOP), width);              
 

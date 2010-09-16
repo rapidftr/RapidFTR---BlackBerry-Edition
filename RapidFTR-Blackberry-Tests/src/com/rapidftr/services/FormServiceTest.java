@@ -37,7 +37,7 @@ public class FormServiceTest {
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
 		verify(httpService).get("published_form_sections", null, httpArgs,
-				formService.requestHandler);
+				formService.requestHandler,null);
 	}
 
 
