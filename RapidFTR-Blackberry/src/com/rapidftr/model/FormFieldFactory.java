@@ -31,6 +31,11 @@ public class FormFieldFactory {
 		if (field != null)
 			return field;
 
+		field = TextAreaFormField.createField(name, type);
+
+		if (field != null)
+			return field;
+
 		return null;
 
 	}
