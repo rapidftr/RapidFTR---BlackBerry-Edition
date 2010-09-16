@@ -1,89 +1,135 @@
 <!--It Required Blackberry Ant Tools (http://bb-ant-tools.sourceforge.net/)  -->
 <project name="RapidFTR---BlackBerry-Edition" default="compile">
-	<property file="build.properties" />
+  <property file="build.properties" />
 
-	<taskdef resource="bb-ant-defs.xml" classpath="${bb-ant-tools-jar}" />
+  <taskdef resource="bb-ant-defs.xml" classpath="${bb-ant-tools-jar}" />
 
-	<path id="build.classpath">
-		<fileset dir="RapidFTR-Blackberry-Tests\\lib">
-			<include name="*.jar" />
-		</fileset>
-		<fileset dir="${output.dir}">
-			<include name="*.jar" />
-		</fileset>
-	</path>
-	
-	<target name="clean">
-		<delete failonerror="false">
-			<fileset dir="${output.dir}" includes="**/*" />
-			<fileset dir="${output.dir}/unzipped" includes="**/*" />
-			<fileset dir="${report.dir}" includes="**/*" />
-			<fileset dir="${tests-output.dir}" includes="**/*" />
-		    <fileset dir="${release.dir}" includes="**/*" />
-		</delete>
-	</target>
+  <path id="build.classpath">
+    <fileset dir="RapidFTR-Blackberry-Tests\\lib">
+      <include name="*.jar" />
+    </fileset>
+    <fileset dir="${output.dir}">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+  
+  <target name="clean">
+    <delete failonerror="false">
+      <fileset dir="${output.dir}" includes="**/*" />
+      <fileset dir="${report.dir}" includes="**/*" />
+      <fileset dir="${tests-output.dir}" includes="**/*" />
+      <fileset dir="${release.dir}" includes="**/*" />
+    </delete>
+  </target>
 
-	<target name="init">
-		<mkdir dir="${output.dir}" />
-		<mkdir dir="${release.dir}" />
-		<mkdir dir="${tests-output.dir}" />
-		<mkdir dir="${report.dir}" />
-		<mkdir dir="${output.dir}/unzipped" />
-	</target>
-
-	<target name="compile" depends="init">
-		<rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}">
-			<jdp title="${title}" vendor="${vendor}" version="1.0" type="cldc" />
-		</rapc>
-	</target>
-
-	<target name="sign" depends="compile">
-		<java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
-			<arg line=" -a -p ${signing.code} -c -C  *.cod" />
-		</java>
-	</target>
-	
-  <target name="release" depends="sign">
-	<alx destdir="${release.dir}" filename="${output.file}.alx">
-     <application id="com.rapidftr" name="${title}">
-      <codset>
-         <fileset dir="${output.dir}" includes="*.cod" />
-      </codset>
-     </application>
-    </alx>
+  <target name="init">
+    <mkdir dir="${output.dir}" />
+    <mkdir dir="${output.dir}/temp" />
+    <mkdir dir="${release.dir}" />
+    <mkdir dir="${tests-output.dir}" />
+    <mkdir dir="${report.dir}" />
   </target>
 
 
-	<!-- Load to device -->
-	<target name="load" depends="sign">
-		<exec executable="${jde.home}/bin/JavaLoader.exe" dir="." failonerror="true">
-			<arg value="-u" />
-			<arg value="load" />
-			<arg value="output/tocod/${output.file}.cod" />
-		</exec>
-	</target>
+  <target name="compile" depends="init">
+  	
+    <rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}/temp">
+      <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"/>
+    </rapc>	
+  	
+  	<jar destfile="${output.dir}/temp/${output.file}.jar" update="true">
+  	  <fileset dir="${src.dir}" >
+  	  <exclude name="**/Thumbs.db"/>
+  	  <exclude name="**/*.java"/>
+  	  </fileset>
+	</jar>
+ 
+  	<copy file="${output.dir}/temp/${output.file}.jar" todir="${output.dir}" /> 
+  		
+    <delete failonerror="true">
+      <fileset dir="${output.dir}/temp" />
+    </delete>
+  	
+    <rapc  srcdir="${output.dir}" output="${output.file}" destdir="${output.dir}">
+      <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"  />
+    </rapc>
+  </target>
 
-	<target name="compile-tests" depends="compile">
-		<javac srcdir="${tests-src.dir}" destdir="${tests-output.dir}" classpathref="build.classpath" />
-	</target>
+  <target name="sign" depends="compile">
+    <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
+      <arg line=" -a -p ${signing.code} -c -C  *.cod" />
+    </java>
+  </target>
+  
+  <target name="release" depends="sign">
+    <alx destdir="${release.dir}" filename="${output.file}.alx">
+      <application id="com.rapidftr" name="${app.title}">
+        <codset greaterthanequal="4.6.1">
+          <fileset dir="${output.dir}" includes="*.cod" />
+        </codset>
+      </application>
+    </alx>
+  </target>
 
-	<target name="junit" depends="compile-tests">
-		<junit printsummary="yes">
-			<classpath refid="build.classpath">
-			</classpath>
-			<formatter type="xml" />
-			<batchtest fork="yes" todir="${report.dir}">
-				<fileset dir="${tests-src.dir}" />
-			</batchtest>
-		</junit>
-	</target>
+  <!-- Load to device -->
+  <target name="load" depends="sign">
+    <exec executable="${jde.home}/bin/JavaLoader.exe" dir="." failonerror="true">
+      <arg value="-u" />
+      <arg value="load" />
+      <arg value="output/tocod/${output.file}.cod" />
+    </exec>
+  </target>
 
-	<target name="junitreport" depends="junit">
-		<junitreport todir="${report.dir}">
-			<fileset dir="${report.dir}" includes="TEST-*.xml" />
-			<report todir="${report.dir}" />
-		</junitreport>
-	</target>
+  <target name="compile-tests" depends="compile">
+    <javac srcdir="${tests-src.dir}" destdir="${tests-output.dir}" classpathref="build.classpath" />
+  </target>
 
+  <target name="junit" depends="compile-tests">
+    <junit printsummary="yes">
+      <classpath refid="build.classpath">
+      </classpath>
+      <formatter type="xml" />
+      <batchtest fork="yes" todir="${report.dir}">
+        <fileset dir="${tests-src.dir}" />
+      </batchtest>
+    </junit>
+  </target>
 
+  <target name="junitreport" depends="junit">
+    <junitreport todir="${report.dir}">
+      <fileset dir="${report.dir}" includes="TEST-*.xml" />
+      <report todir="${report.dir}" />
+    </junitreport>
+  </target>
+
+  <target name="build_final">
+    <echo message="rapc build, dir=${output.dir}"></echo>
+    <mkdir dir="${output.dir}" />
+    <rapc srcdir="${src.dir}" verbose="true" output="${output.file}" destdir="${output.dir}" jdehome="${jde.home}"  noconvert="true">
+      <src>
+        <fileset file="${output.dir}/${output.file}.jar" />
+      </src>
+      <jdp title="${app.title}" vendor="${app.vendor}" version="${app.version}" type="cldc"  >
+      </jdp>
+    </rapc>
+
+    <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
+      <arg line=" -a -p ${signing.code} -c -C  *.cod" />
+    </java>    
+    <!-- sigtool jdehome="C:Program FilesResearch In MotionBlackBerry JDE 4.7.0" codfile="${dist.dir}/bbant/${name}.cod" password="" / -->
+    <alx destdir="${output.dir}" filename="${app.title}.alx">
+      <application id="${app.title}">
+        <codset>
+          <fileset dir="${output.dir}" includes="*.cod">
+          </fileset>
+        </codset>
+      </application>
+    </alx>
+    <mkdir dir="${output.dir}/bbant-final" />
+    <jadtool input="${output.dir}/${output.file}.jad" destdir="${output.dir}/bbant-final">
+      <fileset dir="${output.dir}" includes="*.cod">
+      </fileset>
+    </jadtool>
+  </target>
+    
 </project>
