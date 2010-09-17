@@ -39,6 +39,8 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
+
+import com.rapidftr.net.HttpConnectionFactory;
 import com.sun.me.web.path.Result;
 
 public final class Request implements Runnable {
@@ -230,7 +232,8 @@ public final class Request implements Runnable {
 
 		HttpConnection conn = null;
 		try {
-			conn = (HttpConnection) Connector.open(location.toString());
+			//conn = HttpConnectionFactory.openConnection(location.toString());
+			conn=(HttpConnection) Connector.open(location.toString());
 			conn.setRequestMethod(method);
 
 			if (httpArgs != null) {
