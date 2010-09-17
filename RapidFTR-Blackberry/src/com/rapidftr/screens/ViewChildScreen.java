@@ -48,7 +48,7 @@ public class ViewChildScreen extends CustomScreen {
 	}
 
 	private void renderChildFields(Child child) {
-		updateChildFieldsWithLatestForms(child);
+		//updateChildFieldsWithLatestForms(child);
 		Hashtable data = child.getKeyMap();
 		HorizontalFieldManager hmanager = new HorizontalFieldManager(Manager.HORIZONTAL_SCROLLBAR);
 		renderBitmap(data, hmanager);
@@ -56,29 +56,9 @@ public class ViewChildScreen extends CustomScreen {
 		hmanager.add(new BoldRichTextField("   " + data.get(new String("name"))));
 		add(hmanager);
 		RichTextField richField[] = new RichTextField[data.size()];
-		int i = 0;
+		int index = 0;
 
-		for (Enumeration keyList = data.keys(); keyList.hasMoreElements();) {
-			String key = (String) keyList.nextElement();
-			String value = (String) data.get(key);
-			if (ChildFieldIgnoreList.isInIgnoreList(key)) {
-				continue;
-			}
-
-			key = key.replace('_', ' ');
-			richField[i] = BoldRichTextField.getSemiBoldRichTextField(key + " :", value);
-
-			add(richField[i]);
-			add(new SeparatorField());
-			i++;
-
-		}
-
-	}
-
-	private void updateChildFieldsWithLatestForms(Child child) {
-		FormStore fstore = new FormStore();
-		Vector forms = fstore.getForms();
+		Vector forms = new FormStore().getForms();
 
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			Form form = (Form) list.nextElement();
@@ -87,12 +67,26 @@ public class ViewChildScreen extends CustomScreen {
 
 				if (nextElement != null) {
 					FormField field = (FormField) nextElement;
-					child.updateField(field.getName());
+					String key = field.getName();
+					child.updateField(key);
+					String value = (String) data.get(key);
+					if (ChildFieldIgnoreList.isInIgnoreList(key)) {
+						continue;
+					}
+
+					key = key.replace('_', ' ');
+					richField[index] = BoldRichTextField.getSemiBoldRichTextField(key + " :", value);
+
+					add(richField[index]);
+					add(new SeparatorField());
+					index++;
 				}
 			}
 
 		}
+
 	}
+
 
 	private void renderBitmap(Hashtable data, HorizontalFieldManager manager) {
 		manager.setMargin(10, 10, 10, 10);
