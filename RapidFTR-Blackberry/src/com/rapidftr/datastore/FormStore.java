@@ -2,6 +2,8 @@ package com.rapidftr.datastore;
 
 import java.util.Vector;
 
+import net.rim.device.api.ui.component.Dialog;
+
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
@@ -80,6 +82,7 @@ public class FormStore {
 		}
 		catch(Error e)
 		{
+			Dialog.alert(e.getMessage());
 			e.printStackTrace();
 		}
 		return forms;

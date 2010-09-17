@@ -13,3 +13,4 @@ bb-build/**
 bb-test/**
 release/**
 build.properties
+/*.zip
