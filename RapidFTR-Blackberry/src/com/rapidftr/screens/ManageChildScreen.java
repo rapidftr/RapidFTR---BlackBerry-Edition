@@ -45,6 +45,7 @@ public class ManageChildScreen extends CustomScreen {
     }
 
     public void setForms(Vector forms) {
+    	 childToEdit = null;
         this.forms = forms;
         for (Enumeration list = forms.elements(); list.hasMoreElements();) {
             ((Form) list.nextElement()).initializeLayout(this);

@@ -11,7 +11,7 @@ public class FileUtility {
 	public static byte[] getByteArray(String filename) {
 		FileConnection fconn;
 		try {
-			fconn = (FileConnection) Connector.open("file://" + filename);
+			fconn = (FileConnection) Connector.open(filename);
 
 			InputStream input = fconn.openInputStream();
 			byte[] data = new byte[(int) fconn.fileSize()];
