@@ -40,7 +40,7 @@ public class ChildrenListField extends ObjectListField {
     	Child child = (Child) this.get(listField, index);
     	
     	listField.setRowHeight(this.titleFont.getHeight()*4);
-    	graphics.setFont(titleFont);
+     	graphics.setFont(titleFont);
     	graphics.drawText((String) child.getField("name"),firstrowPostion, y, (DrawStyle.LEFT|DrawStyle.ELLIPSIS|DrawStyle.TOP), width);              
 
     	int yStartForText = y + (this.getFont()).getHeight() + 1;
@@ -57,6 +57,13 @@ public class ChildrenListField extends ObjectListField {
 
     	yStartForText = yStartForText + (this.getFont()).getHeight() + 1;
         graphics.drawLine(0,(index* listField.getRowHeight()), width, (index* listField.getRowHeight()));
+       	if(child.isNewChild()){
+        	graphics.setColor(Color.RED);
+        	}else{
+        		graphics.setColor(Color.GREEN);	
+        	}
+        graphics.drawRect(0,((index+1)* listField.getRowHeight()), width,  listField.getRowHeight());
+           //super.paint(graphics);
     }
 
 }

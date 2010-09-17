@@ -11,39 +11,50 @@ public class HttpRequestHandler implements RequestListener {
 	protected boolean requestInProgress;
 	private int activeRequests = 0;
 	private int totalRequests = 0;
+
 	public HttpRequestHandler(RequestCallBack requestCallBack) {
 		super();
 		this.requestCallBack = requestCallBack;
 	}
 
-	public void done(Object context, Response result) throws Exception {
-		if(activeRequests>0){
-		activeRequests--;
-		}
-		updateRequestProgress(totalRequests-activeRequests, totalRequests);
-//		if (!requestInProgress)
-//			return;
-//		requestInProgress = false;
-		if (result.getException() != null) {
-			requestCallBack.handleException(result.getException());
-			return;
-		} else if (result.getCode() == HttpConnection.HTTP_UNAUTHORIZED) {
+	public boolean isValidResponse(Response response) {
+		return (response.getException() == null)&&(
+				response.getCode() == HttpConnection.HTTP_OK
+				|| response.getCode() == HttpConnection.HTTP_CREATED);
+	}
+
+	public void handleResponseErrors(Response response) {
+		if (response.getException() != null) {
+			requestCallBack.handleException(response.getException());
+		} else if (response.getCode() == HttpConnection.HTTP_UNAUTHORIZED) {
 			requestCallBack.handleUnauthorized();
-			return;
-		} else if (result.getCode() != HttpConnection.HTTP_OK && result.getCode() != HttpConnection.HTTP_CREATED ) {
+		} else if (response.getCode() != HttpConnection.HTTP_OK
+				&& response.getCode() != HttpConnection.HTTP_CREATED) {
 			requestCallBack.handleConnectionProblem();
-			return;
-		} else {
-			requestCallBack.onSuccess(context, result);
 		}
-		
-		if(isProcessCompleted()){
+	}
+
+	public void done(Object context, Response response) {
+		if (activeRequests > 0) {
+			activeRequests--;
+		}
+		updateRequestProgress(totalRequests - activeRequests, totalRequests);
+		// if (!requestInProgress)
+		// return;
+		// requestInProgress = false;
+		if (isValidResponse(response)) {
+			requestCallBack.onSuccess(context, response);
+		} else {
+			handleResponseErrors(response);
+		}
+
+		if (isProcessCompleted()) {
 			markProcessComplete();
 		}
 	}
 
 	public void readProgress(Object context, int bytes, int total) {
-		//updateRequestProgress(bytes, total);
+		// updateRequestProgress(bytes, total);
 	}
 
 	public void writeProgress(Object context, int bytes, int total) {
@@ -55,11 +66,11 @@ public class HttpRequestHandler implements RequestListener {
 		double size = ((double) bytes) / total;
 		requestCallBack.updateRequestProgress((int) (size * 100));
 	}
-	
+
 	public void markProcessComplete() {
 		requestCallBack.onProcessComplete();
 	}
-	
+
 	public void markProcessFailed() {
 		requestCallBack.onProcessFail();
 	}
@@ -89,12 +100,12 @@ public class HttpRequestHandler implements RequestListener {
 		return requestCallBack;
 	}
 
-	public void incrementActiveRequests(int requests){
-		activeRequests+=requests;
-		totalRequests +=requests;
+	public void incrementActiveRequests(int requests) {
+		activeRequests += requests;
+		totalRequests += requests;
 	}
-	
-	public boolean isProcessCompleted(){
-		return activeRequests==0;
+
+	public boolean isProcessCompleted() {
+		return activeRequests == 0;
 	}
 }

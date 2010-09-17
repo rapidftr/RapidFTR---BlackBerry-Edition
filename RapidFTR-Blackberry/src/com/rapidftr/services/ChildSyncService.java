@@ -19,6 +19,7 @@ import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.path.Result;
+import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.Response;
@@ -28,10 +29,11 @@ public class ChildSyncService extends RequestAwareService {
 	private static final String FILE_STORE_HOME_USER = "file:///store/home/user";
 
 	private static final String PROCESS_STATE = "process_state";
-	
-    private final ChildrenRecordStore childRecordStore;
 
-	public ChildSyncService(HttpService httpService, ChildrenRecordStore childRecordStore) {
+	private final ChildrenRecordStore childRecordStore;
+
+	public ChildSyncService(HttpService httpService,
+			ChildrenRecordStore childRecordStore) {
 		super(httpService);
 		this.childRecordStore = childRecordStore;
 	}
@@ -43,21 +45,25 @@ public class ChildSyncService extends RequestAwareService {
 	private void uploadChildren(Vector childrenList) {
 		requestHandler.setRequestInProgress();
 		Enumeration children = childrenList.elements();
-		int index=0;
+		int index = 0;
 		while (children.hasMoreElements()) {
 			Hashtable context = new Hashtable();
-			context.put(PROCESS_STATE, "Uploading ["+(++index)+"/"+childrenList.size()+"]");
+			context.put(PROCESS_STATE, "Uploading [" + (++index) + "/"
+					+ childrenList.size() + "]");
 			Child child = (Child) children.nextElement();
 			PostData postData = child.getPostData();
-			Arg multiPart = new Arg("Content-Type", "multipart/form-data;boundary=" + postData.getBoundary());
+			Arg multiPart = new Arg("Content-Type",
+					"multipart/form-data;boundary=" + postData.getBoundary());
 			Arg json = HttpUtility.HEADER_ACCEPT_JSON;
 			Arg[] httpArgs = { multiPart, json };
 			if (child.isNewChild()) {
 				requestHandler.incrementActiveRequests(1);
-				httpService.post("children", null, httpArgs, requestHandler, postData, context);
+				httpService.post("children", null, httpArgs, requestHandler,
+						postData, context);
 			} else if (child.isUpdated()) {
 				requestHandler.incrementActiveRequests(1);
-				httpService.put("children/" + child.getField("_id"), null, httpArgs, requestHandler, postData, context);
+				httpService.put("children/" + child.getField("_id"), null,
+						httpArgs, requestHandler, postData, context);
 			}
 		}
 	}
@@ -69,7 +75,8 @@ public class ChildSyncService extends RequestAwareService {
 	}
 
 	public void onRequestSuccess(Object context, Response result) {
-		requestHandler.getRequestCallBack().updateProgressMessage(((Hashtable)context).get(PROCESS_STATE).toString());
+		requestHandler.getRequestCallBack().updateProgressMessage(
+				((Hashtable) context).get(PROCESS_STATE).toString());
 		// sync child with local store
 		Child child = new Child();
 		try {
@@ -85,22 +92,25 @@ public class ChildSyncService extends RequestAwareService {
 			try {
 				Arg[] httpArgs = new Arg[1];
 				httpArgs[0] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
-				Response response = httpService.get("children/" + child.getField("_id") + "/thumbnail", null, httpArgs);
+				Response response = httpService.get("children/"
+						+ child.getField("_id") + "/thumbnail", null, httpArgs);
 				byte[] data = response.getResult().getData();
-				
+
 				String storePath = "";
 				try {
-				    String sdCardPath = "file:///SDCard/Blackberry";
-				    FileConnection fc = (FileConnection) Connector.open(sdCardPath);
-				    if (fc.exists())
-				        storePath = sdCardPath;
-				    else 
-				        storePath = FILE_STORE_HOME_USER;
+					String sdCardPath = "file:///SDCard/Blackberry";
+					FileConnection fc = (FileConnection) Connector
+							.open(sdCardPath);
+					if (fc.exists())
+						storePath = sdCardPath;
+					else
+						storePath = FILE_STORE_HOME_USER;
 				} catch (IOException ex) {
-				    storePath = FILE_STORE_HOME_USER;
+					storePath = FILE_STORE_HOME_USER;
 				}
-				
-				String imagePath = storePath + "/pictures/" + (String) child.getField("current_photo_key") + ".jpg";
+
+				String imagePath = storePath + "/pictures/"
+						+ (String) child.getField("current_photo_key") + ".jpg";
 				FileConnection fc = (FileConnection) Connector.open(imagePath);
 				if (!fc.exists()) {
 					fc.create(); // create the file if it doesn't exist
@@ -119,7 +129,7 @@ public class ChildSyncService extends RequestAwareService {
 			child.clearEditHistory();
 			childRecordStore.addOrUpdateChild(child);
 		} catch (JSONException e) {
-			//SumitG TODO  to handle this by  maintaining error queue  
+			// SumitG TODO to handle this by maintaining error queue
 			e.printStackTrace();
 		}
 
@@ -129,6 +139,8 @@ public class ChildSyncService extends RequestAwareService {
 		new Thread() {
 			public void run() {
 				requestHandler.setRequestInProgress();
+				requestHandler.getRequestCallBack().updateProgressMessage(
+						"Syncing");
 				uploadChildRecords();
 
 				try {
@@ -136,8 +148,9 @@ public class ChildSyncService extends RequestAwareService {
 				} catch (IOException e) {
 					requestHandler.markProcessFailed();
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					requestHandler.markProcessFailed();
+				} catch (Exception e) {
+					requestHandler.markProcessComplete();
 				}
 				if (requestHandler.isProcessCompleted()) {
 					requestHandler.markProcessComplete();
@@ -152,36 +165,40 @@ public class ChildSyncService extends RequestAwareService {
 		Enumeration items = childNeedToDownload.elements();
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
-		int index=0;
+		int index = 0;
 		while (items.hasMoreElements()) {
 			index++;
 			Hashtable context = new Hashtable();
-			context.put(PROCESS_STATE, "Downloading ["+index+"/"+childNeedToDownload.size()+"]");
+			context.put(PROCESS_STATE, "Downloading [" + index + "/"
+					+ childNeedToDownload.size() + "]");
 			requestHandler.incrementActiveRequests(1);
-			httpService.get("children/" + items.nextElement().toString(), null, httpArgs, requestHandler,context);
+			httpService.get("children/" + items.nextElement().toString(), null,
+					httpArgs, requestHandler, context);
 		}
 
 	}
 
-	private Vector childRecordsNeedToBeDownload() throws IOException, JSONException {
+	private Vector childRecordsNeedToBeDownload() throws IOException,
+			JSONException {
 		Vector childNeedToDownload = new Vector();
 		Hashtable offlineIdRevXREF = getOfflineStoredChildrenIdRevMapping();
-		Hashtable onlineIdRevXREF;
-
-		onlineIdRevXREF = getOnlineStoredChildrenIdRevMapping();
+		Hashtable onlineIdRevXREF = getOnlineStoredChildrenIdRevMapping();
 
 		Enumeration items = onlineIdRevXREF.keys();
 
 		while (items.hasMoreElements()) {
 			String key = (String) items.nextElement();
-			if ((!offlineIdRevXREF.containsKey(key)) || (offlineIdRevXREF.containsKey(key) && !offlineIdRevXREF.get(key).equals(onlineIdRevXREF.get(key)))) {
+			if ((!offlineIdRevXREF.containsKey(key))
+					|| (offlineIdRevXREF.containsKey(key) && !offlineIdRevXREF
+							.get(key).equals(onlineIdRevXREF.get(key)))) {
 				childNeedToDownload.addElement(key);
 			}
 		}
 		return childNeedToDownload;
 	}
 
-	public Vector getAllChildrenFromOnlineStore() throws IOException, JSONException {
+	public Vector getAllChildrenFromOnlineStore() throws IOException,
+			JSONException {
 
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
@@ -206,21 +223,36 @@ public class ChildSyncService extends RequestAwareService {
 
 	}
 
-	private Hashtable getOnlineStoredChildrenIdRevMapping() throws IOException, JSONException {
+	private Hashtable getOnlineStoredChildrenIdRevMapping()
+			throws ServiceException {
 
 		Hashtable mapping = new Hashtable();
 
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
-		Response response = httpService.get("children-ids", null, httpArgs);
-		Result result = response.getResult();
-		HttpServer.printResponse(response);
-		JSONArray jsonChildren = result.getAsArray("");
-		for (int i = 0; i < jsonChildren.length(); i++) {
-			JSONObject jsonChild = (JSONObject) jsonChildren.get(i);
-			mapping.put(jsonChild.getString("id"), jsonChild.getString("rev"));
-		}
+		Response response;
+		try {
+			response = httpService.get("children-ids", null, httpArgs);
+			Result result = response.getResult();
+			if (requestHandler.isValidResponse(response)) {
+				HttpServer.printResponse(response);
+				JSONArray jsonChildren = result.getAsArray("");
+				for (int i = 0; i < jsonChildren.length(); i++) {
+					JSONObject jsonChild = (JSONObject) jsonChildren.get(i);
 
+					mapping.put(jsonChild.getString("id"), jsonChild
+							.getString("rev"));
+				}
+			} else {
+				requestHandler.handleResponseErrors(response);
+			}
+		} catch (JSONException e) {
+			throw new ServiceException("JSON Data is invalid Problem");
+		} catch (ResultException e) {
+			throw new ServiceException("JSON Data is invalid Problem");
+		} catch (IOException e) {
+			throw new ServiceException("Connection Problem");
+		}
 		return mapping;
 	}
 
@@ -255,14 +287,15 @@ public class ChildSyncService extends RequestAwareService {
 				child.setField(fieldName, fieldValue);
 			}
 		} catch (JSONException e) {
-			throw new ServiceException("JSON returned from get children is in unexpected format");
+			throw new ServiceException(
+					"JSON returned from get children is in unexpected format");
 		}
 		return child;
 	}
 
 	public void clearState() {
 		childRecordStore.deleteAllChildren();
-		
+
 	}
 
 }
