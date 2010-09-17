@@ -232,8 +232,8 @@ public final class Request implements Runnable {
 
 		HttpConnection conn = null;
 		try {
-			//conn = HttpConnectionFactory.openConnection(location.toString());
-			conn=(HttpConnection) Connector.open(location.toString());
+			conn = HttpConnectionFactory.openConnection(location.toString());
+			//conn=(HttpConnection) Connector.open(location.toString());
 			conn.setRequestMethod(method);
 
 			if (httpArgs != null) {
