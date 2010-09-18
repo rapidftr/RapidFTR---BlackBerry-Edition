@@ -26,7 +26,7 @@ public class ViewChildrenController extends Controller {
 
 		children = childStoreService.getAllChildrenFromPhoneStoredAsArray();
 		sortByLocationThenName(children);
-		((ViewChildrenScreen) screen).setChildren(children);
+		((ViewChildrenScreen) currentScreen).setChildren(children);
 		super.show();
 
 	}
@@ -62,7 +62,7 @@ public class ViewChildrenController extends Controller {
 
 	public void searchAndDispalyChildren(SearchChildFilter searchChildFilter) {
 		Child children[] = childStoreService.searchChildrenFromStore(searchChildFilter);
-		((ViewChildrenScreen) screen).setChildren(children);
+		((ViewChildrenScreen) currentScreen).setChildren(children);
 		super.show();
 		}
 

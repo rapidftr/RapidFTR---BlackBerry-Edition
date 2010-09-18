@@ -12,7 +12,7 @@ public class ViewChildController extends Controller {
 	}
 
 	public void show(Child child) {
-		((ViewChildScreen) screen).setChild(child);
+		((ViewChildScreen) currentScreen).setChild(child);
 		super.show();
 	}
 	

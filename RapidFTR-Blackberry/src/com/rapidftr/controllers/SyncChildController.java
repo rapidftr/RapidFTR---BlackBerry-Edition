@@ -22,7 +22,7 @@ public class SyncChildController extends RequestAwareController {
 
 	public void syncChildRecord(Child child) {
 		((ChildSyncService) service).uploadChildRecord(child);
-		((SyncChildScreen) screen).resetProgressBar();
+		((SyncChildScreen) currentScreen).resetProgressBar();
 		show();
 	}
 

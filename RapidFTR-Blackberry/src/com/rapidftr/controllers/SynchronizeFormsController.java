@@ -14,7 +14,7 @@ public class SynchronizeFormsController extends RequestAwareController {
 
 	public void synchronizeForms() {
 		((FormService) service).downloadForms();
-		((SynchronizeFormsScreen) screen).resetProgressBar();
+		((SynchronizeFormsScreen) currentScreen).resetProgressBar();
 		show();
 	}
 

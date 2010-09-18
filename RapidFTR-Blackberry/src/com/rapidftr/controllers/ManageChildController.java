@@ -25,13 +25,13 @@ public class ManageChildController extends Controller {
 	}
 
 	public void show() {
-		((ManageChildScreen) screen).setForms(formStore.getForms());
+		((ManageChildScreen) currentScreen).setForms(formStore.getForms());
 		super.show();
 	}
 	
 
 	public void showEditScreenForChild(Child child) {
-		((ManageChildScreen) screen).setEditForms(formStore.getForms(),child);
+		((ManageChildScreen) currentScreen).setEditForms(formStore.getForms(),child);
 		super.show();
 	}
 

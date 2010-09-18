@@ -6,13 +6,13 @@ import com.rapidftr.screens.UiStack;
 abstract public class Controller {
 
 	protected Dispatcher dispatcher;
-	protected CustomScreen screen;
+	protected CustomScreen currentScreen;
 	protected UiStack uiStack;
 
 	public Controller(CustomScreen screen, UiStack uiStack) {
-		this.screen = screen;
+		this.currentScreen = screen;
 		this.uiStack = uiStack;
-		this.screen.setController(this);
+		this.currentScreen.setController(this);
 	}
 
 	public void setDispatcher(Dispatcher dispatcher) {
@@ -21,13 +21,13 @@ abstract public class Controller {
 
 	public void show() {
 
-		if (!screen.isActive())
-			uiStack.pushScreen(screen);
-		screen.setUp();
+		if (!currentScreen.isActive())
+			uiStack.pushScreen(currentScreen);
+		currentScreen.setUp();
 	}
 
 	public void popScreen() {
-		screen.popScreen(uiStack);
+		currentScreen.popScreen(uiStack);
 	}
 
 }
