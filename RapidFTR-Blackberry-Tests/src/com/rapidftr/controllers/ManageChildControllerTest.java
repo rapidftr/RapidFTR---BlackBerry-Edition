@@ -9,12 +9,13 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.ManageChildScreen;
-import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildScreen;
+import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildStoreService;
 
 public class ManageChildControllerTest {

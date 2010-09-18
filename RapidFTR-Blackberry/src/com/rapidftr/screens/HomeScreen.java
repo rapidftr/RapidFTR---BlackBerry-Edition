@@ -10,6 +10,7 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controls.Button;
+import com.rapidftr.screens.internal.CustomScreen;
 
 public class HomeScreen extends CustomScreen {
 

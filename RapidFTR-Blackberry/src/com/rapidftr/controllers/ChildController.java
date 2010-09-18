@@ -1,12 +1,13 @@
 package com.rapidftr.controllers;
 
+import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
-import com.rapidftr.screens.ChildChangeLogScreen;
+import com.rapidftr.screens.ChildHistoryScreen;
 import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.SnapshotScreen;
-import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildScreen;
+import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildStoreService;
 import com.rapidftr.utilities.ImageCaptureListener;
 
@@ -66,7 +67,7 @@ public class ChildController extends Controller {
 	
 	public void showHistory(Child child)
 	{
-		ChildChangeLogScreen historyScreen = new ChildChangeLogScreen(child);
+		ChildHistoryScreen historyScreen = new ChildHistoryScreen(child);
 		uiStack.pushScreen(historyScreen);
 		historyScreen.setUp();
 	}

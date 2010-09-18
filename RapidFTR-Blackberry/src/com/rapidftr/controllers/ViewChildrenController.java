@@ -4,10 +4,11 @@ package com.rapidftr.controllers;
 import net.rim.device.api.util.Arrays;
 import net.rim.device.api.util.Comparator;
 
+import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.SearchChildFilter;
-import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.ViewChildrenScreen;
+import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildStoreService;
 
 public class ViewChildrenController extends Controller {

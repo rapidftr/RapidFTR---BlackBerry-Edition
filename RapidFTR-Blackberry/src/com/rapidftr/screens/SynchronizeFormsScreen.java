@@ -3,6 +3,7 @@ package com.rapidftr.screens;
 import com.rapidftr.controllers.SynchronizeFormsController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.net.ScreenCallBack;
+import com.rapidftr.screens.internal.CustomScreen;
 
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;

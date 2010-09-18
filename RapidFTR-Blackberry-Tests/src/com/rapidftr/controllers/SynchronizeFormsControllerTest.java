@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.rapidftr.screens.SynchronizeFormsScreen;
-import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.FormService;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.request.Response;
@@ -59,14 +59,14 @@ public class SynchronizeFormsControllerTest {
 	@Test
 	public void shouldUpdateProgressBarValueOnScreen() {
 		synchronizeFormsController.synchronizeForms();
-		synchronizeFormsController.screenCallBack.updateRequestProgress(10);
+		synchronizeFormsController.getScreenCallBack().updateRequestProgress(10);
 		verify(synchronizeFormsScreen).updateRequestProgress(10);
 	}
 
 	@Test
 	public void shouldSendDownloadFailedErrorMessageToScreen() {
 		synchronizeFormsController.synchronizeForms();
-		synchronizeFormsController.screenCallBack.handleConnectionProblem();
+		synchronizeFormsController.getScreenCallBack().handleConnectionProblem();
 		verify(synchronizeFormsScreen).handleConnectionProblem();
 	}
 

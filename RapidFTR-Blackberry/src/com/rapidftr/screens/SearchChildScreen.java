@@ -15,6 +15,7 @@ import net.rim.device.api.ui.decor.BorderFactory;
 import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.model.SearchChildFilter;
+import com.rapidftr.screens.internal.CustomScreen;
 
 public class SearchChildScreen extends CustomScreen implements FieldChangeListener{
 	private static final int MAX_SIZE = 200;

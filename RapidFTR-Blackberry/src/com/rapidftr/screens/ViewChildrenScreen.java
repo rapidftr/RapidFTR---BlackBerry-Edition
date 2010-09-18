@@ -9,6 +9,7 @@ import net.rim.device.api.ui.component.SeparatorField;
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildrenListField;
+import com.rapidftr.screens.internal.CustomScreen;
 
 public class ViewChildrenScreen extends CustomScreen {
 

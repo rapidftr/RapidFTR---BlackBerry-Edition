@@ -14,6 +14,7 @@ import net.rim.device.api.ui.decor.BorderFactory;
 import com.rapidftr.controllers.SyncChildController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.net.ScreenCallBack;
+import com.rapidftr.screens.internal.CustomScreen;
 
 public class SyncChildScreen extends CustomScreen implements
 		FieldChangeListener, ScreenCallBack {

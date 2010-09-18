@@ -3,6 +3,7 @@ package com.rapidftr.controllers;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.model.Child;
 
 import static org.mockito.Mockito.mock;

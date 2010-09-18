@@ -7,9 +7,10 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.net.HttpRequestHandler;
-import com.rapidftr.screens.UiStack;
 import com.rapidftr.screens.SyncChildScreen;
+import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildSyncService;
 import com.rapidftr.services.RequestCallBackImpl;
 import com.sun.me.web.path.Result;
@@ -52,7 +53,7 @@ public class UploadChildrenRecordsControllerTests {
 	@Test
 	public void shouldUpdateStatusOfUploadOperation() {
 		uploadChildRecordsController.syncAllChildRecords();
-		uploadChildRecordsController.screenCallBack.updateRequestProgress(10);
+		uploadChildRecordsController.getScreenCallBack().updateRequestProgress(10);
 		verify(uploadChildRecordsScreen).updateRequestProgress(10);
 	}
 

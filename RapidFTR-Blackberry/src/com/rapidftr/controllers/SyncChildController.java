@@ -1,9 +1,10 @@
 package com.rapidftr.controllers;
 
+import com.rapidftr.controllers.internal.RequestAwareController;
 import com.rapidftr.model.Child;
-import com.rapidftr.screens.CustomScreen;
 import com.rapidftr.screens.SyncChildScreen;
-import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildSyncService;
 
 public class SyncChildController extends RequestAwareController {

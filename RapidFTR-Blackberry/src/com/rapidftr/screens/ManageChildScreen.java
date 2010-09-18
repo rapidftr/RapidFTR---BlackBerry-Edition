@@ -20,6 +20,7 @@ import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.controls.Button;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
+import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.ImageCaptureListener;
 import com.rapidftr.utilities.SettingsStore;
 

@@ -1,7 +1,8 @@
 package com.rapidftr.controllers;
 
+import com.rapidftr.controllers.internal.RequestAwareController;
 import com.rapidftr.screens.SynchronizeFormsScreen;
-import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.FormService;
 
 public class SynchronizeFormsController extends RequestAwareController {

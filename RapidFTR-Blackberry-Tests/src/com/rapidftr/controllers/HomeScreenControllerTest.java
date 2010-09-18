@@ -3,8 +3,10 @@ package com.rapidftr.controllers;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.screens.HomeScreen;
-import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.internal.UiStack;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
