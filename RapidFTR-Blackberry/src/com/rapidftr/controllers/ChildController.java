@@ -8,12 +8,12 @@ import com.rapidftr.screens.UiStack;
 import com.rapidftr.services.ChildStoreService;
 import com.rapidftr.utilities.ImageCaptureListener;
 
-public class ManageChildController extends Controller {
+public class ChildController extends Controller {
 
 	private final FormStore formStore;
 	private final ChildStoreService childStoreService;
 
-	public ManageChildController(ManageChildScreen screen, UiStack uiStack,
+	public ChildController(ManageChildScreen screen, UiStack uiStack,
 			FormStore formStore, ChildStoreService childStoreService) {
 		super(screen, uiStack);
 		this.formStore = formStore;

@@ -21,7 +21,7 @@ public class ManageChildControllerTest {
 	private FormStore formStore;
 	private UiStack uiStack;
 	private ManageChildScreen newChildScreen;
-	private ManageChildController newChildController;
+	private ChildController newChildController;
 	private Vector forms;
 	private Dispatcher dispatcher;
 	private ChildStoreService childStoreService;
@@ -34,7 +34,7 @@ public class ManageChildControllerTest {
 		childStoreService = mock(ChildStoreService.class);
 		when(formStore.getForms()).thenReturn(forms);
 		newChildScreen = mock(ManageChildScreen.class);
-		newChildController = new ManageChildController(newChildScreen, uiStack,
+		newChildController = new ChildController(newChildScreen, uiStack,
 				formStore,childStoreService);
 		dispatcher = mock(Dispatcher.class);
 		newChildController.setDispatcher(dispatcher);

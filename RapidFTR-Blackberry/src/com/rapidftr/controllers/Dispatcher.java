@@ -10,7 +10,7 @@ public class Dispatcher {
 	private final ViewChildrenController viewChildrenController;
 	private final ViewChildController viewChildController;
 	private final SynchronizeFormsController synchronizeFormsController;
-	private final ManageChildController newChildController;
+	private final ChildController newChildController;
 	private final SyncChildController syncChildController;
 	private final SearchChildController searchChildController;
 
@@ -19,7 +19,7 @@ public class Dispatcher {
 			ViewChildrenController viewChildrenController,
 			ViewChildController viewChildController,
 			SynchronizeFormsController synchronizeFormsController,
-			ManageChildController newChildController,
+			ChildController newChildController,
 			SyncChildController uploadChildRecordsController,
 			SearchChildController searchChildController) {
 

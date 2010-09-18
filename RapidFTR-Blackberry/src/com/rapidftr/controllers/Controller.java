@@ -19,8 +19,12 @@ abstract public class Controller {
 		this.dispatcher = dispatcher;
 	}
 
+	protected void changeScreen(CustomScreen screen) {	
+		currentScreen = screen;
+		currentScreen.setController(this);
+        show();
+	}
 	public void show() {
-
 		if (!currentScreen.isActive())
 			uiStack.pushScreen(currentScreen);
 		currentScreen.setUp();

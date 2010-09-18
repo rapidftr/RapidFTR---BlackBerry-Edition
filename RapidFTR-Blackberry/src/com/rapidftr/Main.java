@@ -7,7 +7,7 @@ import net.rim.device.api.ui.UiApplication;
 import com.rapidftr.controllers.Dispatcher;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
-import com.rapidftr.controllers.ManageChildController;
+import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controllers.SyncChildController;
 import com.rapidftr.controllers.SynchronizeFormsController;
@@ -90,7 +90,7 @@ public class Main extends UiApplication {
 		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(new FormService(httpService, formStore), uiStack, synchronizeFormsScreen);
 
 		ManageChildScreen newChildScreen = new ManageChildScreen(settings);
-		ManageChildController newChildController = new ManageChildController(newChildScreen, uiStack, formStore, childStoreService);
+		ChildController newChildController = new ChildController(newChildScreen, uiStack, formStore, childStoreService);
 		SyncChildScreen uploadChildRecordsScreen = new SyncChildScreen();
 
 		ChildSyncService childRecordsUploadService = new ChildSyncService(httpService, childRecordStore);

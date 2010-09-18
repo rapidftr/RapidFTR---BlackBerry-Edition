@@ -15,7 +15,7 @@ import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.rapidftr.controllers.ManageChildController;
+import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.controls.Button;
 import com.rapidftr.model.Child;
@@ -80,7 +80,7 @@ public class ManageChildScreen extends CustomScreen {
 
             controller.popScreen();
             if (result == Dialog.OK) {
-                ((ManageChildController) controller).synchronizeForms();
+                ((ChildController) controller).synchronizeForms();
             }
             return;
         }
@@ -124,7 +124,7 @@ public class ManageChildScreen extends CustomScreen {
 
     public void takePhoto(ImageCaptureListener imageCaptureListener) {
 
-        ((ManageChildController) controller).takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
+        ((ChildController) controller).takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
 
     }
 
@@ -163,7 +163,7 @@ public class ManageChildScreen extends CustomScreen {
         if ((invalidDataField = validateRequiredFields()) != null) {
             return invalidDataField;
         }
-        ((ManageChildController) controller).saveChild(childToEdit);
+        ((ChildController) controller).saveChild(childToEdit);
         return null;
     }
 
@@ -191,7 +191,7 @@ public class ManageChildScreen extends CustomScreen {
                 controller.popScreen();
                 if (!validateOnSave())
                     return;
-                ((ManageChildController) controller).syncChild(childToEdit);
+                ((ChildController) controller).syncChild(childToEdit);
                 childToEdit = null;
             }
         };

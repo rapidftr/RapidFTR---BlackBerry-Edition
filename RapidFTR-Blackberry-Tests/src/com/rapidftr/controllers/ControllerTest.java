@@ -29,6 +29,13 @@ public class ControllerTest {
 	}
 
 	@Test
+	public void shouldShowNewScreenOnChangeScreen() {
+		CustomScreen newScreen = mock(CustomScreen.class);
+		controller.changeScreen(newScreen);
+		verify(newScreen).setUp();
+	}
+
+	@Test
 	public void shouldPushScreenToUiStack() {
 		controller.show();
 		verify(uiStack).pushScreen(screen);

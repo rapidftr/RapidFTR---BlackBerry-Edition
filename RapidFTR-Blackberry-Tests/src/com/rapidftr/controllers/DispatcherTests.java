@@ -16,7 +16,7 @@ public class DispatcherTests {
 	private ViewChildController viewChildController;
 	private SynchronizeFormsController synchronizeFormsController;
 	private Dispatcher dispatcher;
-	private ManageChildController newChildController;
+	private ChildController newChildController;
 	private SyncChildController uploadChildRecordsController;
 	private SearchChildController searchChildController;
 
@@ -27,7 +27,7 @@ public class DispatcherTests {
 		viewChildrenController = mock(ViewChildrenController.class);
 		viewChildController = mock(ViewChildController.class);
 		synchronizeFormsController = mock(SynchronizeFormsController.class);
-		newChildController = mock(ManageChildController.class);
+		newChildController = mock(ChildController.class);
 		uploadChildRecordsController = mock(SyncChildController.class);
 		searchChildController = mock(SearchChildController.class);
 		dispatcher = new Dispatcher(homeScreenController, loginController,
