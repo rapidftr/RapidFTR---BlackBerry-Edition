@@ -14,6 +14,7 @@ import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.services.ChildStoreService;
 
 public class ManageChildControllerTest {
@@ -21,6 +22,7 @@ public class ManageChildControllerTest {
 	private FormStore formStore;
 	private UiStack uiStack;
 	private ManageChildScreen newChildScreen;
+	private ViewChildScreen viewChildScreen;
 	private ChildController newChildController;
 	private Vector forms;
 	private Dispatcher dispatcher;
@@ -34,35 +36,30 @@ public class ManageChildControllerTest {
 		childStoreService = mock(ChildStoreService.class);
 		when(formStore.getForms()).thenReturn(forms);
 		newChildScreen = mock(ManageChildScreen.class);
-		newChildController = new ChildController(newChildScreen, uiStack,
-				formStore,childStoreService);
+		newChildController = new ChildController(newChildScreen,
+				viewChildScreen, uiStack, formStore, childStoreService);
 		dispatcher = mock(Dispatcher.class);
 		newChildController.setDispatcher(dispatcher);
 	}
-	
+
 	@Test
-	public void shouldDelegateSynchronizeFormActionToDispatcher()
-	{
+	public void shouldDelegateSynchronizeFormActionToDispatcher() {
 		newChildController.synchronizeForms();
 		verify(dispatcher).synchronizeForms();
 	}
-	
+
 	@Test
-	public void shouldDelegateShowEditScreenForChildActionToChildScreen()
-	{
+	public void shouldDelegateShowEditScreenForChildActionToChildScreen() {
 		Child child = mock(Child.class);
-		newChildController.showEditScreenForChild(child);
-		verify(newChildScreen).setEditForms(formStore.getForms(),child);
-	}
-	
-	
-	@Test
-	public void shouldSaveTheChildToTheRecordStore()
-	{
-		
-	Child child = mock(Child.class);
-		newChildController.saveChild(child);
+		newChildController.editChild(child);
+		verify(newChildScreen).setEditForms(formStore.getForms(), child);
 	}
 
+	@Test
+	public void shouldSaveTheChildToTheRecordStore() {
+
+		Child child = mock(Child.class);
+		newChildController.saveChild(child);
+	}
 
 }

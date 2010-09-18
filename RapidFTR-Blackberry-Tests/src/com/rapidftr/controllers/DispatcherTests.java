@@ -13,10 +13,9 @@ public class DispatcherTests {
 	private HomeScreenController homeScreenController;
 	private LoginController loginController;
 	private ViewChildrenController viewChildrenController;
-	private ViewChildController viewChildController;
 	private SynchronizeFormsController synchronizeFormsController;
 	private Dispatcher dispatcher;
-	private ChildController newChildController;
+	private ChildController childController;
 	private SyncChildController uploadChildRecordsController;
 	private SearchChildController searchChildController;
 
@@ -25,14 +24,13 @@ public class DispatcherTests {
 		homeScreenController = mock(HomeScreenController.class);
 		loginController = mock(LoginController.class);
 		viewChildrenController = mock(ViewChildrenController.class);
-		viewChildController = mock(ViewChildController.class);
 		synchronizeFormsController = mock(SynchronizeFormsController.class);
-		newChildController = mock(ChildController.class);
+		childController = mock(ChildController.class);
 		uploadChildRecordsController = mock(SyncChildController.class);
 		searchChildController = mock(SearchChildController.class);
 		dispatcher = new Dispatcher(homeScreenController, loginController,
-				viewChildrenController, viewChildController,
-				synchronizeFormsController, newChildController,
+				viewChildrenController,
+				synchronizeFormsController, childController,
 				uploadChildRecordsController, searchChildController);
 
 	}
@@ -60,13 +58,13 @@ public class DispatcherTests {
 	public void shouldShowViewChildScreen() {
 		Child child = mock(Child.class);
 		dispatcher.viewChild(child);
-		verify(viewChildController).show(child);
+		verify(childController).viewChild(child);
 	}
 
 	@Test
 	public void shouldShowNewChildScreen() {
 		dispatcher.newChild();
-		verify(newChildController).show();
+		verify(childController).newChild();
 	}
 
 }

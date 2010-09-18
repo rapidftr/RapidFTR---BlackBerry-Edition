@@ -20,7 +20,7 @@ import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 
-import com.rapidftr.controllers.ViewChildController;
+import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controls.TitleField;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
@@ -115,13 +115,13 @@ public class ViewChildScreen extends CustomScreen {
 			public void run() {
 				// Move from edit screen directly to the main menu application screen
 				controller.popScreen();
-				((ViewChildController) controller).editChild(child);
+				((ChildController) controller).editChild(child);
 			}
 		};
 
 		MenuItem historyMenu = new MenuItem("View The Change Log", 2, 1) {
 			public void run() {
-				((ViewChildController) controller).viewChildHistory(child);
+				((ChildController) controller).showHistory(child);
 			}
 		};
 

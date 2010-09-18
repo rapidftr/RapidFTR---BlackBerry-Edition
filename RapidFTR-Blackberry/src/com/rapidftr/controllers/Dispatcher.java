@@ -8,7 +8,6 @@ public class Dispatcher {
 	private final HomeScreenController homeScreenController;
 	private final LoginController loginController;
 	private final ViewChildrenController viewChildrenController;
-	private final ViewChildController viewChildController;
 	private final SynchronizeFormsController synchronizeFormsController;
 	private final ChildController newChildController;
 	private final SyncChildController syncChildController;
@@ -17,7 +16,6 @@ public class Dispatcher {
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController,
 			ViewChildrenController viewChildrenController,
-			ViewChildController viewChildController,
 			SynchronizeFormsController synchronizeFormsController,
 			ChildController newChildController,
 			SyncChildController uploadChildRecordsController,
@@ -26,7 +24,6 @@ public class Dispatcher {
 		this.homeScreenController = homeScreenController;
 		this.loginController = loginController;
 		this.viewChildrenController = viewChildrenController;
-		this.viewChildController = viewChildController;
 		this.synchronizeFormsController = synchronizeFormsController;
 		this.newChildController = newChildController;
 		this.syncChildController = uploadChildRecordsController;
@@ -34,7 +31,6 @@ public class Dispatcher {
 		homeScreenController.setDispatcher(this);
 		loginController.setDispatcher(this);
 		viewChildrenController.setDispatcher(this);
-		viewChildController.setDispatcher(this);
 		synchronizeFormsController.setDispatcher(this);
 		newChildController.setDispatcher(this);
 		uploadChildRecordsController.setDispatcher(this);
@@ -51,11 +47,11 @@ public class Dispatcher {
 	}
 
 	public void viewChild(Child child) {
-		viewChildController.show(child);
+		newChildController.viewChild(child);
 	}
 
 	public void editChild(Child child) {
-		newChildController.showEditScreenForChild(child);
+		newChildController.editChild(child);
 	}
 
 	public void login() {
@@ -67,7 +63,7 @@ public class Dispatcher {
 	}
 
 	public void newChild() {
-		newChildController.show();
+		newChildController.newChild();
 	}
 
 
@@ -76,7 +72,7 @@ public class Dispatcher {
 	}
 
 	public void viewChildHistory(Child child) {
-		viewChildController.showHistory(child);
+		newChildController.showHistory(child);
 	}
 
 	public void searchChild() {

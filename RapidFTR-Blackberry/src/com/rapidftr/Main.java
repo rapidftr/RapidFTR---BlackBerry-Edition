@@ -4,14 +4,13 @@ import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 
+import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controllers.Dispatcher;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
-import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controllers.SyncChildController;
 import com.rapidftr.controllers.SynchronizeFormsController;
-import com.rapidftr.controllers.ViewChildController;
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
@@ -81,8 +80,6 @@ public class Main extends UiApplication {
 		HomeScreenController homeScreenController = new HomeScreenController(homeScreen, uiStack);
 
 		ViewChildScreen viewChildScreen = new ViewChildScreen();
-		ViewChildController viewChildController = new ViewChildController(viewChildScreen, uiStack);
-
 		ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
 		ViewChildrenController viewChildrenController = new ViewChildrenController(viewChildrenScreen, uiStack, childStoreService);
 
@@ -90,7 +87,7 @@ public class Main extends UiApplication {
 		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(new FormService(httpService, formStore), uiStack, synchronizeFormsScreen);
 
 		ManageChildScreen newChildScreen = new ManageChildScreen(settings);
-		ChildController newChildController = new ChildController(newChildScreen, uiStack, formStore, childStoreService);
+		ChildController newChildController = new ChildController(newChildScreen,viewChildScreen, uiStack, formStore, childStoreService);
 		SyncChildScreen uploadChildRecordsScreen = new SyncChildScreen();
 
 		ChildSyncService childRecordsUploadService = new ChildSyncService(httpService, childRecordStore);
@@ -99,7 +96,7 @@ public class Main extends UiApplication {
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
 		SearchChildController searchChildController = new SearchChildController(searchChildScreen, uiStack);
 
-		Dispatcher dispatcher = new Dispatcher(homeScreenController, loginController, viewChildrenController, viewChildController, synchronizeFormsController, newChildController, uploadChildRecordsController, searchChildController);
+		Dispatcher dispatcher = new Dispatcher(homeScreenController, loginController, viewChildrenController, synchronizeFormsController, newChildController, uploadChildRecordsController, searchChildController);
 
 		dispatcher.homeScreen();
 

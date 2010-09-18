@@ -147,7 +147,7 @@ public class ManageChildScreen extends CustomScreen {
     private boolean validateOnSave() {
         String invalidDataField = onSaveChildClicked();
         if (invalidDataField != null) {
-            Dialog.alert("Please input " + invalidDataField + "it is a mandatory field");
+            Dialog.alert("Please input " + invalidDataField + " it is a mandatory field");
             return false;
         }
         return true;
