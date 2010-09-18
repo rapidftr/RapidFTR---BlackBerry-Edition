@@ -55,7 +55,7 @@ public class ViewChildScreen extends CustomScreen {
 
 		hmanager.add(new BoldRichTextField("   " + data.get(new String("name"))));
 		add(hmanager);
-		RichTextField richField[] = new RichTextField[data.size()];
+		//RichTextField richField[] = new RichTextField[data.size()];
 		int index = 0;
 
 		Vector forms = new FormStore().getForms();
@@ -75,9 +75,9 @@ public class ViewChildScreen extends CustomScreen {
 					}
 
 					key = key.replace('_', ' ');
-					richField[index] = BoldRichTextField.getSemiBoldRichTextField(key + " :", value);
+					//richField[index] = BoldRichTextField.getSemiBoldRichTextField(key + " :", value);
 
-					add(richField[index]);
+					add(BoldRichTextField.getSemiBoldRichTextField(key + " :", value));
 					add(new SeparatorField());
 					index++;
 				}
