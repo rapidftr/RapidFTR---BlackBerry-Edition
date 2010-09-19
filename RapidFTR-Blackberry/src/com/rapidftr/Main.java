@@ -52,48 +52,40 @@ public class Main extends UiApplication {
 	 * The default constructor. Creates all of the RIM UI components and pushes the application's root screen onto the UI stack.
 	 */
 	public Main() {
+		
 		enablePermission(ApplicationPermissions.PERMISSION_INPUT_SIMULATION);
 		enablePermission(ApplicationPermissions.PERMISSION_FILE_API);
 
 		SettingsStore settings = new SettingsStore();
-
 		FormStore formStore = new FormStore();
-
 		ChildrenRecordStore childRecordStore = new ChildrenRecordStore();
 
 		HttpServer httpServer = new HttpServer();
+
 		HttpService httpService = new HttpService(httpServer, settings);
-
 		LoginService loginService = new LoginService(httpService, settings);
-
 		ChildStoreService childStoreService = new ChildStoreService(childRecordStore);
 
 		UiStack uiStack = new UiStack(this);
-
-		LoginScreen loginScreen = new LoginScreen(settings);
-		LoginController loginController = new LoginController(loginScreen, uiStack, loginService);
-		loginScreen.setController(loginController);
-
+		
 		HomeScreen homeScreen = new HomeScreen();
-		HomeScreenController homeScreenController = new HomeScreenController(homeScreen, uiStack);
-
+		LoginScreen loginScreen = new LoginScreen(settings);
 		ViewChildScreen viewChildScreen = new ViewChildScreen();
 		ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
-
-		SynchronizeFormsScreen synchronizeFormsScreen = new SynchronizeFormsScreen();
-		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(new FormService(httpService, formStore), uiStack, synchronizeFormsScreen);
-
-
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
-			ManageChildScreen newChildScreen = new ManageChildScreen(settings);
-		ChildController newChildController = new ChildController(newChildScreen,viewChildScreen,searchChildScreen,viewChildrenScreen, uiStack, formStore, childStoreService);
+		ManageChildScreen newChildScreen = new ManageChildScreen(settings);
 		SyncChildScreen uploadChildRecordsScreen = new SyncChildScreen();
-
+		SynchronizeFormsScreen synchronizeFormsScreen = new SynchronizeFormsScreen();
+		
+		LoginController loginController = new LoginController(loginScreen, uiStack, loginService);
+		//loginScreen.setController(loginController);
+		HomeScreenController homeScreenController = new HomeScreenController(homeScreen, uiStack);
+		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(new FormService(httpService, formStore), uiStack, synchronizeFormsScreen);
+		ChildController newChildController = new ChildController(newChildScreen,viewChildScreen,searchChildScreen,viewChildrenScreen, uiStack, formStore, childStoreService);
 		ChildSyncService childRecordsUploadService = new ChildSyncService(httpService, childRecordStore);
 		SyncChildController uploadChildRecordsController = new SyncChildController(uploadChildRecordsScreen, uiStack, childRecordsUploadService);
 
 		Dispatcher dispatcher = new Dispatcher(homeScreenController, loginController, synchronizeFormsController, newChildController, uploadChildRecordsController);
-
 		dispatcher.homeScreen();
 
 	}

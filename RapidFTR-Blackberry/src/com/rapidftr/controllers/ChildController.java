@@ -35,7 +35,6 @@ public class ChildController extends Controller {
 		this.childStoreService = childStoreService;
 		this.searchChildScreen = searchChildScreen;
 		this.viewChildrenScreen = viewChildrenScreen;
-
 	}
 
 	public void synchronizeForms() {
@@ -43,8 +42,8 @@ public class ChildController extends Controller {
 	}
 
 	public void newChild() {
-		((ManageChildScreen) currentScreen).setForms(formStore.getForms());
-		super.show();
+		manageChildScreen.setForms(formStore.getForms());
+		changeScreen(manageChildScreen);
 	}
 
 	public void editChild(Child child) {
