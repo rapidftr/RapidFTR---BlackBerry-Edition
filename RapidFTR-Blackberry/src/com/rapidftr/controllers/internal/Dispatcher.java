@@ -6,7 +6,6 @@ import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controllers.SyncChildController;
 import com.rapidftr.controllers.SynchronizeFormsController;
 import com.rapidftr.model.Child;
-import com.rapidftr.model.SearchChildFilter;
 
 public class Dispatcher {
 
@@ -43,13 +42,6 @@ public class Dispatcher {
 		childController.viewChildren();
 	}
 
-	public void viewChild(Child child) {
-		childController.viewChild(child);
-	}
-
-	public void editChild(Child child) {
-		childController.editChild(child);
-	}
 
 	public void login() {
 		loginController.show();
@@ -68,16 +60,8 @@ public class Dispatcher {
 		syncChildController.syncAllChildRecords();
 	}
 
-	public void viewChildHistory(Child child) {
-		childController.showHistory(child);
-	}
-
 	public void searchChild() {
 		childController.showChildSearchScreen();
-	}
-
-	public void searchAndDisplayChildren(SearchChildFilter searchChildFilter) {
-		childController.searchAndDispalyChildren(searchChildFilter);
 	}
 
 	public void syncChild(Child child) {

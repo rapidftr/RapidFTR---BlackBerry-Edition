@@ -1,32 +1,33 @@
 package com.rapidftr.controllers;
 
+import static org.mockito.Mockito.verify;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import com.rapidftr.controllers.internal.Dispatcher;
-import com.rapidftr.model.Child;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class DispatcherTests {
 
-	private HomeScreenController homeScreenController;
-	private LoginController loginController;
-	private SynchronizeFormsController synchronizeFormsController;
 	private Dispatcher dispatcher;
+
+	@Mock
+	private HomeScreenController homeScreenController;
+	@Mock
+	private LoginController loginController;
+	@Mock
+	private SynchronizeFormsController synchronizeFormsController;
+	@Mock
 	private ChildController childController;
+	@Mock
 	private SyncChildController uploadChildRecordsController;
-	
+
 	@Before
 	public void setUp() {
-		homeScreenController = mock(HomeScreenController.class);
-		loginController = mock(LoginController.class);
-		synchronizeFormsController = mock(SynchronizeFormsController.class);
-		childController = mock(ChildController.class);
-		uploadChildRecordsController = mock(SyncChildController.class);
+		MockitoAnnotations.initMocks(this);
 		dispatcher = new Dispatcher(homeScreenController, loginController,
-				
 				synchronizeFormsController, childController,
 				uploadChildRecordsController);
 
@@ -49,13 +50,6 @@ public class DispatcherTests {
 	public void shouldShowViewChildernScreen() {
 		dispatcher.viewChildren();
 		verify(childController).viewChildren();
-	}
-
-	@Test
-	public void shouldShowViewChildScreen() {
-		Child child = mock(Child.class);
-		dispatcher.viewChild(child);
-		verify(childController).viewChild(child);
 	}
 
 	@Test
