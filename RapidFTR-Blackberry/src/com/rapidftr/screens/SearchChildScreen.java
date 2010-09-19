@@ -12,8 +12,9 @@ import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.BorderFactory;
 
-import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controls.Button;
+import com.rapidftr.controllers.ChildController;
+import com.rapidftr.model.Child;
 import com.rapidftr.model.SearchChildFilter;
 import com.rapidftr.screens.internal.CustomScreen;
 
@@ -90,7 +91,7 @@ public class SearchChildScreen extends CustomScreen implements FieldChangeListen
 		searchChildFilter.setName(searchTextField.getText());
 		if(!"".equals(searchTextField.getText()))
 		{
-			((SearchChildController) controller).search(searchChildFilter);
+			((ChildController) controller).searchAndDispalyChildren(searchChildFilter);
 		}
 		else
 		{

@@ -8,51 +8,62 @@ import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.ManageChildScreen;
+import com.rapidftr.screens.SearchChildScreen;
 import com.rapidftr.screens.ViewChildScreen;
+import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildStoreService;
 
-public class ManageChildControllerTest {
+public class ChildControllerTest {
 
+	@Mock
 	private FormStore formStore;
+	@Mock
 	private UiStack uiStack;
+	@Mock
 	private ManageChildScreen newChildScreen;
+	@Mock
 	private ViewChildScreen viewChildScreen;
-	private ChildController newChildController;
+	@Mock
+	private SearchChildScreen searchChildScreen;
+	@Mock
+	private ViewChildrenScreen viewChildrenScreen;
+	
+	private ChildController childController;
+	@Mock
 	private Vector forms;
+	@Mock
 	private Dispatcher dispatcher;
+	@Mock
 	private ChildStoreService childStoreService;
 
 	@Before
 	public void setUp() {
-		formStore = mock(FormStore.class);
-		uiStack = mock(UiStack.class);
-		forms = mock(Vector.class);
-		childStoreService = mock(ChildStoreService.class);
+		MockitoAnnotations.initMocks(this);
 		when(formStore.getForms()).thenReturn(forms);
-		newChildScreen = mock(ManageChildScreen.class);
-		newChildController = new ChildController(newChildScreen,
-				viewChildScreen, uiStack, formStore, childStoreService);
-		dispatcher = mock(Dispatcher.class);
-		newChildController.setDispatcher(dispatcher);
+		childController = new ChildController(newChildScreen,
+				viewChildScreen,searchChildScreen,viewChildrenScreen, uiStack, formStore, childStoreService);
+		childController.setDispatcher(dispatcher);
 	}
 
 	@Test
 	public void shouldDelegateSynchronizeFormActionToDispatcher() {
-		newChildController.synchronizeForms();
+		childController.synchronizeForms();
 		verify(dispatcher).synchronizeForms();
 	}
 
 	@Test
 	public void shouldDelegateShowEditScreenForChildActionToChildScreen() {
 		Child child = mock(Child.class);
-		newChildController.editChild(child);
+		childController.editChild(child);
 		verify(newChildScreen).setEditForms(formStore.getForms(), child);
 	}
 
@@ -60,7 +71,7 @@ public class ManageChildControllerTest {
 	public void shouldSaveTheChildToTheRecordStore() {
 
 		Child child = mock(Child.class);
-		newChildController.saveChild(child);
+		childController.saveChild(child);
 	}
 
 }

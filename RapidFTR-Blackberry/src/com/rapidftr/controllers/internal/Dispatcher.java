@@ -3,10 +3,8 @@ package com.rapidftr.controllers.internal;
 import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
-import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controllers.SyncChildController;
 import com.rapidftr.controllers.SynchronizeFormsController;
-import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.SearchChildFilter;
 
@@ -14,34 +12,26 @@ public class Dispatcher {
 
 	private final HomeScreenController homeScreenController;
 	private final LoginController loginController;
-	private final ViewChildrenController viewChildrenController;
 	private final SynchronizeFormsController synchronizeFormsController;
-	private final ChildController newChildController;
+	private final ChildController childController;
 	private final SyncChildController syncChildController;
-	private final SearchChildController searchChildController;
 
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController,
-			ViewChildrenController viewChildrenController,
 			SynchronizeFormsController synchronizeFormsController,
 			ChildController newChildController,
-			SyncChildController uploadChildRecordsController,
-			SearchChildController searchChildController) {
+			SyncChildController uploadChildRecordsController) {
 
 		this.homeScreenController = homeScreenController;
 		this.loginController = loginController;
-		this.viewChildrenController = viewChildrenController;
 		this.synchronizeFormsController = synchronizeFormsController;
-		this.newChildController = newChildController;
+		this.childController = newChildController;
 		this.syncChildController = uploadChildRecordsController;
-		this.searchChildController = searchChildController;
 		homeScreenController.setDispatcher(this);
 		loginController.setDispatcher(this);
-		viewChildrenController.setDispatcher(this);
 		synchronizeFormsController.setDispatcher(this);
 		newChildController.setDispatcher(this);
 		uploadChildRecordsController.setDispatcher(this);
-		searchChildController.setDispatcher(this);
 
 	}
 
@@ -50,15 +40,15 @@ public class Dispatcher {
 	}
 
 	public void viewChildren() {
-		viewChildrenController.show();
+		childController.viewChildren();
 	}
 
 	public void viewChild(Child child) {
-		newChildController.viewChild(child);
+		childController.viewChild(child);
 	}
 
 	public void editChild(Child child) {
-		newChildController.editChild(child);
+		childController.editChild(child);
 	}
 
 	public void login() {
@@ -70,7 +60,7 @@ public class Dispatcher {
 	}
 
 	public void newChild() {
-		newChildController.newChild();
+		childController.newChild();
 	}
 
 
@@ -79,15 +69,15 @@ public class Dispatcher {
 	}
 
 	public void viewChildHistory(Child child) {
-		newChildController.showHistory(child);
+		childController.showHistory(child);
 	}
 
 	public void searchChild() {
-		searchChildController.show();
+		childController.showChildSearchScreen();
 	}
 
 	public void searchAndDisplayChildren(SearchChildFilter searchChildFilter) {
-		viewChildrenController.searchAndDispalyChildren(searchChildFilter);
+		childController.searchAndDispalyChildren(searchChildFilter);
 	}
 
 	public void syncChild(Child child) {
