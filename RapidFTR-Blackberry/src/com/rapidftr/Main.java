@@ -82,8 +82,7 @@ public class Main extends UiApplication {
 		HomeScreenController homeScreenController = new HomeScreenController(homeScreen, uiStack);
 		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(new FormService(httpService, formStore), uiStack, synchronizeFormsScreen);
 		ChildController newChildController = new ChildController(newChildScreen,viewChildScreen,searchChildScreen,viewChildrenScreen, uiStack, formStore, childStoreService);
-		ChildSyncService childRecordsUploadService = new ChildSyncService(httpService, childRecordStore);
-		SyncChildController uploadChildRecordsController = new SyncChildController(uploadChildRecordsScreen, uiStack, childRecordsUploadService);
+		SyncChildController uploadChildRecordsController = new SyncChildController(uploadChildRecordsScreen, uiStack, new ChildSyncService(httpService, childRecordStore));
 
 		Dispatcher dispatcher = new Dispatcher(homeScreenController, loginController, synchronizeFormsController, newChildController, uploadChildRecordsController);
 		dispatcher.homeScreen();

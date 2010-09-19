@@ -68,7 +68,7 @@ public class ChildSyncService extends RequestAwareService {
 		}
 	}
 
-	public void uploadChildRecord(Child child) {
+	public void syncChildRecord(Child child) {
 		Vector childrenList = new Vector();
 		childrenList.addElement(child);
 		uploadChildren(childrenList);
