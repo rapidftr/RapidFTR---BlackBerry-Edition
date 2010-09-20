@@ -1,6 +1,7 @@
 package com.rapidftr.controllers;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,18 +19,17 @@ public class DispatcherTests {
 	@Mock
 	private LoginController loginController;
 	@Mock
-	private SynchronizeFormsController synchronizeFormsController;
-	@Mock
 	private ChildController childController;
 	@Mock
-	private SyncChildController uploadChildRecordsController;
+	private SyncController syncController;
+	@Mock
+	private ResetDeviceController resetDeviceController;
 
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		dispatcher = new Dispatcher(homeScreenController, loginController,
-				synchronizeFormsController, childController,
-				uploadChildRecordsController);
+				childController, syncController, resetDeviceController);
 
 	}
 
@@ -42,8 +42,9 @@ public class DispatcherTests {
 
 	@Test
 	public void shouldShowLoginScreen() {
-		dispatcher.login();
-		verify(loginController).show();
+		com.rapidftr.process.Process process = mock(com.rapidftr.process.Process.class);
+		dispatcher.login(process);
+		verify(loginController).showLoginScreen(process);
 	}
 
 	@Test
@@ -58,4 +59,10 @@ public class DispatcherTests {
 		verify(childController).newChild();
 	}
 
+	
+	@Test
+	public void shouldResetDevice() {
+		dispatcher.resetDevice();
+		verify(resetDeviceController).resetDevice();
+	}
 }

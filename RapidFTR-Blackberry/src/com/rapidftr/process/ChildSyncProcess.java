@@ -19,12 +19,16 @@ public class ChildSyncProcess implements Process {
 	public void startProcess() {
 		if(child!=null){
 		 service.syncChildRecord(child);
-		 //child=null;
 		}
 	}
 
 	public void stopProcess() {
 		service.cancelRequest();
 	}
+
+	public void setChild(Child child) {
+		this.child = child;
+	}
+	
 
 }

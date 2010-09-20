@@ -5,14 +5,16 @@ import com.rapidftr.services.ChildSyncService;
 public class SyncAllProcess implements Process {
 
 	ChildSyncService service;
+	String name;
 
 	public SyncAllProcess(ChildSyncService service) {
 		super();
 		this.service = service;
+		this.name="Sync All";
 	}
 
 	public String name() {
-		return "Sync All";
+		return name;
 	}
 
 	public void startProcess() {
@@ -22,5 +24,7 @@ public class SyncAllProcess implements Process {
 	public void stopProcess() {
 		service.cancelRequest();
 	}
+	
+	
 
 }

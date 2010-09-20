@@ -10,10 +10,6 @@ public class HomeScreenController extends Controller {
 		super(screen, uiStack);
 	}
 
-	public void login() {
-		dispatcher.login();
-	}
-
 	public void viewChildren() {
 		dispatcher.viewChildren();
 	}
@@ -37,7 +33,7 @@ public class HomeScreenController extends Controller {
 	}
 
 	public void cleanAll() {
-		dispatcher.cleanAll();		
+		dispatcher.resetDevice();		
 	}
 
 }

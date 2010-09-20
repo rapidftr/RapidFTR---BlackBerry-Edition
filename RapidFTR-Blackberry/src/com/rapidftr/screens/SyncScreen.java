@@ -1,6 +1,6 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.controllers.SynchronizeFormsController;
+import com.rapidftr.controllers.SyncController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.net.ScreenCallBack;
 import com.rapidftr.process.Process;
@@ -20,41 +20,34 @@ import net.rim.device.api.ui.decor.BorderFactory;
 public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		ScreenCallBack {
 
+	// Model
 	Process process;
+
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
-
 	private Button okButton;
-	GaugeField downloadProgressBar;
-
+	private GaugeField downloadProgressBar;
 	private Manager hButtonManager;
 	private Button cancelButton;
-
+	LabelField labelField;
 	public SyncScreen() {
-		//this.syncProcessName = syncProcessName;
 		layoutScreen();
 	}
 
 	private void layoutScreen() {
 		try {
-			LabelField labelField = new LabelField(process.name());
+			labelField = new LabelField("Syncinging ...");
 			Manager hManager = new HorizontalFieldManager(FIELD_HCENTER);
 			hManager.add(labelField);
 			hManager.setPadding(PADDING);
-
 			add(hManager);
-
 			Manager hGaugeManager = new HorizontalFieldManager(FIELD_HCENTER);
-
 			downloadProgressBar = new GaugeField("", 0, 100, 0,
 					GaugeField.LABEL_AS_PROGRESS);
-
 			downloadProgressBar.setBorder(BorderFactory
 					.createSimpleBorder(new XYEdges(1, 1, 1, 1)));
-
 			hGaugeManager.add(downloadProgressBar);
 			hGaugeManager.setPadding(PADDING);
 			add(hGaugeManager);
-
 			hButtonManager = new HorizontalFieldManager(FIELD_HCENTER);
 			add(hButtonManager);
 			hButtonManager.setPadding(PADDING);
@@ -78,7 +71,8 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	public void setUp() {
-
+        labelField.setText(process.name());
+		resetProgressBar();
 	}
 
 	public void fieldChanged(Field field, int context) {
@@ -90,8 +84,7 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		if (field.equals(cancelButton)) {
 			int result = Dialog.ask(Dialog.D_YES_NO,
 					"Are you sure want to cancel " + process.name() + "?");
-			downloadProgressBar.setValue(0);
-
+			resetProgressBar();
 			if (result == Dialog.YES) {
 				process.stopProcess();
 				controller.popScreen();
@@ -109,14 +102,11 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 				int result = Dialog.ask(Dialog.D_OK_CANCEL,
 						"You are not logged in.\n Press ok to  login");
 				downloadProgressBar.setValue(0);
-
-				controller.popScreen();
-
+				//controller.popScreen();
 				if (result == Dialog.OK) {
-					((SynchronizeFormsController) controller).login();
+					((SyncController) controller).login();
 					return;
 				}
-
 			}
 		});
 
@@ -155,27 +145,39 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	public void onProcessFail() {
-
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-
 				int result = Dialog.ask(Dialog.D_YES_NO, process.name()
 						+ " Failed.\n Do you want to Retry?");
 				downloadProgressBar.setValue(0);
-
 				if (result == Dialog.YES) {
 					process.startProcess();
 					return;
 				}
-
 				controller.popScreen();
-
 			}
 		});
 	}
 
 	public void setProgressMessage(String message) {
 		downloadProgressBar.setLabel(message);
+	}
+
+	public void setProcess(Process process) {
+		this.process = process;
+	}
+
+	public void showRunninngProcessAlert() {
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				int result = Dialog.ask(Dialog.D_YES_NO,"other process ["+ process.name()
+						+ "] is Still Runing .\n Do you want to Stop it?");
+				if (result == Dialog.YES) {
+					process.stopProcess();
+					return;
+				}
+			}
+		});	
 	}
 
 }

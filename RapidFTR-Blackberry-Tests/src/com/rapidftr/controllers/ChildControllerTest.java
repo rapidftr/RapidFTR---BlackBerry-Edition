@@ -68,8 +68,7 @@ public class ChildControllerTest {
 	}
 
 	@Test
-	public void shouldSaveTheChildToTheRecordStore() {
-
+	public void shouldSaveTheChildToTheRecordStore() {		
 		Child child = mock(Child.class);
 		childController.saveChild(child);
 	}

@@ -63,6 +63,9 @@ public class RequestCallBackImpl implements RequestCallBack {
 		if (ifScreenCallbackExists()) {
 			screenCallback.onProcessFail();
 		}
+		if (ifControllerCallbackExists()) {
+			controllerCallback.afterProcessComplete();
+		}
 	}
 
 	public void setScreenCallback(ScreenCallBack screenCallback) {

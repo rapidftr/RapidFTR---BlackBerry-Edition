@@ -1,12 +1,14 @@
 package com.rapidftr.controllers;
 
 import com.rapidftr.controllers.internal.RequestAwareController;
+import com.rapidftr.process.Process;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.LoginService;
 
 public class LoginController extends RequestAwareController {
 
+	Process callingProcess ;
 	public LoginController(LoginScreen screen, UiStack uiStack,
 			LoginService loginService) {
 		super(screen, uiStack,loginService);
@@ -23,10 +25,14 @@ public class LoginController extends RequestAwareController {
 
 	public void afterProcessComplete() {
 		popScreen();
+		if(callingProcess!=null){
+			callingProcess.startProcess();
+		}
 	}
 
-	public void clearLoginState() {
-		((LoginService)service).clearLoginState();
+	public void showLoginScreen(Process callingProcess) {
+		this.callingProcess = callingProcess;	
+		show();		
 	}
 
 }

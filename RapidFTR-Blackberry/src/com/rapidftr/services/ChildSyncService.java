@@ -150,7 +150,7 @@ public class ChildSyncService extends RequestAwareService {
 				} catch (JSONException e) {
 					requestHandler.markProcessFailed();
 				} catch (Exception e) {
-					requestHandler.markProcessComplete();
+					requestHandler.markProcessFailed();
 				}
 				if (requestHandler.isProcessCompleted()) {
 					requestHandler.markProcessComplete();

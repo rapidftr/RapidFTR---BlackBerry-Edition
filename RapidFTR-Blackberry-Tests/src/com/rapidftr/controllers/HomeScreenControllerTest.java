@@ -26,11 +26,6 @@ public class HomeScreenControllerTest {
 		homeScreenController.setDispatcher(dispatcher);
 	}
 
-	@Test
-	public void shouldDelegateLoginActionToDispatcher() {
-		homeScreenController.login();
-		verify(dispatcher).login();
-	}
 
 	@Test
 	public void shouldDelegateViewChildrenActionToDispatcher() {

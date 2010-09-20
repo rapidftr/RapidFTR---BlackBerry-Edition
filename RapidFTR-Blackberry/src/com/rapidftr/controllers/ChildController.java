@@ -18,10 +18,10 @@ public class ChildController extends Controller {
 
 	private final FormStore formStore;
 	private final ChildStoreService childStoreService;
-	private ManageChildScreen manageChildScreen;
-	private ViewChildScreen viewChildScreen;
-	private SearchChildScreen searchChildScreen;
-	private ViewChildrenScreen viewChildrenScreen;
+	private final ManageChildScreen manageChildScreen;
+	private final ViewChildScreen viewChildScreen;
+	private final SearchChildScreen searchChildScreen;
+	private final ViewChildrenScreen viewChildrenScreen;
 
 	public ChildController(ManageChildScreen manageChildScreen,
 			ViewChildScreen viewChildScreen,

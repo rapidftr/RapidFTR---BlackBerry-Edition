@@ -7,8 +7,8 @@ import net.rim.device.api.ui.UiApplication;
 import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
-import com.rapidftr.controllers.SyncChildController;
-import com.rapidftr.controllers.SynchronizeFormsController;
+import com.rapidftr.controllers.ResetDeviceController;
+import com.rapidftr.controllers.SyncController;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
@@ -18,8 +18,7 @@ import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.SearchChildScreen;
-import com.rapidftr.screens.SyncChildScreen;
-import com.rapidftr.screens.SynchronizeFormsScreen;
+import com.rapidftr.screens.SyncScreen;
 import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.UiStack;
@@ -49,10 +48,11 @@ public class Main extends UiApplication {
 
 	/**
 	 * <p>
-	 * The default constructor. Creates all of the RIM UI components and pushes the application's root screen onto the UI stack.
+	 * The default constructor. Creates all of the RIM UI components and pushes
+	 * the application's root screen onto the UI stack.
 	 */
 	public Main() {
-		
+
 		enablePermission(ApplicationPermissions.PERMISSION_INPUT_SIMULATION);
 		enablePermission(ApplicationPermissions.PERMISSION_FILE_API);
 
@@ -64,33 +64,40 @@ public class Main extends UiApplication {
 
 		HttpService httpService = new HttpService(httpServer, settings);
 		LoginService loginService = new LoginService(httpService, settings);
-		ChildStoreService childStoreService = new ChildStoreService(childRecordStore);
+		ChildStoreService childStoreService = new ChildStoreService(
+				childRecordStore);
+		FormService formService = new FormService(httpService, formStore);
+		ChildSyncService childSyncService = new ChildSyncService(httpService, childRecordStore);
 
 		UiStack uiStack = new UiStack(this);
-		
+
 		HomeScreen homeScreen = new HomeScreen();
 		LoginScreen loginScreen = new LoginScreen(settings);
 		ViewChildScreen viewChildScreen = new ViewChildScreen();
 		ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
 		ManageChildScreen newChildScreen = new ManageChildScreen(settings);
-		SyncChildScreen uploadChildRecordsScreen = new SyncChildScreen();
-		SynchronizeFormsScreen synchronizeFormsScreen = new SynchronizeFormsScreen();
-		
-		LoginController loginController = new LoginController(loginScreen, uiStack, loginService);
-		//loginScreen.setController(loginController);
+	    SyncScreen syncScreen = new SyncScreen();
+		LoginController loginController = new LoginController(loginScreen,
+				uiStack, loginService);
+		// loginScreen.setController(loginController);
+		ResetDeviceController restController = new ResetDeviceController(formService, childSyncService, loginService);
 		HomeScreenController homeScreenController = new HomeScreenController(homeScreen, uiStack);
-		SynchronizeFormsController synchronizeFormsController = new SynchronizeFormsController(new FormService(httpService, formStore), uiStack, synchronizeFormsScreen);
-		ChildController newChildController = new ChildController(newChildScreen,viewChildScreen,searchChildScreen,viewChildrenScreen, uiStack, formStore, childStoreService);
-		SyncChildController uploadChildRecordsController = new SyncChildController(uploadChildRecordsScreen, uiStack, new ChildSyncService(httpService, childRecordStore));
+		ChildController childController = new ChildController(
+				newChildScreen, viewChildScreen, searchChildScreen,
+				viewChildrenScreen, uiStack, formStore, childStoreService);
+		SyncController syncController = new SyncController(syncScreen,uiStack,childSyncService,formService);
 
-		Dispatcher dispatcher = new Dispatcher(homeScreenController, loginController, synchronizeFormsController, newChildController, uploadChildRecordsController);
+		Dispatcher dispatcher = new Dispatcher(homeScreenController,
+				loginController,
+				childController, syncController,restController);
 		dispatcher.homeScreen();
 
 	}
 
 	private void enablePermission(int permission) {
-		ApplicationPermissionsManager manager = ApplicationPermissionsManager.getInstance();
+		ApplicationPermissionsManager manager = ApplicationPermissionsManager
+				.getInstance();
 
 		if (manager.getApplicationPermissions().getPermission(permission) == ApplicationPermissions.VALUE_ALLOW) {
 			System.out.println("Got correct permissions");
@@ -103,6 +110,7 @@ public class Main extends UiApplication {
 			requestedPermissions.addPermission(permission);
 		}
 
-		ApplicationPermissionsManager.getInstance().invokePermissionsRequest(requestedPermissions);
+		ApplicationPermissionsManager.getInstance().invokePermissionsRequest(
+				requestedPermissions);
 	}
 }

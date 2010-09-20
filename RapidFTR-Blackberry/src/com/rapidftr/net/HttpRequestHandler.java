@@ -85,6 +85,8 @@ public class HttpRequestHandler implements RequestListener {
 
 	public void cancelRequestInProgress() {
 		this.requestInProgress = false;
+	    this.activeRequests=0;
+	    this.totalRequests=0;
 	}
 
 	public boolean checkIfRequestNotInProgress() {
