@@ -85,8 +85,5 @@ public class ChildStoreService {
 		childRecordStore.addOrUpdateChild(child);
 	}
 
-	public void saveChildrenInLocalStore(Vector children){	
-		childRecordStore.storeChildren(children);		
-	}
 
 }
