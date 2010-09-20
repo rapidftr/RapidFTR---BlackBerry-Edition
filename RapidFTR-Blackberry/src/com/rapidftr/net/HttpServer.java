@@ -12,7 +12,8 @@ import com.sun.me.web.request.Response;
 
 public class HttpServer {
 
-	private Request request = null;
+	//private Request request = null;
+	private RequestPool requestPool= RequestPool.getInstance();
 	private int requestTimeout;
 
 	public HttpServer() {
@@ -21,15 +22,15 @@ public class HttpServer {
 
 	public void postToServer(String url, Arg[] postParams, Arg[] httpArgs,
 			RequestListener listener, PostData multiPart, Object context) {
-
-		request = Request.post(buildFullyQualifiedUrl(url), postParams,
-				httpArgs, listener, multiPart, context);
+		requestPool.execute(Request.post(buildFullyQualifiedUrl(url), postParams,
+				httpArgs, listener, multiPart, context));
 	}
 
 	public void getFromServer(String url, Arg[] inputParams, Arg[] httpArgs,
 			RequestListener listener,Object context) {
-		request = Request.get(buildFullyQualifiedUrl(url), inputParams,
-				httpArgs, listener, context);
+requestPool.execute(Request.get(buildFullyQualifiedUrl(url), inputParams,
+		httpArgs, listener, context));
+	
 	}
 	
 	public Response getFromServer(String url, Arg[] inputParams, Arg[] httpArgs) throws IOException {
@@ -38,8 +39,7 @@ public class HttpServer {
 	}
 
 	public void cancelRequest() {
-		if (request != null)
-			request.cancel();
+	  requestPool.cancelAllRequests();
 	}
 
 	public String buildFullyQualifiedUrl(String uri) {

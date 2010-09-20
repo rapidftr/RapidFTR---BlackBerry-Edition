@@ -50,7 +50,6 @@ public class FormServiceTest {
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_OK);
 		String json = "json response";
 		when(mockResult.toString()).thenReturn(json);
-		formService.requestHandler.setRequestInProgress();
 		formService.requestHandler.done(context, response);
 		verify(formStore).storeForms(response.getResult().toString());
 	}

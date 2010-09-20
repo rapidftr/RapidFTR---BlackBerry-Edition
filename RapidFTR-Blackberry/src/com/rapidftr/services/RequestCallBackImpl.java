@@ -17,7 +17,7 @@ public class RequestCallBackImpl implements RequestCallBack {
 
 	public void handleConnectionProblem() {
 		if (ifScreenCallbackExists()) {
-			screenCallback.handleConnectionProblem();
+			screenCallback.onConnectionProblem();
 		}
 	}
 
@@ -29,7 +29,7 @@ public class RequestCallBackImpl implements RequestCallBack {
 
 	public void handleUnauthorized() {
 		if (ifScreenCallbackExists()) {
-			screenCallback.handleAuthenticationFailure();
+			screenCallback.onAuthenticationFailure();
 		}
 	}
 
@@ -46,7 +46,7 @@ public class RequestCallBackImpl implements RequestCallBack {
 
 	public void updateRequestProgress(int size) {
 		if (ifScreenCallbackExists()) {
-			screenCallback.updateRequestProgress(size);
+			screenCallback.updateProgress(size);
 		}
 	}
 

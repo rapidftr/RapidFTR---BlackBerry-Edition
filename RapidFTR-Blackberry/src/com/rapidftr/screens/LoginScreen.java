@@ -193,12 +193,12 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 		((LoginController) controller).loginCancelled();
 	}
 
-	public void handleAuthenticationFailure() {
+	public void onAuthenticationFailure() {
      onProcessFail();
 	}
 
 
-	public void handleConnectionProblem() {
+	public void onConnectionProblem() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 				setProgressMsg("Connection Problem");
@@ -207,7 +207,7 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 		});
 	}
 
-	public void updateRequestProgress(int progress) {
+	public void updateProgress(int progress) {
 		// TODO Auto-generated method stub
 		
 	}

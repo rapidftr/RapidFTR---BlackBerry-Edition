@@ -20,7 +20,6 @@ public class LoginService extends RequestAwareService{
 	}
 
 	public void login(String userName, String password) {
-		requestHandler.setRequestInProgress();
 		Arg[] postArgs = new Arg[] { new Arg("user_name", userName),
 				new Arg("password", password) };
 
@@ -29,7 +28,7 @@ public class LoginService extends RequestAwareService{
 
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
-		httpService.post("sessions", postArgs, httpArgs, requestHandler, null,
+		requestHandler.post("sessions", postArgs, httpArgs, null,
 				context);
 	}
 

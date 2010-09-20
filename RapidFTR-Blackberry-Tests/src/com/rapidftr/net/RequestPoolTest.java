@@ -1,10 +1,13 @@
-package com.sun.me.web.request;
+package com.rapidftr.net;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
+
+import com.rapidftr.net.RequestPool;
+import com.sun.me.web.request.Request;
 
 public class RequestPoolTest {
 	private RequestPool requestPool;

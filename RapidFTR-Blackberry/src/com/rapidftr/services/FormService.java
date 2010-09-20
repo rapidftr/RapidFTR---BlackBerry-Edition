@@ -15,10 +15,9 @@ public class FormService extends RequestAwareService{
 	}
 
 	public void downloadForms() {
-		requestHandler.setRequestInProgress();
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
-		httpService.get("published_form_sections", null, httpArgs, requestHandler,null);
+		requestHandler.get("published_form_sections", null, httpArgs, null);
 	}
 
 

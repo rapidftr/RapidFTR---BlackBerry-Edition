@@ -65,8 +65,8 @@ public class LoginControllerTest {
 												// requestInProgress flag to
 												// set
 
-		screenCallBack.handleConnectionProblem();
-		verify(loginScreen).handleConnectionProblem();
+		screenCallBack.onConnectionProblem();
+		verify(loginScreen).onConnectionProblem();
 	}
 
 	@Test
@@ -75,8 +75,8 @@ public class LoginControllerTest {
 												// isRequestInProgress flag to
 												// set
 
-		screenCallBack.handleAuthenticationFailure();
-		verify(loginScreen).handleAuthenticationFailure();
+		screenCallBack.onAuthenticationFailure();
+		verify(loginScreen).onAuthenticationFailure();
 	}
 
 }

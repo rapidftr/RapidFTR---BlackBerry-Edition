@@ -95,7 +95,7 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 
 	}
 
-	public void handleAuthenticationFailure() {
+	public void onAuthenticationFailure() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 
@@ -121,11 +121,11 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		return super.onClose();
 	}
 
-	public void handleConnectionProblem() {
+	public void onConnectionProblem() {
 		onProcessFail();
 	}
 
-	public void updateRequestProgress(final int size) {
+	public void updateProgress(final int size) {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 				downloadProgressBar.setValue(size);
