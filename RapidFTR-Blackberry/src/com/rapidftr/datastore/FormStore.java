@@ -68,8 +68,6 @@ public class FormStore {
 				}
 
 			}
-			//To test---> Have to remove this
-			formFields.addElement(formFieldFactory.createFormField("some name", "audio_upload_field", new Vector()));
 			Form form = new Form(jsonForm.getString("name"), jsonForm
 					.getString("unique_id"), formFields);
 			forms.addElement(form);
