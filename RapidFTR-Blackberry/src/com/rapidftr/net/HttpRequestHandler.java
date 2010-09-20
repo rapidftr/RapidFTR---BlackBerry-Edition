@@ -104,7 +104,7 @@ public class HttpRequestHandler implements RequestListener {
 		totalRequests += 1;
 	}
 
-	public boolean isProcessCompleted() {
+	private boolean isProcessCompleted() {
 		return unprocessedRequests == 0;
 	}
 
@@ -125,6 +125,10 @@ public class HttpRequestHandler implements RequestListener {
 			handleResponseErrors(response);
 		}
 
+		checkAndMarkProcessComplete();
+	}
+
+	public void checkAndMarkProcessComplete() {
 		if (isProcessCompleted()) {
 			markProcessComplete();
 		}

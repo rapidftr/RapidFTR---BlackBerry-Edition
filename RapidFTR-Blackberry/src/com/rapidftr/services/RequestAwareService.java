@@ -22,10 +22,10 @@ public abstract class RequestAwareService implements ServiceCallback {
 
 	public void cancelRequest() {
 		requestHandler.cancelRequestInProgress();
-		//httpService.cancelRequest();
 	}
 
 	public void onRequestFailure(Exception exception) {
+		//TODO handle individual requests , like stale records etc
 		// requestHandler.markProcessFailed();
 	}
 

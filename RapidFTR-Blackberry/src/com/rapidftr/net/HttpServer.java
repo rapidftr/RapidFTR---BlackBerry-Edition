@@ -12,8 +12,8 @@ import com.sun.me.web.request.Response;
 
 public class HttpServer {
 
-	//private Request request = null;
-	private RequestPool requestPool= RequestPool.getInstance();
+	// private Request request = null;
+	private RequestPool requestPool = RequestPool.getInstance();
 	private int requestTimeout;
 
 	public HttpServer() {
@@ -22,24 +22,25 @@ public class HttpServer {
 
 	public void postToServer(String url, Arg[] postParams, Arg[] httpArgs,
 			RequestListener listener, PostData multiPart, Object context) {
-		requestPool.execute(Request.post(buildFullyQualifiedUrl(url), postParams,
-				httpArgs, listener, multiPart, context));
+		requestPool.execute(Request.post(buildFullyQualifiedUrl(url),
+				postParams, httpArgs, listener, multiPart, context));
 	}
 
 	public void getFromServer(String url, Arg[] inputParams, Arg[] httpArgs,
-			RequestListener listener,Object context) {
-requestPool.execute(Request.get(buildFullyQualifiedUrl(url), inputParams,
-		httpArgs, listener, context));
-	
+			RequestListener listener, Object context) {
+		requestPool.execute(Request.get(buildFullyQualifiedUrl(url),
+				inputParams, httpArgs, listener, context));
+
 	}
-	
-	public Response getFromServer(String url, Arg[] inputParams, Arg[] httpArgs) throws IOException {
-		 return  Request.get(buildFullyQualifiedUrl(url), inputParams,
-				httpArgs,null);
+
+	public Response getFromServer(String url, Arg[] inputParams, Arg[] httpArgs)
+			throws IOException {
+		return Request.get(buildFullyQualifiedUrl(url), inputParams, httpArgs,
+				null);
 	}
 
 	public void cancelRequest() {
-	  requestPool.cancelAllRequests();
+		requestPool.cancelAllRequests();
 	}
 
 	public String buildFullyQualifiedUrl(String uri) {
