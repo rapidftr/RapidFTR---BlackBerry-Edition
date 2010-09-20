@@ -50,19 +50,27 @@ public class ViewChildScreen extends CustomScreen {
 	private void renderChildFields(Child child) {
 		//updateChildFieldsWithLatestForms(child);
 		int index = 0;
-		
 		Hashtable data = child.getKeyMap();
+		
+		//render the picture
 		HorizontalFieldManager hmanager = new HorizontalFieldManager(Manager.HORIZONTAL_SCROLLBAR);
 		renderBitmap(data, hmanager);
 
 		hmanager.add(new BoldRichTextField("   " + data.get(new String("name"))));
 		add(hmanager);
 
-		//RichTextField richField[] = new RichTextField[data.size()];
-
-		Vector forms = new FormStore().getForms();
+		//add an empty line
+		add(new LabelField(""));
 		
-		RichTextField richField[] = new RichTextField[claculateTotalElementsInForms(forms)];
+		//render the unique id
+		String uniqueIdentifier = (String)data.get("unique_identifier");
+		uniqueIdentifier = (null==uniqueIdentifier)?"":uniqueIdentifier;
+		
+		add(BoldRichTextField.getSemiBoldRichTextField("Unique Id" + " :", uniqueIdentifier ));
+		add(new SeparatorField());
+		
+		//render other fields
+		Vector forms = new FormStore().getForms();
 	
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			Form form = (Form) list.nextElement();
