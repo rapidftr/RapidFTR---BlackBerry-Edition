@@ -148,7 +148,7 @@ public class ManageChildScreen extends CustomScreen {
     private boolean validateOnSave() {
         String invalidDataField = onSaveChildClicked();
         if (invalidDataField != null) {
-            Dialog.alert("Please input " + invalidDataField + " it is a mandatory field");
+            Dialog.alert("Please input the following mandatory field(s)" + invalidDataField + " .");
             return false;
         }
         return true;
@@ -161,7 +161,7 @@ public class ManageChildScreen extends CustomScreen {
             childToEdit.update(settings.getCurrentlyLoggedIn(), forms);
         }
         String invalidDataField = null;
-        if ((invalidDataField = validateRequiredFields()) != null) {
+        if ((invalidDataField = validateRequiredFields()) != "") {
             return invalidDataField;
         }
         ((ChildController) controller).saveChild(childToEdit);
@@ -169,11 +169,12 @@ public class ManageChildScreen extends CustomScreen {
     }
 
     private String validateRequiredFields() {
+    	StringBuffer invalidFields= new StringBuffer("");
         for (int i = 0; i < REQUIRED_FIELDS.length; i++) {
             if (childToEdit.getField(REQUIRED_FIELDS[i]) == null || childToEdit.getField(REQUIRED_FIELDS[i]).toString().equals(""))
-                return REQUIRED_FIELDS[i];
+                invalidFields.append(" ," + REQUIRED_FIELDS[i]);
         }
-        return null;
+        return invalidFields.toString();
     }
 
     protected void makeMenu(Menu menu, int instance) {
