@@ -230,4 +230,9 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 		setProgressMsg(message);		
 	}
 
+	public void onProcessStart() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

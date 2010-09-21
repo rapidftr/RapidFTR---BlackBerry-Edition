@@ -9,12 +9,12 @@ import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Response;
 
-public class LoginService extends RequestAwareService{
+public class LoginService extends RequestAwareService {
 
 	private SettingsStore settingsStore;
 	public static final String USER_NAME = "user_name";
-	
-	public LoginService(HttpService httpService,SettingsStore settingsStore) {
+
+	public LoginService(HttpService httpService, SettingsStore settingsStore) {
 		super(httpService);
 		this.settingsStore = settingsStore;
 	}
@@ -28,8 +28,7 @@ public class LoginService extends RequestAwareService{
 
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
-		requestHandler.post("sessions", postArgs, httpArgs, null,
-				context);
+		requestHandler.post("sessions", postArgs, httpArgs, null, context);
 	}
 
 	private String parseAuthorizationToken(Response response) {
@@ -41,6 +40,9 @@ public class LoginService extends RequestAwareService{
 		}
 	}
 
+	public void clearLoginState() {
+		settingsStore.clearState();
+	}
 
 	public void onRequestSuccess(Object context, Response result) {
 		Hashtable table = (Hashtable) context;
@@ -50,7 +52,9 @@ public class LoginService extends RequestAwareService{
 		settingsStore.setCurrentlyLoggedIn(userName);
 	}
 
-	public void clearLoginState() {
-		settingsStore.clearState();
+	public void onRequestFailure(Object context, Exception exception) {
+		requestHandler.markProcessFailed("Login Failed Due to "
+				+ exception.getMessage());
 	}
+
 }

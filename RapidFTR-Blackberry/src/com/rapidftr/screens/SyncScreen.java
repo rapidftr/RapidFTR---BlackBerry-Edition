@@ -63,16 +63,10 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 
 	}
 
-	public void resetProgressBar() {
-		downloadProgressBar.setLabel(process.name() + " ...");
-		downloadProgressBar.setValue(0);
-		hButtonManager.deleteAll();
-		hButtonManager.add(cancelButton);
-	}
 
 	public void setUp() {
 		labelField.setText(process.name());
-		resetProgressBar();
+		onProcessStart();
 	}
 
 	public void fieldChanged(Field field, int context) {
@@ -84,7 +78,7 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		if (field.equals(cancelButton)) {
 			int result = Dialog.ask(Dialog.D_YES_NO,
 					"Are you sure want to cancel " + process.name() + "?");
-			resetProgressBar();
+			
 			if (result == Dialog.YES) {
 				process.stopProcess();
 				controller.popScreen();
@@ -189,6 +183,16 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 				// controller.popScreen();
 			}
 		});
+	}
+
+	public void onProcessStart() {
+		if(process!=null){
+		downloadProgressBar.setLabel(process.name() + " ...");
+		}
+		downloadProgressBar.setValue(0);
+		hButtonManager.deleteAll();
+		hButtonManager.add(cancelButton);
+		
 	}
 
 }

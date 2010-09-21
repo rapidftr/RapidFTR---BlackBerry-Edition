@@ -6,6 +6,8 @@ public interface ScreenCallBack {
 
 	void onAuthenticationFailure();
 
+	void onProcessStart();
+	
 	void onProcessComplete();
 
 	void onProcessFail(String failureMessage);

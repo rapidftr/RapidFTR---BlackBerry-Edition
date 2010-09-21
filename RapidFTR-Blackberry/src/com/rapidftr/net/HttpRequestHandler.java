@@ -38,14 +38,14 @@ public class HttpRequestHandler implements RequestListener {
 		service.put(url, postArgs, httpArgs, this, postData, context);
 	}
 
-	//sync request
+	// sync request
 	public Response get(String url, Arg[] inputArgs, Arg[] httpArgs)
 			throws IOException {
 		Response response = service.get(url, inputArgs, httpArgs);
 		if (isValidResponse(response)) {
 			return response;
 		} else {
-			handleResponseErrors(null,response);
+			handleResponseErrors(null, response);
 			return null;
 		}
 	}
@@ -56,12 +56,14 @@ public class HttpRequestHandler implements RequestListener {
 						.getCode() == HttpConnection.HTTP_CREATED);
 	}
 
-	public void handleResponseErrors(Object context, Response response) {
-		if (response.getException() != null) {
-			requestCallBack.onRequestException(context,response.getException());
-		} else if (response.getCode() == HttpConnection.HTTP_UNAUTHORIZED) {
+	private void handleResponseErrors(Object context, Response response) {
+		if (response.getCode() == HttpConnection.HTTP_UNAUTHORIZED
+				|| response.getCode() == HttpConnection.HTTP_FORBIDDEN) {
 			requestCallBack.onAuthenticationFailure();
 			terminateProcess();
+		} else if (response.getException() != null) {
+			requestCallBack
+					.onRequestException(context, response.getException());
 		} else if (response.getCode() != HttpConnection.HTTP_OK
 				&& response.getCode() != HttpConnection.HTTP_CREATED) {
 			requestCallBack.onConnectionProblem();
@@ -74,19 +76,18 @@ public class HttpRequestHandler implements RequestListener {
 	}
 
 	public void writeProgress(Object context, int bytes, int total) {
-		//requestCallBack.writeProgress(context, bytes, total);
+		// requestCallBack.writeProgress(context, bytes, total);
 	}
 
-
 	public void markProcessComplete() {
-		unprocessedRequests=totalRequests=0;
+		unprocessedRequests = totalRequests = 0;
 		requestCallBack.onProcessComplete();
 	}
 
 	public void markProcessFailed() {
 		requestCallBack.onProcessFail(null);
 	}
-	
+
 	public void markProcessFailed(String failureMessage) {
 		requestCallBack.onProcessFail(failureMessage);
 	}
@@ -112,18 +113,18 @@ public class HttpRequestHandler implements RequestListener {
 	public void setRequestCallBack(RequestCallBack requestCallBack) {
 		this.requestCallBack = requestCallBack;
 	}
-	
-	
+
 	public void done(Object context, Response response) {
 		if (unprocessedRequests > 0) {
 			unprocessedRequests--;
 		}
-		requestCallBack.updateRequestProgress(totalRequests - unprocessedRequests, totalRequests);
+		requestCallBack.updateRequestProgress(totalRequests
+				- unprocessedRequests, totalRequests);
 
 		if (isValidResponse(response)) {
 			requestCallBack.onRequestComplete(context, response);
 		} else {
-			handleResponseErrors(context,response);
+			handleResponseErrors(context, response);
 		}
 
 		checkAndMarkProcessComplete();

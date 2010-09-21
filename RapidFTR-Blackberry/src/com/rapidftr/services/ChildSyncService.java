@@ -71,7 +71,6 @@ public class ChildSyncService extends RequestAwareService {
 		uploadChildren(childrenList);
 	}
 
-
 	public void syncAllChildRecords() throws ServiceException {
 		new Thread() {
 			public void run() {
@@ -82,7 +81,8 @@ public class ChildSyncService extends RequestAwareService {
 				try {
 					downloadNewChildRecords();
 				} catch (IOException e) {
-					requestHandler.markProcessFailed("Sync failed due to loss of network connectivity");
+					requestHandler
+							.markProcessFailed("Sync failed due to loss of network connectivity");
 				} catch (JSONException e) {
 					requestHandler.markProcessFailed();
 				} catch (Exception e) {
@@ -156,7 +156,7 @@ public class ChildSyncService extends RequestAwareService {
 			throw new ServiceException("JSON Data is invalid Problem");
 		} catch (ResultException e) {
 			throw new ServiceException("JSON Data is invalid Problem");
-		} 
+		}
 		return mapping;
 	}
 
@@ -179,7 +179,7 @@ public class ChildSyncService extends RequestAwareService {
 		childRecordStore.deleteAllChildren();
 
 	}
-	
+
 	public void onRequestSuccess(Object context, Response result) {
 		requestHandler.getRequestCallBack().updateProgressMessage(
 				((Hashtable) context).get(PROCESS_STATE).toString());
@@ -196,9 +196,11 @@ public class ChildSyncService extends RequestAwareService {
 			}
 			updateChildPhoto(child);
 			child.syncSuccess();
-			childRecordStore.addOrUpdateChild(child);
+
 		} catch (JSONException e) {
-            child.syncFailed(e.getMessage());
+			child.syncFailed(e.getMessage());
+		} finally {
+			childRecordStore.addOrUpdateChild(child);
 		}
 
 	}
@@ -214,8 +216,7 @@ public class ChildSyncService extends RequestAwareService {
 			String storePath = "";
 			try {
 				String sdCardPath = "file:///SDCard/Blackberry";
-				FileConnection fc = (FileConnection) Connector
-						.open(sdCardPath);
+				FileConnection fc = (FileConnection) Connector.open(sdCardPath);
 				if (fc.exists())
 					storePath = sdCardPath;
 				else
@@ -243,9 +244,8 @@ public class ChildSyncService extends RequestAwareService {
 		}
 	}
 
-	
-	public void onRequestFailure(Object context,Exception exception) {
-		//TODO handle individual requests , like stale records etc
+	public void onRequestFailure(Object context, Exception exception) {
+		// TODO handle individual requests , like stale records etc
 		// requestHandler.markProcessFailed();
 	}
 

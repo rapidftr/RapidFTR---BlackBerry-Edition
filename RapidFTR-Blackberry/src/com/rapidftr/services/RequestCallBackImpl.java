@@ -95,4 +95,10 @@ public class RequestCallBackImpl implements RequestCallBack {
 		}
 	}
 
+	public void onProcessStart() {
+		if (ifScreenCallbackExists()) {
+			screenCallback.onProcessComplete();
+		}
+	}
+
 }
