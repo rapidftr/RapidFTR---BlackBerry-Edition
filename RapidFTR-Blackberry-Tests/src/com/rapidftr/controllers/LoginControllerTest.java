@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.rapidftr.net.HttpRequestHandler;
 import com.rapidftr.net.ScreenCallBack;
 import com.rapidftr.screens.LoginScreen;
-import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.LoginService;
 import com.rapidftr.services.RequestCallBackImpl;
 import com.rapidftr.utilities.SettingsStore;
@@ -34,7 +34,7 @@ public class LoginControllerTest {
 		uiStack = mock(UiStack.class);
 		loginController = new LoginController(loginScreen, uiStack,
 				loginService);
-		screenCallBack = loginController.screenCallBack;
+		screenCallBack = loginController.getScreenCallBack();
 	}
 
 	@Test
@@ -65,8 +65,8 @@ public class LoginControllerTest {
 												// requestInProgress flag to
 												// set
 
-		screenCallBack.handleConnectionProblem();
-		verify(loginScreen).handleConnectionProblem();
+		screenCallBack.onConnectionProblem();
+		verify(loginScreen).onConnectionProblem();
 	}
 
 	@Test
@@ -75,8 +75,8 @@ public class LoginControllerTest {
 												// isRequestInProgress flag to
 												// set
 
-		screenCallBack.handleAuthenticationFailure();
-		verify(loginScreen).handleAuthenticationFailure();
+		screenCallBack.onAuthenticationFailure();
+		verify(loginScreen).onAuthenticationFailure();
 	}
 
 }

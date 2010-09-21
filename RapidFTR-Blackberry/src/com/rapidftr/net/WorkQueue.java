@@ -1,4 +1,4 @@
-package com.sun.me.web.request;
+package com.rapidftr.net;
 
 public class WorkQueue {
 
@@ -33,7 +33,7 @@ public class WorkQueue {
 		}
 	}
 
-	public void addRequest(Request request) {
+	public void addRequest(Runnable request) {
 		Thread workerThread = new Thread(request);
 		if (currentSize == threads.length)
 			doubleCapacity();
@@ -59,6 +59,11 @@ public class WorkQueue {
 		threads = newArray;
 		front = 0;
 		back = currentSize - 1;
+	}
+
+	public void cancelAllRequests() {
+		makeEmpty();
+		//TODO add logic to cancel active requests
 	}
 
 }

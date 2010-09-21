@@ -61,7 +61,7 @@ public final class Request implements Runnable {
 	private Arg[] inputArgs = null;
 	private PostData multiPart = null;
 	private RequestListener listener = null;
-	private RequestPool pool = RequestPool.getInstance();
+	//private RequestPool pool = RequestPool.getInstance();
 	private boolean interrupted = false;
 
 	private int totalToSend = 0;
@@ -118,7 +118,7 @@ public final class Request implements Runnable {
 		// TODO: implement more sophisticated pooling, queuing and scheduling strategies
 		// request.thread = new Thread(request);
 		// request.thread.start();
-		request.pool.execute(request);
+		//request.pool.execute(request);
 		return request;
 	}
 
@@ -149,7 +149,7 @@ public final class Request implements Runnable {
 			// TODO check for time out and add this request in pool again
 			// pool.execute(this);
 		} finally {
-			pool.decrementActiveThreadCount();
+			//pool.decrementActiveThreadCount();
 			if (listener != null) {
 				try {
 					listener.done(context, response);

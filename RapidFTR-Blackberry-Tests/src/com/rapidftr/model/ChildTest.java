@@ -16,12 +16,12 @@ import org.json.me.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.rapidftr.controllers.ManageChildController;
-import com.rapidftr.controllers.Dispatcher;
+import com.rapidftr.controllers.ChildController;
+import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.screens.ManageChildScreen;
-import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.internal.UiStack;
 
 public class ChildTest {
 

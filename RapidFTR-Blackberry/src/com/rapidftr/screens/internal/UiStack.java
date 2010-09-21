@@ -1,4 +1,4 @@
-package com.rapidftr.screens;
+package com.rapidftr.screens.internal;
 
 import net.rim.device.api.ui.Screen;
 import net.rim.device.api.ui.UiApplication;

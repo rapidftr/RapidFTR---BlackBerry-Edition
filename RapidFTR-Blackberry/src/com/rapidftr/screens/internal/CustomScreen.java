@@ -1,4 +1,4 @@
-package com.rapidftr.screens;
+package com.rapidftr.screens.internal;
 
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.UiApplication;
@@ -7,14 +7,13 @@ import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.decor.BackgroundFactory;
 
-import com.rapidftr.controllers.Controller;
-import com.rapidftr.controllers.Dispatcher;
+import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.controls.TitleField;
 import com.rapidftr.utilities.Styles;
 
 public abstract class CustomScreen extends MainScreen {
 
-	Controller controller;
+	protected Controller controller;
 	private TitleField titleField;
 	protected static final XYEdges PADDING = new XYEdges(4, 4, 4, 4);
 

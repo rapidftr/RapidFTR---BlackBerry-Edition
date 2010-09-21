@@ -16,6 +16,7 @@ import net.rim.device.api.ui.container.HorizontalFieldManager;
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.net.ScreenCallBack;
+import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.SettingsStore;
 
 public class LoginScreen extends CustomScreen implements FieldChangeListener,
@@ -192,12 +193,12 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 		((LoginController) controller).loginCancelled();
 	}
 
-	public void handleAuthenticationFailure() {
-     onProcessFail("Authentication Failed");
+	public void onAuthenticationFailure() {
+		 onProcessFail("Authentication Failed");
 	}
 
 
-	public void handleConnectionProblem() {
+	public void onConnectionProblem() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 				setProgressMsg("Connection Problem");
@@ -206,7 +207,7 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 		});
 	}
 
-	public void updateRequestProgress(int progress) {
+	public void updateProgress(int progress) {
 		// TODO Auto-generated method stub
 		
 	}

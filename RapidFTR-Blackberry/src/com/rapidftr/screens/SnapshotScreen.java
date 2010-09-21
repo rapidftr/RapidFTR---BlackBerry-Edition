@@ -26,6 +26,7 @@ import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
 
 import com.rapidftr.controllers.SnapshotController;
+import com.rapidftr.screens.internal.CustomScreen;
 
 public class SnapshotScreen extends CustomScreen {
 

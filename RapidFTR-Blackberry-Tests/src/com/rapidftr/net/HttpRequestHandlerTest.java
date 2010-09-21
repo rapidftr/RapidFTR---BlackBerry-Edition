@@ -20,11 +20,14 @@ public class HttpRequestHandlerTest {
 	@Mock
 	private RequestCallBack requestCallBack;
 	@Mock
+	private HttpService httpService;
+	@Mock
 	private Object context;
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		requestHandler = new HttpRequestHandler(requestCallBack);
+		requestHandler = new HttpRequestHandler(httpService);
+		requestHandler.setRequestCallBack(requestCallBack);
 	}
 
 //
@@ -43,9 +46,8 @@ public class HttpRequestHandlerTest {
 			throws Exception {
 		Response response = mock(Response.class);
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_UNAUTHORIZED);
-		requestHandler.setRequestInProgress();
 		requestHandler.done(context, response);
-		verify(requestCallBack).handleUnauthorized();
+		verify(requestCallBack).onAuthenticationFailure();
 	}
 
 	@Test
@@ -53,9 +55,8 @@ public class HttpRequestHandlerTest {
 			throws Exception {
 		Response response = mock(Response.class);
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_CLIENT_TIMEOUT);
-		requestHandler.setRequestInProgress();
-		requestHandler.done(context, response);
-		verify(requestCallBack).handleConnectionProblem();
+    	requestHandler.done(context, response);
+		verify(requestCallBack).onConnectionProblem();
 	}
 
 	@Test
@@ -63,9 +64,8 @@ public class HttpRequestHandlerTest {
 			throws Exception {
 		Response response = mock(Response.class);
 		when(response.getException()).thenReturn(new Exception());
-		requestHandler.setRequestInProgress();
 		requestHandler.done(context, response);
-		verify(requestCallBack).handleException(response.getException());
+		verify(requestCallBack).onRequestException(context,response.getException());
 
 	}
 

@@ -15,53 +15,42 @@ public class RequestCallBackImpl implements RequestCallBack {
 
 	}
 
-	public void handleConnectionProblem() {
+	public void onConnectionProblem() {
 		if (ifScreenCallbackExists()) {
-			screenCallback.handleConnectionProblem();
+			screenCallback.onConnectionProblem();
 		}
 	}
 
-	public void handleException(Exception exception) {
+
+	public void onAuthenticationFailure() {
 		if (ifScreenCallbackExists()) {
-			serviceCallback.onRequestFailure(exception);
+			screenCallback.onAuthenticationFailure();
 		}
 	}
 
-	public void handleUnauthorized() {
-		if (ifScreenCallbackExists()) {
-			screenCallback.handleAuthenticationFailure();
-		}
-	}
-
-	public void onSuccess(Object context, Response result) {
+	public void onRequestComplete(Object context, Response result) {
 		if (ifServiceCallbackExists()) {
 			serviceCallback.onRequestSuccess(context, result);
 		}
 	}
 
-	public void writeProgress(Object context, int bytes, int total) {
-		// TODO Auto-generated method stub
 
-	}
-
-	public void updateRequestProgress(int size) {
-		if (ifScreenCallbackExists()) {
-			screenCallback.updateRequestProgress(size);
-		}
-	}
 
 	public void onProcessComplete() {
 		if (ifScreenCallbackExists()) {
 			screenCallback.onProcessComplete();
 		}
 		if (ifControllerCallbackExists()) {
-			controllerCallback.afterProcessComplete();
+			controllerCallback.onProcessComplete();
 		}
 	}
 
 	public void onProcessFail(String failureMessage) {
 		if (ifScreenCallbackExists()) {
 			screenCallback.onProcessFail(failureMessage);
+		}
+		if (ifControllerCallbackExists()) {
+			controllerCallback.onProcessComplete();
 		}
 	}
 
@@ -92,6 +81,18 @@ public class RequestCallBackImpl implements RequestCallBack {
 	public void updateProgressMessage(String msg) {
 		screenCallback.setProgressMessage(msg);
 		
+	}
+
+	public void onRequestException(Object context, Exception exception) {
+		if (ifScreenCallbackExists()) {
+			serviceCallback.onRequestFailure(context,exception);
+		}
+	}
+
+	public void updateRequestProgress(int finished, int totalRequests) {
+		if (ifScreenCallbackExists()) {
+			screenCallback.updateProgress((int) (((double) finished) / totalRequests * 100));
+		}
 	}
 
 }

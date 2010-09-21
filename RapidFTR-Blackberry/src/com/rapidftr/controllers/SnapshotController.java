@@ -3,8 +3,9 @@ package com.rapidftr.controllers;
 
 import net.rim.device.api.system.EncodedImage;
 
+import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.screens.SnapshotScreen;
-import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.utilities.ImageCaptureListener;
 
 public class SnapshotController extends Controller {

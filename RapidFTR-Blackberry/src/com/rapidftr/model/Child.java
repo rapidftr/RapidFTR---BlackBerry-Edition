@@ -22,10 +22,13 @@ public class Child implements Persistable {
 	private final Hashtable data;
 	private final Hashtable changedFields;
 
+	private ChildStatus childStatus;
+
 	public Child() {
 		changedFields = new Hashtable();
 		data = new Hashtable();
 		data.put("_id", RandomStringGenerator.generate(32));
+		childStatus = ChildStatus.NEW;
 	}
 
 	public String toFormatedString() {
@@ -52,9 +55,11 @@ public class Child implements Persistable {
 		while (keyList.hasMoreElements()) {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
-			if (key.equals("current_photo_key") && value != null && !value.equals("")) {
+			if (key.equals("current_photo_key") && value != null
+					&& !value.equals("")) {
 				Arg[] headers = new Arg[2];
-				headers[0] = new Arg("Content-Disposition", "form-data; name=\"child[" + "photo" + "]\"");
+				headers[0] = new Arg("Content-Disposition",
+						"form-data; name=\"child[" + "photo" + "]\"");
 				headers[1] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
 				byte[] imageData = FileUtility.getByteArray(value.toString());
 				Part part = new Part(imageData, headers);
@@ -62,7 +67,8 @@ public class Child implements Persistable {
 				continue;
 			}
 			Arg[] headers = new Arg[1];
-			headers[0] = new Arg("Content-Disposition", "form-data; name=\"child[" + key + "]\"");
+			headers[0] = new Arg("Content-Disposition",
+					"form-data; name=\"child[" + key + "]\"");
 			Part part = new Part(value.toString().getBytes(), headers);
 			parts.addElement(part);
 		}
@@ -82,7 +88,8 @@ public class Child implements Persistable {
 	public void setField(String name, Object value) {
 		if (!isNewChild()) {
 			Object oldValue = getField(name);
-			if (oldValue != null && !oldValue.equals(value) && !name.equals("_id")) {
+			if (oldValue != null && !oldValue.equals(value)
+					&& !name.equals("_id")) {
 				changedFields.put(name, value);
 			}
 		}
@@ -101,7 +108,8 @@ public class Child implements Persistable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((data == null) ? 0 : data.get("_id").hashCode());
+		result = prime * result
+				+ ((data == null) ? 0 : data.get("_id").hashCode());
 		return result;
 	}
 
@@ -117,9 +125,13 @@ public class Child implements Persistable {
 			if (other.data != null)
 				return false;
 		} else {
-			if (data.get("_id") != null && other.data.get("_id") != null && data.get("_id").equals((other.data.get("_id"))))
+			if (data.get("_id") != null && other.data.get("_id") != null
+					&& data.get("_id").equals((other.data.get("_id"))))
 				return true;
-			if (data.get("unique_identifier") != null && other.data.get("unique_identifier") != null && data.get("unique_identifier").equals((other.data.get("unique_identifier"))))
+			if (data.get("unique_identifier") != null
+					&& other.data.get("unique_identifier") != null
+					&& data.get("unique_identifier").equals(
+							(other.data.get("unique_identifier"))))
 				return true;
 		}
 
@@ -144,7 +156,8 @@ public class Child implements Persistable {
 			if (nextElement != null) {
 				Form form = (Form) nextElement;
 				System.out.println(form.FORM_NAME);
-				for (Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();) {
+				for (Enumeration fields = form.getFieldList().elements(); fields
+						.hasMoreElements();) {
 
 					Object nextFormfieldElement = fields.nextElement();
 					if (nextFormfieldElement != null) {
@@ -158,11 +171,16 @@ public class Child implements Persistable {
 				}
 			}
 		}
+
 		return child;
 	}
 
 	public void update(String userName, Vector forms) {
 		updateChildDetails(this, forms);
+		if (isUpdated()) {
+			childStatus = ChildStatus.UPDATED;
+
+		}
 		// try {
 		// JSONArray histories = getField("histories") != null ? new JSONArray(
 		// getField("histories").toString())
@@ -213,15 +231,23 @@ public class Child implements Persistable {
 					JSONObject changes = history.getJSONObject("changes");
 					Enumeration changedFields = changes.keys();
 					while (changedFields.hasMoreElements()) {
-						String changedFieldName = (String) changedFields.nextElement();
-						JSONObject changedFieldObject = changes.getJSONObject(changedFieldName);
+						String changedFieldName = (String) changedFields
+								.nextElement();
+						JSONObject changedFieldObject = changes
+								.getJSONObject(changedFieldName);
 						String changeDateTime = history.getString("datetime");
 						String oldValue = changedFieldObject.getString("from");
 						String newalue = changedFieldObject.getString("to");
 						if (oldValue.equals("")) {
-							historyLogs.addElement(changeDateTime + " " + changedFieldName + " intialized to " + newalue + " By " + history.getString("user_name"));
+							historyLogs.addElement(changeDateTime + " "
+									+ changedFieldName + " intialized to "
+									+ newalue + " By "
+									+ history.getString("user_name"));
 						} else {
-							historyLogs.addElement(changeDateTime + " " + changedFieldName + " changed from " + oldValue + " to " + newalue + " By " + history.getString("user_name"));
+							historyLogs.addElement(changeDateTime + " "
+									+ changedFieldName + " changed from "
+									+ oldValue + " to " + newalue + " By "
+									+ history.getString("user_name"));
 
 						}
 					}
@@ -229,7 +255,8 @@ public class Child implements Persistable {
 				}
 			}
 		} catch (JSONException e) {
-			throw new RuntimeException("Invalid  History Format" + e.getMessage());
+			throw new RuntimeException("Invalid  History Format"
+					+ e.getMessage());
 		}
 
 		return historyLogs;
@@ -243,7 +270,23 @@ public class Child implements Persistable {
 		return changedFields.size() > 0;
 	}
 
-	public void clearEditHistory() {
-		changedFields.clear();
+	public ChildStatus childStatus() {
+		return childStatus;
 	}
+
+	public void syncSuccess() {
+		changedFields.clear();
+		childStatus = ChildStatus.SYNCED;
+	}
+
+	public void syncFailed(String message) {
+		ChildStatus status = ChildStatus.SYNC_FAILED;
+		status.setSyncError(message);
+		childStatus = status;
+	}
+
+	public boolean isSyncFailed() {
+		return childStatus==ChildStatus.SYNC_FAILED;
+	}
+
 }

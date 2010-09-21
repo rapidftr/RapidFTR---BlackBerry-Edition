@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import com.rapidftr.screens.SnapshotScreen;
-import com.rapidftr.screens.UiStack;
+import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.utilities.ImageCaptureListener;
 
 public class SnapshotControllerTest {
