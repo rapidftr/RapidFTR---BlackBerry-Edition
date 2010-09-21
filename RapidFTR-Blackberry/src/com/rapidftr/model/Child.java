@@ -179,7 +179,6 @@ public class Child implements Persistable {
 		updateChildDetails(this, forms);
 		if (isUpdated()) {
 			childStatus = ChildStatus.UPDATED;
-
 		}
 		// try {
 		// JSONArray histories = getField("histories") != null ? new JSONArray(

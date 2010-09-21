@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="lib/mockito-all-1.8.5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/net.rim.ejde.BlackBerryVMInstallType/BlackBerry JRE 4.6.1"/>
 	<classpathentry kind="lib" path="/RapidFTR-Blackberry/bin"/>
+	<classpathentry kind="lib" path="lib/net_rim_api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
