@@ -49,17 +49,28 @@ public class ViewChildScreen extends CustomScreen {
 
 	private void renderChildFields(Child child) {
 		//updateChildFieldsWithLatestForms(child);
+		int index = 0;
 		Hashtable data = child.getKeyMap();
+		
+		//render the picture
 		HorizontalFieldManager hmanager = new HorizontalFieldManager(Manager.HORIZONTAL_SCROLLBAR);
 		renderBitmap(data, hmanager);
 
 		hmanager.add(new BoldRichTextField("   " + data.get(new String("name"))));
 		add(hmanager);
-		//RichTextField richField[] = new RichTextField[data.size()];
-		int index = 0;
-
+		//add an empty line
+		add(new LabelField(""));
+		
+		//render the unique id
+		String uniqueIdentifier = (String)data.get("unique_identifier");
+		uniqueIdentifier = (null==uniqueIdentifier)?"":uniqueIdentifier;
+		
+		add(BoldRichTextField.getSemiBoldRichTextField("Unique Id" + " :", uniqueIdentifier ));
+		add(new SeparatorField());
+		
+		//render other fields
 		Vector forms = new FormStore().getForms();
-
+	
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			Form form = (Form) list.nextElement();
 			for (Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();) {
@@ -156,5 +167,17 @@ public class ViewChildScreen extends CustomScreen {
 		} catch (IllegalArgumentException ex) {
 			return null;
 		}
+	}
+	
+	private int claculateTotalElementsInForms(Vector forms)
+	{
+		int totalCount=0;
+		for(int i=0 ;i< forms.size();i++)
+		{
+			Form form = (Form)forms.elementAt(i);
+			totalCount= totalCount+ form.getFieldList().size();
+		}
+		
+		return totalCount;
 	}
 }

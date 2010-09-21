@@ -23,7 +23,7 @@ public class HomeScreen extends CustomScreen {
 
 	private void layoutScreen() {
 
-		Button newChildButton = new Button("New child");
+		Button newChildButton = new Button("Add New child");
 		newChildButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onNewChildClicked();

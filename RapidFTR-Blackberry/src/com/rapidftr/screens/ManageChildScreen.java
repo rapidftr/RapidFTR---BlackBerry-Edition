@@ -189,11 +189,12 @@ public class ManageChildScreen extends CustomScreen {
 
         MenuItem syncChildMenu = new MenuItem("Sync Record ", 2, 2) {
             public void run() {
-                controller.popScreen();
+            
                 if (!validateOnSave())
                     return;
                 ((ChildController) controller).syncChild(childToEdit);
                 childToEdit = null;
+                controller.popScreen();
             }
         };
 

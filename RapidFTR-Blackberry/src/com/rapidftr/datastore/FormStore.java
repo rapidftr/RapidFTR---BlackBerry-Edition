@@ -61,7 +61,8 @@ public class FormStore {
 												.getString(k));
 									}
 								} catch (JSONException ex) {
-									ex.printStackTrace();
+									//The JSON array does not contains "option_strings"
+									//ex.printStackTrace();
 								}
 				//	}
 
