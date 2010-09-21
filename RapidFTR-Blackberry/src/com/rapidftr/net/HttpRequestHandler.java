@@ -72,7 +72,11 @@ public class HttpRequestHandler implements RequestListener {
 	}
 
 	public void markProcessFailed() {
-		requestCallBack.onProcessFail();
+		requestCallBack.onProcessFail(null);
+	}
+	
+	public void markProcessFailed(String failureMessage) {
+		requestCallBack.onProcessFail(failureMessage);
 	}
 
 	public boolean isRequestInProgress() {

@@ -146,7 +146,7 @@ public class ChildSyncService extends RequestAwareService {
 				try {
 					downloadNewChildRecords();
 				} catch (IOException e) {
-					requestHandler.markProcessFailed();
+					requestHandler.markProcessFailed("Sync failed due to loss of network connectivity");
 				} catch (JSONException e) {
 					requestHandler.markProcessFailed();
 				} catch (Exception e) {
@@ -224,7 +224,7 @@ public class ChildSyncService extends RequestAwareService {
 	}
 
 	private Hashtable getOnlineStoredChildrenIdRevMapping()
-			throws ServiceException {
+			throws ServiceException, IOException {
 
 		Hashtable mapping = new Hashtable();
 
@@ -250,9 +250,7 @@ public class ChildSyncService extends RequestAwareService {
 			throw new ServiceException("JSON Data is invalid Problem");
 		} catch (ResultException e) {
 			throw new ServiceException("JSON Data is invalid Problem");
-		} catch (IOException e) {
-			throw new ServiceException("Connection Problem");
-		}
+		} 
 		return mapping;
 	}
 

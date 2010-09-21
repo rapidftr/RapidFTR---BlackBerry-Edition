@@ -10,7 +10,7 @@ public interface ScreenCallBack {
 
 	void onProcessComplete();
 
-	void onProcessFail();
+	void onProcessFail(String failureMessage);
 
 	void setProgressMessage(String message);
 }

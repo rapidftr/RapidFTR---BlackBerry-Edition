@@ -160,17 +160,24 @@ public class SyncChildScreen extends CustomScreen implements
 		});
 	}
 
-	public void onProcessFail() {
+	public void onProcessFail(final String failureMessage) {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-
+				
+				String msg = "Sync Failed.";
+				if(null!=failureMessage) 
+					msg=failureMessage;
+					
 				int result = Dialog.ask(Dialog.D_YES_NO,
-						"Sync Failed.\n Do you want to Retry?");
+						msg+"\n Do you want to Retry?");
 				uploadProgressBar.setValue(0);
+				uploadProgressBar.setLabel("Failed");
 
 				if (result == Dialog.YES) {
 					((SyncChildController) controller).syncAllChildRecords();
 					return;
+				} else if (result == Dialog.NO){
+					controller.popScreen();
 				}
 
 			//	controller.popScreen();

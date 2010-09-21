@@ -136,7 +136,7 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 	}
 
 	public void handleConnectionProblem() {
-		onProcessFail();
+		onProcessFail("Connection Problem");
 	}
 
 	public void updateRequestProgress(final int size) {
@@ -158,7 +158,7 @@ public class SynchronizeFormsScreen extends CustomScreen implements
 		});
 	}
 
-	public void onProcessFail() {
+	public void onProcessFail(String failureMessage) {
 
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {

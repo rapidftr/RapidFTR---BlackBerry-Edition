@@ -20,6 +20,6 @@ public interface RequestCallBack {
 
 	void onProcessComplete();
 
-	void onProcessFail();
+	void onProcessFail(String failureMessage);
 
 }

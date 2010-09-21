@@ -59,9 +59,9 @@ public class RequestCallBackImpl implements RequestCallBack {
 		}
 	}
 
-	public void onProcessFail() {
+	public void onProcessFail(String failureMessage) {
 		if (ifScreenCallbackExists()) {
-			screenCallback.onProcessFail();
+			screenCallback.onProcessFail(failureMessage);
 		}
 	}
 

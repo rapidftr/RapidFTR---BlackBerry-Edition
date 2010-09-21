@@ -270,9 +270,7 @@ public final class Request implements Runnable {
 
 			response.responseCode = conn.getResponseCode();
 			if (response.responseCode != HttpConnection.HTTP_OK) {
-				// TODO: TomE: check for exceptional status codes
-				// TODO: handle redirects
-				// return;
+				
 			}
 
 			if (interrupted) { return; }

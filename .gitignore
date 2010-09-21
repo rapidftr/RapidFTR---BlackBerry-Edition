@@ -14,3 +14,4 @@ bb-test/**
 release/**
 build.properties
 /*.zip
+.metadata/**
