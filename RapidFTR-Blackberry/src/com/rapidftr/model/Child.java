@@ -52,7 +52,7 @@ public class Child implements Persistable {
 				parts.addElement(multiPart(value,"photo",HttpUtility.HEADER_CONTENT_TYPE_IMAGE));
 				continue;
 			}
-			if(key.equals("current_audio_key")){
+			if(key.equals("recorded_audio")&&value==null){
 				parts.addElement(multiPart(value,"audio",HttpUtility.HEADER_CONTENT_TYPE_AUDIO));
 				continue;
 			}
