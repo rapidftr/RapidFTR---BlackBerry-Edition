@@ -2,15 +2,15 @@ package com.rapidftr.net;
 
 public interface ScreenCallBack {
 
-	void handleConnectionProblem();
+	void onConnectionProblem();
 
-	void handleAuthenticationFailure();
-
-	void updateRequestProgress(int progress);
+	void onAuthenticationFailure();
 
 	void onProcessComplete();
 
 	void onProcessFail();
+
+	void updateProgress(int progress);
 
 	void setProgressMessage(String message);
 }

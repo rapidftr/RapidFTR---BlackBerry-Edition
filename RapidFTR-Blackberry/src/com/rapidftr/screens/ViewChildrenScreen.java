@@ -6,9 +6,10 @@ import net.rim.device.api.ui.component.Menu;
 
 import net.rim.device.api.ui.component.SeparatorField;
 
-import com.rapidftr.controllers.ViewChildrenController;
+import com.rapidftr.controllers.ChildController;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildrenListField;
+import com.rapidftr.screens.internal.CustomScreen;
 
 public class ViewChildrenScreen extends CustomScreen {
 
@@ -28,12 +29,12 @@ public class ViewChildrenScreen extends CustomScreen {
 				if (this.getSelectedIndex() > 0) {
 					Object child = this.get(this, this.getSelectedIndex());
 					if (child instanceof Child) {
-						((ViewChildrenController) controller)
-								.showChild((Child) child);
+						((ChildController) controller)
+								.viewChild((Child) child);
 						return super.navigationClick(i, i1);
 					}
 				}
-					return false;
+				return false;
 			}
 
 		};
@@ -64,8 +65,9 @@ public class ViewChildrenScreen extends CustomScreen {
 			MenuItem editChildMenu = new MenuItem("Open Record", 1, 1) {
 				public void run() {
 					int selectedIndex = childrenListField.getSelectedIndex();
-					Child child = (Child) childrenListField.get(childrenListField, selectedIndex);
-					((ViewChildrenController) controller).viewChild(child);
+					Child child = (Child) childrenListField.get(
+							childrenListField, selectedIndex);
+					((ChildController) controller).viewChild(child);
 				}
 			};
 			menu.add(editChildMenu);

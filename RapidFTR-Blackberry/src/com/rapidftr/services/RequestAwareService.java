@@ -5,30 +5,27 @@ import com.rapidftr.net.HttpService;
 import com.rapidftr.net.ServiceCallback;
 
 public abstract class RequestAwareService implements ServiceCallback {
-	protected HttpService httpService;
+	//protected HttpService httpService;
 	HttpRequestHandler requestHandler;
 
 	RequestAwareService(HttpService httpService) {
-		this();
-		this.httpService = httpService;
-	}
-
-	RequestAwareService() {
 		RequestCallBackImpl requestCallBack = new RequestCallBackImpl();
 		requestCallBack.setServiceCallback(this);
-		requestHandler = new HttpRequestHandler(requestCallBack);
+		requestHandler = new HttpRequestHandler(httpService);
+		requestHandler.setRequestCallBack(requestCallBack);
 	}
+
 
 	public HttpRequestHandler getRequestHandler() {
 		return requestHandler;
 	}
 
 	public void cancelRequest() {
-		requestHandler.cancelRequestInProgress();
-		httpService.cancelRequest();
+		requestHandler.terminateProcess();
 	}
 
-	public void onRequestFailure(Exception exception) {
+	public void onRequestFailure(Object context,Exception exception) {
+		//TODO handle individual requests , like stale records etc
 		// requestHandler.markProcessFailed();
 	}
 

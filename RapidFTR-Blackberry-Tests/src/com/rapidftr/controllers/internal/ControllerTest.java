@@ -1,4 +1,4 @@
-package com.rapidftr.controllers;
+package com.rapidftr.controllers.internal;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,8 +6,9 @@ import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import com.rapidftr.screens.CustomScreen;
-import com.rapidftr.screens.UiStack;
+import com.rapidftr.controllers.internal.Controller;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.screens.internal.UiStack;
 
 public class ControllerTest {
 
@@ -26,6 +27,13 @@ public class ControllerTest {
 	@Test
 	public void shouldSetControllerOnScreenInstance() {
 		verify(screen).setController(controller);
+	}
+
+	@Test
+	public void shouldShowNewScreenOnChangeScreen() {
+		CustomScreen newScreen = mock(CustomScreen.class);
+		controller.changeScreen(newScreen);
+		verify(newScreen).setUp();
 	}
 
 	@Test

@@ -1,4 +1,6 @@
-package com.sun.me.web.request;
+package com.rapidftr.net;
+
+import com.sun.me.web.request.Request;
 
 public class RequestPool implements Runnable {
 	// a simple implementation of singleton
@@ -10,7 +12,7 @@ public class RequestPool implements Runnable {
 
 	WorkQueue requestQueue;
 
-	private RequestPool() {
+	public RequestPool() {
 		requestQueue = new WorkQueue();
 		new Thread(this).start();
 	}
@@ -21,7 +23,7 @@ public class RequestPool implements Runnable {
 
 	public void execute(Request request) {
 		synchronized (requestQueue) {
-			requestQueue.addRequest(request);
+			requestQueue.addRequest(new WorkerThread(request));
 			requestQueue.notify();
 		}
 	}
@@ -50,11 +52,30 @@ public class RequestPool implements Runnable {
 		synchronized (requestQueue) {
 			requestQueue.notify();
 		}
-	
+
 	}
-	
-	public void cancelAllRequests(){
-	   requestQueue.makeEmpty();
+
+	public void cancelAllRequests() {
+		requestQueue.cancelAllRequests();
+	}
+
+	private class WorkerThread implements Runnable {
+		Request request;
+
+		public WorkerThread(Request request) {
+			super();
+			this.request = request;
+		}
+
+		public void run() {
+			try {
+				request.run();
+			} finally {
+				decrementActiveThreadCount();
+			}
+
+		}
+
 	}
 
 }

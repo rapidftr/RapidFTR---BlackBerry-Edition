@@ -2,6 +2,9 @@ package com.rapidftr.services;
 
 import java.util.Vector;
 
+import net.rim.device.api.util.Arrays;
+import net.rim.device.api.util.Comparator;
+
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.SearchChildFilter;
@@ -20,9 +23,26 @@ public class ChildStoreService {
 			return new Child[0];
 		}
 		Child[] childList = new Child[children.size()];
-		children.copyInto(childList);
+		children.copyInto(childList);		
+        sortChildrenOnLocationThenName(childList);
 		return childList;
 	}
+
+	private void sortChildrenOnLocationThenName(Child[] childList) {
+		Arrays.sort(childList, new Comparator() {			
+			public int compare(Object o1, Object o2) {
+				Child child1 = (Child)o1;
+				Child child2 = (Child)o2;
+				int locationComparator = ((String) child1.getField("last_known_location")).compareTo((String) child2.getField("last_known_location"));
+				if (locationComparator == 0) {
+					return ((String) child1.getField("name")).compareTo((String) child2.getField("name"));
+				} else {
+				return locationComparator;
+				}
+			}
+		});
+	}
+	
 
 	public Child[] searchChildrenFromStore(SearchChildFilter searchChildFilter) {
 		Vector source = childRecordStore.getAllChildren();
@@ -65,8 +85,5 @@ public class ChildStoreService {
 		childRecordStore.addOrUpdateChild(child);
 	}
 
-	public void saveChildrenInLocalStore(Vector children){	
-		childRecordStore.storeChildren(children);		
-	}
 
 }

@@ -1,5 +1,11 @@
 package com.rapidftr.screens;
 
+import com.rapidftr.controllers.SyncController;
+import com.rapidftr.controls.Button;
+import com.rapidftr.net.ScreenCallBack;
+import com.rapidftr.process.Process;
+import com.rapidftr.screens.internal.CustomScreen;
+
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
@@ -11,46 +17,37 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.BorderFactory;
 
-import com.rapidftr.controllers.SyncChildController;
-import com.rapidftr.controls.Button;
-import com.rapidftr.net.ScreenCallBack;
+public class SyncScreen extends CustomScreen implements FieldChangeListener,
+		ScreenCallBack {
 
-public class SyncChildScreen extends CustomScreen implements
-		FieldChangeListener, ScreenCallBack {
+	// Model
+	Process process;
 
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
 	private Button okButton;
-
-	GaugeField uploadProgressBar;
-
+	private GaugeField downloadProgressBar;
 	private Manager hButtonManager;
 	private Button cancelButton;
-
-	public SyncChildScreen() {
+	LabelField labelField;
+	public SyncScreen() {
 		layoutScreen();
 	}
 
 	private void layoutScreen() {
 		try {
-			LabelField labelField = new LabelField("Syncing Child Records");
+			labelField = new LabelField("Syncinging ...");
 			Manager hManager = new HorizontalFieldManager(FIELD_HCENTER);
 			hManager.add(labelField);
 			hManager.setPadding(PADDING);
-
 			add(hManager);
-
 			Manager hGaugeManager = new HorizontalFieldManager(FIELD_HCENTER);
-
-			uploadProgressBar = new GaugeField("", 0, 100, 0,
+			downloadProgressBar = new GaugeField("", 0, 100, 0,
 					GaugeField.LABEL_AS_PROGRESS);
-
-			uploadProgressBar.setBorder(BorderFactory
+			downloadProgressBar.setBorder(BorderFactory
 					.createSimpleBorder(new XYEdges(1, 1, 1, 1)));
-
-			hGaugeManager.add(uploadProgressBar);
+			hGaugeManager.add(downloadProgressBar);
 			hGaugeManager.setPadding(PADDING);
 			add(hGaugeManager);
-
 			hButtonManager = new HorizontalFieldManager(FIELD_HCENTER);
 			add(hButtonManager);
 			hButtonManager.setPadding(PADDING);
@@ -66,15 +63,15 @@ public class SyncChildScreen extends CustomScreen implements
 	}
 
 	public void resetProgressBar() {
-		uploadProgressBar.setLabel("Syncing ..");
-		uploadProgressBar.setValue(0);
+		downloadProgressBar.setLabel(process.name() + " ...");
+		downloadProgressBar.setValue(0);
 		hButtonManager.deleteAll();
 		hButtonManager.add(cancelButton);
-
 	}
 
 	public void setUp() {
-
+        labelField.setText(process.name());
+		resetProgressBar();
 	}
 
 	public void fieldChanged(Field field, int context) {
@@ -85,12 +82,10 @@ public class SyncChildScreen extends CustomScreen implements
 		}
 		if (field.equals(cancelButton)) {
 			int result = Dialog.ask(Dialog.D_YES_NO,
-					"Are you sure want to cacel Sync?");
-			//uploadProgressBar.setValue(0);
-
+					"Are you sure want to cancel " + process.name() + "?");
+			resetProgressBar();
 			if (result == Dialog.YES) {
-				uploadProgressBar.setValue(0);
-				((SyncChildController) controller).cancelUpload();
+				process.stopProcess();
 				controller.popScreen();
 				return;
 			}
@@ -99,8 +94,25 @@ public class SyncChildScreen extends CustomScreen implements
 
 	}
 
+	public void onAuthenticationFailure() {
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+
+				int result = Dialog.ask(Dialog.D_OK_CANCEL,
+						"You are not logged in.\n Press ok to  login");
+				downloadProgressBar.setValue(0);
+				//controller.popScreen();
+				if (result == Dialog.OK) {
+					((SyncController) controller).login();
+					return;
+				}
+			}
+		});
+
+	}
+
 	public void cleanUp() {
-		((SyncChildController) controller).cancelUpload();
+		process.stopProcess();
 	}
 
 	public boolean onClose() {
@@ -108,52 +120,23 @@ public class SyncChildScreen extends CustomScreen implements
 		return super.onClose();
 	}
 
-	public void handleAuthenticationFailure() {
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-
-				int result = Dialog.ask(Dialog.D_OK_CANCEL,
-						"You are not logged in.\n Press ok to  login");
-				uploadProgressBar.setValue(0);
-
-				controller.popScreen();
-
-				if (result == Dialog.OK) {
-					((SyncChildController) controller).login();
-					return;
-				}
-
-			}
-		});
-
+	public void onConnectionProblem() {
+		onProcessFail();
 	}
 
-	public void handleConnectionProblem() {
+	public void updateProgress(final int size) {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-				Dialog
-						.alert("Connection Error.\n Please Check your Internet Connectivity?");
-				controller.popScreen();
-
+				downloadProgressBar.setValue(size);
 			}
 		});
-
-	}
-
-	public void updateRequestProgress(final int progress) {
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-				uploadProgressBar.setValue(progress);
-			}
-		});
-
 	}
 
 	public void onProcessComplete() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-				uploadProgressBar.setLabel("Complete");
-				uploadProgressBar.setValue(100);
+				downloadProgressBar.setLabel("Complete");
+				downloadProgressBar.setValue(100);
 				hButtonManager.deleteAll();
 				hButtonManager.add(okButton);
 			}
@@ -163,25 +146,37 @@ public class SyncChildScreen extends CustomScreen implements
 	public void onProcessFail() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-
-				int result = Dialog.ask(Dialog.D_YES_NO,
-						"Sync Failed.\n Do you want to Retry?");
-				uploadProgressBar.setValue(0);
-
+				int result = Dialog.ask(Dialog.D_YES_NO, process.name()
+						+ " Failed.\n Do you want to Retry?");
+				downloadProgressBar.setValue(0);
 				if (result == Dialog.YES) {
-					((SyncChildController) controller).syncAllChildRecords();
+					process.startProcess();
 					return;
 				}
-
-			//	controller.popScreen();
-
+				controller.popScreen();
 			}
 		});
-
 	}
 
 	public void setProgressMessage(String message) {
-		uploadProgressBar.setLabel(message);
+		downloadProgressBar.setLabel(message);
+	}
+
+	public void setProcess(Process process) {
+		this.process = process;
+	}
+
+	public void showRunninngProcessAlert() {
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				int result = Dialog.ask(Dialog.D_YES_NO,"other process ["+ process.name()
+						+ "] is Still Runing .\n Do you want to Stop it?");
+				if (result == Dialog.YES) {
+					process.stopProcess();
+					return;
+				}
+			}
+		});	
 	}
 
 }

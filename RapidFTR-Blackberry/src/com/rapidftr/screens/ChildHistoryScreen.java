@@ -9,10 +9,11 @@ import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.Dialog;
 
 import com.rapidftr.model.Child;
+import com.rapidftr.screens.internal.CustomScreen;
 
-public class ChildChangeLogScreen extends CustomScreen {
+public class ChildHistoryScreen extends CustomScreen {
 
-	public ChildChangeLogScreen(Child child) {
+	public ChildHistoryScreen(Child child) {
 		if(child != null)
 		{	Vector history = child.getHistory();
 			if (history==null || history.size() == 0) {

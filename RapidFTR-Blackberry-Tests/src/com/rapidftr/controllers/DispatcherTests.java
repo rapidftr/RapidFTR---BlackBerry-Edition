@@ -1,39 +1,35 @@
 package com.rapidftr.controllers;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mock;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import com.rapidftr.model.Child;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import com.rapidftr.controllers.internal.Dispatcher;
 
 public class DispatcherTests {
 
-	private HomeScreenController homeScreenController;
-	private LoginController loginController;
-	private ViewChildrenController viewChildrenController;
-	private ViewChildController viewChildController;
-	private SynchronizeFormsController synchronizeFormsController;
 	private Dispatcher dispatcher;
-	private ManageChildController newChildController;
-	private SyncChildController uploadChildRecordsController;
-	private SearchChildController searchChildController;
+
+	@Mock
+	private HomeScreenController homeScreenController;
+	@Mock
+	private LoginController loginController;
+	@Mock
+	private ChildController childController;
+	@Mock
+	private SyncController syncController;
+	@Mock
+	private ResetDeviceController resetDeviceController;
 
 	@Before
 	public void setUp() {
-		homeScreenController = mock(HomeScreenController.class);
-		loginController = mock(LoginController.class);
-		viewChildrenController = mock(ViewChildrenController.class);
-		viewChildController = mock(ViewChildController.class);
-		synchronizeFormsController = mock(SynchronizeFormsController.class);
-		newChildController = mock(ManageChildController.class);
-		uploadChildRecordsController = mock(SyncChildController.class);
-		searchChildController = mock(SearchChildController.class);
+		MockitoAnnotations.initMocks(this);
 		dispatcher = new Dispatcher(homeScreenController, loginController,
-				viewChildrenController, viewChildController,
-				synchronizeFormsController, newChildController,
-				uploadChildRecordsController, searchChildController);
+				childController, syncController, resetDeviceController);
 
 	}
 
@@ -46,27 +42,27 @@ public class DispatcherTests {
 
 	@Test
 	public void shouldShowLoginScreen() {
-		dispatcher.login();
-		verify(loginController).show();
+		com.rapidftr.process.Process process = mock(com.rapidftr.process.Process.class);
+		dispatcher.login(process);
+		verify(loginController).showLoginScreen(process);
 	}
 
 	@Test
 	public void shouldShowViewChildernScreen() {
 		dispatcher.viewChildren();
-		verify(viewChildrenController).show();
-	}
-
-	@Test
-	public void shouldShowViewChildScreen() {
-		Child child = mock(Child.class);
-		dispatcher.viewChild(child);
-		verify(viewChildController).show(child);
+		verify(childController).viewChildren();
 	}
 
 	@Test
 	public void shouldShowNewChildScreen() {
 		dispatcher.newChild();
-		verify(newChildController).show();
+		verify(childController).newChild();
 	}
 
+	
+	@Test
+	public void shouldResetDevice() {
+		dispatcher.resetDevice();
+		verify(resetDeviceController).resetDevice();
+	}
 }

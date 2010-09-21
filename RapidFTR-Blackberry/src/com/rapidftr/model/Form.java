@@ -103,14 +103,6 @@ public class Form {
 		return id;
 	}
 
-	public Hashtable getDetails() {
-		Hashtable data = new Hashtable();
-		data.put(Form.FORM_NAME, name);
-		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
-			FormField field = (FormField) list.nextElement();
-			data.put(field.name, field.getValue());
-		}
-		return data;
-	}
+	
 
 }
