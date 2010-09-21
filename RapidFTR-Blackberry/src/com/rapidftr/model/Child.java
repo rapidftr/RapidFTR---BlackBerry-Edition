@@ -49,11 +49,15 @@ public class Child implements Persistable {
 			Object value = data.get(key);
 
 			if (key.equals("current_photo_key")) {
-				parts.addElement(multiPart(value,"photo",HttpUtility.HEADER_CONTENT_TYPE_IMAGE));
+				parts.addElement(multiPart(value, "photo",
+						HttpUtility.HEADER_CONTENT_TYPE_IMAGE));
 				continue;
 			}
-			if(key.equals("recorded_audio")&&value==null){
-				parts.addElement(multiPart(value,"audio",HttpUtility.HEADER_CONTENT_TYPE_AUDIO));
+			if (key.equals("recorded_audio")) {
+				if (value != null) {
+					parts.addElement(multiPart(value, "audio",
+							HttpUtility.HEADER_CONTENT_TYPE_AUDIO));
+				}
 				continue;
 			}
 
@@ -72,11 +76,10 @@ public class Child implements Persistable {
 		return anArray;
 	}
 
-
 	private Part multiPart(Object value, String paramName, Arg headerContentType) {
 		Arg[] headers = new Arg[2];
-		headers[0] = new Arg("Content-Disposition",
-				"form-data; name=\"child[" + paramName + "]\"");
+		headers[0] = new Arg("Content-Disposition", "form-data; name=\"child["
+				+ paramName + "]\"");
 		headers[1] = headerContentType;
 		byte[] imageData = FileUtility.getByteArray(value.toString());
 		return new Part(imageData, headers);
