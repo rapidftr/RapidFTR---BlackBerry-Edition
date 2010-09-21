@@ -23,7 +23,7 @@ public class LoginController extends RequestAwareController {
 		service.cancelRequest();
 	}
 
-	public void afterProcessComplete() {
+	public void onProcessComplete() {
 		popScreen();
 		if(callingProcess!=null){
 			callingProcess.startProcess();

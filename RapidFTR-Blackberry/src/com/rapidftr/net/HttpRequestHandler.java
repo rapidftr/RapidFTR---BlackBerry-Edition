@@ -45,7 +45,7 @@ public class HttpRequestHandler implements RequestListener {
 		if (isValidResponse(response)) {
 			return response;
 		} else {
-			handleResponseErrors(response);
+			handleResponseErrors(null,response);
 			return null;
 		}
 	}
@@ -56,14 +56,16 @@ public class HttpRequestHandler implements RequestListener {
 						.getCode() == HttpConnection.HTTP_CREATED);
 	}
 
-	public void handleResponseErrors(Response response) {
+	public void handleResponseErrors(Object context, Response response) {
 		if (response.getException() != null) {
-			requestCallBack.handleException(response.getException());
+			requestCallBack.onRequestException(context,response.getException());
 		} else if (response.getCode() == HttpConnection.HTTP_UNAUTHORIZED) {
-			requestCallBack.handleUnauthorized();
+			requestCallBack.onAuthenticationFailure();
+			terminateProcess();
 		} else if (response.getCode() != HttpConnection.HTTP_OK
 				&& response.getCode() != HttpConnection.HTTP_CREATED) {
-			requestCallBack.handleConnectionProblem();
+			requestCallBack.onConnectionProblem();
+			terminateProcess();
 		}
 	}
 
@@ -72,14 +74,9 @@ public class HttpRequestHandler implements RequestListener {
 	}
 
 	public void writeProgress(Object context, int bytes, int total) {
-		requestCallBack.writeProgress(context, bytes, total);
-
+		//requestCallBack.writeProgress(context, bytes, total);
 	}
 
-	public void updateRequestProgress(int bytes, int total) {
-		double size = ((double) bytes) / total;
-		requestCallBack.updateRequestProgress((int) (size * 100));
-	}
 
 	public void markProcessComplete() {
 		unprocessedRequests=totalRequests=0;
@@ -90,7 +87,7 @@ public class HttpRequestHandler implements RequestListener {
 		requestCallBack.onProcessFail();
 	}
 
-	public void cancelRequestInProgress() {
+	public void terminateProcess() {
 		service.cancelRequest();
 		unprocessedRequests = totalRequests = 0;
 	}
@@ -117,12 +114,12 @@ public class HttpRequestHandler implements RequestListener {
 		if (unprocessedRequests > 0) {
 			unprocessedRequests--;
 		}
-		updateRequestProgress(totalRequests - unprocessedRequests, totalRequests);
+		requestCallBack.updateRequestProgress(totalRequests - unprocessedRequests, totalRequests);
 
 		if (isValidResponse(response)) {
-			requestCallBack.onSuccess(context, response);
+			requestCallBack.onRequestComplete(context, response);
 		} else {
-			handleResponseErrors(response);
+			handleResponseErrors(context,response);
 		}
 
 		checkAndMarkProcessComplete();

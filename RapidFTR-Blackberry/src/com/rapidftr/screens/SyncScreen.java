@@ -67,7 +67,6 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		downloadProgressBar.setValue(0);
 		hButtonManager.deleteAll();
 		hButtonManager.add(cancelButton);
-
 	}
 
 	public void setUp() {

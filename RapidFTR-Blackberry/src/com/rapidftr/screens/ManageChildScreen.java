@@ -197,6 +197,16 @@ public class ManageChildScreen extends CustomScreen {
             }
         };
 
+        if(childToEdit!=null && childToEdit.isSyncFailed()){
+        	 MenuItem syncFailesErrorMenu = new MenuItem("Sync Error ", 2, 2) {
+                 public void run() {
+                     Dialog.alert(childToEdit.childStatus().getSyncError());
+                     
+                 }
+             };
+
+        }
+        
         MenuItem CloseMenu = new MenuItem("Close", 3, 1) {
             public void run() {
                 onClose();

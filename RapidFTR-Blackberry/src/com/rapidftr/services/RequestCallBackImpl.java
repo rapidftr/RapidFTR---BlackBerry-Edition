@@ -15,47 +15,33 @@ public class RequestCallBackImpl implements RequestCallBack {
 
 	}
 
-	public void handleConnectionProblem() {
+	public void onConnectionProblem() {
 		if (ifScreenCallbackExists()) {
 			screenCallback.onConnectionProblem();
 		}
 	}
 
-	public void handleException(Exception exception) {
-		if (ifScreenCallbackExists()) {
-			serviceCallback.onRequestFailure(exception);
-		}
-	}
 
-	public void handleUnauthorized() {
+	public void onAuthenticationFailure() {
 		if (ifScreenCallbackExists()) {
 			screenCallback.onAuthenticationFailure();
 		}
 	}
 
-	public void onSuccess(Object context, Response result) {
+	public void onRequestComplete(Object context, Response result) {
 		if (ifServiceCallbackExists()) {
 			serviceCallback.onRequestSuccess(context, result);
 		}
 	}
 
-	public void writeProgress(Object context, int bytes, int total) {
-		// TODO Auto-generated method stub
 
-	}
-
-	public void updateRequestProgress(int size) {
-		if (ifScreenCallbackExists()) {
-			screenCallback.updateProgress(size);
-		}
-	}
 
 	public void onProcessComplete() {
 		if (ifScreenCallbackExists()) {
 			screenCallback.onProcessComplete();
 		}
 		if (ifControllerCallbackExists()) {
-			controllerCallback.afterProcessComplete();
+			controllerCallback.onProcessComplete();
 		}
 	}
 
@@ -64,7 +50,7 @@ public class RequestCallBackImpl implements RequestCallBack {
 			screenCallback.onProcessFail();
 		}
 		if (ifControllerCallbackExists()) {
-			controllerCallback.afterProcessComplete();
+			controllerCallback.onProcessComplete();
 		}
 	}
 
@@ -95,6 +81,18 @@ public class RequestCallBackImpl implements RequestCallBack {
 	public void updateProgressMessage(String msg) {
 		screenCallback.setProgressMessage(msg);
 		
+	}
+
+	public void onRequestException(Object context, Exception exception) {
+		if (ifScreenCallbackExists()) {
+			serviceCallback.onRequestFailure(context,exception);
+		}
+	}
+
+	public void updateRequestProgress(int finished, int totalRequests) {
+		if (ifScreenCallbackExists()) {
+			screenCallback.updateProgress((int) (((double) finished) / totalRequests * 100));
+		}
 	}
 
 }

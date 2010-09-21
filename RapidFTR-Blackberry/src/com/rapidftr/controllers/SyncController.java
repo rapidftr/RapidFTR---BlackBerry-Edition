@@ -79,19 +79,14 @@ public class SyncController extends Controller implements ControllerCallback {
 
 	}
 
-	public void afterProcessComplete() {
+	public void onProcessComplete() {
 		previousProcess = currentProcess;
 		currentProcess = null;
 	}
 
 	public void login() {
 		dispatcher.login(previousProcess);
-		requestHandler.cancelRequestInProgress();
-	}
-
-	public void beforeProcessStart() {
-		// TODO Auto-generated method stub
-
+		requestHandler.terminateProcess();
 	}
 
 }

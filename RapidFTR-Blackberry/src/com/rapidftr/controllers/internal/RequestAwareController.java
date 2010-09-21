@@ -24,13 +24,9 @@ public class RequestAwareController extends Controller implements ControllerCall
 		screenCallBack = (ScreenCallBack) screen;
 	}
 	
-	public void afterProcessComplete() {
+	public void onProcessComplete() {
 		//screenCallBack.onProcessComplete();
 	}
-	public void beforeProcessStart() {
-	//dummy implementation : child class may override 
-	}
-
 
 	public ScreenCallBack getScreenCallBack() {
 		return screenCallBack;

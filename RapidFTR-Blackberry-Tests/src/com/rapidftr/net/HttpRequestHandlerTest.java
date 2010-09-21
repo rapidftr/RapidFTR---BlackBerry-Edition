@@ -47,7 +47,7 @@ public class HttpRequestHandlerTest {
 		Response response = mock(Response.class);
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_UNAUTHORIZED);
 		requestHandler.done(context, response);
-		verify(requestCallBack).handleUnauthorized();
+		verify(requestCallBack).onAuthenticationFailure();
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class HttpRequestHandlerTest {
 		Response response = mock(Response.class);
 		when(response.getCode()).thenReturn(HttpConnection.HTTP_CLIENT_TIMEOUT);
     	requestHandler.done(context, response);
-		verify(requestCallBack).handleConnectionProblem();
+		verify(requestCallBack).onConnectionProblem();
 	}
 
 	@Test
@@ -65,7 +65,7 @@ public class HttpRequestHandlerTest {
 		Response response = mock(Response.class);
 		when(response.getException()).thenReturn(new Exception());
 		requestHandler.done(context, response);
-		verify(requestCallBack).handleException(response.getException());
+		verify(requestCallBack).onRequestException(context,response.getException());
 
 	}
 

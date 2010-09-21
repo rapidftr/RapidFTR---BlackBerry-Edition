@@ -71,66 +71,6 @@ public class ChildSyncService extends RequestAwareService {
 		uploadChildren(childrenList);
 	}
 
-	public void onRequestSuccess(Object context, Response result) {
-		requestHandler.getRequestCallBack().updateProgressMessage(
-				((Hashtable) context).get(PROCESS_STATE).toString());
-		// sync child with local store
-		Child child = new Child();
-		try {
-			JSONObject jsonChild = new JSONObject(result.getResult().toString());
-			HttpServer.printResponse(result);
-			JSONArray fieldNames = jsonChild.names();
-			for (int j = 0; j < fieldNames.length(); j++) {
-				String fieldName = fieldNames.get(j).toString();
-				String fieldValue = jsonChild.getString(fieldName);
-				child.setField(fieldName, fieldValue);
-			}
-
-			try {
-				Arg[] httpArgs = new Arg[1];
-				httpArgs[0] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
-				Response response = requestHandler.get("children/"
-						+ child.getField("_id") + "/thumbnail", null, httpArgs);
-				byte[] data = response.getResult().getData();
-
-				String storePath = "";
-				try {
-					String sdCardPath = "file:///SDCard/Blackberry";
-					FileConnection fc = (FileConnection) Connector
-							.open(sdCardPath);
-					if (fc.exists())
-						storePath = sdCardPath;
-					else
-						storePath = FILE_STORE_HOME_USER;
-				} catch (IOException ex) {
-					storePath = FILE_STORE_HOME_USER;
-				}
-
-				String imagePath = storePath + "/pictures/"
-						+ (String) child.getField("current_photo_key") + ".jpg";
-				FileConnection fc = (FileConnection) Connector.open(imagePath);
-				if (!fc.exists()) {
-					fc.create(); // create the file if it doesn't exist
-				}
-				fc.setWritable(true);
-				OutputStream outStream = fc.openOutputStream();
-				outStream.write(data);
-				outStream.close();
-				fc.close();
-
-				child.setField("current_photo_key", imagePath);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			child.clearEditHistory();
-			childRecordStore.addOrUpdateChild(child);
-		} catch (JSONException e) {
-			// SumitG TODO to handle this by maintaining error queue
-			e.printStackTrace();
-		}
-
-	}
 
 	public void syncAllChildRecords() throws ServiceException {
 		new Thread() {
@@ -240,6 +180,75 @@ public class ChildSyncService extends RequestAwareService {
 	public void clearState() {
 		childRecordStore.deleteAllChildren();
 
+	}
+	
+	public void onRequestSuccess(Object context, Response result) {
+		requestHandler.getRequestCallBack().updateProgressMessage(
+				((Hashtable) context).get(PROCESS_STATE).toString());
+		// sync child with local store
+		Child child = new Child();
+		try {
+			JSONObject jsonChild = new JSONObject(result.getResult().toString());
+			HttpServer.printResponse(result);
+			JSONArray fieldNames = jsonChild.names();
+			for (int j = 0; j < fieldNames.length(); j++) {
+				String fieldName = fieldNames.get(j).toString();
+				String fieldValue = jsonChild.getString(fieldName);
+				child.setField(fieldName, fieldValue);
+			}
+			updateChildPhoto(child);
+			child.syncSuccess();
+			childRecordStore.addOrUpdateChild(child);
+		} catch (JSONException e) {
+            child.syncFailed(e.getMessage());
+		}
+
+	}
+
+	private void updateChildPhoto(Child child) {
+		try {
+			Arg[] httpArgs = new Arg[1];
+			httpArgs[0] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
+			Response response = requestHandler.get("children/"
+					+ child.getField("_id") + "/thumbnail", null, httpArgs);
+			byte[] data = response.getResult().getData();
+
+			String storePath = "";
+			try {
+				String sdCardPath = "file:///SDCard/Blackberry";
+				FileConnection fc = (FileConnection) Connector
+						.open(sdCardPath);
+				if (fc.exists())
+					storePath = sdCardPath;
+				else
+					storePath = FILE_STORE_HOME_USER;
+			} catch (IOException ex) {
+				storePath = FILE_STORE_HOME_USER;
+			}
+
+			String imagePath = storePath + "/pictures/"
+					+ (String) child.getField("current_photo_key") + ".jpg";
+			FileConnection fc = (FileConnection) Connector.open(imagePath);
+			if (!fc.exists()) {
+				fc.create(); // create the file if it doesn't exist
+			}
+			fc.setWritable(true);
+			OutputStream outStream = fc.openOutputStream();
+			outStream.write(data);
+			outStream.close();
+			fc.close();
+
+			child.setField("current_photo_key", imagePath);
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	
+	public void onRequestFailure(Object context,Exception exception) {
+		//TODO handle individual requests , like stale records etc
+		// requestHandler.markProcessFailed();
 	}
 
 }
