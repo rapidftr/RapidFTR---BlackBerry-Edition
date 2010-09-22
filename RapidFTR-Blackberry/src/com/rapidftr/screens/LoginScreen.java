@@ -42,7 +42,7 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 		super();
 		this.store = store;
 		layoutScreen();
-		passwordField.setFocus();
+		usernameField.setFocus();
 	}
 
 	private void layoutScreen() {
