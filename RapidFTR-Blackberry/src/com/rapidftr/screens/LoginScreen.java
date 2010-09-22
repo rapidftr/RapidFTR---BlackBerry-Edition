@@ -15,8 +15,8 @@ import net.rim.device.api.ui.container.HorizontalFieldManager;
 
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
-import com.rapidftr.net.ScreenCallBack;
 import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.services.ScreenCallBack;
 import com.rapidftr.utilities.SettingsStore;
 
 public class LoginScreen extends CustomScreen implements FieldChangeListener,
@@ -212,7 +212,7 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 		
 	}
 
-	public void onProcessComplete() {
+	public void onProcessSuccess() {
 //		controller.popScreen();
 		
 	}

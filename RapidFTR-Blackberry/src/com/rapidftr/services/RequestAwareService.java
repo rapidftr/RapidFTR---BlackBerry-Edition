@@ -1,22 +1,21 @@
 package com.rapidftr.services;
 
-import com.rapidftr.net.HttpRequestHandler;
+import com.rapidftr.net.HttpBatchRequestHandler;
 import com.rapidftr.net.HttpService;
-import com.rapidftr.net.ServiceCallback;
 
 public abstract class RequestAwareService implements ServiceCallback {
 	//protected HttpService httpService;
-	HttpRequestHandler requestHandler;
+	HttpBatchRequestHandler requestHandler;
 
 	RequestAwareService(HttpService httpService) {
 		RequestCallBackImpl requestCallBack = new RequestCallBackImpl();
 		requestCallBack.setServiceCallback(this);
-		requestHandler = new HttpRequestHandler(httpService);
+		requestHandler = new HttpBatchRequestHandler(httpService);
 		requestHandler.setRequestCallBack(requestCallBack);
 	}
 
 
-	public HttpRequestHandler getRequestHandler() {
+	public HttpBatchRequestHandler getRequestHandler() {
 		return requestHandler;
 	}
 

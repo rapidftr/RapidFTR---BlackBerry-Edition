@@ -1,5 +1,5 @@
 
-package com.rapidftr.net;
+package com.rapidftr.services;
 
 import com.sun.me.web.request.Response;
 

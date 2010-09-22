@@ -1,15 +1,15 @@
 package com.rapidftr.controllers.internal;
 
-import com.rapidftr.net.ControllerCallback;
-import com.rapidftr.net.HttpRequestHandler;
-import com.rapidftr.net.ScreenCallBack;
+import com.rapidftr.net.HttpBatchRequestHandler;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.screens.internal.UiStack;
+import com.rapidftr.services.ControllerCallback;
 import com.rapidftr.services.RequestAwareService;
 import com.rapidftr.services.RequestCallBackImpl;
+import com.rapidftr.services.ScreenCallBack;
 
 public class RequestAwareController extends Controller implements ControllerCallback {
-	protected HttpRequestHandler requestHandler;
+	protected HttpBatchRequestHandler requestHandler;
 	protected RequestAwareService service;
 	private ScreenCallBack screenCallBack;
 	public RequestAwareController(CustomScreen screen, UiStack uiStack ,RequestAwareService service) {
@@ -30,6 +30,11 @@ public class RequestAwareController extends Controller implements ControllerCall
 
 	public ScreenCallBack getScreenCallBack() {
 		return screenCallBack;
+	}
+
+	public void beforeProcessStart() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

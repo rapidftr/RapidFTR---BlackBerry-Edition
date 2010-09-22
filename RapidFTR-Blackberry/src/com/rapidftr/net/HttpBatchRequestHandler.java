@@ -9,7 +9,7 @@ import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;
 import com.sun.me.web.request.Response;
 
-public class HttpRequestHandler implements RequestListener {
+public class HttpBatchRequestHandler implements RequestListener {
 
 	RequestCallBack requestCallBack;
 	private int unprocessedRequests = 0;
@@ -17,24 +17,24 @@ public class HttpRequestHandler implements RequestListener {
 
 	private HttpService service;
 
-	public HttpRequestHandler(HttpService httpService) {
+	public HttpBatchRequestHandler(HttpService httpService) {
 		service = httpService;
 	}
 
 	public void get(String url, Arg[] inputArgs, Arg[] httpArgs, Object context) {
-		incrementActiveRequests();
+		setUp();
 		service.get(url, inputArgs, httpArgs, this, context);
 	}
 
 	public void post(String url, Arg[] postArgs, Arg[] httpArgs,
 			PostData postData, Object context) {
-		incrementActiveRequests();
+		setUp();
 		service.post(url, postArgs, httpArgs, this, postData, context);
 	}
 
 	public void put(String url, Arg[] postArgs, Arg[] httpArgs,
 			PostData postData, Object context) {
-		incrementActiveRequests();
+		setUp();
 		service.put(url, postArgs, httpArgs, this, postData, context);
 	}
 
@@ -62,8 +62,7 @@ public class HttpRequestHandler implements RequestListener {
 			requestCallBack.onAuthenticationFailure();
 			terminateProcess();
 		} else if (response.getException() != null) {
-			requestCallBack
-					.onRequestException(context, response.getException());
+			requestCallBack.onRequestFailure(context, response.getException());
 		} else if (response.getCode() != HttpConnection.HTTP_OK
 				&& response.getCode() != HttpConnection.HTTP_CREATED) {
 			requestCallBack.onConnectionProblem();
@@ -81,7 +80,7 @@ public class HttpRequestHandler implements RequestListener {
 
 	public void markProcessComplete() {
 		unprocessedRequests = totalRequests = 0;
-		requestCallBack.onProcessComplete();
+		requestCallBack.onProcessSuccess();
 	}
 
 	public void markProcessFailed() {
@@ -101,13 +100,12 @@ public class HttpRequestHandler implements RequestListener {
 		return requestCallBack;
 	}
 
-	private void incrementActiveRequests() {
+	private void setUp() {
+		if (unprocessedRequests == 0 && totalRequests == 0) {
+			requestCallBack.onProcessStart();
+		}
 		unprocessedRequests += 1;
 		totalRequests += 1;
-	}
-
-	private boolean isProcessCompleted() {
-		return unprocessedRequests == 0;
 	}
 
 	public void setRequestCallBack(RequestCallBack requestCallBack) {
@@ -122,7 +120,7 @@ public class HttpRequestHandler implements RequestListener {
 				- unprocessedRequests, totalRequests);
 
 		if (isValidResponse(response)) {
-			requestCallBack.onRequestComplete(context, response);
+			requestCallBack.onRequestSuccess(context, response);
 		} else {
 			handleResponseErrors(context, response);
 		}
@@ -130,8 +128,8 @@ public class HttpRequestHandler implements RequestListener {
 		checkAndMarkProcessComplete();
 	}
 
-	public void checkAndMarkProcessComplete() {
-		if (isProcessCompleted()) {
+	private void checkAndMarkProcessComplete() {
+		if (unprocessedRequests == 0) {
 			markProcessComplete();
 		}
 	}

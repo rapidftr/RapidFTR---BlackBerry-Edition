@@ -2,9 +2,9 @@ package com.rapidftr.screens;
 
 import com.rapidftr.controllers.SyncController;
 import com.rapidftr.controls.Button;
-import com.rapidftr.net.ScreenCallBack;
 import com.rapidftr.process.Process;
 import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.services.ScreenCallBack;
 
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
@@ -63,7 +63,6 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 
 	}
 
-
 	public void setUp() {
 		labelField.setText(process.name());
 		onProcessStart();
@@ -78,7 +77,7 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		if (field.equals(cancelButton)) {
 			int result = Dialog.ask(Dialog.D_YES_NO,
 					"Are you sure want to cancel " + process.name() + "?");
-			
+
 			if (result == Dialog.YES) {
 				process.stopProcess();
 				controller.popScreen();
@@ -127,7 +126,7 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		});
 	}
 
-	public void onProcessComplete() {
+	public void onProcessSuccess() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 				downloadProgressBar.setLabel("Complete");
@@ -186,13 +185,17 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	public void onProcessStart() {
-		if(process!=null){
-		downloadProgressBar.setLabel(process.name() + " ...");
-		}
-		downloadProgressBar.setValue(0);
-		hButtonManager.deleteAll();
-		hButtonManager.add(cancelButton);
-		
+		UiApplication.getUiApplication().invokeLater(new Runnable() {
+			public void run() {
+				if (process != null) {
+					downloadProgressBar.setLabel(process.name() + " ...");
+				}
+				downloadProgressBar.setValue(0);
+				hButtonManager.deleteAll();
+				hButtonManager.add(cancelButton);
+
+			}
+		});
 	}
 
 }

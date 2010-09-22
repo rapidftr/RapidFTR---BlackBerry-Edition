@@ -1,4 +1,4 @@
-package com.rapidftr.net;
+package com.rapidftr.services;
 
 public interface ScreenCallBack {
 
@@ -6,9 +6,7 @@ public interface ScreenCallBack {
 
 	void onAuthenticationFailure();
 
-	void onProcessStart();
-	
-	void onProcessComplete();
+	void onProcessSuccess();
 
 	void onProcessFail(String failureMessage);
 

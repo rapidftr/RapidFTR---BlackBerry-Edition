@@ -2,9 +2,7 @@ package com.rapidftr.controllers;
 
 import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.model.Child;
-import com.rapidftr.net.ControllerCallback;
-import com.rapidftr.net.HttpRequestHandler;
-import com.rapidftr.net.ScreenCallBack;
+import com.rapidftr.net.HttpBatchRequestHandler;
 import com.rapidftr.process.ChildSyncProcess;
 import com.rapidftr.process.FormSyncProcess;
 import com.rapidftr.process.Process;
@@ -13,9 +11,11 @@ import com.rapidftr.screens.SyncScreen;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildSyncService;
+import com.rapidftr.services.ControllerCallback;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.RequestAwareService;
 import com.rapidftr.services.RequestCallBackImpl;
+import com.rapidftr.services.ScreenCallBack;
 
 public class SyncController extends Controller implements ControllerCallback {
 
@@ -26,7 +26,7 @@ public class SyncController extends Controller implements ControllerCallback {
 	final SyncAllProcess syncAllProcess;
 	final FormSyncProcess formSyncProcess;
 
-	protected HttpRequestHandler requestHandler;
+	protected HttpBatchRequestHandler requestHandler;
 	private ScreenCallBack screenCallBack;
 
 	public SyncController(CustomScreen screen, UiStack uiStack,
@@ -67,7 +67,7 @@ public class SyncController extends Controller implements ControllerCallback {
 
 	private void setAndStartCurrentProcess(Process process) {
 		if (currentProcess == null) {
-			currentProcess = process;
+			previousProcess = currentProcess = process;
 			((SyncScreen) currentScreen).setProcess(currentProcess);
 			show();
 			currentProcess.startProcess();
@@ -87,6 +87,10 @@ public class SyncController extends Controller implements ControllerCallback {
 	public void login() {
 		dispatcher.login(previousProcess);
 		requestHandler.terminateProcess();
+	}
+
+	public void beforeProcessStart() {
+		((SyncScreen)currentScreen).onProcessStart();
 	}
 
 }

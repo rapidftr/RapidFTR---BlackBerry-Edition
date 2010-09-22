@@ -3,21 +3,24 @@ package com.rapidftr.net;
 import com.sun.me.web.request.Response;
 
 public interface RequestCallBack {
+	
 	void onAuthenticationFailure();
 
 	void onConnectionProblem();
 
-	void onRequestException(Object context, Exception exception);
+	void onRequestFailure(Object context, Exception exception);
 
-	void onRequestComplete(Object context, Response result);
+	void onRequestSuccess(Object context, Response result);
 
 	void updateProgressMessage(String msg);
-
-	void onProcessComplete();
 	
+	void updateRequestProgress(int finished, int totalRequests);
+
 	void onProcessStart();
 
+	void onProcessSuccess();
+	
 	void onProcessFail(String failureMessage);
 
-	void updateRequestProgress(int finished, int totalRequests);
+
 }

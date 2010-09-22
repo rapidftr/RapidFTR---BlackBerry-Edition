@@ -1,9 +1,6 @@
 package com.rapidftr.services;
 
-import com.rapidftr.net.ControllerCallback;
-import com.rapidftr.net.ServiceCallback;
 import com.rapidftr.net.RequestCallBack;
-import com.rapidftr.net.ScreenCallBack;
 import com.sun.me.web.request.Response;
 
 public class RequestCallBackImpl implements RequestCallBack {
@@ -28,7 +25,7 @@ public class RequestCallBackImpl implements RequestCallBack {
 		}
 	}
 
-	public void onRequestComplete(Object context, Response result) {
+	public void onRequestSuccess(Object context, Response result) {
 		if (ifServiceCallbackExists()) {
 			serviceCallback.onRequestSuccess(context, result);
 		}
@@ -36,9 +33,9 @@ public class RequestCallBackImpl implements RequestCallBack {
 
 
 
-	public void onProcessComplete() {
+	public void onProcessSuccess() {
 		if (ifScreenCallbackExists()) {
-			screenCallback.onProcessComplete();
+			screenCallback.onProcessSuccess();
 		}
 		if (ifControllerCallbackExists()) {
 			controllerCallback.onProcessComplete();
@@ -83,7 +80,7 @@ public class RequestCallBackImpl implements RequestCallBack {
 		
 	}
 
-	public void onRequestException(Object context, Exception exception) {
+	public void onRequestFailure(Object context, Exception exception) {
 		if (ifScreenCallbackExists()) {
 			serviceCallback.onRequestFailure(context,exception);
 		}
@@ -96,8 +93,8 @@ public class RequestCallBackImpl implements RequestCallBack {
 	}
 
 	public void onProcessStart() {
-		if (ifScreenCallbackExists()) {
-			screenCallback.onProcessComplete();
+		if (ifControllerCallbackExists()) {
+			controllerCallback.beforeProcessStart();
 		}
 	}
 
