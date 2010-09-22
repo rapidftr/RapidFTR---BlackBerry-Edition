@@ -185,8 +185,6 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 				} else if (result == Dialog.NO) {
 					controller.popScreen();
 				}
-
-				// controller.popScreen();
 			}
 		});
 	}

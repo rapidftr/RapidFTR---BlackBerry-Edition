@@ -14,12 +14,11 @@ import com.rapidftr.utilities.Styles;
 
 public class TextboxFormField extends FormField {
 
-	private static String TYPE = "text_field";
-	private VerticalFieldManager manager;
-	private BasicEditField field;
+	protected VerticalFieldManager manager;
+	protected BasicEditField field;
 
-	private TextboxFormField(String name) {
-		super(name, TYPE);
+	public TextboxFormField(String name, String type) {
+		super(name, type);
 	}
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {
@@ -36,16 +35,6 @@ public class TextboxFormField extends FormField {
 	public Manager getLayout() {
 
 		return manager;
-	}
-
-	public static TextboxFormField createField(String name, String type) {
-
-		if (type.equals(TYPE)) {
-			return new TextboxFormField(name);
-		}
-
-		return null;
-
 	}
 
 	public boolean equals(Object obj) {

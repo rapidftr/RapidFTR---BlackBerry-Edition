@@ -12,13 +12,12 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 
 public class SelectboxFormField extends FormField {
 
-	private static final String TYPE = "select_box";
 	private Vector optionStrings;
 	private VerticalFieldManager manager;
 	private ObjectChoiceField field;
 
-	private SelectboxFormField(String name, Vector optionStrings) {
-		super(name, TYPE);
+	public SelectboxFormField(String name, String type, Vector optionStrings) {
+		super(name, type);
 		this.optionStrings = optionStrings;
 	}
 
@@ -32,16 +31,6 @@ public class SelectboxFormField extends FormField {
 
 	public Manager getLayout() {
 		return manager;
-	}
-
-	public static SelectboxFormField createdFormField(String name, String type,
-			Vector optionStrings) {
-		if (type.equals(TYPE)) {
-			return new SelectboxFormField(name, optionStrings);
-		}
-
-		return null;
-
 	}
 
 	public String getValue() {
