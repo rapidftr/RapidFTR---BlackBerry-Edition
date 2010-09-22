@@ -17,15 +17,14 @@ import com.rapidftr.utilities.ImageUtility;
 public class PhotoUploadFormField extends FormField implements
 		ImageCaptureListener {
 
-	public static final String TYPE = "photo_upload_box";
-
 	private Bitmap bitmap;
 	private VerticalFieldManager manager;
 	private String imageLocation= "";
 	private Button capturePhoto;
 	private Child child;
-	private PhotoUploadFormField(String name) {
-		super(name, TYPE);
+	
+	public PhotoUploadFormField(String name, String type) {
+		super(name, type);
 	}
 
 	public void initializeLayout(final ManageChildScreen newChildScreen) {
@@ -70,15 +69,6 @@ public class PhotoUploadFormField extends FormField implements
 
 	public Manager getLayout() {
 		return manager;
-	}
-
-	public static PhotoUploadFormField createdFormField(String name, String type) {
-		if (type.equals(TYPE)) {
-			return new PhotoUploadFormField(name);
-		}
-
-		return null;
-
 	}
 
 	public void onImagedSaved(String imageLocation, EncodedImage encodedImage) {

@@ -38,12 +38,20 @@ public class ChildrenListField extends ObjectListField {
 		Child child = (Child) this.get(listField, index);
 
 		listField.setRowHeight(this.titleFont.getHeight() * 4);
+//		graphics.setColor(child.childStatus().getStatusColor());
+//		graphics.drawRect(0, ((index) * listField.getRowHeight()), width,
+//				listField.getRowHeight());
+//		graphics.fillRect(0, ((index) * listField.getRowHeight()), width,
+//				listField.getRowHeight());
+//		graphics.setColor(Color.BLACK);
 		graphics.setColor(child.childStatus().getStatusColor());
-		graphics.drawRect(0, ((index) * listField.getRowHeight()), width,
+		graphics.drawRect(0, ((index) * listField.getRowHeight()), 15,
 				listField.getRowHeight());
-		graphics.fillRect(0, ((index) * listField.getRowHeight()), width,
+		graphics.fillRect(0, ((index) * listField.getRowHeight()), 15,				
 				listField.getRowHeight());
+
 		graphics.setColor(Color.BLACK);
+		
 		graphics.setFont(titleFont);
 		graphics.drawText((String) child.getField("name"), firstrowPostion, y,
 				(DrawStyle.LEFT | DrawStyle.ELLIPSIS | DrawStyle.TOP), width);
