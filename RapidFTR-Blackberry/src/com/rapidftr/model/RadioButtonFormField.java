@@ -13,13 +13,12 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 
 public class RadioButtonFormField extends FormField {
 
-	private static final String TYPE = "radio_button";
 	private RadioButtonGroup group;
 	private VerticalFieldManager manager;
 	private Vector optionStrings;
 
-	private RadioButtonFormField(String name, Vector optionStrings) {
-		super(name, TYPE);
+	public RadioButtonFormField(String name, String type, Vector optionStrings) {
+		super(name, type);
 		this.optionStrings = optionStrings;
 	}
 
@@ -40,16 +39,6 @@ public class RadioButtonFormField extends FormField {
 
 	public Manager getLayout() {
 		return manager;
-	}
-
-	public static RadioButtonFormField createdFormField(String name,
-			String type, Vector optionStrings) {
-		if (type.equals(TYPE)) {
-			return new RadioButtonFormField(name, optionStrings);
-		}
-
-		return null;
-
 	}
 
 	public String getValue() {
@@ -74,7 +63,7 @@ public class RadioButtonFormField extends FormField {
 
 	public String toString() {
 
-		return name + ":" + TYPE + ":" + optionStrings;
+		return name + ":" + type + ":" + optionStrings;
 	}
 
 	public void setValue(String value) {

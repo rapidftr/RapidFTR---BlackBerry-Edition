@@ -9,26 +9,16 @@ import com.rapidftr.screens.ManageChildScreen;
 
 public class CheckboxFormField extends FormField {
 
-	private static final String TYPE = "check_box";
 	private VerticalFieldManager manager;
 	private CheckboxField field;
 
-	private CheckboxFormField(String name) {
-		super(name, TYPE);
+	public CheckboxFormField(String name, String type) {
+		super(name, type);
 	}
 
 	public Manager getLayout() {
 
 		return manager;
-	}
-
-	public static CheckboxFormField createdFormField(String name, String type) {
-		if (type.equals(TYPE)) {
-			return new CheckboxFormField(name);
-		}
-
-		return null;
-
 	}
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {
