@@ -45,7 +45,7 @@ public class HttpServer {
 
 	public String buildFullyQualifiedUrl(String uri) {
 
-		String url = getUrlPrefix() + uri + ";deviceside=false"
+		String url = getUrlPrefix() + uri + ";deviceside=true"
 				+ ";ConnectionTimeout=" + requestTimeout;
 		return url;
 	}
