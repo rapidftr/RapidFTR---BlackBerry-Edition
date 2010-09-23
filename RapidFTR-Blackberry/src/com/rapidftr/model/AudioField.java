@@ -29,7 +29,7 @@ public class AudioField extends FormField implements AudioRecordListener{
 	private byte[] data = null;
 	private String location = null;
 	protected static final String TYPE = "audio_upload_box";
-	private static final String DIRECTORY_NAME = "file:///store/rapidftr/";
+	private static final String DIRECTORY_NAME = "/store/rapidftr/";
 	private VerticalFieldManager manager;
 	private NewChildScreen newChildScreen;
 
@@ -91,7 +91,7 @@ public class AudioField extends FormField implements AudioRecordListener{
 	private void writeAudio(byte [] data) throws IOException {
 		createDirectoryIfNotExists();
 		location=generateLocation();
-		FileConnection fconn = (FileConnection) Connector.open(location, Connector.READ_WRITE);
+		FileConnection fconn = (FileConnection) Connector.open("file://"+location, Connector.READ_WRITE);
         if (!fconn.exists())
                 fconn.create();
         OutputStream os = fconn.openDataOutputStream();
@@ -101,7 +101,7 @@ public class AudioField extends FormField implements AudioRecordListener{
 	}
 
 	private void createDirectoryIfNotExists() throws IOException {
-		FileConnection directory = (FileConnection)Connector.open(DIRECTORY_NAME);
+		FileConnection directory = (FileConnection)Connector.open("file://"+DIRECTORY_NAME);
 		if(!(directory).exists()){
 			directory.mkdir();
 		}
