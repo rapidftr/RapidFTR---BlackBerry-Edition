@@ -2,7 +2,7 @@ package com.rapidftr.screens;
 
 import java.util.Enumeration;
 import java.util.Vector;
-
+import  com.rapidftr.controllers.ChildController;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
@@ -114,8 +114,9 @@ public class ManageChildScreen extends CustomScreen {
             public void fieldChanged(Field field, int context) {
                 if (!validateOnSave())
                     return;
-                childToEdit = null;
                 controller.popScreen();
+              ((ChildController)controller).viewChild(childToEdit);
+              childToEdit = null;
             }
         });
         saveButtonManager.add(saveButton);
@@ -184,6 +185,7 @@ public class ManageChildScreen extends CustomScreen {
                     return;
                 Dialog.alert("ChildRecord has been stored succesfully\n" + "Please upload record to central server whenever you get Internet Access!!");
                 controller.popScreen();
+                ((ChildController)controller).viewChild(childToEdit);
                 childToEdit = null;
             }
         };
@@ -194,8 +196,11 @@ public class ManageChildScreen extends CustomScreen {
                 if (!validateOnSave())
                     return;
                 ((ChildController) controller).syncChild(childToEdit);
+              
                 childToEdit = null;
                 controller.popScreen();
+               
+             
             }
         };
 

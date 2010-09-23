@@ -56,16 +56,20 @@ public class HomeScreen extends CustomScreen {
 				onSyncAllClicked();
 			}
 		});
-		
-		
+
 		Button cleanAllButton = new Button("Clean Device");
 		cleanAllButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
-				((HomeScreenController) controller).cleanAll();
-				Dialog.alert("Device successfully cleaned");
+				int result = Dialog
+						.ask(
+								Dialog.D_YES_NO,
+								"Do you want to clean the device? This will clear all the locally stored child records and login information");
+				if (result == Dialog.YES) {
+					((HomeScreenController) controller).cleanAll();
+					Dialog.alert("Device successfully cleaned");
+				}
 			}
 		});
-
 
 		Vector buttonGroup = new Vector();
 		buttonGroup.addElement(newChildButton);
@@ -84,8 +88,8 @@ public class HomeScreen extends CustomScreen {
 		manager.add(viewChildrenButton);
 		searchButton.setPadding(PADDING);
 		manager.add(searchButton);
-		//uploadChildRecordsButton.setPadding(PADDING);
-		//manager.add(uploadChildRecordsButton);
+		// uploadChildRecordsButton.setPadding(PADDING);
+		// manager.add(uploadChildRecordsButton);
 		syncFormsButton.setPadding(PADDING);
 		manager.add(syncFormsButton);
 		syncAllButton.setPadding(PADDING);
@@ -93,7 +97,7 @@ public class HomeScreen extends CustomScreen {
 
 		cleanAllButton.setPadding(PADDING);
 		manager.add(cleanAllButton);
-		
+
 		add(manager);
 
 	}
@@ -105,8 +109,6 @@ public class HomeScreen extends CustomScreen {
 	private void onViewChildrenClicked() {
 		((HomeScreenController) controller).viewChildren();
 	}
-
-
 
 	private void onSearchClicked() {
 		((HomeScreenController) controller).showSearch();

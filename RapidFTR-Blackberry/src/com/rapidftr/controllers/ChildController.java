@@ -93,8 +93,12 @@ public class ChildController extends Controller {
 	public void searchAndDispalyChildren(SearchChildFilter searchChildFilter) {
 		Child children[] = childStoreService
 				.searchChildrenFromStore(searchChildFilter);
+		if(children.length!=0){
 		viewChildrenScreen.setChildren(children);
 		changeScreen(viewChildrenScreen);
+		}else{
+		searchChildScreen.showNoSearchResultsAlert();	
+		}
 	}
 
 }

@@ -67,6 +67,7 @@ public class SearchChildScreen extends CustomScreen implements
 	}
 
 	public void setUp() {
+		resetSearchBox();
 	}
 
 	public void fieldChanged(Field field, int context) {
@@ -76,13 +77,14 @@ public class SearchChildScreen extends CustomScreen implements
 
 		}
 		if (field.equals(resetButton)) {
-			onResetButtonClicked();
+			resetSearchBox();
 		}
 	}
 
-	private void onResetButtonClicked() {
+	private void resetSearchBox() {
 
 		searchTextField.setText("");
+		searchTextField.setFocus();
 
 	}
 
@@ -92,13 +94,21 @@ public class SearchChildScreen extends CustomScreen implements
 			((ChildController) controller)
 					.searchAndDispalyChildren(searchChildFilter);
 		} else {
-			Dialog.alert("Please enter either Name or Id");
+			Dialog
+					.alert("Please enter either Child Name or Unique id, to perform search");
+			searchTextField.setFocus();
 		}
 
 	}
 
 	protected boolean onSavePrompt() {
 		return true;
+	}
+
+	public void showNoSearchResultsAlert() {
+		Dialog
+				.alert("No search results found , Please enter a valid search keyword");
+		resetSearchBox();
 	}
 
 }
