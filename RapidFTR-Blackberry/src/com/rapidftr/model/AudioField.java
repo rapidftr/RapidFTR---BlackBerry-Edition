@@ -28,7 +28,7 @@ public class AudioField extends FormField implements AudioRecordListener{
 	private ByteArrayOutputStream output = null;
 	private byte[] data = null;
 	private String location = null;
-	protected static final String TYPE = "audio_upload_field";
+	protected static final String TYPE = "audio_upload_box";
 	private static final String DIRECTORY_NAME = "file:///store/rapidftr/";
 	private VerticalFieldManager manager;
 	private NewChildScreen newChildScreen;
