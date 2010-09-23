@@ -26,18 +26,21 @@ public class HttpBatchRequestHandler implements RequestListener {
 		service.get(url, inputArgs, httpArgs, this, context);
 	}
 
-	public void post(String url, Arg[] postArgs, Arg[] httpArgs, PostData postData, Object context) {
+	public void post(String url, Arg[] postArgs, Arg[] httpArgs,
+			PostData postData, Object context) {
 		setUp();
 		service.post(url, postArgs, httpArgs, this, postData, context);
 	}
 
-	public void put(String url, Arg[] postArgs, Arg[] httpArgs, PostData postData, Object context) {
+	public void put(String url, Arg[] postArgs, Arg[] httpArgs,
+			PostData postData, Object context) {
 		setUp();
 		service.put(url, postArgs, httpArgs, this, postData, context);
 	}
 
 	// sync request
-	public Response get(String url, Arg[] inputArgs, Arg[] httpArgs) throws IOException {
+	public Response get(String url, Arg[] inputArgs, Arg[] httpArgs)
+			throws IOException {
 		Response response = service.get(url, inputArgs, httpArgs);
 		if (isValidResponse(response)) {
 			return response;
@@ -48,16 +51,29 @@ public class HttpBatchRequestHandler implements RequestListener {
 	}
 
 	private boolean isValidResponse(Response response) {
-		return (response.getException() == null) && (response.getCode() == HttpConnection.HTTP_OK || response.getCode() == HttpConnection.HTTP_CREATED);
+		return (response.getException() == null)
+				&& (response.getCode() == HttpConnection.HTTP_OK || response
+						.getCode() == HttpConnection.HTTP_CREATED);
 	}
 
 	private void handleResponseErrors(Object context, Response response) {
-		if (response.getCode() == HttpConnection.HTTP_UNAUTHORIZED || response.getCode() == HttpConnection.HTTP_FORBIDDEN) {
+		if (response.getCode() == HttpConnection.HTTP_UNAUTHORIZED
+				|| response.getCode() == HttpConnection.HTTP_FORBIDDEN) {
 			requestCallBack.onAuthenticationFailure();
 			terminateProcess();
 		} else if (response.getException() != null) {
+			// if (response.getException() instanceof IOException) {
+			// // terminateProcess();
+			// service.cancelRequest();
+			// if (unprocessedRequests < 1) {
+			// requestCallBack.onProcessFail(response.getException()
+			// .getMessage());
+			// }
+			// } else {
 			requestCallBack.onRequestFailure(context, response.getException());
-		} else if (response.getCode() != HttpConnection.HTTP_OK && response.getCode() != HttpConnection.HTTP_CREATED) {
+			// }
+		} else if (response.getCode() != HttpConnection.HTTP_OK
+				&& response.getCode() != HttpConnection.HTTP_CREATED) {
 			requestCallBack.onConnectionProblem();
 			terminateProcess();
 		}
@@ -109,7 +125,8 @@ public class HttpBatchRequestHandler implements RequestListener {
 		if (unprocessedRequests > 0) {
 			unprocessedRequests--;
 		}
-		requestCallBack.updateRequestProgress(totalRequests - unprocessedRequests, totalRequests);
+		requestCallBack.updateRequestProgress(totalRequests
+				- unprocessedRequests, totalRequests);
 
 		if (isValidResponse(response)) {
 			requestCallBack.onRequestSuccess(context, response);

@@ -99,6 +99,7 @@ public class SyncController extends Controller implements ControllerCallback {
 	}
 
 	public void clearProcess() {
+		currentProcess.stopProcess();
 		currentProcess = null;
 	}
 
