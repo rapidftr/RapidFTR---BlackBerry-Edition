@@ -11,7 +11,8 @@ public class FormFieldFactory {
 	public static final String PHOTO_FIELD = "photo_upload_box";
 	public static final String TEXTAREA_FIELD = "textarea";
 	public static final String NUMERIC_TEXT_FIELD = "numeric_text_field";
-	
+	public static final String AUDIO_FIELD = "audio_upload_box";
+
 	public FormField createFormField(String name, String type, Vector optionStrings) {
 
 		if(TEXT_FIELD.equals(type)) {
@@ -35,6 +36,9 @@ public class FormFieldFactory {
 		else if (NUMERIC_TEXT_FIELD.equals(type)) {
 			return new NumericTextboxFormField(name, type);
 		}
+        else if (AUDIO_FIELD.equals(type)) {
+            return AudioField.createdFormField(name, type);
+        }
 		else {
 			return null;
 		}
