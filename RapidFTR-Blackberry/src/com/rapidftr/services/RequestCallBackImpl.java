@@ -38,7 +38,7 @@ public class RequestCallBackImpl implements RequestCallBack {
 			screenCallback.onProcessSuccess();
 		}
 		if (ifControllerCallbackExists()) {
-			controllerCallback.onProcessComplete();
+			controllerCallback.onProcessComplete(true);
 		}
 	}
 
@@ -47,7 +47,7 @@ public class RequestCallBackImpl implements RequestCallBack {
 			screenCallback.onProcessFail(failureMessage);
 		}
 		if (ifControllerCallbackExists()) {
-			controllerCallback.onProcessComplete();
+			controllerCallback.onProcessComplete(false);
 		}
 	}
 

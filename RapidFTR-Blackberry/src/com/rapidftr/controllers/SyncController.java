@@ -79,7 +79,7 @@ public class SyncController extends Controller implements ControllerCallback {
 
 	}
 
-	public void onProcessComplete() {
+	public void onProcessComplete(boolean status) {
 		previousProcess = currentProcess;
 		currentProcess = null;
 	}

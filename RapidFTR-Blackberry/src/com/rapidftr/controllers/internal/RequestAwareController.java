@@ -8,7 +8,7 @@ import com.rapidftr.services.RequestAwareService;
 import com.rapidftr.services.RequestCallBackImpl;
 import com.rapidftr.services.ScreenCallBack;
 
-public class RequestAwareController extends Controller implements ControllerCallback {
+public abstract class  RequestAwareController extends Controller implements ControllerCallback {
 	protected HttpBatchRequestHandler requestHandler;
 	protected RequestAwareService service;
 	private ScreenCallBack screenCallBack;
@@ -23,10 +23,7 @@ public class RequestAwareController extends Controller implements ControllerCall
 		screen.setController(this);	
 		screenCallBack = (ScreenCallBack) screen;
 	}
-	
-	public void onProcessComplete() {
-		//screenCallBack.onProcessComplete();
-	}
+
 
 	public ScreenCallBack getScreenCallBack() {
 		return screenCallBack;

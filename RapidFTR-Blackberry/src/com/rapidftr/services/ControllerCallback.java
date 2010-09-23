@@ -1,7 +1,7 @@
 package com.rapidftr.services;
 
 public interface ControllerCallback {
-	void onProcessComplete();
+	void onProcessComplete(boolean status);
 
 	void beforeProcessStart();
 }
