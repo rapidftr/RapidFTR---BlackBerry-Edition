@@ -35,4 +35,9 @@ public class LoginController extends RequestAwareController {
 		show();		
 	}
 
+	public void homeScreen() {
+		uiStack.clear();
+		dispatcher.homeScreen();		
+	}
+
 }

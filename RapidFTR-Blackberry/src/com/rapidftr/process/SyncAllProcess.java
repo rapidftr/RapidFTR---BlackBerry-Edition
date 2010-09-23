@@ -6,11 +6,12 @@ public class SyncAllProcess implements Process {
 
 	ChildSyncService service;
 	String name;
+	boolean cancel;
 
 	public SyncAllProcess(ChildSyncService service) {
 		super();
 		this.service = service;
-		this.name="Sync All";
+		this.name="Sync Child Records";
 	}
 
 	public String name() {
@@ -22,7 +23,12 @@ public class SyncAllProcess implements Process {
 	}
 
 	public void stopProcess() {
+		cancel = true;
 		service.cancelRequest();
+	}
+
+	public boolean isCanceled() {
+		return cancel;
 	}
 	
 	

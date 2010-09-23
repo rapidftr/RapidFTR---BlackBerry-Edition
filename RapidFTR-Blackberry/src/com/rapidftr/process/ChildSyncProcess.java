@@ -7,6 +7,7 @@ public class ChildSyncProcess implements Process {
 
 	ChildSyncService service;
     Child child;
+    boolean cancel;
 	public ChildSyncProcess(ChildSyncService service) {
 		super();
 		this.service = service;
@@ -23,11 +24,16 @@ public class ChildSyncProcess implements Process {
 	}
 
 	public void stopProcess() {
+		cancel = true;
 		service.cancelRequest();
 	}
 
 	public void setChild(Child child) {
 		this.child = child;
+	}
+	
+	public boolean isCanceled() {
+		return cancel;
 	}
 	
 

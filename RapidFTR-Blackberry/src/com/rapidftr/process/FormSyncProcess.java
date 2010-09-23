@@ -5,7 +5,7 @@ import com.rapidftr.services.FormService;
 public class FormSyncProcess implements Process {
 
 	FormService service;
-	
+	boolean cancel;
 	public FormSyncProcess(FormService service) {
 		super();
 		this.service = service;
@@ -21,7 +21,11 @@ public class FormSyncProcess implements Process {
 
 	public void stopProcess() {
 		service.cancelRequest();
-
+		cancel = true;
+	}
+	
+	public boolean isCanceled() {
+		return cancel;
 	}
 
 }

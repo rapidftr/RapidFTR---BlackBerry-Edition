@@ -23,4 +23,11 @@ public class UiStack {
     			application.popScreen(screen);
     	//	}
     }
+
+	public void clear() {
+		for (int i = application.getScreenCount();i>0 ; i--)
+		{
+			application.popScreen(application.getActiveScreen());
+		}
+	}
 }

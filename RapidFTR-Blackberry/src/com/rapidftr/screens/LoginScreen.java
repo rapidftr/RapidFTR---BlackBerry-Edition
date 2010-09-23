@@ -1,5 +1,7 @@
 package com.rapidftr.screens;
 
+import net.rim.device.api.system.Characters;
+import net.rim.device.api.system.KeyListener;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
@@ -20,7 +22,7 @@ import com.rapidftr.services.ScreenCallBack;
 import com.rapidftr.utilities.SettingsStore;
 
 public class LoginScreen extends CustomScreen implements FieldChangeListener,
-		ScreenCallBack {
+		ScreenCallBack, KeyListener {
 
 	private static final int MAX_SIZE = 200;
 
@@ -194,9 +196,8 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	public void onAuthenticationFailure() {
-		 onProcessFail("Authentication Failed");
+		onProcessFail("Authentication Failed");
 	}
-
 
 	public void onConnectionProblem() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
@@ -209,12 +210,12 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 
 	public void updateProgress(int progress) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void onProcessSuccess() {
-//		controller.popScreen();
-		
+		// controller.popScreen();
+
 	}
 
 	public void onProcessFail(String failureMessage) {
@@ -223,16 +224,45 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 				setProgressMsg("Login Failed");
 				setLoginButton();
 			}
-		});		
+		});
 	}
 
 	public void setProgressMessage(String message) {
-		setProgressMsg(message);		
+		setProgressMsg(message);
 	}
 
 	public void onProcessStart() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public boolean keyUp(int keycode, int time) {
+		return super.keyUp(keycode, time);
+	}
+
+	public boolean keyDown(int keycode, int time) {
+		if (keycode == Characters.ESCAPE) {
+			((LoginController) controller).homeScreen();
+			
+		}
+		return super.keyDown(keycode, time);
+	}
+
+	public boolean keyRepeat(int keycode, int time) {
+		return super.keyRepeat(keycode, time);
+
+	}
+
+	public boolean keyStatus(int keycode, int time) {
+		return super.keyStatus(keycode, time);
+	}
+
+	public boolean keyChar(char keycode, int time, int arg2) {
+		if (keycode == Characters.ESCAPE) {
+			((LoginController) controller).homeScreen();
+		}
+		return super.keyChar(keycode, time, arg2);
+
 	}
 
 }

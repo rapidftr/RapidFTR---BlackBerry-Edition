@@ -97,8 +97,11 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 				downloadProgressBar.setValue(0);
 				// controller.popScreen();
 				if (result == Dialog.OK) {
+					process.stopProcess();
 					((SyncController) controller).login();
-					return;
+				}else{
+					((SyncController) controller).clearProcess();
+					controller.popScreen();
 				}
 			}
 		});

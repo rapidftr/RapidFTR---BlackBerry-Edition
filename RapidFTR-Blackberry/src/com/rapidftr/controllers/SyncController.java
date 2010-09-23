@@ -72,7 +72,12 @@ public class SyncController extends Controller implements ControllerCallback {
 			show();
 			currentProcess.startProcess();
 		} else if (currentProcess == process) {
-			show();
+			if (!currentProcess.isCanceled()) {
+				show();
+			} else {
+				currentProcess.startProcess();
+				show();
+			}
 		} else {
 			((SyncScreen) currentScreen).showRunninngProcessAlert();
 		}
@@ -90,7 +95,11 @@ public class SyncController extends Controller implements ControllerCallback {
 	}
 
 	public void beforeProcessStart() {
-		((SyncScreen)currentScreen).onProcessStart();
+		((SyncScreen) currentScreen).onProcessStart();
+	}
+
+	public void clearProcess() {
+		currentProcess = null;
 	}
 
 }
