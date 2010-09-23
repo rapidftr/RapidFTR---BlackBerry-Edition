@@ -77,7 +77,7 @@ public class ManageChildScreen extends CustomScreen {
         add(screenManager);
 
         if (forms == null || forms.size() == 0) {
-            int result = Dialog.ask(Dialog.D_OK_CANCEL, "There are no form details stored\n" + "press ok to synchronize forms with a server");
+            int result = Dialog.ask(Dialog.D_OK_CANCEL, "There are no form details stored\n" + "press ok to synchronize forms with a server.");
 
             controller.popScreen();
             if (result == Dialog.OK) {
@@ -131,7 +131,7 @@ public class ManageChildScreen extends CustomScreen {
     }
 
     public boolean onClose() {
-        int result = Dialog.ask(Dialog.D_YES_NO, "Do you want to save the changes before closing?", Dialog.YES);
+        int result = Dialog.ask(Dialog.D_YES_NO, "Do you want to save the changes before closing?.", Dialog.YES);
 
         if (result == Dialog.YES) {
             if (!validateOnSave())
@@ -183,7 +183,7 @@ public class ManageChildScreen extends CustomScreen {
             public void run() {
                 if (!validateOnSave())
                     return;
-                Dialog.alert("ChildRecord has been stored succesfully\n" + "Please upload record to central server whenever you get Internet Access!!");
+                Dialog.alert("ChildRecord has been stored succesfully\n" + "Please upload record to central server whenever you get Internet Access!!.");
                 controller.popScreen();
                 ((ChildController)controller).viewChild(childToEdit);
                 childToEdit = null;

@@ -93,7 +93,7 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 			public void run() {
 
 				int result = Dialog.ask(Dialog.D_OK_CANCEL,
-						"You are not logged in.\n Press ok to  login");
+						"You are not logged in.\n Press ok to  login.");
 				downloadProgressBar.setValue(0);
 				// controller.popScreen();
 				if (result == Dialog.OK) {
@@ -151,9 +151,9 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 	public void showRunninngProcessAlert() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-				int result = Dialog.ask(Dialog.D_YES_NO, "other process ["
+				int result = Dialog.ask(Dialog.D_YES_NO, " other process [ "
 						+ process.name()
-						+ "] is Still Runing .\n Do you want to Stop it?");
+						+ " ] is Still Runing .\n Do you want to Stop it?");
 				if (result == Dialog.YES) {
 					process.stopProcess();
 					return;
@@ -166,12 +166,12 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 
-				String msg = "Sync Failed.";
+				String msg = "Sync Failed. ";
 				if (null != failureMessage)
 					msg = failureMessage;
 
 				int result = Dialog.ask(Dialog.D_YES_NO, msg
-						+ "\n Do you want to Retry?");
+						+ " \n Do you want to Retry?");
 				downloadProgressBar.setValue(0);
 				downloadProgressBar.setLabel("Failed");
 

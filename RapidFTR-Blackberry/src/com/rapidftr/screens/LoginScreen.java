@@ -199,13 +199,13 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	public void onAuthenticationFailure() {
-		onProcessFail("Authentication Failed");
+		onProcessFail("Authentication Failed ");
 	}
 
 	public void onConnectionProblem() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-				setProgressMsg("Connection Problem");
+				setProgressMsg(" Connection Problem ");
 				setLoginButton();
 			}
 		});

@@ -75,7 +75,7 @@ public class ChildSyncService extends RequestAwareService {
 				try {
 					downloadNewChildRecords();
 				} catch (IOException e) {
-					requestHandler.markProcessFailed("Sync failed due to loss of network connectivity");
+					requestHandler.markProcessFailed("Sync failed due to loss of network connectivity. ");
 				} catch (JSONException e) {
 					requestHandler.markProcessFailed();
 				} catch (Exception e) {

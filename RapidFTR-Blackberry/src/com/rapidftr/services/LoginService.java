@@ -53,8 +53,8 @@ public class LoginService extends RequestAwareService {
 	}
 
 	public void onRequestFailure(Object context, Exception exception) {
-		requestHandler.markProcessFailed("Login Failed Due to "
-				+ exception.getMessage());
+		requestHandler.markProcessFailed(" Login Failed Due to "
+				+ exception.getMessage()+". ");
 	}
 
 }

@@ -38,7 +38,7 @@ public class FormService extends RequestAwareService{
 	}
 	
 	public void onRequestFailure(Object context,Exception exception) {
-		requestHandler.markProcessFailed("Form Sync Failed"+exception.getMessage());
+		requestHandler.markProcessFailed("Form Sync Failed. "+exception.getMessage());
 	}
 
 }

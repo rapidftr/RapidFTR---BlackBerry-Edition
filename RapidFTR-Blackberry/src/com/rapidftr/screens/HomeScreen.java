@@ -131,7 +131,7 @@ public class HomeScreen extends CustomScreen {
 				"Are you sure you want to Log Out ?");
 		if (result == Dialog.YES) {
 			settings.clearState();
-			Dialog.alert("successfully Logged Out");
+			Dialog.alert("Successfully Logged Out");
 		}
 	}
 
