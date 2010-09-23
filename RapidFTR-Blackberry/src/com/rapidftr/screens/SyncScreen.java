@@ -155,7 +155,7 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 						+ process.name()
 						+ " ] is Still Runing .\n Do you want to Stop it?");
 				if (result == Dialog.YES) {
-					process.stopProcess();
+						((SyncController) controller).clearProcess();
 					return;
 				}
 			}
