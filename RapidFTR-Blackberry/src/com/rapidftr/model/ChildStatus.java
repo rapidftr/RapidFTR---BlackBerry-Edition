@@ -5,8 +5,8 @@ import net.rim.device.api.util.Persistable;
 
 public class ChildStatus implements Persistable {
 
-	public static final ChildStatus NEW = new ChildStatus(Color.WHITE);
-	public static final ChildStatus UPDATED = new ChildStatus(Color.BLUE);
+	public static final ChildStatus NEW = new ChildStatus(Color.BLUE);
+	public static final ChildStatus UPDATED = new ChildStatus(Color.CYAN);
 	public static final ChildStatus SYNCED = new ChildStatus(Color.GREEN);
 	public static final ChildStatus SYNC_FAILED = new ChildStatus(Color.DARKRED);
 
