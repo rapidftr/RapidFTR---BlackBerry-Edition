@@ -227,7 +227,7 @@ public class ChildSyncService extends RequestAwareService {
 	}
 
 	public void onRequestFailure(Object context, Exception exception) {
-		requestHandler.markProcessFailed();
+		//requestHandler.markProcessFailed();
 	}
 
 }
