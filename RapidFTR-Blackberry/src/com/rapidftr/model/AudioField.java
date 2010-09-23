@@ -29,6 +29,7 @@ public class AudioField extends FormField implements AudioRecordListener{
 	private byte[] data = null;
 	private String location = null;
 	protected static final String TYPE = "audio_upload_field";
+	private static final String DIRECTORY_NAME = "file:///store/rapidftr/";
 	private VerticalFieldManager manager;
 	private NewChildScreen newChildScreen;
 
@@ -81,27 +82,35 @@ public class AudioField extends FormField implements AudioRecordListener{
 			player.close();
 			writeAudio(data);
 		} catch (Exception e) {
-		System.out.println("Comes here"+e);
 			e.printStackTrace();
 			new RuntimeException(e.getMessage());
 		}
 	}
 
+
 	private void writeAudio(byte [] data) throws IOException {
+		createDirectoryIfNotExists();
 		location=generateLocation();
 		FileConnection fconn = (FileConnection) Connector.open(location, Connector.READ_WRITE);
         if (!fconn.exists())
                 fconn.create();
-
         OutputStream os = fconn.openDataOutputStream();
         os.write(data);
 		os.close();
 		fconn.close();
 	}
 
-	private String generateLocation() {
-		return "file:///store/home/user/a"+new Date().getTime()+FORMAT_EXT;
+	private void createDirectoryIfNotExists() throws IOException {
+		FileConnection directory = (FileConnection)Connector.open(DIRECTORY_NAME);
+		if(!(directory).exists()){
+			directory.mkdir();
+		}
 	}
+
+	private String generateLocation() {
+		return DIRECTORY_NAME+"audio"+new Date().getTime()+FORMAT_EXT;
+	}
+
 
 	public net.rim.device.api.ui.Manager getLayout() {
 		return manager;
