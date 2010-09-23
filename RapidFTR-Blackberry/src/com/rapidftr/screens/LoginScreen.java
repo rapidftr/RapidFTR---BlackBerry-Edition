@@ -19,6 +19,7 @@ import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.services.ScreenCallBack;
+import com.rapidftr.utilities.Properties;
 import com.rapidftr.utilities.SettingsStore;
 
 public class LoginScreen extends CustomScreen implements FieldChangeListener,
@@ -156,7 +157,9 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	private void onLoginButtonClicked() {
-
+		if (hostField.getText() != null && !hostField.getText().equals("")) {
+			Properties.getInstance().setHostName(hostField.getText());
+		}
 		((LoginController) controller).login(usernameField.getText(),
 				passwordField.getText());
 		setCacelButton();
@@ -243,7 +246,7 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 	public boolean keyDown(int keycode, int time) {
 		if (keycode == Characters.ESCAPE) {
 			((LoginController) controller).homeScreen();
-			
+
 		}
 		return super.keyDown(keycode, time);
 	}
@@ -260,8 +263,12 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 	public boolean keyChar(char keycode, int time, int arg2) {
 		if (keycode == Characters.ESCAPE) {
 			((LoginController) controller).homeScreen();
+			return true;
 		}
-		return super.keyChar(keycode, time, arg2);
+		else
+		{
+			return super.keyChar(keycode, time, arg2);
+		}
 
 	}
 

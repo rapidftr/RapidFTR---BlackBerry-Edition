@@ -35,4 +35,10 @@ public class Properties {
 		return httpRequestTimeout;
 	}
 
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+	
+	
+
 }
