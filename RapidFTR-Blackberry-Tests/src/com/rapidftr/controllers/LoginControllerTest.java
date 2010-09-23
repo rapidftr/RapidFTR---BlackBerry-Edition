@@ -3,23 +3,16 @@ package com.rapidftr.controllers;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.util.Hashtable;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.rapidftr.net.HttpRequestHandler;
-import com.rapidftr.net.ScreenCallBack;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.LoginService;
-import com.rapidftr.services.RequestCallBackImpl;
-import com.rapidftr.utilities.SettingsStore;
-import com.sun.me.web.path.Result;
-import com.sun.me.web.request.Response;
+import com.rapidftr.services.ScreenCallBack;
 
 public class LoginControllerTest {
 	private LoginService loginService;

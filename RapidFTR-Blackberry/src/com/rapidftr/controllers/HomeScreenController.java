@@ -23,7 +23,6 @@ public class HomeScreenController extends Controller {
 		dispatcher.newChild();
 	}
 
-
 	public void syncAll() {
 		dispatcher.syncAll();
 	}
@@ -33,7 +32,11 @@ public class HomeScreenController extends Controller {
 	}
 
 	public void cleanAll() {
-		dispatcher.resetDevice();		
+		dispatcher.resetDevice();
+	}
+
+	public void logIn() {
+		dispatcher.login(null);
 	}
 
 }

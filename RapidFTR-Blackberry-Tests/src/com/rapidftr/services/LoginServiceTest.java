@@ -4,7 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.util.Hashtable;
 
 import javax.microedition.io.HttpConnection;
@@ -12,9 +11,7 @@ import javax.microedition.io.HttpConnection;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.rapidftr.net.HttpRequestHandler;
 import com.rapidftr.net.HttpService;
-import com.rapidftr.net.RequestCallBack;
 import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.SettingsStore;
 import com.sun.me.web.path.Result;

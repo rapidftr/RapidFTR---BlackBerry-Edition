@@ -71,7 +71,7 @@ public class Main extends UiApplication {
 
 		UiStack uiStack = new UiStack(this);
 
-		HomeScreen homeScreen = new HomeScreen();
+		HomeScreen homeScreen = new HomeScreen(settings);
 		LoginScreen loginScreen = new LoginScreen(settings);
 		ViewChildScreen viewChildScreen = new ViewChildScreen();
 		ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();

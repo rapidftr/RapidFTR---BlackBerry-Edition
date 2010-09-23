@@ -83,9 +83,16 @@ public class SettingsStore {
 	public String getCurrentlyLoggedIn() {
 		return getString(CURRENT_USER);
 	}
+
 	public String getAuthorizationToken() {
 
 		return getString(AUTHORISATION_TOKEN);
+	}
+
+	public boolean isUserLoggedIn() {
+
+		return !getAuthorizationToken().equals("");
+
 	}
 
 	public void clearState() {

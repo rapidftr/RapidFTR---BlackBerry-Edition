@@ -16,7 +16,7 @@ import com.sun.me.web.request.Response;
 public class HttpRequestHandlerTest {
 
 	
-	private HttpRequestHandler requestHandler;
+	private HttpBatchRequestHandler requestHandler;
 	@Mock
 	private RequestCallBack requestCallBack;
 	@Mock
@@ -26,7 +26,7 @@ public class HttpRequestHandlerTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		requestHandler = new HttpRequestHandler(httpService);
+		requestHandler = new HttpBatchRequestHandler(httpService);
 		requestHandler.setRequestCallBack(requestCallBack);
 	}
 
@@ -65,7 +65,7 @@ public class HttpRequestHandlerTest {
 		Response response = mock(Response.class);
 		when(response.getException()).thenReturn(new Exception());
 		requestHandler.done(context, response);
-		verify(requestCallBack).onRequestException(context,response.getException());
+		verify(requestCallBack).onRequestFailure(context,response.getException());
 
 	}
 

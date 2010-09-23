@@ -40,7 +40,6 @@ public class ViewChildScreen extends CustomScreen {
 	public void setChild(Child child) {
 		this.child = child;
 		clearFields();
-		add(new TitleField());
 		add(new LabelField("Child Details"));
 		add(new SeparatorField());
 		renderChildFields(child);

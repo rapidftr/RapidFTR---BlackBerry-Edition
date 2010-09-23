@@ -70,6 +70,7 @@ public abstract class CustomScreen extends MainScreen {
 		int fieldCount = this.getFieldCount();
 		if (fieldCount > 0)
 			this.deleteRange(0, fieldCount);
+		add(new TitleField());
 	}
 
 

@@ -10,18 +10,39 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controls.Button;
+import com.rapidftr.controls.TitleField;
 import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.SettingsStore;
 
 public class HomeScreen extends CustomScreen {
 
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
 	private Button searchButton;
+	private SettingsStore settings;
 
-	public HomeScreen() {
+	public HomeScreen(SettingsStore settings) {
+		this.settings = settings;
 		layoutScreen();
 	}
 
 	private void layoutScreen() {
+
+		Button loginButton;
+		if (settings.isUserLoggedIn()) {
+			loginButton = new Button("Log Out");
+			loginButton.setChangeListener(new FieldChangeListener() {
+				public void fieldChanged(Field field, int context) {
+					onLogOutButtonClicked();
+				}
+			});
+		} else {
+			loginButton = new Button("Log In");
+			loginButton.setChangeListener(new FieldChangeListener() {
+				public void fieldChanged(Field field, int context) {
+					onLoginButtonClicked();
+				}
+			});
+		}
 
 		Button newChildButton = new Button("Add New child");
 		newChildButton.setChangeListener(new FieldChangeListener() {
@@ -72,6 +93,7 @@ public class HomeScreen extends CustomScreen {
 		});
 
 		Vector buttonGroup = new Vector();
+		buttonGroup.addElement(loginButton);
 		buttonGroup.addElement(newChildButton);
 		buttonGroup.addElement(viewChildrenButton);
 		buttonGroup.addElement(searchButton);
@@ -82,6 +104,8 @@ public class HomeScreen extends CustomScreen {
 		Button.setOptimimWidthForButtonGroup(buttonGroup);
 		VerticalFieldManager manager = new VerticalFieldManager(FIELD_HCENTER);
 		manager.setPadding(PADDING);
+		loginButton.setPadding(PADDING);
+		manager.add(loginButton);
 		newChildButton.setPadding(PADDING);
 		manager.add(newChildButton);
 		viewChildrenButton.setPadding(PADDING);
@@ -100,6 +124,19 @@ public class HomeScreen extends CustomScreen {
 
 		add(manager);
 
+	}
+
+	protected void onLogOutButtonClicked() {
+		int result = Dialog.ask(Dialog.D_YES_NO,
+				"Are you sure you want to Log Out ?");
+		if (result == Dialog.YES) {
+			settings.clearState();
+			Dialog.alert("successfully Logged Out");
+		}
+	}
+
+	protected void onLoginButtonClicked() {
+		((HomeScreenController) controller).logIn();
 	}
 
 	protected void onSyncAllClicked() {
@@ -128,6 +165,12 @@ public class HomeScreen extends CustomScreen {
 
 	public void cleanUp() {
 
+	}
+
+	protected void onExposed() {
+		clearFields();
+		layoutScreen();
+		super.onExposed();
 	}
 
 }
