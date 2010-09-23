@@ -49,8 +49,8 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	private void layoutScreen() {
-		addLogo();
-		add(new SeparatorField());
+		//addLogo();
+		//add(new SeparatorField());
 		usernameField.setPadding(PADDING);
 		usernameField.setText(store.getLastUsedLoginUsername());
 		add(usernameField);
@@ -270,6 +270,12 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 			return super.keyChar(keycode, time, arg2);
 		}
 
+	}
+
+	public void resetCredentials() {
+		usernameField.setText(store.getLastUsedLoginUsername());
+		passwordField.setText("");
+		
 	}
 
 }

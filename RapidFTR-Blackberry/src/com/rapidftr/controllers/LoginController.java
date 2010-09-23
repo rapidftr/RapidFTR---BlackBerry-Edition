@@ -40,4 +40,8 @@ public class LoginController extends RequestAwareController {
 		dispatcher.homeScreen();		
 	}
 
+	public void clearLoginScreen() {
+		((LoginScreen)currentScreen).resetCredentials();
+	}
+
 }

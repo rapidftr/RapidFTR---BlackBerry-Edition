@@ -59,6 +59,7 @@ public class Dispatcher {
 
 	public void resetDevice() {
 		resetDeviceController.resetDevice();
+		loginController.clearLoginScreen();
 	}
 
 	public void login(Process process) {
