@@ -199,7 +199,7 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	public void onAuthenticationFailure() {
-		onProcessFail("Authentication Failed ");
+		onProcessFail("Authentication Failure ");
 	}
 
 	public void onConnectionProblem() {
