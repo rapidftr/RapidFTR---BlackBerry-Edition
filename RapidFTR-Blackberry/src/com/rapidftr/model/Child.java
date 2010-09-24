@@ -285,7 +285,7 @@ public class Child implements Persistable {
 	}
 
 	public boolean isSyncFailed() {
-		return childStatus==ChildStatus.SYNC_FAILED;
+		return childStatus.equals(ChildStatus.SYNC_FAILED);
 	}
 
 }

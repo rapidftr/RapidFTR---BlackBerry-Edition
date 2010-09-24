@@ -8,15 +8,16 @@ import com.rapidftr.services.LoginService;
 
 public class LoginController extends RequestAwareController {
 
-	Process callingProcess ;
+	Process callingProcess;
+
 	public LoginController(LoginScreen screen, UiStack uiStack,
 			LoginService loginService) {
-		super(screen, uiStack,loginService);
+		super(screen, uiStack, loginService);
 	}
 
 	public void login(String userName, String password) {
 		getScreenCallBack().setProgressMessage("Signing In ...");
-		((LoginService)service).login(userName, password);
+		((LoginService) service).login(userName, password);
 	}
 
 	public void loginCancelled() {
@@ -24,24 +25,26 @@ public class LoginController extends RequestAwareController {
 	}
 
 	public void onProcessComplete(boolean status) {
-		if(callingProcess!=null && status){
+		if (callingProcess == null) {
+			popScreen();
+		} else if (callingProcess != null && status) {
 			popScreen();
 			callingProcess.startProcess();
 		}
 	}
 
 	public void showLoginScreen(Process callingProcess) {
-		this.callingProcess = callingProcess;	
-		show();		
+		this.callingProcess = callingProcess;
+		show();
 	}
 
 	public void homeScreen() {
 		uiStack.clear();
-		dispatcher.homeScreen();		
+		dispatcher.homeScreen();
 	}
 
 	public void clearLoginScreen() {
-		((LoginScreen)currentScreen).resetCredentials();
+		((LoginScreen) currentScreen).resetCredentials();
 	}
 
 }

@@ -13,14 +13,15 @@ import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.BitmapField;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 
 import com.rapidftr.controllers.ChildController;
-import com.rapidftr.controls.TitleField;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
@@ -47,32 +48,36 @@ public class ViewChildScreen extends CustomScreen {
 	}
 
 	private void renderChildFields(Child child) {
-		//updateChildFieldsWithLatestForms(child);
+		// updateChildFieldsWithLatestForms(child);
 		int index = 0;
 		Hashtable data = child.getKeyMap();
-		
-		//render the picture
-		HorizontalFieldManager hmanager = new HorizontalFieldManager(Manager.HORIZONTAL_SCROLLBAR);
+
+		// render the picture
+		HorizontalFieldManager hmanager = new HorizontalFieldManager(
+				Manager.HORIZONTAL_SCROLLBAR);
 		renderBitmap(data, hmanager);
 
-		hmanager.add(new BoldRichTextField("   " + data.get(new String("name"))));
+		hmanager
+				.add(new BoldRichTextField("   " + data.get(new String("name"))));
 		add(hmanager);
-		//add an empty line
+		// add an empty line
 		add(new LabelField(""));
-		
-		//render the unique id
-		String uniqueIdentifier = (String)data.get("unique_identifier");
-		uniqueIdentifier = (null==uniqueIdentifier)?"":uniqueIdentifier;
-		
-		add(BoldRichTextField.getSemiBoldRichTextField("Unique Id" + " :", uniqueIdentifier ));
+
+		// render the unique id
+		String uniqueIdentifier = (String) data.get("unique_identifier");
+		uniqueIdentifier = (null == uniqueIdentifier) ? "" : uniqueIdentifier;
+
+		add(BoldRichTextField.getSemiBoldRichTextField("Unique Id" + " :",
+				uniqueIdentifier));
 		add(new SeparatorField());
-		
-		//render other fields
+
+		// render other fields
 		Vector forms = new FormStore().getForms();
-	
+
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			Form form = (Form) list.nextElement();
-			for (Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();) {
+			for (Enumeration fields = form.getFieldList().elements(); fields
+					.hasMoreElements();) {
 				Object nextElement = fields.nextElement();
 
 				if (nextElement != null) {
@@ -85,9 +90,12 @@ public class ViewChildScreen extends CustomScreen {
 					}
 
 					key = key.replace('_', ' ');
-					//richField[index] = BoldRichTextField.getSemiBoldRichTextField(key + " :", value);
+					// richField[index] =
+					// BoldRichTextField.getSemiBoldRichTextField(key + " :",
+					// value);
 
-					add(BoldRichTextField.getSemiBoldRichTextField(key + " :", value));
+					add(BoldRichTextField.getSemiBoldRichTextField(key + " :",
+							value));
 					add(new SeparatorField());
 					index++;
 				}
@@ -96,7 +104,6 @@ public class ViewChildScreen extends CustomScreen {
 		}
 
 	}
-
 
 	private void renderBitmap(Hashtable data, HorizontalFieldManager manager) {
 		manager.setMargin(10, 10, 10, 10);
@@ -123,7 +130,8 @@ public class ViewChildScreen extends CustomScreen {
 	protected void makeMenu(Menu menu, int instance) {
 		MenuItem editChildMenu = new MenuItem("Edit Child Detail", 1, 1) {
 			public void run() {
-				// Move from edit screen directly to the main menu application screen
+				// Move from edit screen directly to the main menu application
+				// screen
 				controller.popScreen();
 				((ChildController) controller).editChild(child);
 			}
@@ -142,6 +150,21 @@ public class ViewChildScreen extends CustomScreen {
 		};
 
 		menu.add(editChildMenu);
+		if (child.isSyncFailed()) {
+			MenuItem syncMenu = new MenuItem("Sync Errors", 2, 1) {
+				public void run() {
+					UiApplication.getUiApplication().invokeLater(
+							new Runnable() {
+								public void run() {
+									Dialog.alert(child.childStatus()
+											.getSyncError());
+
+								}
+							});
+				}
+			};
+			menu.add(syncMenu);
+		}
 		menu.add(historyMenu);
 		menu.add(CloseMenu);
 	}
@@ -156,7 +179,8 @@ public class ViewChildScreen extends CustomScreen {
 				outputStream.write(i);
 
 			byte[] data = outputStream.toByteArray();
-			EncodedImage eimg = EncodedImage.createEncodedImage(data, 0, data.length);
+			EncodedImage eimg = EncodedImage.createEncodedImage(data, 0,
+					data.length);
 			Bitmap image = eimg.getBitmap();
 			inputStream.close();
 
@@ -167,16 +191,14 @@ public class ViewChildScreen extends CustomScreen {
 			return null;
 		}
 	}
-	
-	private int claculateTotalElementsInForms(Vector forms)
-	{
-		int totalCount=0;
-		for(int i=0 ;i< forms.size();i++)
-		{
-			Form form = (Form)forms.elementAt(i);
-			totalCount= totalCount+ form.getFieldList().size();
+
+	private int claculateTotalElementsInForms(Vector forms) {
+		int totalCount = 0;
+		for (int i = 0; i < forms.size(); i++) {
+			Form form = (Form) forms.elementAt(i);
+			totalCount = totalCount + form.getFieldList().size();
 		}
-		
+
 		return totalCount;
 	}
 }
