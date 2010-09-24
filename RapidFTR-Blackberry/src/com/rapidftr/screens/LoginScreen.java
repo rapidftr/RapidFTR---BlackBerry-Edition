@@ -224,7 +224,7 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 	public void onProcessFail(final String message) {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-				setProgressMsg("Login Failed due to "+message);
+				setProgressMsg("Login Failed");
 				setLoginButton();
 			}
 		});

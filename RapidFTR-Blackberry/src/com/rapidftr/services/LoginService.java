@@ -28,6 +28,7 @@ public class LoginService extends RequestAwareService {
 
 		Arg[] httpArgs = new Arg[1];
 		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
+		requestHandler.startNewProcess();
 		requestHandler.post("sessions", postArgs, httpArgs, null, context);
 	}
 

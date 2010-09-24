@@ -71,6 +71,7 @@ public class ChildSyncService extends RequestAwareService {
 	public void syncChildRecord(Child child) {
 		Vector childrenList = new Vector();
 		childrenList.addElement(child);
+		requestHandler.startNewProcess();
 		uploadChildren(childrenList);
 	}
 
@@ -79,25 +80,17 @@ public class ChildSyncService extends RequestAwareService {
 			public void run() {
 				requestHandler.getRequestCallBack().updateProgressMessage(
 						"Syncing");
+				requestHandler.startNewProcess();
 				uploadChildRecords();
+				downloadNewChildRecords();
 
-				try {
-					downloadNewChildRecords();
-				} catch (IOException e) {
-					requestHandler
-							.markProcessFailed("Sync failed due to loss of network connectivity. ");
-				} catch (JSONException e) {
-					requestHandler.markProcessFailed();
-				} catch (Exception e) {
-					requestHandler.markProcessFailed();
-				}
 				// requestHandler.checkAndMarkProcessComplete();
 			};
 		}.start();
 
 	}
 
-	private void downloadNewChildRecords() throws IOException, JSONException {
+	private void downloadNewChildRecords() {
 		Vector childNeedToDownload = childRecordsNeedToBeDownload();
 		Enumeration items = childNeedToDownload.elements();
 		Arg[] httpArgs = new Arg[1];
@@ -119,8 +112,7 @@ public class ChildSyncService extends RequestAwareService {
 
 	}
 
-	private Vector childRecordsNeedToBeDownload() throws IOException,
-			JSONException {
+	private Vector childRecordsNeedToBeDownload() {
 		Vector childNeedToDownload = new Vector();
 		Hashtable offlineIdRevXREF = getOfflineStoredChildrenIdRevMapping();
 		Hashtable onlineIdRevXREF = getOnlineStoredChildrenIdRevMapping();
@@ -138,8 +130,7 @@ public class ChildSyncService extends RequestAwareService {
 		return childNeedToDownload;
 	}
 
-	private Hashtable getOnlineStoredChildrenIdRevMapping()
-			throws ServiceException, IOException {
+	private Hashtable getOnlineStoredChildrenIdRevMapping() {
 
 		Hashtable mapping = new Hashtable();
 
@@ -148,10 +139,14 @@ public class ChildSyncService extends RequestAwareService {
 		Response response;
 		try {
 			response = requestHandler.get("children-ids", null, httpArgs);
+
 			if (response != null) {
 				Result result = response.getResult();
 				HttpServer.printResponse(response);
-				JSONArray jsonChildren = result.getAsArray("");
+				JSONArray jsonChildren;
+
+				jsonChildren = result.getAsArray("");
+
 				for (int i = 0; i < jsonChildren.length(); i++) {
 					JSONObject jsonChild = (JSONObject) jsonChildren.get(i);
 
@@ -159,12 +154,17 @@ public class ChildSyncService extends RequestAwareService {
 							.getString("rev"));
 				}
 			}
-
-		} catch (JSONException e) {
-			throw new ServiceException("JSON Data is invalid Problem");
 		} catch (ResultException e) {
-			throw new ServiceException("JSON Data is invalid Problem");
+			requestHandler.markProcessFailed("Sync failed due to"
+					+ e.getMessage() + ". ");
+		} catch (JSONException e) {
+			requestHandler.markProcessFailed("Sync failed due to "
+					+ e.getMessage() + ". ");
+		} catch (IOException e) {
+			requestHandler.markProcessFailed("Sync failed due to "
+					+ e.getMessage() + ". ");
 		}
+
 		return mapping;
 	}
 
@@ -205,7 +205,7 @@ public class ChildSyncService extends RequestAwareService {
 			updateChildPhoto(child);
 			child.syncSuccess();
 
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			child.syncFailed(e.getMessage());
 		} finally {
 			childRecordStore.addOrUpdateChild(child);

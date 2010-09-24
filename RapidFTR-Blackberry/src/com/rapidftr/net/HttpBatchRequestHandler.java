@@ -22,6 +22,13 @@ public class HttpBatchRequestHandler implements RequestListener {
 		service = httpService;
 	}
 
+	public void startNewProcess() {
+		// terminateProcess();
+		// TODO create new thread pool for every process
+		unprocessedRequests = totalRequests = 0;
+		failedRequest = false;
+	}
+
 	public void get(String url, Arg[] inputArgs, Arg[] httpArgs, Object context) {
 		setUp();
 		service.get(url, inputArgs, httpArgs, this, context);
@@ -40,15 +47,17 @@ public class HttpBatchRequestHandler implements RequestListener {
 	}
 
 	// sync request
-	public Response get(String url, Arg[] inputArgs, Arg[] httpArgs)
-			throws IOException {
-		Response response = service.get(url, inputArgs, httpArgs);
-		if (isValidResponse(response)) {
-			return response;
-		} else {
-			handleResponseErrors(null, response);
-			return null;
-		}
+	public Response get(String url, Arg[] inputArgs, Arg[] httpArgs) throws IOException {
+		Response response = null;
+
+			response = service.get(url, inputArgs, httpArgs);
+			if (!isValidResponse(response)) {
+				handleResponseErrors(null, response);
+				return null;
+			}
+		
+		return response;
+
 	}
 
 	private boolean isValidResponse(Response response) {
@@ -58,6 +67,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 	}
 
 	private void handleResponseErrors(Object context, Response response) {
+		failedRequest = true;
 		if (response.getCode() == HttpConnection.HTTP_UNAUTHORIZED
 				|| response.getCode() == HttpConnection.HTTP_FORBIDDEN) {
 			requestCallBack.onAuthenticationFailure();
@@ -98,12 +108,13 @@ public class HttpBatchRequestHandler implements RequestListener {
 	}
 
 	public void markProcessFailed(String failureMessage) {
+		terminateProcess();
 		requestCallBack.onProcessFail(failureMessage);
 	}
 
 	public void terminateProcess() {
 		service.cancelRequest();
-		unprocessedRequests = totalRequests = 0;
+		totalRequests = 0;
 	}
 
 	public RequestCallBack getRequestCallBack() {
@@ -124,29 +135,29 @@ public class HttpBatchRequestHandler implements RequestListener {
 	}
 
 	public void done(Object context, Response response) {
-		if (unprocessedRequests > 0) {
-			unprocessedRequests--;
-		}
+
 		requestCallBack.updateRequestProgress(totalRequests
 				- unprocessedRequests, totalRequests);
 
 		if (isValidResponse(response)) {
 			requestCallBack.onRequestSuccess(context, response);
-			checkAndMarkProcessComplete();
 		} else {
 			handleResponseErrors(context, response);
 		}
+		checkForProcessCompletion();
 
 	}
 
-	private void checkAndMarkProcessComplete() {
+	private synchronized void checkForProcessCompletion() {
+		if (unprocessedRequests > 0) {
+			unprocessedRequests--;
+		}
 		if (unprocessedRequests == 0) {
-			markProcessComplete();
-//			if (failedRequest) {
-//				markProcessFailed();
-//			} else {
-//				markProcessComplete();
-//			}
+			if (failedRequest) {
+				markProcessFailed();
+			} else {
+				markProcessComplete();
+			}
 		}
 	}
 
