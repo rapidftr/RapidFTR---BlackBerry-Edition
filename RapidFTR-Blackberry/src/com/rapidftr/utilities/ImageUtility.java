@@ -81,9 +81,13 @@ public class ImageUtility {
 
 		}
 
-	} catch (IOException e) {
+	}catch (IllegalArgumentException e)
+	{
+		return  EncodedImage.getEncodedImageResource("res\\head.png") ;
+	}
+	catch (IOException e) {
 		e.printStackTrace();
-		return  null ;
+		return  EncodedImage.getEncodedImageResource("res\\head.png") ;
 	}
 	return null;
 	}
