@@ -73,6 +73,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 				|| response.getCode() == HttpConnection.HTTP_FORBIDDEN) {
 			requestCallBack.onAuthenticationFailure();
 			terminateProcess();
+			processCompleted = true;
 		} else if (response.getException() != null) {
 			// if (response.getException() instanceof IOException) {
 			// // terminateProcess();
@@ -88,6 +89,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 				&& response.getCode() != HttpConnection.HTTP_CREATED) {
 			requestCallBack.onConnectionProblem();
 			terminateProcess();
+			processCompleted = true;
 		}
 	}
 
