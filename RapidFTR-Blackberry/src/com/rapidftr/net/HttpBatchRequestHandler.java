@@ -158,7 +158,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 		checkForProcessCompletion();
 	}
 
-	public void checkForProcessCompletion() {
+	public synchronized void checkForProcessCompletion() {
 		if (unprocessedRequests == 0 && ! processCompleted) {
 			processCompleted = true;
 			if (failedRequest) {

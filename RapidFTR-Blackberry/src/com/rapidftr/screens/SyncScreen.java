@@ -124,7 +124,12 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 	public void updateProgress(final int size) {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
+				try{
 				downloadProgressBar.setValue(size);
+				}catch (Exception ignore) {
+					// Gauge field throwing this wired exception if screen is not active
+					// TODO handle this stuff by checking if current screen is active
+				}
 			}
 		});
 	}
