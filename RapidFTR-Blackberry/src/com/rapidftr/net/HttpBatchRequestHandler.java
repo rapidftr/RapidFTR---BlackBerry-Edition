@@ -132,19 +132,21 @@ public class HttpBatchRequestHandler implements RequestListener {
 
 		if (isValidResponse(response)) {
 			requestCallBack.onRequestSuccess(context, response);
+			checkAndMarkProcessComplete();
 		} else {
 			handleResponseErrors(context, response);
 		}
-		checkAndMarkProcessComplete();
+
 	}
 
 	private void checkAndMarkProcessComplete() {
 		if (unprocessedRequests == 0) {
-			if (failedRequest) {
-				markProcessFailed();
-			} else {
-				markProcessComplete();
-			}
+			markProcessComplete();
+//			if (failedRequest) {
+//				markProcessFailed();
+//			} else {
+//				markProcessComplete();
+//			}
 		}
 	}
 
