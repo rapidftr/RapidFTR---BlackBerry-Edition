@@ -15,7 +15,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 	private int unprocessedRequests = 0;
 	private int totalRequests = 0;
 	private boolean failedRequest = false;
-
+	private boolean processCompleted = false;
 	private HttpService service;
 
 	public HttpBatchRequestHandler(HttpService httpService) {
@@ -27,6 +27,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 		// TODO create new thread pool for every process
 		unprocessedRequests = totalRequests = 0;
 		failedRequest = false;
+		processCompleted = false;
 	}
 
 	public void get(String url, Arg[] inputArgs, Arg[] httpArgs, Object context) {
@@ -144,15 +145,20 @@ public class HttpBatchRequestHandler implements RequestListener {
 		} else {
 			handleResponseErrors(context, response);
 		}
-		checkForProcessCompletion();
+		cleanUp();
 
 	}
 
-	private synchronized void checkForProcessCompletion() {
+	private synchronized void cleanUp() {
 		if (unprocessedRequests > 0) {
 			unprocessedRequests--;
 		}
-		if (unprocessedRequests == 0) {
+		checkForProcessCompletion();
+	}
+
+	public void checkForProcessCompletion() {
+		if (unprocessedRequests == 0 && ! processCompleted) {
+			processCompleted = true;
 			if (failedRequest) {
 				markProcessFailed();
 			} else {

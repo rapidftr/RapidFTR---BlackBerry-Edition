@@ -83,7 +83,7 @@ public class ChildSyncService extends RequestAwareService {
 				requestHandler.startNewProcess();
 				uploadChildRecords();
 				downloadNewChildRecords();
-
+              requestHandler.checkForProcessCompletion();
 				// requestHandler.checkAndMarkProcessComplete();
 			};
 		}.start();
