@@ -25,11 +25,11 @@ public class LoginController extends RequestAwareController {
 	}
 
 	public void onProcessComplete(boolean status) {
-		if (callingProcess == null) {
+		if (status) {
 			popScreen();
-		} else if (callingProcess != null && status) {
-			popScreen();
-			callingProcess.startProcess();
+			if (callingProcess != null) {
+				callingProcess.startProcess();
+			}
 		}
 	}
 

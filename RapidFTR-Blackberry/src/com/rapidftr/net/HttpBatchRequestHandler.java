@@ -14,6 +14,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 	RequestCallBack requestCallBack;
 	private int unprocessedRequests = 0;
 	private int totalRequests = 0;
+	private boolean failedRequest = false;
 
 	private HttpService service;
 
@@ -112,6 +113,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 	private void setUp() {
 		if (unprocessedRequests == 0 && totalRequests == 0) {
 			requestCallBack.onProcessStart();
+			failedRequest = false;
 		}
 		unprocessedRequests += 1;
 		totalRequests += 1;
@@ -130,15 +132,19 @@ public class HttpBatchRequestHandler implements RequestListener {
 
 		if (isValidResponse(response)) {
 			requestCallBack.onRequestSuccess(context, response);
-			checkAndMarkProcessComplete();
 		} else {
 			handleResponseErrors(context, response);
 		}
+		checkAndMarkProcessComplete();
 	}
 
 	private void checkAndMarkProcessComplete() {
 		if (unprocessedRequests == 0) {
-			markProcessComplete();
+			if (failedRequest) {
+				markProcessFailed();
+			} else {
+				markProcessComplete();
+			}
 		}
 	}
 

@@ -114,8 +114,7 @@ public class ChildSyncService extends RequestAwareService {
 			child.setField("name", childId);
 			child.setField("last_known_location", "NA");
 			context.put(CHILD_TO_SYNC, child);
-			requestHandler.get("children/" + childId,
-					null, httpArgs, context);
+			requestHandler.get("children/" + childId, null, httpArgs, context);
 		}
 
 	}
@@ -248,14 +247,14 @@ public class ChildSyncService extends RequestAwareService {
 
 			child.setField("current_photo_key", imagePath);
 		} catch (IOException e) {
-
-			e.printStackTrace();
+			child.syncFailed(e.getMessage());
 		}
 	}
 
 	public void onRequestFailure(Object context, Exception exception) {
 		requestHandler.getRequestCallBack().updateProgressMessage(
-				((Hashtable) context).get(PROCESS_STATE).toString() + " Failed. ");
+				((Hashtable) context).get(PROCESS_STATE).toString()
+						+ " Failed. ");
 		Child child = (Child) (((Hashtable) context).get(CHILD_TO_SYNC));
 		child.syncFailed(exception.getMessage());
 		childRecordStore.addOrUpdateChild(child);
