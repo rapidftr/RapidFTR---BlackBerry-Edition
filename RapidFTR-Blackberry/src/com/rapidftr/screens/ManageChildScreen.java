@@ -31,7 +31,8 @@ public class ManageChildScreen extends CustomScreen {
     SettingsStore settings;
     private Child childToEdit;
 
-    private static String[] REQUIRED_FIELDS = { "last_known_location", "current_photo_key" };
+    private static String[] REQUIRED_FIELDS = {}; 
+    //{ "last_known_location", "current_photo_key" };
 
     public ManageChildScreen(SettingsStore settings) {
         this.settings = settings;
