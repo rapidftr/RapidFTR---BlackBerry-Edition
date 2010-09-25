@@ -24,7 +24,7 @@ public class Button extends Field {
 
 	private int backgroundColour;
 	private Bitmap bitmap;
-
+                 
 	public Button(String text) {
 		super(Field.FOCUSABLE);
 		backgroundColour = Styles.COLOR_FIELD_BACKGROUND;

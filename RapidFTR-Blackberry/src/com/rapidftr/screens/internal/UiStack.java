@@ -29,4 +29,8 @@ public class UiStack {
 			application.popScreen(application.getActiveScreen());
 		}
 	}
+
+    public CustomScreen getCurrentScreen() {
+        return (CustomScreen)application.getActiveScreen();
+    }
 }
