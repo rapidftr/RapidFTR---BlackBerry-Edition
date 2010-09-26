@@ -28,7 +28,7 @@ abstract public class FormField {
 		return name;
 	}
 
-    protected String displayLabel() {
+    public String displayLabel() {
         if (displayName != null && !displayName.equals("")) {
             return displayName;
         }
