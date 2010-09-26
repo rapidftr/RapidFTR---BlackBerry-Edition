@@ -84,7 +84,7 @@ public class Form {
 			{
 					FormField formField = (FormField) nextElement;
 					formField.initializeLayout(newChildScreen);
-					Object fieldValue = child.getField(formField.displayLabel());
+					Object fieldValue = child.getField(formField.getName());
 					formField.setValue((fieldValue != null) ? fieldValue.toString()
 							: "");
 					layoutManager.add(formField.getLayout());
