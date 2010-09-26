@@ -23,8 +23,8 @@ public class PhotoUploadFormField extends FormField implements
 	private Button capturePhoto;
 	private Child child;
 	
-	public PhotoUploadFormField(String name, String type) {
-		super(name, type);
+	public PhotoUploadFormField(String name, String displayName, String type) {
+		super(name, displayName, type);
 	}
 
 	public void initializeLayout(final ManageChildScreen newChildScreen) {
@@ -62,7 +62,7 @@ public class PhotoUploadFormField extends FormField implements
 			}
 		});
 
-		manager.add(new LabelField(name));
+		manager.add(new LabelField(displayLabel()));
 		manager.add(capturePhoto);
 
 	}

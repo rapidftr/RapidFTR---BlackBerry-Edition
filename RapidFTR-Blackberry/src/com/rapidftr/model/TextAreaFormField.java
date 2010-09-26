@@ -18,13 +18,13 @@ public class TextAreaFormField extends FormField {
 	private VerticalFieldManager manager;
 	private TextField field;
 
-	public TextAreaFormField(String name, String type) {
-		super(name, type);
+	public TextAreaFormField(String name, String displayName, String type) {
+		super(name, displayName, type);
 	}
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
-		manager.add(new LabelField(name));
+		manager.add(new LabelField(displayLabel()));
 		field = new BasicEditField();
 		XYEdges edges = new XYEdges(10, 10, 30, 10);
 		Border rounBorder = BorderFactory.createRoundedBorder(edges,

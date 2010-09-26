@@ -1,26 +1,26 @@
 package com.rapidftr.controllers.internal;
 
+import com.rapidftr.controllers.ChildController;
+import com.rapidftr.screens.ManageChildScreen;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.screens.internal.UiStack;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import com.rapidftr.controllers.internal.Controller;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.screens.internal.UiStack;
+public class ChildControllerTest {
 
-public class ControllerTest {
-
-	private CustomScreen screen;
+	private ManageChildScreen screen;
 	private UiStack uiStack;
-	private Controller controller;
+	private ChildController controller;
 
 	@Before
 	public void setUp() {
-		screen = mock(CustomScreen.class);
+		screen = mock(ManageChildScreen.class);
 		uiStack = mock(UiStack.class);
-		controller = new Controller(screen, uiStack) {
+		controller = new ChildController(screen, null, null, null, uiStack, null, null) {
 		};
 	}
 

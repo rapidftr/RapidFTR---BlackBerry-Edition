@@ -1,14 +1,12 @@
 package com.rapidftr.model;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
+import com.rapidftr.controls.BlankSeparatorField;
+import com.rapidftr.screens.ManageChildScreen;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.rapidftr.controls.BlankSeparatorField;
-import com.rapidftr.screens.ManageChildScreen;
+import java.util.Enumeration;
+import java.util.Vector;
 
 public class Form {
 
@@ -86,7 +84,7 @@ public class Form {
 			{
 					FormField formField = (FormField) nextElement;
 					formField.initializeLayout(newChildScreen);
-					Object fieldValue = child.getField(formField.getName());
+					Object fieldValue = child.getField(formField.displayLabel());
 					formField.setValue((fieldValue != null) ? fieldValue.toString()
 							: "");
 					layoutManager.add(formField.getLayout());
