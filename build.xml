@@ -4,6 +4,36 @@
 
   <taskdef resource="bb-ant-defs.xml" classpath="${bb-ant-tools-jar}" />
 
+
+  <condition property="isMac">
+    <os family="mac"/>
+  </condition>
+
+  <condition property="isWindows">
+    <os family="windows"/>
+  </condition>
+
+  <condition property="isUnixButNotMacOsX">
+      <and>
+          <os family="unix"/>
+          <not>
+              <os family="mac"/>
+          </not>
+      </and>
+  </condition>
+
+  <condition property="verify.path" value="${jde.home}/bin-win">
+    <isset property="isWindows"/>
+  </condition>
+
+  <condition property="verify.path" value="${jde.home}/bin-OSX">
+    <isset property="isMac"/>
+  </condition>
+
+  <condition property="verify.path" value="${jde.home}/bin-linux">
+    <isset property="isUnixButNotMacOsX"/>
+  </condition>
+
   <path id="build.classpath">
     <fileset dir="RapidFTR-Blackberry-Tests\\lib">
       <include name="*.jar" />
@@ -22,7 +52,7 @@
     </delete>
   </target>
 
-  <target name="init">
+  <target name="init" depends="clean">
     <mkdir dir="${output.dir}" />
     <mkdir dir="${output.dir}/temp" />
     <mkdir dir="${release.dir}" />
@@ -33,7 +63,7 @@
 
   <target name="compile" depends="init">
   	
-    <rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}/temp">
+    <rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}/temp" exepath="${verify.path}">
       <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"/>
     </rapc>	
   	
@@ -50,14 +80,15 @@
       <fileset dir="${output.dir}/temp" />
     </delete>
   	
-    <rapc  srcdir="${output.dir}" output="${output.file}" destdir="${output.dir}">
+    <rapc  srcdir="${output.dir}" output="${output.file}" destdir="${output.dir}" exepath="${verify.path}">
       <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"  />
     </rapc>
   </target>
 
   <target name="sign" depends="compile">
+	<echo message="${output.dir}"/>
     <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
-      <arg line=" -a -p ${signing.code} -c -C  *.cod" />
+      <arg line=" -a -p ${signing.code} -c -C  RapidFTR.cod" />
     </java>
   </target>
   
@@ -105,7 +136,7 @@
   <target name="build_final">
     <echo message="rapc build, dir=${output.dir}"></echo>
     <mkdir dir="${output.dir}" />
-    <rapc srcdir="${src.dir}" verbose="true" output="${output.file}" destdir="${output.dir}" jdehome="${jde.home}"  noconvert="true">
+    <rapc srcdir="${src.dir}" verbose="true" output="${output.file}" destdir="${output.dir}" jdehome="${jde.home}"  noconvert="true" exepath="${verify.path}">
       <src>
         <fileset file="${output.dir}/${output.file}.jar" />
       </src>
