@@ -17,13 +17,13 @@ public class TextboxFormField extends FormField {
 	protected VerticalFieldManager manager;
 	protected BasicEditField field;
 
-	public TextboxFormField(String name, String type) {
-		super(name, type);
+	public TextboxFormField(String name, String displayName, String type) {
+		super(name, displayName, type);
 	}
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
-		manager.add(new LabelField(name));
+		manager.add(new LabelField(displayLabel()));
 		field = new BasicEditField();
 		XYEdges edges = new XYEdges(10, 10, 10, 10);
 		Border rounBorder = BorderFactory.createRoundedBorder(edges,

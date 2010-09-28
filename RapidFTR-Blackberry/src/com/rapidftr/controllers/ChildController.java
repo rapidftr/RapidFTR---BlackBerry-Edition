@@ -10,6 +10,7 @@ import com.rapidftr.screens.SearchChildScreen;
 import com.rapidftr.screens.SnapshotScreen;
 import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.ViewChildrenScreen;
+import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildStoreService;
 import com.rapidftr.utilities.ImageCaptureListener;
@@ -22,8 +23,9 @@ public class ChildController extends Controller {
 	private final ViewChildScreen viewChildScreen;
 	private final SearchChildScreen searchChildScreen;
 	private final ViewChildrenScreen viewChildrenScreen;
+    private CustomScreen currentChildScreen;
 
-	public ChildController(ManageChildScreen manageChildScreen,
+    public ChildController(ManageChildScreen manageChildScreen,
 			ViewChildScreen viewChildScreen,
 			SearchChildScreen searchChildScreen,
 			ViewChildrenScreen viewChildrenScreen, UiStack uiStack,
@@ -35,6 +37,8 @@ public class ChildController extends Controller {
 		this.childStoreService = childStoreService;
 		this.searchChildScreen = searchChildScreen;
 		this.viewChildrenScreen = viewChildrenScreen;
+        
+        this.currentChildScreen = this.manageChildScreen;
 	}
 
 	public void synchronizeForms() {
@@ -51,6 +55,22 @@ public class ChildController extends Controller {
 		changeScreen(manageChildScreen);
 	}
 
+    public void changeScreen(CustomScreen screen) {
+        currentChildScreen = screen;
+        currentChildScreen.setController(this);
+        show();
+    }
+
+    public void changeBackToScreen(CustomScreen screen) {
+        currentChildScreen = screen;
+    }
+
+	public void show() {
+		if (!currentChildScreen.isActive())
+			uiStack.pushScreen(currentChildScreen);
+		currentChildScreen.setUp();
+	}
+	
 	public void takeSnapshotAndUpdateWithNewImage(
 			ImageCaptureListener imageCaptureListener) {
 
@@ -101,4 +121,7 @@ public class ChildController extends Controller {
 		}
 	}
 
+	public void popScreen() {
+		currentChildScreen.popScreen(uiStack, this);
+	}
 }

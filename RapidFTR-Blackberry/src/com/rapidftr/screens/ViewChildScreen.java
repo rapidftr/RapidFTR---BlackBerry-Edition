@@ -1,26 +1,5 @@
 package com.rapidftr.screens;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.microedition.io.Connector;
-
-import net.rim.device.api.system.Bitmap;
-import net.rim.device.api.system.EncodedImage;
-import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.MenuItem;
-import net.rim.device.api.ui.UiApplication;
-import net.rim.device.api.ui.component.BitmapField;
-import net.rim.device.api.ui.component.Dialog;
-import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.component.SeparatorField;
-import net.rim.device.api.ui.container.HorizontalFieldManager;
-
 import com.rapidftr.controllers.ChildController;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
@@ -30,6 +9,20 @@ import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.BoldRichTextField;
 import com.rapidftr.utilities.ChildFieldIgnoreList;
 import com.rapidftr.utilities.ImageUtility;
+import net.rim.device.api.system.Bitmap;
+import net.rim.device.api.system.EncodedImage;
+import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.component.*;
+import net.rim.device.api.ui.container.HorizontalFieldManager;
+
+import javax.microedition.io.Connector;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Vector;
 
 public class ViewChildScreen extends CustomScreen {
 
@@ -48,23 +41,20 @@ public class ViewChildScreen extends CustomScreen {
 	}
 
 	private void renderChildFields(Child child) {
-		// updateChildFieldsWithLatestForms(child);
 		int index = 0;
-		Hashtable data = child.getKeyMap();
 
 		// render the picture
 		HorizontalFieldManager hmanager = new HorizontalFieldManager(
 				Manager.HORIZONTAL_SCROLLBAR);
-		renderBitmap(data, hmanager);
+		renderBitmap(hmanager, (String) child.getField("current_photo_key"));
 
-		hmanager
-				.add(new BoldRichTextField("   " + data.get(new String("name"))));
+		hmanager.add(new BoldRichTextField("   " + child.getField("name")));
 		add(hmanager);
 		// add an empty line
 		add(new LabelField(""));
 
 		// render the unique id
-		String uniqueIdentifier = (String) data.get("unique_identifier");
+		String uniqueIdentifier = (String) child.getField("unique_identifier");
 		uniqueIdentifier = (null == uniqueIdentifier) ? "" : uniqueIdentifier;
 
 		add(BoldRichTextField.getSemiBoldRichTextField("Unique Id" + " :",
@@ -84,18 +74,14 @@ public class ViewChildScreen extends CustomScreen {
 					FormField field = (FormField) nextElement;
 					String key = field.getName();
 					child.updateField(key);
-					String value = (String) data.get(key);
+					String value = (String) child.getField(key);
 					if (ChildFieldIgnoreList.isInIgnoreList(key)) {
 						continue;
 					}
 
 					key = key.replace('_', ' ');
-					// richField[index] =
-					// BoldRichTextField.getSemiBoldRichTextField(key + " :",
-					// value);
 
-					add(BoldRichTextField.getSemiBoldRichTextField(key + " :",
-							value));
+					add(BoldRichTextField.getSemiBoldRichTextField(field.displayLabel() + " :", value));
 					add(new SeparatorField());
 					index++;
 				}
@@ -105,10 +91,10 @@ public class ViewChildScreen extends CustomScreen {
 
 	}
 
-	private void renderBitmap(Hashtable data, HorizontalFieldManager manager) {
+	private void renderBitmap(HorizontalFieldManager manager, String currentPhotoKey) {
 		manager.setMargin(10, 10, 10, 10);
 
-		Bitmap image = getChildImage((String) data.get("current_photo_key"));
+		Bitmap image = getChildImage(currentPhotoKey);
 
 		if (image == null)
 			image = getChildImage("res/default.jpg");
@@ -192,13 +178,4 @@ public class ViewChildScreen extends CustomScreen {
 		}
 	}
 
-	private int claculateTotalElementsInForms(Vector forms) {
-		int totalCount = 0;
-		for (int i = 0; i < forms.size(); i++) {
-			Form form = (Form) forms.elementAt(i);
-			totalCount = totalCount + form.getFieldList().size();
-		}
-
-		return totalCount;
-	}
 }

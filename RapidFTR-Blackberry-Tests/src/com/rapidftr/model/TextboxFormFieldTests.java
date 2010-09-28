@@ -1,8 +1,8 @@
 package com.rapidftr.model;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class TextboxFormFieldTests {
 
@@ -10,9 +10,8 @@ public class TextboxFormFieldTests {
 	public void shouldTestForEquals() {
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
 		FormField field1 = (TextboxFormField) formFieldFactory
-				.createFormField("name1", "text_field", null);
-		FormField field2 = formFieldFactory.createFormField("name1",
-				"text_field", null);
+				.createFormField("name1", "Name 1", "text_field", null);
+		FormField field2 = formFieldFactory.createFormField("name1", "Name 1", "text_field", null);
 		assertTrue(field1.equals(field2));
 	}
 	

@@ -12,8 +12,8 @@ public class CheckboxFormField extends FormField {
 	private VerticalFieldManager manager;
 	private CheckboxField field;
 
-	public CheckboxFormField(String name, String type) {
-		super(name, type);
+	public CheckboxFormField(String name, String displayName, String type) {
+		super(name, displayName, type);
 	}
 
 	public Manager getLayout() {
@@ -23,7 +23,7 @@ public class CheckboxFormField extends FormField {
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
-		field = new CheckboxField(name, false);
+		field = new CheckboxField(displayLabel(), false);
 		manager.add(field);
 	}
 

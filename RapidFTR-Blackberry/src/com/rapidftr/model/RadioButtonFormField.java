@@ -1,15 +1,14 @@
 package com.rapidftr.model;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import com.rapidftr.screens.ManageChildScreen;
-
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.RadioButtonGroup;
 import net.rim.device.api.ui.container.VerticalFieldManager;
+
+import java.util.Enumeration;
+import java.util.Vector;
 
 public class RadioButtonFormField extends FormField {
 
@@ -17,15 +16,15 @@ public class RadioButtonFormField extends FormField {
 	private VerticalFieldManager manager;
 	private Vector optionStrings;
 
-	public RadioButtonFormField(String name, String type, Vector optionStrings) {
-		super(name, type);
+	public RadioButtonFormField(String name, String displayName, String type, Vector optionStrings) {
+		super(name, displayName, type);
 		this.optionStrings = optionStrings;
 	}
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
 		group = new RadioButtonGroup();
-		manager.add(new LabelField(name));
+		manager.add(new LabelField(displayLabel()));
 
 		for (Enumeration list = optionStrings.elements(); list
 				.hasMoreElements();) {

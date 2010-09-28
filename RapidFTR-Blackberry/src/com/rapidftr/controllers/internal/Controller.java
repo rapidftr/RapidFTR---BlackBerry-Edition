@@ -6,7 +6,7 @@ import com.rapidftr.screens.internal.UiStack;
 abstract public class Controller {
 
 	protected Dispatcher dispatcher;
-	protected CustomScreen currentScreen;
+	protected final CustomScreen currentScreen;
 	protected UiStack uiStack;
 
 	public Controller(CustomScreen screen, UiStack uiStack) {
@@ -19,11 +19,6 @@ abstract public class Controller {
 		this.dispatcher = dispatcher;
 	}
 
-	protected void changeScreen(CustomScreen screen) {	
-		currentScreen = screen;
-		currentScreen.setController(this);
-        show();
-	}
 	public void show() {
 		if (!currentScreen.isActive())
 			uiStack.pushScreen(currentScreen);
@@ -33,5 +28,4 @@ abstract public class Controller {
 	public void popScreen() {
 		currentScreen.popScreen(uiStack);
 	}
-
 }

@@ -1,14 +1,13 @@
 package com.rapidftr.model;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import com.rapidftr.screens.ManageChildScreen;
-
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.component.ObjectChoiceField;
 import net.rim.device.api.ui.container.VerticalFieldManager;
+
+import java.util.Enumeration;
+import java.util.Vector;
 
 public class SelectboxFormField extends FormField {
 
@@ -16,8 +15,8 @@ public class SelectboxFormField extends FormField {
 	private VerticalFieldManager manager;
 	private ObjectChoiceField field;
 
-	public SelectboxFormField(String name, String type, Vector optionStrings) {
-		super(name, type);
+	public SelectboxFormField(String name, String displayName, String type, Vector optionStrings) {
+		super(name, displayName, type);
 		this.optionStrings = optionStrings;
 	}
 
@@ -25,7 +24,7 @@ public class SelectboxFormField extends FormField {
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
 		Object[] optionArray = new Object[optionStrings.size()];
 		optionStrings.copyInto(optionArray);
-		field = new ObjectChoiceField(name + ":", optionArray);
+		field = new ObjectChoiceField(displayLabel() + ":", optionArray);
 		manager.add(field);
 	}
 

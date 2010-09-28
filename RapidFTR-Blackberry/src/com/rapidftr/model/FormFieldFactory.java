@@ -12,28 +12,28 @@ public class FormFieldFactory {
 	public static final String TEXTAREA_FIELD = "textarea";
 	public static final String NUMERIC_TEXT_FIELD = "numeric_text_field";
 	
-	public FormField createFormField(String name, String type, Vector optionStrings) {
+	public FormField createFormField(String name, String displayName, String type, Vector optionStrings) {
 
 		if(TEXT_FIELD.equals(type)) {
-			return new TextboxFormField(name, type);
+			return new TextboxFormField(name, displayName, type);
 		}
 		else if (SELECT_FIELD.equals(type)){
-			return new SelectboxFormField(name, type, optionStrings);
+			return new SelectboxFormField(name, displayName, type, optionStrings);
 		}
 		else if (RADIO_FIELD.equals(type)) {
-			return new RadioButtonFormField(name, type, optionStrings);
+			return new RadioButtonFormField(name, displayName, type, optionStrings);
 		}
 		else if (CHECKBOX_FIELD.equals(type)) {
-			return new CheckboxFormField(name, type);
+			return new CheckboxFormField(name, displayName, type);
 		}
 		else if (PHOTO_FIELD.equals(type)) {
-			return new PhotoUploadFormField(name, type);
+			return new PhotoUploadFormField(name, displayName, type);
 		}
 		else if (TEXTAREA_FIELD.equals(type)) {
-			return new TextAreaFormField(name, type);
+			return new TextAreaFormField(name, displayName, type);
 		}
 		else if (NUMERIC_TEXT_FIELD.equals(type)) {
-			return new NumericTextboxFormField(name, type);
+			return new NumericTextboxFormField(name, displayName, type);
 		}
 		else {
 			return null;
