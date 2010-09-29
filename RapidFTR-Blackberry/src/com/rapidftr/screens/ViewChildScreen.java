@@ -123,6 +123,12 @@ public class ViewChildScreen extends CustomScreen {
 			}
 		};
 
+		MenuItem photoMenu = new MenuItem("View Child Photo", 2, 1) {
+			public void run() {
+				((ChildController) controller).viewChildPhoto(child);
+			}
+		};
+
 		MenuItem historyMenu = new MenuItem("View The Change Log", 2, 1) {
 			public void run() {
 				((ChildController) controller).showHistory(child);
@@ -136,6 +142,7 @@ public class ViewChildScreen extends CustomScreen {
 		};
 
 		menu.add(editChildMenu);
+		menu.add(photoMenu);
 		if (child.isSyncFailed()) {
 			MenuItem syncMenu = new MenuItem("Sync Errors", 2, 1) {
 				public void run() {
