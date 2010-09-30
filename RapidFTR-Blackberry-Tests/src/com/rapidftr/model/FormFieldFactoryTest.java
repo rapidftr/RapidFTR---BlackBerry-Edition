@@ -56,7 +56,7 @@ public class FormFieldFactoryTest {
 	public void shouldReturnNumericTextboxFormField()
 	{
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "numeric_text_field", null);
+		FormField field = formFieldFactory.createFormField("name", "Name", "numeric_field", null);
 		assertNotNull(field);
 		assertTrue(field instanceof NumericTextboxFormField);
 	}
