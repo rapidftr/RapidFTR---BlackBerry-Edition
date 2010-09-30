@@ -16,6 +16,10 @@ public class ChildPhotoScreen extends CustomScreen{
 	private Child child;
 	private LabelField childName ;
 	
+	public ChildPhotoScreen() {
+		super();
+	}
+	
 	public void setChild(Child child) {
 		this.child = child;
 		clearFields();
@@ -26,11 +30,19 @@ public class ChildPhotoScreen extends CustomScreen{
 	}
 	private void renderChildFields(Child child) {
 		
-		EncodedImage eimage = ImageUtility.getBitmapImageForPath(((String) child.getField("current_photo_key")));
-		Bitmap image = eimage.getBitmap();
-		image = ImageUtility.resizeBitmap(image, Display.getWidth(),Display.getHeight()-childName.getHeight());
-		BitmapField imageField= new BitmapField(image);
-		add(imageField);
+		if(child.getField("current_photo_key")==null || child.getField("current_photo_key")=="")
+		{
+			add(new LabelField("No Image Present !!!"));
+		}
+		else
+		{
+			EncodedImage eimage = ImageUtility.getBitmapImageForPath(((String) child.getField("current_photo_key")));
+			Bitmap image = eimage.getBitmap();
+			//image = ImageUtility.resizeBitmap(image, Display.getWidth(),Display.getHeight()-childName.getHeight());
+			BitmapField imageField= new BitmapField(image);
+			add(imageField);
+		}
+		
 	}
 	public void cleanUp() {
 		
