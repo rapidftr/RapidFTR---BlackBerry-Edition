@@ -15,3 +15,4 @@ release/**
 build.properties
 /*.zip
 .metadata/**
+build/*

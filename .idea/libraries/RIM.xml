@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../tools/eclipse/plugins/net.rim.ejde.componentpack4.6.1_4.6.1.36/components/lib/net_rim_api.jar!/" />
       <root url="jar://C:/eclipse/plugins/net.rim.ejde.componentpack4.6.1_4.6.1.36/components/lib/net_rim_api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/tools/jde.4.6.1/lib/net_rim_api.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="http://www.blackberry.com/developers/docs/4.6.0api/" />

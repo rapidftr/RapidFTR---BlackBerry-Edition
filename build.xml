@@ -42,44 +42,50 @@
       <include name="*.jar" />
     </fileset>
   </path>
-  
-  <target name="clean">
-    <delete failonerror="false">
-      <fileset dir="${output.dir}" includes="**/*" />
-      <fileset dir="${report.dir}" includes="**/*" />
-      <fileset dir="${tests-output.dir}" includes="**/*" />
-      <fileset dir="${release.dir}" includes="**/*" />
-    </delete>
-  </target>
+
+    <path id="test.classpath">
+        <path refid="build.classpath"/>
+        <fileset dir="RapidFTR-Blackberry-Tests/lib" includes="**/*.jar"/>
+        <pathelement path="${tests.build.dir}"/>
+    </path>
+
+    <target name="clean">
+        <delete failonerror="false">
+            <fileset dir="${output.dir}" includes="**/*"/>
+            <fileset dir="${report.dir}" includes="**/*"/>
+            <fileset dir="${tests.build.dir}" includes="**/*"/>
+            <fileset dir="${release.dir}" includes="**/*"/>
+        </delete>
+    </target>
 
   <target name="init" depends="clean">
     <mkdir dir="${output.dir}" />
     <mkdir dir="${output.dir}/temp" />
     <mkdir dir="${release.dir}" />
-    <mkdir dir="${tests-output.dir}" />
+    <mkdir dir="${tests.build.dir}" />
     <mkdir dir="${report.dir}" />
   </target>
 
 
   <target name="compile" depends="init">
-  	
+
     <rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}/temp" exepath="${verify.path}">
       <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"/>
-    </rapc>	
-  	
+    </rapc>
+
   	<jar destfile="${output.dir}/temp/${output.file}.jar" update="true">
   	  <fileset dir="${src.dir}" >
   	  <exclude name="**/Thumbs.db"/>
   	  <exclude name="**/*.java"/>
   	  </fileset>
 	</jar>
- 
-  	<copy file="${output.dir}/temp/${output.file}.jar" todir="${output.dir}" /> 
-  		
+
+  	<copy file="${output.dir}/temp/${output.file}.jar" todir="${output.dir}" />
+
     <delete failonerror="true">
       <fileset dir="${output.dir}/temp" />
     </delete>
-  	
+
     <rapc  srcdir="${output.dir}" output="${output.file}" destdir="${output.dir}" exepath="${verify.path}">
       <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"  />
     </rapc>
@@ -91,7 +97,7 @@
       <arg line=" -a -p ${signing.code} -c -C  RapidFTR.cod" />
     </java>
   </target>
-  
+
   <target name="release" depends="sign">
     <alx destdir="${release.dir}" filename="${output.file}.alx">
       <application id="com.rapidftr" name="${app.title}">
@@ -112,28 +118,27 @@
   </target>
 
   <target name="compile-tests" depends="compile">
-    <javac srcdir="${tests-src.dir}" destdir="${tests-output.dir}" classpathref="build.classpath" />
+    <javac srcdir="${tests.src.dir}" destdir="${tests.build.dir}" classpathref="test.classpath" />
   </target>
 
-  <target name="junit" depends="compile-tests">
-    <junit printsummary="yes">
-      <classpath refid="build.classpath">
-      </classpath>
-      <formatter type="xml" />
-      <batchtest fork="yes" todir="${report.dir}">
-        <fileset dir="${tests-src.dir}" />
-      </batchtest>
-    </junit>
-  </target>
+    <target name="test" depends="compile-tests">
+        <junit printsummary="yes" haltonfailure="no" failureproperty="unit.tests.failed">
+            <classpath refid="test.classpath">
+            </classpath>
+            <formatter type="xml"/>
+            <batchtest fork="yes" todir="${report.dir}">
+                <fileset dir="${tests.src.dir}"/>
+            </batchtest>
+        </junit>
+        <junitreport todir="${report.dir}">
+            <fileset dir="${report.dir}" includes="TEST-*.xml"/>
+            <report todir="${report.dir}"/>
+        </junitreport>
+        <fail if="unit.tests.failed" message="Unit tests failed"/>
+    </target>
 
-  <target name="junitreport" depends="junit">
-    <junitreport todir="${report.dir}">
-      <fileset dir="${report.dir}" includes="TEST-*.xml" />
-      <report todir="${report.dir}" />
-    </junitreport>
-  </target>
 
-  <target name="build_final">
+    <target name="build_final">
     <echo message="rapc build, dir=${output.dir}"></echo>
     <mkdir dir="${output.dir}" />
     <rapc srcdir="${src.dir}" verbose="true" output="${output.file}" destdir="${output.dir}" jdehome="${jde.home}"  noconvert="true" exepath="${verify.path}">
@@ -146,7 +151,7 @@
 
     <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
       <arg line=" -a -p ${signing.code} -c -C  *.cod" />
-    </java>    
+    </java>
     <!-- sigtool jdehome="C:Program FilesResearch In MotionBlackBerry JDE 4.7.0" codfile="${dist.dir}/bbant/${name}.cod" password="" / -->
     <alx destdir="${output.dir}" filename="${app.title}.alx">
       <application id="${app.title}">
@@ -162,5 +167,5 @@
       </fileset>
     </jadtool>
   </target>
-    
+
 </project>
