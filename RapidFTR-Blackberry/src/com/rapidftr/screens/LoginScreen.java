@@ -76,7 +76,7 @@ public class LoginScreen extends CustomScreen implements FieldChangeListener,
 			return;
 		}
 		hostField.setPadding(PADDING);
-		hostField.setText(store.getLastUsedLoginHost());
+		hostField.setText(Properties.getInstance().getHostName());
 		int hostPosition = getHostPosition();
 		if (hostPosition == -1) {
 			add(hostField);
