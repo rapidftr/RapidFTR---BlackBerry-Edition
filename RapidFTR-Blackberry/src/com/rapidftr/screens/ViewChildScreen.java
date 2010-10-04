@@ -11,13 +11,22 @@ import com.rapidftr.utilities.ChildFieldIgnoreList;
 import com.rapidftr.utilities.ImageUtility;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
+import net.rim.device.api.ui.Color;
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FieldChangeListener;
+import net.rim.device.api.ui.FocusChangeListener;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.*;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.decor.Border;
+import net.rim.device.api.ui.decor.BorderFactory;
 
 import javax.microedition.io.Connector;
+import javax.microedition.lcdui.Display;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +36,9 @@ import java.util.Vector;
 public class ViewChildScreen extends CustomScreen {
 
 	Child child;
-
+	BitmapField bf;
+	boolean isBitmapFieldFocused = false;
+	
 	public ViewChildScreen() {
 	}
 
@@ -51,7 +62,9 @@ public class ViewChildScreen extends CustomScreen {
 		hmanager.add(new BoldRichTextField("   " + child.getField("name")));
 		add(hmanager);
 		// add an empty line
-		add(new LabelField(""));
+		LabelField emptyLine = new LabelField("");
+		emptyLine.select(false);
+		add(emptyLine);
 
 		// render the unique id
 		String uniqueIdentifier = (String) child.getField("unique_identifier");
@@ -96,15 +109,51 @@ public class ViewChildScreen extends CustomScreen {
 
 		Bitmap image = getChildImage(currentPhotoKey);
 
-		if (image == null)
+		if (image == null)	
+		{
 			image = getChildImage("res/default.jpg");
-
-		if (image != null) {
-			BitmapField bf = new BitmapField(image, BitmapField.FOCUSABLE);
-			manager.add(bf);
 		}
+			
+		bf= new BitmapField(image,BitmapField.FOCUSABLE);
+		bf.select(true);
+		//bf.setVisualStae(Field.VISUAL_STATE_FOCUS);
+		
+		bf.setFocusListener(new FocusChangeListener() {
+			
+			public void focusChanged(Field field, int eventType) {
+				
+				//bf.setVisualState(HIGHLIGHT_SELECT);
+				if(eventType==FOCUS_GAINED)
+				{
+					isBitmapFieldFocused=true;
+					Border blueBorder = BorderFactory.createSimpleBorder(new XYEdges(2, 2, 2, 2),new  XYEdges(Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE), Border.STYLE_SOLID);
+					bf.setBorder(blueBorder);
+				}
+				else if(eventType==FOCUS_LOST)
+				{
+					isBitmapFieldFocused=false;
+					bf.setBorder(null);
+					
+				}
+					
+			}
+		});
+		
+		manager.add(bf);
+		
 	}
 
+	 protected boolean trackwheelClick(int status, int time) {
+		 	if(isBitmapFieldFocused)
+		 	{
+		 		((ChildController) controller).viewChildPhoto(child);
+		 		return false;
+		 		
+		 	}
+		return true;
+	}
+	 
+	 
 	public void setUp() {
 		// TODO Auto-generated method stub
 	}
@@ -123,6 +172,12 @@ public class ViewChildScreen extends CustomScreen {
 			}
 		};
 
+		MenuItem photoMenu = new MenuItem("View Child Photo", 2, 1) {
+			public void run() {
+				((ChildController) controller).viewChildPhoto(child);
+			}
+		};
+
 		MenuItem historyMenu = new MenuItem("View The Change Log", 2, 1) {
 			public void run() {
 				((ChildController) controller).showHistory(child);
@@ -136,6 +191,7 @@ public class ViewChildScreen extends CustomScreen {
 		};
 
 		menu.add(editChildMenu);
+		menu.add(photoMenu);
 		if (child.isSyncFailed()) {
 			MenuItem syncMenu = new MenuItem("Sync Errors", 2, 1) {
 				public void run() {

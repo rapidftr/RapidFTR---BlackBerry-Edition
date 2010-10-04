@@ -28,9 +28,9 @@ public class ChildSyncService extends RequestAwareService {
 
 	private static final String FILE_STORE_HOME_USER = "file:///store/home/user";
 
-	private static final String PROCESS_STATE = "process_state";
+	static final String PROCESS_STATE = "process_state";
 
-	private static final String CHILD_TO_SYNC = "childToSync";
+	static final String CHILD_TO_SYNC = "childToSync";
 
 	private final ChildrenRecordStore childRecordStore;
 
@@ -195,7 +195,7 @@ public class ChildSyncService extends RequestAwareService {
 		Child child = (Child) (((Hashtable) context).get(CHILD_TO_SYNC));
 		try {
 			JSONObject jsonChild = new JSONObject(result.getResult().toString());
-			HttpServer.printResponse(result);
+			//HttpServer.printResponse(result);
 			JSONArray fieldNames = jsonChild.names();
 			for (int j = 0; j < fieldNames.length(); j++) {
 				String fieldName = fieldNames.get(j).toString();

@@ -14,6 +14,7 @@ import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
+import com.rapidftr.screens.ChildPhotoScreen;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.ManageChildScreen;
@@ -83,9 +84,10 @@ public class Main extends UiApplication {
 		// loginScreen.setController(loginController);
 		ResetDeviceController restController = new ResetDeviceController(formService, childSyncService, loginService);
 		HomeScreenController homeScreenController = new HomeScreenController(homeScreen, uiStack);
+		ChildPhotoScreen childPhotoScreen = new ChildPhotoScreen();
 		ChildController childController = new ChildController(
 				newChildScreen, viewChildScreen, searchChildScreen,
-				viewChildrenScreen, uiStack, formStore, childStoreService);
+				viewChildrenScreen, uiStack, formStore, childStoreService,childPhotoScreen);
 		SyncController syncController = new SyncController(syncScreen,uiStack,childSyncService,formService);
 
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,

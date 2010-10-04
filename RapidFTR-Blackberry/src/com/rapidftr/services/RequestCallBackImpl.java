@@ -76,7 +76,9 @@ public class RequestCallBackImpl implements RequestCallBack {
 	}
 
 	public void updateProgressMessage(String msg) {
+		if (ifScreenCallbackExists()) {
 		screenCallback.setProgressMessage(msg);
+		}
 		
 	}
 

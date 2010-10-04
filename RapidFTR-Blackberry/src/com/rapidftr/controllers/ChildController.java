@@ -5,6 +5,7 @@ import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.SearchChildFilter;
 import com.rapidftr.screens.ChildHistoryScreen;
+import com.rapidftr.screens.ChildPhotoScreen;
 import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.SearchChildScreen;
 import com.rapidftr.screens.SnapshotScreen;
@@ -23,13 +24,14 @@ public class ChildController extends Controller {
 	private final ViewChildScreen viewChildScreen;
 	private final SearchChildScreen searchChildScreen;
 	private final ViewChildrenScreen viewChildrenScreen;
+	private final ChildPhotoScreen childPhotoScreen;
     private CustomScreen currentChildScreen;
 
     public ChildController(ManageChildScreen manageChildScreen,
 			ViewChildScreen viewChildScreen,
 			SearchChildScreen searchChildScreen,
 			ViewChildrenScreen viewChildrenScreen, UiStack uiStack,
-			FormStore formStore, ChildStoreService childStoreService) {
+			FormStore formStore, ChildStoreService childStoreService, ChildPhotoScreen childPhotoScreen) {
 		super(manageChildScreen, uiStack);
 		this.manageChildScreen = manageChildScreen;
 		this.viewChildScreen = viewChildScreen;
@@ -37,7 +39,7 @@ public class ChildController extends Controller {
 		this.childStoreService = childStoreService;
 		this.searchChildScreen = searchChildScreen;
 		this.viewChildrenScreen = viewChildrenScreen;
-        
+        this.childPhotoScreen = childPhotoScreen;
         this.currentChildScreen = this.manageChildScreen;
 	}
 
@@ -93,6 +95,11 @@ public class ChildController extends Controller {
 		changeScreen(viewChildScreen);
 	}
 
+	public void viewChildPhoto(Child child)
+	{
+		childPhotoScreen.setChild(child);
+		changeScreen(childPhotoScreen);
+	}
 	public void showHistory(Child child) {
 		ChildHistoryScreen historyScreen = new ChildHistoryScreen(child);
 		uiStack.pushScreen(historyScreen);
