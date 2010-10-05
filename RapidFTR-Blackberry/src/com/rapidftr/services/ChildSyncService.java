@@ -218,7 +218,7 @@ public class ChildSyncService extends RequestAwareService {
 			Arg[] httpArgs = new Arg[1];
 			httpArgs[0] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
 			Response response = requestHandler.get("children/"
-					+ child.getField("_id") + "/thumbnail", null, httpArgs);
+					+ child.getField("_id") + "/resized_photo/400", null, httpArgs);
 			byte[] data = response.getResult().getData();
 
 			String storePath = "";
