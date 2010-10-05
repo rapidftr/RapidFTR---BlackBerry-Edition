@@ -1,18 +1,16 @@
 package com.rapidftr.screens;
 
-import java.util.Vector;
-
+import com.rapidftr.controllers.HomeScreenController;
+import com.rapidftr.controls.Button;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.SettingsStore;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.rapidftr.controllers.HomeScreenController;
-import com.rapidftr.controls.Button;
-import com.rapidftr.controls.TitleField;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.SettingsStore;
+import java.util.Vector;
 
 public class HomeScreen extends CustomScreen {
 
@@ -44,20 +42,20 @@ public class HomeScreen extends CustomScreen {
 			});
 		}
 
-		Button newChildButton = new Button("Add New child");
+		Button newChildButton = new Button("Register Child");
 		newChildButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onNewChildClicked();
 			}
 		});
-		Button viewChildrenButton = new Button("View all children");
+		Button viewChildrenButton = new Button("View All Children");
 		viewChildrenButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onViewChildrenClicked();
 			}
 		});
 
-		searchButton = new Button("Search for a child");
+		searchButton = new Button("Search for a Child");
 		searchButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onSearchClicked();
@@ -71,7 +69,7 @@ public class HomeScreen extends CustomScreen {
 			}
 		});
 
-		Button syncAllButton = new Button("Sync All");
+		Button syncAllButton = new Button("Sync Child Records");
 		syncAllButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onSyncAllClicked();
