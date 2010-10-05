@@ -45,7 +45,7 @@ public class Dispatcher {
 		childController.newChild();
 	}
 
-	public void syncAll() {
+	public void syncChildRecords() {
 		syncController.syncAllChildRecords();
 	}
 

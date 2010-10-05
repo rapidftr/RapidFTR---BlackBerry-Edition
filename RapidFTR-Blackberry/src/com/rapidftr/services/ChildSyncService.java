@@ -1,18 +1,5 @@
 package com.rapidftr.services;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.microedition.io.Connector;
-import javax.microedition.io.file.FileConnection;
-
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
-
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpServer;
@@ -23,6 +10,17 @@ import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.Response;
+import org.json.me.JSONArray;
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+
+import javax.microedition.io.Connector;
+import javax.microedition.io.file.FileConnection;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class ChildSyncService extends RequestAwareService {
 
