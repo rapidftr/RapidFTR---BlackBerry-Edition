@@ -15,6 +15,7 @@ import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
+import com.rapidftr.screens.ChildPhotoScreen;
 import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.SearchChildScreen;
 import com.rapidftr.screens.ViewChildScreen;
@@ -36,7 +37,10 @@ public class ChildControllerTest {
 	private SearchChildScreen searchChildScreen;
 	@Mock
 	private ViewChildrenScreen viewChildrenScreen;
-	
+
+	@Mock
+	private ChildPhotoScreen childPhotoScreen;
+
 	private ChildController childController;
 	@Mock
 	private Vector forms;
@@ -49,8 +53,9 @@ public class ChildControllerTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		when(formStore.getForms()).thenReturn(forms);
-		childController = new ChildController(newChildScreen,
-				viewChildScreen,searchChildScreen,viewChildrenScreen, uiStack, formStore, childStoreService);
+		childController = new ChildController(newChildScreen, viewChildScreen,
+				searchChildScreen, viewChildrenScreen, uiStack, formStore,
+				childStoreService, childPhotoScreen);
 		childController.setDispatcher(dispatcher);
 	}
 
@@ -68,7 +73,7 @@ public class ChildControllerTest {
 	}
 
 	@Test
-	public void shouldSaveTheChildToTheRecordStore() {		
+	public void shouldSaveTheChildToTheRecordStore() {
 		Child child = mock(Child.class);
 		childController.saveChild(child);
 	}

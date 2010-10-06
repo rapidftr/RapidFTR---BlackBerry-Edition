@@ -10,7 +10,7 @@ public class FormFieldFactory {
 	public static final String CHECKBOX_FIELD = "check_box";
 	public static final String PHOTO_FIELD = "photo_upload_box";
 	public static final String TEXTAREA_FIELD = "textarea";
-	public static final String NUMERIC_TEXT_FIELD = "numeric_text_field";
+	public static final String numeric_field = "numeric_field";
 	
 	public FormField createFormField(String name, String displayName, String type, Vector optionStrings) {
 
@@ -32,7 +32,7 @@ public class FormFieldFactory {
 		else if (TEXTAREA_FIELD.equals(type)) {
 			return new TextAreaFormField(name, displayName, type);
 		}
-		else if (NUMERIC_TEXT_FIELD.equals(type)) {
+		else if (numeric_field.equals(type)) {
 			return new NumericTextboxFormField(name, displayName, type);
 		}
 		else {
