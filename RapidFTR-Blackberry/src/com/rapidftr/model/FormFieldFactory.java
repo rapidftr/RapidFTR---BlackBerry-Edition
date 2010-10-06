@@ -11,6 +11,7 @@ public class FormFieldFactory {
 	public static final String PHOTO_FIELD = "photo_upload_box";
 	public static final String TEXTAREA_FIELD = "textarea";
 	public static final String numeric_field = "numeric_field";
+	public static final String date_field = "date_field";
 	
 	public FormField createFormField(String name, String displayName, String type, Vector optionStrings) {
 
@@ -34,6 +35,9 @@ public class FormFieldFactory {
 		}
 		else if (numeric_field.equals(type)) {
 			return new NumericTextboxFormField(name, displayName, type);
+		}
+		else if (date_field.equals(type)) {
+			return new DateFormField(name, displayName, type);
 		}
 		else {
 			return null;
