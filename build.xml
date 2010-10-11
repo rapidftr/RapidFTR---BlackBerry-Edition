@@ -1,47 +1,46 @@
-<!--It Required Blackberry Ant Tools (http://bb-ant-tools.sourceforge.net/)  -->
 <project name="RapidFTR---BlackBerry-Edition" default="compile">
-  <property file="build.properties" />
+    <property file="build.properties"/>
 
-  <taskdef resource="bb-ant-defs.xml" classpath="${bb-ant-tools-jar}" />
+    <taskdef resource="bb-ant-defs.xml" classpath="${bb-ant-tools-jar}"/>
 
 
-  <condition property="isMac">
-    <os family="mac"/>
-  </condition>
+    <condition property="isMac">
+        <os family="mac"/>
+    </condition>
 
-  <condition property="isWindows">
-    <os family="windows"/>
-  </condition>
+    <condition property="isWindows">
+        <os family="windows"/>
+    </condition>
 
-  <condition property="isUnixButNotMacOsX">
-      <and>
-          <os family="unix"/>
-          <not>
-              <os family="mac"/>
-          </not>
-      </and>
-  </condition>
+    <condition property="isUnixButNotMacOsX">
+        <and>
+            <os family="unix"/>
+            <not>
+                <os family="mac"/>
+            </not>
+        </and>
+    </condition>
 
-  <condition property="verify.path" value="${jde.home}/bin-win">
-    <isset property="isWindows"/>
-  </condition>
+    <condition property="verify.path" value="${jde.home}/bin-win">
+        <isset property="isWindows"/>
+    </condition>
 
-  <condition property="verify.path" value="${jde.home}/bin-OSX">
-    <isset property="isMac"/>
-  </condition>
+    <condition property="verify.path" value="${jde.home}/bin-OSX">
+        <isset property="isMac"/>
+    </condition>
 
-  <condition property="verify.path" value="${jde.home}/bin-linux">
-    <isset property="isUnixButNotMacOsX"/>
-  </condition>
+    <condition property="verify.path" value="${jde.home}/bin-linux">
+        <isset property="isUnixButNotMacOsX"/>
+    </condition>
 
-  <path id="build.classpath">
-    <fileset dir="RapidFTR-Blackberry-Tests\\lib">
-      <include name="*.jar" />
-    </fileset>
-    <fileset dir="${output.dir}">
-      <include name="*.jar" />
-    </fileset>
-  </path>
+    <path id="build.classpath">
+        <fileset dir="RapidFTR-Blackberry-Tests\\lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${output.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
 
     <path id="test.classpath">
         <path refid="build.classpath"/>
@@ -58,68 +57,71 @@
         </delete>
     </target>
 
-  <target name="init" depends="clean">
-    <mkdir dir="${output.dir}" />
-    <mkdir dir="${output.dir}/temp" />
-    <mkdir dir="${release.dir}" />
-    <mkdir dir="${tests.build.dir}" />
-    <mkdir dir="${report.dir}" />
-  </target>
+    <target name="init" depends="clean">
+        <mkdir dir="${output.dir}"/>
+        <mkdir dir="${output.dir}/temp"/>
+        <mkdir dir="${release.dir}"/>
+        <mkdir dir="${tests.build.dir}"/>
+        <mkdir dir="${report.dir}"/>
+    </target>
 
 
-  <target name="compile" depends="init">
+    <target name="compile" depends="init">
 
-    <rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}/temp" exepath="${verify.path}">
-      <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"/>
-    </rapc>
+        <rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}/temp" exepath="${verify.path}">
+            <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"/>
+        </rapc>
 
-  	<jar destfile="${output.dir}/temp/${output.file}.jar" update="true">
-  	  <fileset dir="${src.dir}" >
-  	  <exclude name="**/Thumbs.db"/>
-  	  <exclude name="**/*.java"/>
-  	  </fileset>
-	</jar>
+        <jar destfile="${output.dir}/temp/${output.file}.jar" update="true">
+            <fileset dir="${src.dir}">
+                <exclude name="**/Thumbs.db"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </jar>
 
-  	<copy file="${output.dir}/temp/${output.file}.jar" todir="${output.dir}" />
+        <copy file="${output.dir}/temp/${output.file}.jar" todir="${output.dir}"/>
 
-    <delete failonerror="true">
-      <fileset dir="${output.dir}/temp" />
-    </delete>
+        <delete failonerror="true">
+            <fileset dir="${output.dir}/temp"/>
+        </delete>
 
-    <rapc  srcdir="${output.dir}" output="${output.file}" destdir="${output.dir}" exepath="${verify.path}">
-      <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"  />
-    </rapc>
-  </target>
+        <rapc srcdir="${output.dir}" output="${output.file}" destdir="${output.dir}" exepath="${verify.path}">
+            <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"/>
+        </rapc>
+    </target>
 
-  <target name="sign" depends="compile">
-	<echo message="${output.dir}"/>
-    <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
-      <arg line=" -a -p ${signing.code} -c -C  RapidFTR.cod" />
-    </java>
-  </target>
+    <target name="sign" depends="compile">
+        <echo message="${output.dir}"/>
+        <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
+            <arg line=" -a -p ${signing.code} -c -C  RapidFTR.cod"/>
+        </java>
+    </target>
 
-  <target name="release" depends="sign">
-    <alx destdir="${release.dir}" filename="${output.file}.alx">
-      <application id="com.rapidftr" name="${app.title}">
-        <codset greaterthanequal="4.6.1">
-          <fileset dir="${output.dir}" includes="*.cod" />
-        </codset>
-      </application>
-    </alx>
-  </target>
+    <target name="release" depends="sign">
+        <alx destdir="${release.dir}" filename="${output.file}.alx">
+            <application id="com.rapidftr" name="${app.title}">
+                <codset greaterthanequal="4.6.1">
+                    <fileset dir="${output.dir}" includes="*.cod"/>
+                </codset>
+            </application>
+        </alx>
+        <jadtool input="${output.dir}/${output.file}.jad" destdir="${release.dir}">
+            <fileset dir="build" includes="*.cod"/>
+        </jadtool>
+    </target>
 
-  <!-- Load to device -->
-  <target name="load" depends="sign">
-    <exec executable="${jde.home}/bin/JavaLoader.exe" dir="." failonerror="true">
-      <arg value="-u" />
-      <arg value="load" />
-      <arg value="output/tocod/${output.file}.cod" />
-    </exec>
-  </target>
+    <!-- Load to device -->
+    <target name="load" depends="sign">
+        <exec executable="${jde.home}/bin/JavaLoader.exe" dir="." failonerror="true">
+            <arg value="-u"/>
+            <arg value="load"/>
+            <arg value="output/tocod/${output.file}.cod"/>
+        </exec>
+    </target>
 
-  <target name="compile-tests" depends="compile">
-    <javac srcdir="${tests.src.dir}" destdir="${tests.build.dir}" classpathref="test.classpath" />
-  </target>
+    <target name="compile-tests" depends="compile">
+        <javac srcdir="${tests.src.dir}" destdir="${tests.build.dir}" classpathref="test.classpath"/>
+    </target>
 
     <target name="test" depends="compile-tests">
         <junit printsummary="yes" haltonfailure="no" failureproperty="unit.tests.failed">
@@ -139,33 +141,34 @@
 
 
     <target name="build_final">
-    <echo message="rapc build, dir=${output.dir}"></echo>
-    <mkdir dir="${output.dir}" />
-    <rapc srcdir="${src.dir}" verbose="true" output="${output.file}" destdir="${output.dir}" jdehome="${jde.home}"  noconvert="true" exepath="${verify.path}">
-      <src>
-        <fileset file="${output.dir}/${output.file}.jar" />
-      </src>
-      <jdp title="${app.title}" vendor="${app.vendor}" version="${app.version}" type="cldc"  >
-      </jdp>
-    </rapc>
+        <echo message="rapc build, dir=${output.dir}"></echo>
+        <mkdir dir="${output.dir}"/>
+        <rapc srcdir="${src.dir}" verbose="true" output="${output.file}" destdir="${output.dir}" jdehome="${jde.home}"
+              noconvert="true" exepath="${verify.path}">
+            <src>
+                <fileset file="${output.dir}/${output.file}.jar"/>
+            </src>
+            <jdp title="${app.title}" vendor="${app.vendor}" version="${app.version}" type="cldc">
+            </jdp>
+        </rapc>
 
-    <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
-      <arg line=" -a -p ${signing.code} -c -C  *.cod" />
-    </java>
-    <!-- sigtool jdehome="C:Program FilesResearch In MotionBlackBerry JDE 4.7.0" codfile="${dist.dir}/bbant/${name}.cod" password="" / -->
-    <alx destdir="${output.dir}" filename="${app.title}.alx">
-      <application id="${app.title}">
-        <codset>
-          <fileset dir="${output.dir}" includes="*.cod">
-          </fileset>
-        </codset>
-      </application>
-    </alx>
-    <mkdir dir="${output.dir}/bbant-final" />
-    <jadtool input="${output.dir}/${output.file}.jad" destdir="${output.dir}/bbant-final">
-      <fileset dir="${output.dir}" includes="*.cod">
-      </fileset>
-    </jadtool>
-  </target>
+        <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
+            <arg line=" -a -p ${signing.code} -c -C  *.cod"/>
+        </java>
+        <!-- sigtool jdehome="C:Program FilesResearch In MotionBlackBerry JDE 4.7.0" codfile="${dist.dir}/bbant/${name}.cod" password="" / -->
+        <alx destdir="${output.dir}" filename="${app.title}.alx">
+            <application id="${app.title}">
+                <codset>
+                    <fileset dir="${output.dir}" includes="*.cod">
+                    </fileset>
+                </codset>
+            </application>
+        </alx>
+        <mkdir dir="${output.dir}/bbant-final"/>
+        <jadtool input="${output.dir}/${output.file}.jad" destdir="${output.dir}/bbant-final">
+            <fileset dir="${output.dir}" includes="*.cod">
+            </fileset>
+        </jadtool>
+    </target>
 
 </project>
