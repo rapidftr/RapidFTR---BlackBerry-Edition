@@ -34,6 +34,16 @@ public class DateFormField extends FormField
 	}
 
 	public void setValue(String value) {
-		dateField.setDate(Long.parseLong(value));
+		
+		try
+		{
+			long dateValue = Long.parseLong(value);
+			dateField.setDate(dateValue);
+		}
+		catch (NumberFormatException nfe)
+		{
+			dateField.setDate(System.currentTimeMillis());
+		}
+		
 	}
 }
