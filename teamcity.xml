@@ -17,6 +17,9 @@
     <target name="deploy" depends="package">
         <mkdir dir="${deployment.dir}/${build.label}"/>
         <unzip src="${package.file}" dest="${deployment.dir}/${build.label}"/>
+        <delete dir="${deployment.dir}/latest"/>
+        <mkdir dir="${deployment.dir}/latest"/>
+        <unzip src="${package.file}" dest="${deployment.dir}/latest"/>
     </target>
 
 
