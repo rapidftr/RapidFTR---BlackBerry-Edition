@@ -19,6 +19,11 @@ public class LoginService extends RequestAwareService {
 		this.settingsStore = settingsStore;
 	}
 
+	/**
+	 * @deprecated use login(com.rapidftr.services.Credentials) instead
+	 * @param userName
+	 * @param password
+	 */
 	public void login(String userName, String password) {
 		Arg[] postArgs = new Arg[] { new Arg("user_name", userName),
 				new Arg("password", password) };
@@ -26,10 +31,9 @@ public class LoginService extends RequestAwareService {
 		Hashtable context = new Hashtable();
 		context.put(USER_NAME, userName);
 
-		Arg[] httpArgs = new Arg[1];
-		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
 		requestHandler.startNewProcess();
-		requestHandler.post("sessions", postArgs, httpArgs, null, context);
+		requestHandler.post("sessions", postArgs, HttpUtility.makeJSONHeader(),
+				null, context);
 	}
 
 	private String parseAuthorizationToken(Response response) {
@@ -56,6 +60,12 @@ public class LoginService extends RequestAwareService {
 	public void onRequestFailure(Object context, Exception exception) {
 		requestHandler.markProcessFailed(" Login Failed Due to "
 				+ exception.getMessage()+". ");
+	}
+
+	public void login(Credential credentials) {
+		if(credentials.isOffline()){
+			
+		}
 	}
 
 }

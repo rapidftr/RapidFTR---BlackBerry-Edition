@@ -1,8 +1,10 @@
 package com.rapidftr.services;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.internal.verification.VerificationModeFactory.times; 
 
 import java.util.Hashtable;
 
@@ -10,7 +12,9 @@ import javax.microedition.io.HttpConnection;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.internal.verification.VerificationModeFactory;
 
+import com.rapidftr.controllers.LoginController;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.SettingsStore;
@@ -101,7 +105,29 @@ public class LoginServiceTest {
 		loginService.cancelRequest();
 		verify(httpService).cancelRequest();
 	}
-
+	
+	@Test
+	public void shouldCheckSettingStoreForAuthentication() throws Exception {
+		Credential credential = new Credential("user","pass", true, settingsStore);
+		loginService.login(credential);
+		verify(settingsStore).isVerifiedUser();
+	}
+	
+	@Test
+	public void shouldNotCallIsVerifiedUserIfNotInOfflineMode() throws Exception {
+		Credential credential = new Credential("user","pass", false, settingsStore);
+		loginService.login(credential);
+		verify(settingsStore, times(0)).isVerifiedUser();
+	}
+	
+	@Test
+	public void shouldPostDataToServerIfNotOffline() throws Exception {
+		Credential credential = new Credential("user","pass", false, settingsStore);
+		loginService.login(credential);
+		
+		
+	}
+	
 	private Response stubSuccessfulResponseWithToken(String authorizationToken)
 			throws ResultException {
 		Response response = mock(Response.class);

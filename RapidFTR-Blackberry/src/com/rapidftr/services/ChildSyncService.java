@@ -93,8 +93,6 @@ public class ChildSyncService extends RequestAwareService {
 	private void downloadNewChildRecords() {
 		Vector childNeedToDownload = childRecordsNeedToBeDownload();
 		Enumeration items = childNeedToDownload.elements();
-		Arg[] httpArgs = new Arg[1];
-		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
 		int index = 0;
 		while (items.hasMoreElements()) {
 			index++;
@@ -107,7 +105,7 @@ public class ChildSyncService extends RequestAwareService {
 			child.setField("name", childId);
 			child.setField("last_known_location", "NA");
 			context.put(CHILD_TO_SYNC, child);
-			requestHandler.get("children/" + childId, null, httpArgs, context);
+			requestHandler.get("children/" + childId, null, HttpUtility.makeJSONHeader(), context);
 		}
 
 	}
@@ -134,11 +132,9 @@ public class ChildSyncService extends RequestAwareService {
 
 		Hashtable mapping = new Hashtable();
 
-		Arg[] httpArgs = new Arg[1];
-		httpArgs[0] = HttpUtility.HEADER_ACCEPT_JSON;
 		Response response;
 		try {
-			response = requestHandler.get("children-ids", null, httpArgs);
+			response = requestHandler.get("children-ids", null, HttpUtility.makeJSONHeader());
 
 			if (response != null) {
 				Result result = response.getResult();

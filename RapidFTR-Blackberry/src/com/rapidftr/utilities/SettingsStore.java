@@ -100,4 +100,8 @@ public class SettingsStore {
 		contents = new Hashtable();
 		persistentObject.commit();
 	}
+
+	public boolean isVerifiedUser() {
+		throw new UnsupportedOperationException();
+	}
 }
