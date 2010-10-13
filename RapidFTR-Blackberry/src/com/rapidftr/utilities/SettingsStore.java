@@ -8,14 +8,15 @@ import java.util.Hashtable;
 public class SettingsStore {
 
 	private static final String DEFAULT_HOST = "defaulthost.foo.org";
-
+	private static final String DEFAULT_PORT = "80";
 	private static final String DEFAULT_USERNAME = "default.user";
-
+	
 	private static final long KEY = "com.rapidftr.utilities.ftrstore"
 			.hashCode();
-
+	
 	private static final String KEY_LAST_USED_USERNAME = "Last_Used_Username";
 	private static final String KEY_LAST_USED_HOST = "Last_Used_Host";
+	private static final String KEY_LAST_USED_PORT = "Last_Used_Port";
 
 	private final PersistentObject persistentObject = PersistentStore
 			.getPersistentObject(KEY);
@@ -23,6 +24,8 @@ public class SettingsStore {
 	private Hashtable contents;
 	private static final String AUTHORISATION_TOKEN = "Authorisation_Token";
 	private static final String CURRENT_USER = "Current_User";
+
+
 
 	public SettingsStore() {
 		loadContentsHashtable();
@@ -41,11 +44,15 @@ public class SettingsStore {
 	}
 
 	public String getLastUsedLoginUsername() {
-		return getString(KEY_LAST_USED_USERNAME, DEFAULT_USERNAME);
+		return getString("Last_Used_Username", DEFAULT_USERNAME);
 	}
 
 	public String getLastUsedLoginHost() {
-		return getString(KEY_LAST_USED_HOST, DEFAULT_HOST);
+		return getString("Last_Used_Host", DEFAULT_HOST);
+	}
+	
+	public String getLastUsedLoginPort() {
+		return getString(KEY_LAST_USED_PORT, DEFAULT_PORT);
 	}
 
 	public void setLastUsedUsername(String value) {
@@ -104,4 +111,5 @@ public class SettingsStore {
 	public boolean isVerifiedUser() {
 		throw new UnsupportedOperationException();
 	}
+
 }

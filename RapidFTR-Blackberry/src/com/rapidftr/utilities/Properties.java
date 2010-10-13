@@ -1,14 +1,17 @@
 package com.rapidftr.utilities;
 
+import net.rim.device.api.util.StringUtilities;
+
 public class Properties {
 
-	private static final int DEFAULT_PORT = 3000;
+	private static final int DEFAULT_PORT = 80;
 	private static final String DEFAULT_HOST = "dev.rapidftr.com";
 	private static final int DEFAULT_HTTP_TIMEOUT = 10000;
 
 	private static Properties instance;
-	private String hostName = null;
+	private String hostName = DEFAULT_HOST;
 	private int httpRequestTimeout;
+	private int port = DEFAULT_PORT;
 
 	public static synchronized Properties getInstance() {
 		if (instance == null) {
@@ -23,12 +26,13 @@ public class Properties {
 	}
 
 	public String getHostName() {
-		return ((hostName == null) || (hostName.trim().length() == 0)) ? DEFAULT_HOST
+		return (hostName.trim().length() == 0) ? DEFAULT_HOST
 				: hostName;
 	}
 
 	public int getPort() {
-		return DEFAULT_PORT;
+		return (hostName.trim().length() == 0) ? DEFAULT_PORT
+				: port;
 	}
 
 	public int getHttpRequestTimeout() {
@@ -36,9 +40,14 @@ public class Properties {
 	}
 
 	public void setHostName(String hostName) {
-		this.hostName = hostName;
+		if(isNotEmpty(hostName)) this.hostName = hostName;
+	}
+
+	public void setPort(String port) {
+		if(isNotEmpty(port)) this.port = Integer.parseInt(port);
 	}
 	
-	
-
+	private boolean isNotEmpty(String value) {
+		return value != null &&  !"".equals(value);
+	}
 }
