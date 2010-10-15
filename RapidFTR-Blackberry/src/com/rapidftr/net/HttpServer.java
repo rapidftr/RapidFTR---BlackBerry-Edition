@@ -14,10 +14,10 @@ public class HttpServer {
 
 	// private Request request = null;
 	private RequestPool requestPool = RequestPool.getInstance();
-	private int requestTimeout;
+	private HttpSettings settings;
 
-	public HttpServer() {
-		requestTimeout = Properties.getInstance().getHttpRequestTimeout();
+	public HttpServer(HttpSettings settings) {
+		this.settings = settings;
 	}
 
 	public void postToServer(String url, Arg[] postParams, Arg[] httpArgs,
@@ -46,14 +46,12 @@ public class HttpServer {
 	public String buildFullyQualifiedUrl(String uri) {
 
 		String url = getUrlPrefix() + uri + ";deviceside=true"
-				+ ";ConnectionTimeout=" + requestTimeout;
+				+ ";ConnectionTimeout=" + settings.getTimeOut();
 		return url;
 	}
 
 	private String getUrlPrefix() {
-		String hostName = Properties.getInstance().getHostName();
-		int port = Properties.getInstance().getPort();
-		return "http://" + hostName + ":" + port + "/";
+		return "http://" + settings.getHost() + ":" + settings.getPort() + "/";
 	}
 
 	public static void printResponse(Response res) {

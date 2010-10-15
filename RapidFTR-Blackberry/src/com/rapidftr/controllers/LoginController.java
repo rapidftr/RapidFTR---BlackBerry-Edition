@@ -15,9 +15,9 @@ public class LoginController extends RequestAwareController {
 		super(screen, uiStack, loginService);
 	}
 
-	public void login(String userName, String password) {
+	public void login(String userName, String password, String host, String port) {
 		getScreenCallBack().setProgressMessage("Signing In ...");
-		((LoginService) service).login(userName, password);
+		((LoginService) service).login(userName, password, host, port);
 	}
 
 	public void loginCancelled() {

@@ -7,7 +7,7 @@ import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.ImageCaptureListener;
-import com.rapidftr.utilities.SettingsStore;
+import com.rapidftr.utilities.Settings;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
@@ -23,12 +23,12 @@ public class ManageChildScreen extends CustomScreen {
 
     private Vector forms;
     private Manager screenManager;
-    SettingsStore settings;
+    Settings settings;
     private Child childToEdit;
 
     private static String[] REQUIRED_FIELDS = { };
 
-    public ManageChildScreen(SettingsStore settings) {
+    public ManageChildScreen(Settings settings) {
         this.settings = settings;
     }
 

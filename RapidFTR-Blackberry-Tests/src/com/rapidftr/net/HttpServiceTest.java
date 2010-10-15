@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.rapidftr.utilities.SettingsStore;
+import com.rapidftr.utilities.Settings;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;
@@ -25,20 +25,20 @@ public class HttpServiceTest {
 	@Mock
 	private Object context;
 	@Mock
-	SettingsStore settingsStore;
+	Settings settings;
 	private Arg[] httpArgs;
 	private Arg[] httpArgsWithAuthToken;
 
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		httpService = new HttpService(httpServer, settingsStore);
+		httpService = new HttpService(httpServer, settings);
 		url = "url";
 		String token = "token";
 		httpArgs = new Arg[0];
 		httpArgsWithAuthToken = new Arg[] { new Arg(Arg.AUTHORIZATION,
 				"RFTR_Token " + token) };
-		when(settingsStore.getAuthorizationToken()).thenReturn(token);
+		when(settings.getAuthorizationToken()).thenReturn(token);
 		when(httpServer.buildFullyQualifiedUrl(url)).thenReturn(url);
 	}
 

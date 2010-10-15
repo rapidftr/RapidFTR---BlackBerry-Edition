@@ -16,10 +16,9 @@ import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
+import com.rapidftr.net.HttpSettings;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.services.ScreenCallBack;
-import com.rapidftr.utilities.Properties;
-import com.rapidftr.utilities.SettingsStore;
 
 public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		KeyListener {
@@ -32,25 +31,25 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	private final BasicEditField hostField = basicField("Host:");
 	private final BasicEditField portField = basicField("Port:");
 
-	private final SettingsStore store;
+	private final HttpSettings httpSettings;
 	private Manager progressMsgFieldmanager;
 	private LabelField progressMsg;
 	private Button loginButton;
 	private Manager buttonManager;
 	private Button cancelButton;
+	private LoginSettings loginSettings;
 
-	public LoginScreen(SettingsStore store) {
+	public LoginScreen(HttpSettings httpSettings, LoginSettings loginSettings) {
 		super();
-		this.store = store;
+		this.httpSettings = httpSettings;
+		this.loginSettings = loginSettings;
 		layoutScreen();
 		usernameField.setFocus();
 	}
 
 	private void layoutScreen() {
-		// addLogo();
-		// add(new SeparatorField());
 		usernameField.setPadding(PADDING);
-		usernameField.setText(store.getLastUsedLoginUsername());
+		usernameField.setText(loginSettings.getUsername());
 		add(usernameField);
 		passwordField.setPadding(PADDING);
 		add(passwordField);
@@ -106,19 +105,18 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	protected void makeMenu(Menu menu, int instance) {
 		menu.add(new MenuItem("Change Host", 1, 1) {
 			public void run() {
-				addField(hostField, store.getLastUsedLoginHost());
+				addField(hostField, httpSettings.getHost());
 			}
 		});
 
 		menu.add(new MenuItem("Change Port", 2, 1) {
 			public void run() {
-				addField(portField, store.getLastUsedLoginPort());
+				addField(portField, httpSettings.getPort());
 			}
 		});
 	}
 
 	public void setProgressMsg(String msg) {
-
 		progressMsg.setText(msg);
 
 		try {
@@ -126,7 +124,6 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		} catch (IllegalStateException ex) {
 
 		}
-
 	}
 
 	public boolean isDirty() {
@@ -144,11 +141,13 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	}
 
 	private void onLoginButtonClicked() {
-		Properties.getInstance().setHostName(hostField.getText());
-		Properties.getInstance().setPort(portField.getText());
-
+		httpSettings.setHost(hostField.getText());
+		httpSettings.setPort(portField.getText());
+		
 		((LoginController) controller).login(usernameField.getText(),
-				passwordField.getText());
+				passwordField.getText(),
+				hostField.getText(),
+				portField.getText());
 		showCancelButton();
 	}
 
@@ -199,12 +198,10 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	}
 
 	public void updateProgress(int progress) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void onProcessSuccess() {
-		// controller.popScreen();
 
 	}
 
@@ -222,7 +219,6 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	}
 
 	public void onProcessStart() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -258,7 +254,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	}
 
 	public void resetCredentials() {
-		usernameField.setText(store.getLastUsedLoginUsername());
+		usernameField.setText(loginSettings.getUsername());
 		passwordField.setText("");
 
 	}

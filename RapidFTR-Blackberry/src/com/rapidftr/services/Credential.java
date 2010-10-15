@@ -1,15 +1,15 @@
 package com.rapidftr.services;
 
-import com.rapidftr.utilities.SettingsStore;
+import com.rapidftr.utilities.Settings;
 
 public class Credential {
 
 	private final String user;
 	private final String pass;
 	private final boolean offline;
-	private final SettingsStore settingsStore;
+	private final Settings settingsStore;
 
-	public Credential(String user, String pass, boolean offline, SettingsStore settingsStore) {
+	public Credential(String user, String pass, boolean offline, Settings settingsStore) {
 		this.user = user;
 		// TODO Auto-generated constructor stub
 		this.pass = pass;

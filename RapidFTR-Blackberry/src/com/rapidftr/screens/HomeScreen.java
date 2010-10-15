@@ -10,20 +10,17 @@ import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controls.Button;
-import com.rapidftr.controls.TitleField;
 import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.SettingsStore;
+import com.rapidftr.utilities.Settings;
 
 public class HomeScreen extends CustomScreen {
 
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
 	private Button searchButton;
-	private SettingsStore settings;
-
-	public HomeScreen(SettingsStore settings) {
+	private Settings settings;
+	public HomeScreen(Settings settings) {
 		this.settings = settings;
 		layoutScreen();
 	}
@@ -112,7 +109,7 @@ public class HomeScreen extends CustomScreen {
 		int result = Dialog.ask(Dialog.D_YES_NO,
 				"Are you sure you want to Log Out ?");
 		if (result == Dialog.YES) {
-			settings.clearState();
+			settings.clearAuthenticationInfo();
 			Dialog.alert("Successfully Logged Out");
 		}
 	}

@@ -3,7 +3,7 @@ package com.rapidftr.net;
 import java.io.IOException;
 
 import com.rapidftr.utilities.Properties;
-import com.rapidftr.utilities.SettingsStore;
+import com.rapidftr.utilities.Settings;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;
@@ -12,12 +12,11 @@ import com.sun.me.web.request.Response;
 public class HttpService {
 
 	private final HttpServer httpServer;
-	private final SettingsStore settingsStrore;
+	private final Settings settingsStrore;
 
-	public HttpService(HttpServer httpServer, SettingsStore settingsStrore) {
+	public HttpService(HttpServer httpServer, Settings settingsStrore) {
 		this.httpServer = httpServer;
 		this.settingsStrore = settingsStrore;
-		Properties.getInstance().getHttpRequestTimeout();
 	}
 
 	/*

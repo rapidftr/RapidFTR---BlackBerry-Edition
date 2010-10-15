@@ -25,29 +25,4 @@ public class Properties {
 		httpRequestTimeout = DEFAULT_HTTP_TIMEOUT;
 	}
 
-	public String getHostName() {
-		return (hostName.trim().length() == 0) ? DEFAULT_HOST
-				: hostName;
-	}
-
-	public int getPort() {
-		return (hostName.trim().length() == 0) ? DEFAULT_PORT
-				: port;
-	}
-
-	public int getHttpRequestTimeout() {
-		return httpRequestTimeout;
-	}
-
-	public void setHostName(String hostName) {
-		if(isNotEmpty(hostName)) this.hostName = hostName;
-	}
-
-	public void setPort(String port) {
-		if(isNotEmpty(port)) this.port = Integer.parseInt(port);
-	}
-	
-	private boolean isNotEmpty(String value) {
-		return value != null &&  !"".equals(value);
-	}
 }
