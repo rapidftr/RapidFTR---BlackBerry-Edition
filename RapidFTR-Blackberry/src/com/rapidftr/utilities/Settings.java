@@ -73,22 +73,22 @@ public class Settings {
 		return 10000;
 	}
 
-	public void setLastHost(String host) {
+	public void setLastUsedLoginHost(String host) {
 		if (isNotEmpty(host))
 			store.setString(LAST_USED_HOST_KEY, host);
 		else
 			store.setString(LAST_USED_HOST_KEY, getDefaultHost());
 	}
-
-	private boolean isNotEmpty(String field) {
-		return (!"".equals(field) && field != null);
-	}
-
-	public void setLastPort(String port) {
+	
+	public void setLastUsedLoginPort(String port) {
 		if (isNotEmpty(port))
 			store.setString(LAST_USED_PORT_KEY, port);
 		else
 			store.setString(LAST_USED_PORT_KEY, getDefaultPort());
+	}
+
+	private boolean isNotEmpty(String value) {
+		return (!"".equals(value) && value != null && value.trim().length() != 0);
 	}
 
 	public void clearAuthenticationInfo() {

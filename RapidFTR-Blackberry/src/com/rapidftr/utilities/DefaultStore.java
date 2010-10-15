@@ -11,13 +11,12 @@ public class DefaultStore implements Store {
 	PersistentObject persistentObject = PersistentStore
 			.getPersistentObject(PERSISTENT_STORE_KEY);
 
-	protected void setContents(Hashtable hashtable) {
+	private void setContents(Hashtable hashtable) {
 		persistentObject.setContents(hashtable);
 	}
 
-	protected Hashtable getContents() {
-		Object contentsObject = (Hashtable) persistentObject.getContents();
-		if (!(contentsObject instanceof Hashtable)) {
+	private Hashtable getContents() {
+		if (persistentObject.getContents() == null) {
 			setContents(new Hashtable());
 		}
 

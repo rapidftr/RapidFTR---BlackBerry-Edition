@@ -32,8 +32,8 @@ public class LoginControllerTest {
 
 	@Test
 	public void shouldLoginFromFormService() throws IOException {
-		loginController.login("rapidftr", "rapidftr", "", "");
-		verify(loginService).login("rapidftr", "rapidftr", "", "");
+		loginController.login("rapidftr", "rapidftr");
+		verify(loginService).login("rapidftr", "rapidftr");
 	}
 
 	@Test
@@ -47,21 +47,21 @@ public class LoginControllerTest {
 			throws Exception {
 		String userName = "zskjh";
 		String password = "ksdhfkl";
-		loginController.login(userName, password, "", "");
-		verify(loginService).login(userName, password, "", "");
+		loginController.login(userName, password);
+		verify(loginService).login(userName, password);
 	}
 
 
 	@Test
 	public void shouldUpdateTheScreenWithConnectionProblemErrorMessage() {
-		loginController.login("abcd", "abcd", "", ""); 
+		loginController.login("abcd", "abcd"); 
 		screenCallBack.onConnectionProblem();
 		verify(loginScreen).onConnectionProblem();
 	}
 
 	@Test
 	public void shouldUpdateTheScreenWithLoginFailedErrorMessage() {
-		loginController.login("abcd", "abcd", "", ""); 
+		loginController.login("abcd", "abcd"); 
 		screenCallBack.onAuthenticationFailure();
 		verify(loginScreen).onAuthenticationFailure();
 	}

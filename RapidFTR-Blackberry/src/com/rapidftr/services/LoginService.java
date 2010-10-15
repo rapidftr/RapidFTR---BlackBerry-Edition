@@ -24,14 +24,12 @@ public class LoginService extends RequestAwareService {
 		this.settings = settingsStore;
 	}
 
-	public void login(String userName, String password, String host, String port) {
+	public void login(String userName, String password) {
 		Arg[] postArgs = new Arg[] { new Arg("user_name", userName),
 				new Arg("password", password) };
 
 		Hashtable context = new Hashtable();
 		context.put(USER_NAME, userName);
-		context.put(HOST, host);
-		context.put(PORT, port);
 
 		requestHandler.startNewProcess();
 		requestHandler.post("sessions", postArgs, HttpUtility.makeJSONHeader(),
@@ -54,8 +52,6 @@ public class LoginService extends RequestAwareService {
 	public void onRequestSuccess(Object context, Response result) {
 		Hashtable table = (Hashtable) context;
 		settings.setLastUsedUsername((String) table.get(USER_NAME));
-		settings.setLastHost((String)table.get(HOST));
-		settings.setLastPort((String)table.get(PORT) );
 		settings.setAuthorisationToken(parseAuthorizationToken(result));
 		settings.setCurrentlyLoggedIn((String) table.get(USER_NAME));
 	}

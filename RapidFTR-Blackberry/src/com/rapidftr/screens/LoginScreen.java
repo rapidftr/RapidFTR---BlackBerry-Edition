@@ -16,7 +16,8 @@ import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
-import com.rapidftr.net.HttpSettings;
+import com.rapidftr.utilities.HttpSettings;
+import com.rapidftr.utilities.LoginSettings;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.services.ScreenCallBack;
 
@@ -111,7 +112,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 
 		menu.add(new MenuItem("Change Port", 2, 1) {
 			public void run() {
-				addField(portField, httpSettings.getPort());
+				addField(portField, Integer.toString(httpSettings.getPort()));
 			}
 		});
 	}
@@ -145,9 +146,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		httpSettings.setPort(portField.getText());
 		
 		((LoginController) controller).login(usernameField.getText(),
-				passwordField.getText(),
-				hostField.getText(),
-				portField.getText());
+				passwordField.getText());
 		showCancelButton();
 	}
 

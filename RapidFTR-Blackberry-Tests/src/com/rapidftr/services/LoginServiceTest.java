@@ -35,7 +35,7 @@ public class LoginServiceTest {
 	public void shouldSaveTheLastEnteredUsernameAndAuthorizationTokenAndPopOutLoginScreenInorderToGetBackToHomeScreen()
 			throws Exception {
 
-		loginService.login("abcd", "abcd", "dev.rapidftr.com", "80"); // Just to
+		loginService.login("abcd", "abcd"); // Just to
 		// make
 		// the
 		// isRequestInProgress flag to
@@ -71,7 +71,7 @@ public class LoginServiceTest {
 		final Arg acceptJson = HttpUtility.HEADER_ACCEPT_JSON;
 		final Arg[] httpParams = { acceptJson };
 
-		loginService.login(userName, password, "deve.rapidftr.com", "80");
+		loginService.login(userName, password);
 
 		verify(httpService).post("sessions", postParams, httpParams,
 				loginService.requestHandler, null, context);
