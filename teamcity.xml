@@ -1,0 +1,26 @@
+<project name="RapidFTR---BlackBerry-Edition" default="package">
+
+    <import file="${basedir}/build.xml"/>
+
+    <property environment="env"/>
+
+    <property file="teamcity.properties"/>
+
+    <property name="bb-build-prefix" value="bb-build"/>
+    <property name="build.label" value="${bb-build-prefix}-${env.BUILD_NUMBER}"/>
+    <property name="package.file" value="${release.dir}/${build.label}.zip"/>
+
+    <target name="package" depends="release">
+        <zip destfile="${package.file}" basedir="${release.dir}"/>
+    </target>
+
+    <target name="deploy" depends="package">
+        <mkdir dir="${deployment.dir}/${build.label}"/>
+        <unzip src="${package.file}" dest="${deployment.dir}/${build.label}"/>
+        <delete dir="${deployment.dir}/latest"/>
+        <mkdir dir="${deployment.dir}/latest"/>
+        <unzip src="${package.file}" dest="${deployment.dir}/latest"/>
+    </target>
+
+
+</project>

@@ -1,7 +1,8 @@
 package com.rapidftr.screens;
 
-import java.util.Vector;
-
+import com.rapidftr.controllers.HomeScreenController;
+import com.rapidftr.controls.Button;
+import com.rapidftr.screens.internal.CustomScreen;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.MenuItem;
@@ -14,6 +15,7 @@ import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.Settings;
+import java.util.Vector;
 
 public class HomeScreen extends CustomScreen {
 
@@ -50,31 +52,32 @@ public class HomeScreen extends CustomScreen {
 				onNewChildClicked();
 			}
 		});
-		Button viewChildrenButton = new Button("View all children");
+		Button viewChildrenButton = new Button("View All Children");
 		viewChildrenButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onViewChildrenClicked();
 			}
 		});
 
-		searchButton = new Button("Search for a child");
+		searchButton = new Button("Search for a Child");
 		searchButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				onSearchClicked();
 			}
 		});
 
-//		Button syncFormsButton = new Button("Sync Forms");
-//		syncFormsButton.setChangeListener(new FieldChangeListener() {
-//			public void fieldChanged(Field field, int context) {
-//				onSyncFormsClicked();
-//			}
-//		});
-
-		Button syncAllButton = new Button("Sync Child Records");
-		syncAllButton.setChangeListener(new FieldChangeListener() {
+		Button syncFormsButton = new Button("Sync Forms");
+		syncFormsButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
-				onSyncAllClicked();
+				onSyncFormsClicked();
+			}
+		});
+
+
+		Button syncChildRecordsButton = new Button("Sync Child Records");
+		syncChildRecordsButton.setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				onSyncChildRecordsClicked();
 			}
 		});
 
@@ -83,7 +86,9 @@ public class HomeScreen extends CustomScreen {
 		buttonGroup.addElement(newChildButton);
 		buttonGroup.addElement(viewChildrenButton);
 		buttonGroup.addElement(searchButton);
-		buttonGroup.addElement(syncAllButton);
+
+		buttonGroup.addElement(syncFormsButton);
+		buttonGroup.addElement(syncChildRecordsButton);
 
 		Button.setOptimimWidthForButtonGroup(buttonGroup);
 		VerticalFieldManager manager = new VerticalFieldManager(FIELD_HCENTER);
@@ -96,10 +101,12 @@ public class HomeScreen extends CustomScreen {
 		manager.add(viewChildrenButton);
 		searchButton.setPadding(PADDING);
 		manager.add(searchButton);
-		// uploadChildRecordsButton.setPadding(PADDING);
-		// manager.add(uploadChildRecordsButton);
-		syncAllButton.setPadding(PADDING);
-		manager.add(syncAllButton);
+
+		syncChildRecordsButton.setPadding(PADDING);
+		manager.add(syncChildRecordsButton);
+
+        syncFormsButton.setPadding(PADDING);
+        manager.add(syncFormsButton);
 
 		add(manager);
 
@@ -118,8 +125,8 @@ public class HomeScreen extends CustomScreen {
 		((HomeScreenController) controller).logIn();
 	}
 
-	protected void onSyncAllClicked() {
-		((HomeScreenController) controller).syncAll();
+	protected void onSyncChildRecordsClicked() {
+		((HomeScreenController) controller).syncChildRecords();
 	}
 
 	private void onViewChildrenClicked() {
@@ -138,7 +145,27 @@ public class HomeScreen extends CustomScreen {
 		((HomeScreenController) controller).synchronizeForms();
 	}
 
-	public void setUp() {
+    private void onCleanDeviceClicked() {
+        int result = Dialog
+                .ask(
+                        Dialog.D_YES_NO,
+                        "Do you want to clean the device? This will clear all the locally stored child records and login information");
+        if (result == Dialog.YES) {
+            ((HomeScreenController) controller).cleanAll();
+            Dialog.alert("Device successfully cleaned");
+        }
+    }
+
+    protected void makeMenu(Menu menu, int i) {
+        MenuItem cleanDeviceMenuItem = new MenuItem("Clean Device", 1, 1) {
+			public void run() {
+				onCleanDeviceClicked();
+			}
+		};
+		menu.add(cleanDeviceMenuItem);
+    }
+
+    public void setUp() {
 
 	}
 
@@ -152,27 +179,4 @@ public class HomeScreen extends CustomScreen {
 		super.onExposed();
 	}
 
-	protected void makeMenu(Menu menu, int instance) {
-		MenuItem cleanDeviceMenu = new MenuItem("Clean Device", 1, 1) {
-			public void run() {
-				int result = Dialog
-						.ask(
-								Dialog.D_YES_NO,
-								"Do you want to clean the device? This will clear all the locally stored child records and login information");
-				if (result == Dialog.YES) {
-					((HomeScreenController) controller).cleanAll();
-					Dialog.alert("Device successfully cleaned");
-				}
-			}
-		};
-
-		MenuItem syncFormsMenu = new MenuItem("Sync Forms", 2, 1) {
-			public void run() {
-				onSyncFormsClicked();
-			}
-		};
-
-		menu.add(syncFormsMenu);
-		menu.add(cleanDeviceMenu);
-	}
 }
