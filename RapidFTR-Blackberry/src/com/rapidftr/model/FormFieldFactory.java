@@ -12,9 +12,9 @@ public class FormFieldFactory {
 	public static final String TEXTAREA_FIELD = "textarea";
 	public static final String numeric_field = "numeric_field";
 	public static final String date_field = "date_field";
+	public static final String AUDIO_FIELD = "audio_upload_box";
 	
 	public FormField createFormField(String name, String displayName, String type, Vector optionStrings) {
-
 		if(TEXT_FIELD.equals(type)) {
 			return new TextboxFormField(name, displayName, type);
 		}
@@ -39,6 +39,9 @@ public class FormFieldFactory {
 		else if (date_field.equals(type)) {
 			return new DateFormField(name, displayName, type);
 		}
+        else if (AUDIO_FIELD.equals(type)) {
+            return AudioField.createdFormField(name, type);
+        }
 		else {
 			return null;
 		}
