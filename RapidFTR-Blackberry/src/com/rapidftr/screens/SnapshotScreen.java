@@ -10,10 +10,8 @@ import net.rim.blackberry.api.invoke.Invoke;
 import net.rim.device.api.io.file.FileSystemJournal;
 import net.rim.device.api.io.file.FileSystemJournalEntry;
 import net.rim.device.api.io.file.FileSystemJournalListener;
-import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.Characters;
-import net.rim.device.api.system.Display;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.system.EventInjector.KeyEvent;
 import net.rim.device.api.ui.ContextMenu;
@@ -30,7 +28,6 @@ import com.rapidftr.screens.internal.CustomScreen;
 
 public class SnapshotScreen extends CustomScreen {
 
-	private BitmapField bitmapField;
 	private String photoPath;
 	private boolean cameraHasBeenInvoked;
 	private static long lastUSN;
@@ -42,22 +39,19 @@ public class SnapshotScreen extends CustomScreen {
 		super();
 		photoPath = null;
 		cameraHasBeenInvoked = false;
-		bitmapField = new BitmapField();
-		add(bitmapField);
 		listener = createFileSystemListener();
 	}
 
 	private void savePhoto() {
 		((SnapshotController) controller)
-		.capturedImage(photoPath, encodedImage);
+				.capturedImage(photoPath, encodedImage);
 		cleanUp();
 		controller.popScreen();
 	}
 
 	protected void onExposed() {
 		if (photoPath != null && cameraHasBeenInvoked) {
-			showImage();
-			bitmapField.setBitmap(bitmap);
+			createEncodedImageFromPhotoTaken();
 			savePhoto();
 		}
 
@@ -75,7 +69,6 @@ public class SnapshotScreen extends CustomScreen {
 			cameraHasBeenInvoked = true;
 			Invoke.invokeApplication(Invoke.APP_TYPE_CAMERA,
 					new CameraArguments());
-
 		}
 
 		super.onDisplay();
@@ -92,7 +85,7 @@ public class SnapshotScreen extends CustomScreen {
 		UiApplication.getUiApplication().addFileSystemJournalListener(listener);
 	}
 
-	private void showImage() {
+	private void createEncodedImageFromPhotoTaken() {
 		try {
 			FileConnection fconn = (FileConnection) Connector.open("file://"
 					+ photoPath);
@@ -100,31 +93,13 @@ public class SnapshotScreen extends CustomScreen {
 			InputStream input = fconn.openInputStream();
 			byte[] data = new byte[(int) fconn.fileSize()];
 			input.read(data, 0, data.length);
-			
+
 			encodedImage = EncodedImage
 					.createEncodedImage(data, 0, data.length);
-
-			int currentWidthFixed32 = Fixed32.toFP(encodedImage.getWidth());
-			int currentHeightFixed32 = Fixed32.toFP(encodedImage.getHeight());
-
-			int requiredWidthFixed32 = Fixed32.toFP(Display.getWidth());
-			int requiredHeightFixed32 = Fixed32.toFP(Display.getHeight() - 35);
-
-			int scaleXFixed32 = Fixed32.div(currentWidthFixed32,
-					requiredWidthFixed32);
-			int scaleYFixed32 = Fixed32.div(currentHeightFixed32,
-					requiredHeightFixed32);
-
-			bitmap = encodedImage.scaleImage32(scaleXFixed32, scaleYFixed32)
-					.getBitmap();
 
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-	}
-
-	protected void makeContextMenu(ContextMenu contextMenu) {
-		super.makeContextMenu(contextMenu);
 	}
 
 	private FileSystemJournalListener createFileSystemListener() {
@@ -169,23 +144,6 @@ public class SnapshotScreen extends CustomScreen {
 
 		};
 		return listener;
-	}
-
-	public boolean onClose() {
-
-		if (bitmap != null) {
-			int result = Dialog.ask(Dialog.D_SAVE);
-
-			if (result == Dialog.SAVE) {
-				savePhoto();
-				return true;
-			}
-		}
-
-		cleanUp();
-
-		return super.onClose();
-
 	}
 
 }

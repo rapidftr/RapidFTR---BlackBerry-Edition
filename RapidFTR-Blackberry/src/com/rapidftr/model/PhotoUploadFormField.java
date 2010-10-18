@@ -56,7 +56,6 @@ public class PhotoUploadFormField extends FormField implements
 		capturePhoto = new Button(bitmap);
 
 		capturePhoto.setChangeListener(new FieldChangeListener() {
-
 			public void fieldChanged(Field field, int context) {
 				newChildScreen.takePhoto(imageChanageListener);
 			}
