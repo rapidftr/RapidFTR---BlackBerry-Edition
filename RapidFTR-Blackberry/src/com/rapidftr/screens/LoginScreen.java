@@ -148,6 +148,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		((LoginController) controller).login(usernameField.getText(),
 				passwordField.getText());
 		showCancelButton();
+		resetCredentials();
 	}
 
 	private void onCancelButtonClicked() {
@@ -170,10 +171,8 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	}
 
 	public boolean onClose() {
-
 		cleanUp();
 		return super.onClose();
-
 	}
 
 	public void cleanUp() {
@@ -255,7 +254,6 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	public void resetCredentials() {
 		usernameField.setText(loginSettings.getUsername());
 		passwordField.setText("");
-
 	}
 
 }
