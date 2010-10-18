@@ -1,5 +1,6 @@
 package com.rapidftr.screens;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.io.Connector;
@@ -22,61 +23,48 @@ import net.rim.device.api.ui.Screen;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.Dialog;
+import net.rim.device.api.ui.component.Menu;
 
 import com.rapidftr.controllers.SnapshotController;
 import com.rapidftr.screens.internal.CustomScreen;
 
 public class SnapshotScreen extends CustomScreen {
 
-	private String photoPath;
 	private boolean cameraHasBeenInvoked;
-	private static long lastUSN;
+
 	private Bitmap bitmap;
 	private EncodedImage encodedImage;
 	private FileSystemJournalListener listener;
 
 	public SnapshotScreen() {
 		super();
-		photoPath = null;
-		cameraHasBeenInvoked = false;
-		listener = createFileSystemListener();
-	}
+		listener = new PhotoSaveListener() {
 
-	private void savePhoto() {
-		((SnapshotController) controller)
-				.capturedImage(photoPath, encodedImage);
-		cleanUp();
-		controller.popScreen();
+			void photo(String path) {
+				try {
+					((SnapshotController) controller).capturedImage(path,
+							getEncodedImage(path));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
 	}
 
 	protected void onExposed() {
-		if (photoPath != null && cameraHasBeenInvoked) {
-			createEncodedImageFromPhotoTaken();
-			savePhoto();
-		}
-
-		if (cameraHasBeenInvoked && photoPath == null) {
-			cleanUp();
-			controller.popScreen();
-		}
-
+		controller.popScreen();
+		cleanUp();
 		super.onExposed();
 	}
 
-	protected void onDisplay() {
-
-		if (!cameraHasBeenInvoked) {
-			cameraHasBeenInvoked = true;
-			Invoke.invokeApplication(Invoke.APP_TYPE_CAMERA,
-					new CameraArguments());
-		}
-
-		super.onDisplay();
+	protected void onUiEngineAttached(boolean attached) {
+		if (!attached)
+			return;
+		Invoke.invokeApplication(Invoke.APP_TYPE_CAMERA, new CameraArguments());
+		super.onUiEngineAttached(attached);
 	}
 
 	public void cleanUp() {
-		cameraHasBeenInvoked = false;
-		photoPath = null;
 		UiApplication.getUiApplication().removeFileSystemJournalListener(
 				listener);
 	}
@@ -85,49 +73,44 @@ public class SnapshotScreen extends CustomScreen {
 		UiApplication.getUiApplication().addFileSystemJournalListener(listener);
 	}
 
-	private void createEncodedImageFromPhotoTaken() {
-		try {
-			FileConnection fconn = (FileConnection) Connector.open("file://"
-					+ photoPath);
+	private EncodedImage getEncodedImage(String path) throws IOException {
+		FileConnection fconn = (FileConnection) Connector
+				.open("file://" + path);
 
-			InputStream input = fconn.openInputStream();
-			byte[] data = new byte[(int) fconn.fileSize()];
-			input.read(data, 0, data.length);
+		InputStream input = fconn.openInputStream();
+		byte[] data = new byte[(int) fconn.fileSize()];
+		input.read(data, 0, data.length);
 
-			encodedImage = EncodedImage
-					.createEncodedImage(data, 0, data.length);
+		return EncodedImage.createEncodedImage(data, 0, data.length);
 
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
 	}
 
-	private FileSystemJournalListener createFileSystemListener() {
+	abstract class PhotoSaveListener implements FileSystemJournalListener {
+		private long lastUSN;
 
-		lastUSN = FileSystemJournal.getNextUSN();
-		FileSystemJournalListener listener = new FileSystemJournalListener() {
-			public void fileJournalChanged() {
+		public PhotoSaveListener() {
+			lastUSN = FileSystemJournal.getNextUSN();
+		}
 
-				long USN = FileSystemJournal.getNextUSN();
+		public void fileJournalChanged() {
 
-				for (long i = USN - 1; i >= lastUSN; --i) {
+			long USN = FileSystemJournal.getNextUSN();
 
-					FileSystemJournalEntry entry = FileSystemJournal
-							.getEntry(i);
+			for (long i = USN - 1; i >= lastUSN; --i) {
 
-					if (entry != null) {
+				FileSystemJournalEntry entry = FileSystemJournal.getEntry(i);
 
-						if (entry.getEvent() == FileSystemJournalEntry.FILE_ADDED
-								|| entry.getEvent() == FileSystemJournalEntry.FILE_CHANGED
-								|| entry.getEvent() == FileSystemJournalEntry.FILE_RENAMED) {
+				if (entry != null) {
 
-							if (entry.getPath().indexOf(".jpg") != -1) {
-								photoPath = entry.getPath();
-								injectKey(Characters.ESCAPE);
-								injectKey(Characters.ESCAPE);
-								lastUSN = USN;
+					if (entry.getEvent() == FileSystemJournalEntry.FILE_ADDED
+							|| entry.getEvent() == FileSystemJournalEntry.FILE_CHANGED
+							|| entry.getEvent() == FileSystemJournalEntry.FILE_RENAMED) {
 
-							}
+						if (entry.getPath().indexOf(".jpg") != -1) {
+							photo(entry.getPath());
+							injectKey(Characters.ESCAPE);
+							injectKey(Characters.ESCAPE);
+							lastUSN = USN;
 
 						}
 
@@ -137,13 +120,13 @@ public class SnapshotScreen extends CustomScreen {
 
 			}
 
-			private void injectKey(char key) {
-				KeyEvent inject = new KeyEvent(KeyEvent.KEY_DOWN, key, 0);
-				inject.post();
-			}
+		}
 
-		};
-		return listener;
+		private void injectKey(char key) {
+			KeyEvent inject = new KeyEvent(KeyEvent.KEY_DOWN, key, 0);
+			inject.post();
+		}
+
+		abstract void photo(String path);
 	}
-
 }
