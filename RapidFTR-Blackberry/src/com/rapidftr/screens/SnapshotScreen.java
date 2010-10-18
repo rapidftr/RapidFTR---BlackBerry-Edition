@@ -45,16 +45,9 @@ public class SnapshotScreen extends CustomScreen {
 		bitmapField = new BitmapField();
 		add(bitmapField);
 		listener = createFileSystemListener();
-		addMenuItem(new MenuItem("Save", 1, 1) {
-			public void run() {
-				onSaveClicked();
-			}
-
-		});
-
 	}
 
-	private void onSaveClicked() {
+	private void savePhoto() {
 		((SnapshotController) controller)
 		.capturedImage(photoPath, encodedImage);
 		cleanUp();
@@ -65,6 +58,7 @@ public class SnapshotScreen extends CustomScreen {
 		if (photoPath != null && cameraHasBeenInvoked) {
 			showImage();
 			bitmapField.setBitmap(bitmap);
+			savePhoto();
 		}
 
 		if (cameraHasBeenInvoked && photoPath == null) {
@@ -183,7 +177,7 @@ public class SnapshotScreen extends CustomScreen {
 			int result = Dialog.ask(Dialog.D_SAVE);
 
 			if (result == Dialog.SAVE) {
-				onSaveClicked();
+				savePhoto();
 				return true;
 			}
 		}
