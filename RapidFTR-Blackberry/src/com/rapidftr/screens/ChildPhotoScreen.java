@@ -5,6 +5,7 @@ import net.rim.device.api.system.Display;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
 
 import com.rapidftr.model.Child;
@@ -50,4 +51,10 @@ public class ChildPhotoScreen extends CustomScreen{
 	}
 	public void setUp() {
 	}
+
+	protected void makeMenu(Menu menu, int instance) {
+		super.makeMenu(menu, instance);
+	}
+	
+	
 }

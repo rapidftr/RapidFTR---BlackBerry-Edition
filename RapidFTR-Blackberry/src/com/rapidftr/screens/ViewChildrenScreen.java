@@ -59,7 +59,6 @@ public class ViewChildrenScreen extends CustomScreen {
 	}
 
 	protected void makeMenu(Menu menu, int instance) {
-		super.makeMenu(menu,instance);
 		if (childrenArray.length > 0) {
 
 			MenuItem editChildMenu = new MenuItem("Open Record", 1, 1) {
@@ -71,7 +70,7 @@ public class ViewChildrenScreen extends CustomScreen {
 			};
 			menu.add(editChildMenu);
 		}
-		
+		super.makeMenu(menu, instance);
 	}
 
 }

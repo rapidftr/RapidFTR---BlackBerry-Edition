@@ -156,13 +156,15 @@ public class HomeScreen extends CustomScreen {
         }
     }
 
-    protected void makeMenu(Menu menu, int i) {
+    protected void makeMenu(Menu menu, int instance) {
         MenuItem cleanDeviceMenuItem = new MenuItem("Clean Device", 1, 1) {
 			public void run() {
 				onCleanDeviceClicked();
 			}
 		};
 		menu.add(cleanDeviceMenuItem);
+		
+		//super.makeMenu(menu, instance);
     }
 
     public void setUp() {

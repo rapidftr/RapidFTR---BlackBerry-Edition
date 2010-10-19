@@ -217,6 +217,8 @@ public class ManageChildScreen extends CustomScreen {
         menu.add(saveChildMenu);
         menu.add(syncChildMenu);
         menu.add(CloseMenu);
+        
+        super.makeMenu(menu, instance);
     }
 
     public Child getChild() {

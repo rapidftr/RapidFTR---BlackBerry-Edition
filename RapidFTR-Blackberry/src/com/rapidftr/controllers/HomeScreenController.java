@@ -16,7 +16,6 @@ public class HomeScreenController extends Controller {
 
 	public void synchronizeForms() {
 		dispatcher.synchronizeForms();
-
 	}
 
 	public void newChild() {

@@ -28,4 +28,9 @@ abstract public class Controller {
 	public void popScreen() {
 		currentScreen.popScreen(uiStack);
 	}
+
+	public void homeScreen() {
+		uiStack.clear();
+		dispatcher.homeScreen();
+	}
 }

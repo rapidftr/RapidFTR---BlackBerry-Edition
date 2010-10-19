@@ -14,6 +14,7 @@ import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.GaugeField;
 import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.BorderFactory;
 
@@ -202,6 +203,10 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 
 			}
 		});
+	}
+	
+	protected void makeMenu(Menu menu, int instance) {
+		super.makeMenu(menu, instance);
 	}
 
 }

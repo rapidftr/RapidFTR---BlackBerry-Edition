@@ -7,6 +7,7 @@ import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BasicEditField;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
@@ -110,5 +111,8 @@ public class SearchChildScreen extends CustomScreen implements
 				.alert("No search results found , Please enter a valid search keyword");
 		resetSearchBox();
 	}
-
+	
+	protected void makeMenu(Menu menu, int instance) {
+		super.makeMenu(menu, instance);
+	}
 }

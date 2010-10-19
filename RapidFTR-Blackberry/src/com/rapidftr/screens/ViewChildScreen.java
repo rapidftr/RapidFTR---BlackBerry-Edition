@@ -209,6 +209,8 @@ public class ViewChildScreen extends CustomScreen {
 		}
 		menu.add(historyMenu);
 		menu.add(CloseMenu);
+		
+		super.makeMenu(menu, instance);
 	}
 
 	private Bitmap getChildImage(String ImagePath) {

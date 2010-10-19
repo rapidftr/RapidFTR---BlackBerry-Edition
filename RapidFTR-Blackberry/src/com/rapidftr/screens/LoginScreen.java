@@ -115,6 +115,8 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 				addField(portField, Integer.toString(httpSettings.getPort()));
 			}
 		});
+		
+		super.makeMenu(menu, instance);
 	}
 
 	public void setProgressMsg(String msg) {
