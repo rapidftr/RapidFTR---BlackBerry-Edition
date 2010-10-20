@@ -12,10 +12,8 @@ import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.BorderFactory;
-
 import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controls.Button;
-import com.rapidftr.model.SearchChildFilter;
 import com.rapidftr.screens.internal.CustomScreen;
 
 public class SearchChildScreen extends CustomScreen implements
@@ -28,7 +26,7 @@ public class SearchChildScreen extends CustomScreen implements
 	private Button searchButton;
 	private Button resetButton;
 	private Manager buttonManager;
-	private SearchChildFilter searchChildFilter = new SearchChildFilter();
+
 	// Use screen paramters instead if hardcore values
 	private XYEdges border = new XYEdges(2, 2, 2, 2);
 
@@ -90,10 +88,10 @@ public class SearchChildScreen extends CustomScreen implements
 	}
 
 	private void onSearchButtonClicked() {
-		searchChildFilter.setName(searchTextField.getText());
-		if (!"".equals(searchTextField.getText())) {
+		String searchQuery = searchTextField.getText();
+		if (!"".equals(searchQuery)) {
 			((ChildController) controller)
-					.searchAndDispalyChildren(searchChildFilter);
+					.searchAndDispalyChildren(searchQuery);
 		} else {
 			Dialog
 					.alert("Please enter either Child Name or Unique id, to perform search");
@@ -111,7 +109,7 @@ public class SearchChildScreen extends CustomScreen implements
 				.alert("No search results found , Please enter a valid search keyword");
 		resetSearchBox();
 	}
-	
+
 	protected void makeMenu(Menu menu, int instance) {
 		super.makeMenu(menu, instance);
 	}

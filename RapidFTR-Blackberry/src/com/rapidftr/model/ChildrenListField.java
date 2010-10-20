@@ -21,13 +21,7 @@ public class ChildrenListField extends ObjectListField {
 		screenWidth = Display.getWidth();
 		firstrowPostion = (screenWidth) - (screenWidth - 20);
 		secondRowPosition = (screenWidth) - (screenWidth - 40);
-		// try {
-		// FontFamily alphaSerifFamily = FontFamily.forName("BBMillbank");
-		// titleFont = alphaSerifFamily.getFont(Font.PLAIN,3,Ui.UNITS_mm);
-		// rowFont = alphaSerifFamily.getFont(Font.PLAIN,2,Ui.UNITS_mm);
-		// }
-		// catch (ClassNotFoundException e){
-		// }
+		
 		Font defaultFont = Font.getDefault();
 		titleFont = defaultFont.derive(Font.PLAIN, 3, Ui.UNITS_mm);
 		rowFont = defaultFont.derive(Font.PLAIN, 3, Ui.UNITS_mm);
@@ -38,12 +32,7 @@ public class ChildrenListField extends ObjectListField {
 		Child child = (Child) this.get(listField, index);
 
 		listField.setRowHeight(this.titleFont.getHeight() * 4);
-//		graphics.setColor(child.childStatus().getStatusColor());
-//		graphics.drawRect(0, ((index) * listField.getRowHeight()), width,
-//				listField.getRowHeight());
-//		graphics.fillRect(0, ((index) * listField.getRowHeight()), width,
-//				listField.getRowHeight());
-//		graphics.setColor(Color.BLACK);
+
 		graphics.setColor(child.childStatus().getStatusColor());
 		graphics.drawRect(0, ((index) * listField.getRowHeight()), 15,
 				listField.getRowHeight());
@@ -78,8 +67,6 @@ public class ChildrenListField extends ObjectListField {
 		graphics.drawLine(0, (index * listField.getRowHeight()), width,
 				(index * listField.getRowHeight()));
 
-
-		// super.paint(graphics);
 	}
 
 }

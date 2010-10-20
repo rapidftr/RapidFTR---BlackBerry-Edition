@@ -1,5 +1,7 @@
 package com.rapidftr.services;
 
+import com.rapidftr.datastore.ChildAction;
+import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpServer;
@@ -39,38 +41,43 @@ public class ChildSyncService extends RequestAwareService {
 	}
 
 	private void uploadChildRecords() {
-		uploadChildren(childRecordStore.getAllChildren());
+		uploadChildren(childRecordStore.getAll());
 	}
 
-	private void uploadChildren(Vector childrenList) {
-		Enumeration children = childrenList.elements();
-		int index = 0;
-		while (children.hasMoreElements()) {
-			Hashtable context = new Hashtable();
-			Child child = (Child) children.nextElement();
-			PostData postData = child.getPostData();
-			context.put(PROCESS_STATE, "Uploading [" + (++index) + "/"
-					+ childrenList.size() + "]");
-			context.put(CHILD_TO_SYNC, child);
-			Arg multiPart = new Arg("Content-Type",
-					"multipart/form-data;boundary=" + postData.getBoundary());
-			Arg json = HttpUtility.HEADER_ACCEPT_JSON;
-			Arg[] httpArgs = { multiPart, json };
-			if (child.isNewChild()) {
-				requestHandler.post("children", null, httpArgs, postData,
-						context);
-			} else if (child.isUpdated()) {
-				requestHandler.put("children/" + child.getField("_id"), null,
-						httpArgs, postData, context);
+	private void uploadChildren(final Children children) {
+
+		children.forEachChild(new ChildAction() {
+			int index = 0;
+
+			public void execute(Child child) {
+				Hashtable context = new Hashtable();
+				PostData postData = child.getPostData();
+				context.put(PROCESS_STATE, "Uploading [" + (++index) + "/"
+						+ children.count() + "]");
+				context.put(CHILD_TO_SYNC, child);
+				Arg multiPart = new Arg("Content-Type",
+						"multipart/form-data;boundary="
+								+ postData.getBoundary());
+				Arg json = HttpUtility.HEADER_ACCEPT_JSON;
+				Arg[] httpArgs = { multiPart, json };
+				if (child.isNewChild()) {
+					requestHandler.post("children", null, httpArgs, postData,
+							context);
+				} else if (child.isUpdated()) {
+					requestHandler.put("children/" + child.getField("_id"),
+							null, httpArgs, postData, context);
+				}
+
 			}
-		}
+		});
+
 	}
 
 	public void syncChildRecord(Child child) {
 		Vector childrenList = new Vector();
 		childrenList.addElement(child);
 		requestHandler.startNewProcess();
-		uploadChildren(childrenList);
+		uploadChildren(new Children(childrenList));
 	}
 
 	public void syncAllChildRecords() throws ServiceException {
@@ -81,7 +88,7 @@ public class ChildSyncService extends RequestAwareService {
 				requestHandler.startNewProcess();
 				uploadChildRecords();
 				downloadNewChildRecords();
-              requestHandler.checkForProcessCompletion();
+				requestHandler.checkForProcessCompletion();
 				// requestHandler.checkAndMarkProcessComplete();
 			};
 		}.start();
@@ -103,7 +110,8 @@ public class ChildSyncService extends RequestAwareService {
 			child.setField("name", childId);
 			child.setField("last_known_location", "NA");
 			context.put(CHILD_TO_SYNC, child);
-			requestHandler.get("children/" + childId, null, HttpUtility.makeJSONHeader(), context);
+			requestHandler.get("children/" + childId, null, HttpUtility
+					.makeJSONHeader(), context);
 		}
 
 	}
@@ -132,7 +140,8 @@ public class ChildSyncService extends RequestAwareService {
 
 		Response response;
 		try {
-			response = requestHandler.get("children-ids", null, HttpUtility.makeJSONHeader());
+			response = requestHandler.get("children-ids", null, HttpUtility
+					.makeJSONHeader());
 
 			if (response != null) {
 				Result result = response.getResult();
@@ -163,22 +172,24 @@ public class ChildSyncService extends RequestAwareService {
 	}
 
 	private Hashtable getOfflineStoredChildrenIdRevMapping() {
-		Hashtable mapping = new Hashtable();
-		Enumeration items = childRecordStore.getAllChildren().elements();
+		final Hashtable mapping = new Hashtable();
+		childRecordStore.getAll().forEachChild(new ChildAction() {
 
-		while (items.hasMoreElements()) {
-			Child child = (Child) items.nextElement();
-			Object id = child.getField("_id");
-			Object rev = child.getField("_rev");
-			if (id != null && rev != null) {
-				mapping.put(id.toString(), rev.toString());
+			public void execute(Child child) {
+				Object id = child.getField("_id");
+				Object rev = child.getField("_rev");
+				if (id != null && rev != null) {
+					mapping.put(id.toString(), rev.toString());
+				}
+
 			}
-		}
+		});
+
 		return mapping;
 	}
 
 	public void clearState() {
-		childRecordStore.deleteAllChildren();
+		childRecordStore.deleteAll();
 
 	}
 
@@ -189,7 +200,7 @@ public class ChildSyncService extends RequestAwareService {
 		Child child = (Child) (((Hashtable) context).get(CHILD_TO_SYNC));
 		try {
 			JSONObject jsonChild = new JSONObject(result.getResult().toString());
-			//HttpServer.printResponse(result);
+			// HttpServer.printResponse(result);
 			JSONArray fieldNames = jsonChild.names();
 			for (int j = 0; j < fieldNames.length(); j++) {
 				String fieldName = fieldNames.get(j).toString();
@@ -202,7 +213,7 @@ public class ChildSyncService extends RequestAwareService {
 		} catch (Exception e) {
 			child.syncFailed(e.getMessage());
 		} finally {
-			childRecordStore.addOrUpdateChild(child);
+			childRecordStore.addOrUpdate(child);
 		}
 
 	}
@@ -212,7 +223,8 @@ public class ChildSyncService extends RequestAwareService {
 			Arg[] httpArgs = new Arg[1];
 			httpArgs[0] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
 			Response response = requestHandler.get("children/"
-					+ child.getField("_id") + "/resized_photo/400", null, httpArgs);
+					+ child.getField("_id") + "/resized_photo/400", null,
+					httpArgs);
 			byte[] data = response.getResult().getData();
 
 			String storePath = "";
@@ -251,7 +263,7 @@ public class ChildSyncService extends RequestAwareService {
 						+ " Failed. ");
 		Child child = (Child) (((Hashtable) context).get(CHILD_TO_SYNC));
 		child.syncFailed(exception.getMessage());
-		childRecordStore.addOrUpdateChild(child);
+		childRecordStore.addOrUpdate(child);
 	}
 
 }

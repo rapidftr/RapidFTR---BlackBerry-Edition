@@ -122,7 +122,6 @@ public class ViewChildScreen extends CustomScreen {
 			
 			public void focusChanged(Field field, int eventType) {
 				
-				//bf.setVisualState(HIGHLIGHT_SELECT);
 				if(eventType==FOCUS_GAINED)
 				{
 					isBitmapFieldFocused=true;

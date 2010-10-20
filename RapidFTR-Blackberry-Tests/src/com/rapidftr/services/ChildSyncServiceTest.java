@@ -91,7 +91,7 @@ public class ChildSyncServiceTest {
 		when(context.get(childService.CHILD_TO_SYNC)).thenReturn(child);
 		when(context.get(childService.PROCESS_STATE)).thenReturn("Some State");
 		childService.onRequestSuccess((Object)context, response);
-		verify(store).addOrUpdateChild(child);
+		verify(store).addOrUpdate(child);
 	}
 
 	@Test
@@ -101,7 +101,7 @@ public class ChildSyncServiceTest {
 		when(context.get(childService.CHILD_TO_SYNC)).thenReturn(child);
 		when(context.get(childService.PROCESS_STATE)).thenReturn("Some State");
 		childService.onRequestFailure((Object)context,exeption);
-		verify(store).addOrUpdateChild(child);
+		verify(store).addOrUpdate(child);
 		verify(child).syncFailed(exeption.getMessage());
 	}
 	

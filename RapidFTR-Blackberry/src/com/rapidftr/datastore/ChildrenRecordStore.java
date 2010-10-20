@@ -1,61 +1,60 @@
 package com.rapidftr.datastore;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Vector;
-
 import com.rapidftr.model.Child;
+import com.rapidftr.utilities.Store;
 
 public class ChildrenRecordStore {
 
-	private static final long KEY = 0x63ce3e890db0296dL; // com.rapidftr.datastore.ChildRecordStore
-	PersistentStore persistentStore;
+	private static final String GET_ALL_CHILDREN_KEY = "children";
+	private final Store store;
 
-	public ChildrenRecordStore() {
-		initilaize();
+	public ChildrenRecordStore(Store store) {
+		this.store = store;
 	}
 
-	protected void initilaize() {
-		persistentStore = new PersistentStore(KEY);
-
-		if (persistentStore.getContents() == null) {
-			persistentStore.setContents(new Vector());
-
-		}
-
-	}
-
-	public void addOrUpdateChild(Child child) {
+	public void addOrUpdate(Child child) {
 		if (child == null) {
 			return;
 		}
 
-		Vector children = (Vector) persistentStore.getContents();
+		Vector children = store.getVector(GET_ALL_CHILDREN_KEY);
 
-		if (children == null) {
-			children = new Vector();
-		}
 		if (children.contains(child)) {
 			children.setElementAt(child, children.indexOf(child));
 		} else {
 			children.addElement(child);
 		}
-		persistentStore.setContents(children);
+		
+		store.setVector(GET_ALL_CHILDREN_KEY, children);
 	}
 
-	public Vector getAllChildren() {
-		return (Vector) persistentStore.getContents();
+	public Children getAll() {
+		return new Children(store.getVector(GET_ALL_CHILDREN_KEY));
 	}
 
-
-	public void storeChildren(Vector childrenList) {
-		Enumeration enumeration = childrenList.elements();
-		while (enumeration.hasMoreElements())
-			addOrUpdateChild((Child) enumeration.nextElement());
+	public void deleteAll() {
+		store.clear();
 	}
 
-	public void deleteAllChildren() {
-		persistentStore.setContents(new Vector());
+	public Child[] getAllAsArray() {
+		return getAll().toArray();
+	}
+
+	public Child[] search(final String query) {
+		final Vector results = new Vector();
+
+		getAll().forEachChild(new ChildAction() {
+
+			public void execute(Child child) {
+				if (child.matches(query.toLowerCase())) {
+					results.addElement(child);
+				}
+
+			}
+		});
+
+		return new Children(results).toArray();
 	}
 
 }

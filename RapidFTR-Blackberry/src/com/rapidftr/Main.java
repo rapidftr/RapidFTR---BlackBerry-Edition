@@ -2,9 +2,7 @@ package com.rapidftr;
 
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
-import net.rim.device.api.system.PersistentStore;
 import net.rim.device.api.ui.UiApplication;
-
 import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
@@ -26,7 +24,6 @@ import com.rapidftr.screens.SyncScreen;
 import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.UiStack;
-import com.rapidftr.services.ChildStoreService;
 import com.rapidftr.services.ChildSyncService;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
@@ -35,67 +32,81 @@ import com.rapidftr.utilities.DefaultStore;
 
 public class Main extends UiApplication {
 
+	private static final int CHILDREN_STORE_KEY = "com.rapidftr.utilities.childrenstore"
+			.hashCode();
+	private static final int FTR_PERSISTENT_STORE_KEY = "com.rapidftr.utilities.ftrstore"
+			.hashCode();
 	public static final String APPLICATION_NAME = "Rapid FTR";
 
-	/**
-	 * Entry point for application.
-	 */
 	public static void main(String[] args) {
 		Main application = new Main();
 		application.enterEventDispatcher();
 	}
 
-	/**
-	 * <p>
-	 * The default constructor. Creates all of the RIM UI components and pushes
-	 * the application's root screen onto the UI stack.
-	 */
 	public Main() {
 
 		enablePermission(ApplicationPermissions.PERMISSION_INPUT_SIMULATION);
 		enablePermission(ApplicationPermissions.PERMISSION_FILE_API);
 
-		Settings settings = new Settings(new DefaultStore());
+		DefaultStore defaultStore = new DefaultStore(FTR_PERSISTENT_STORE_KEY);
+		
+		ChildrenRecordStore childrenStore = new ChildrenRecordStore(
+				new DefaultStore(CHILDREN_STORE_KEY));
+		
+		Settings settings = new Settings(defaultStore);
+
 		FormStore formStore = new FormStore();
-		ChildrenRecordStore childRecordStore = new ChildrenRecordStore();
 
 		HttpServer httpServer = new HttpServer(new HttpSettings(settings));
 
 		HttpService httpService = new HttpService(httpServer, settings);
-		LoginService loginService = new LoginService(httpService, settings);
-		ChildStoreService childStoreService = new ChildStoreService(
-				childRecordStore);
+		
+		LoginService loginService = new LoginService(httpService, settings,
+				defaultStore);
+
 		FormService formService = new FormService(httpService, formStore);
 		ChildSyncService childSyncService = new ChildSyncService(httpService,
-				childRecordStore);
+				childrenStore);
 
 		UiStack uiStack = new UiStack(this);
 
 		HomeScreen homeScreen = new HomeScreen(settings);
+		
 		LoginScreen loginScreen = new LoginScreen(new HttpSettings(settings),
 				new LoginSettings(settings));
+		
 		ViewChildScreen viewChildScreen = new ViewChildScreen();
+		
 		ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
+		
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
+		
 		ManageChildScreen newChildScreen = new ManageChildScreen(settings);
+		
 		SyncScreen syncScreen = new SyncScreen();
+		
 		LoginController loginController = new LoginController(loginScreen,
 				uiStack, loginService);
-		// loginScreen.setController(loginController);
+		
 		ResetDeviceController restController = new ResetDeviceController(
 				formService, childSyncService, loginService);
+		
 		HomeScreenController homeScreenController = new HomeScreenController(
 				homeScreen, uiStack);
+		
 		ChildPhotoScreen childPhotoScreen = new ChildPhotoScreen();
+		
 		ChildController childController = new ChildController(newChildScreen,
 				viewChildScreen, searchChildScreen, viewChildrenScreen,
-				uiStack, formStore, childStoreService, childPhotoScreen);
+				uiStack, formStore, childrenStore, childPhotoScreen);
+		
 		SyncController syncController = new SyncController(syncScreen, uiStack,
 				childSyncService, formService);
 
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,
 				loginController, childController, syncController,
 				restController);
+		
 		dispatcher.homeScreen();
 
 	}

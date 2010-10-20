@@ -1,6 +1,7 @@
 package com.rapidftr.utilities;
 
 import java.util.Hashtable;
+import java.util.Vector;
 
 public interface Store {
 
@@ -13,5 +14,10 @@ public interface Store {
 	public abstract void clear();
 
 	public abstract void remove(String key);
+
+	public abstract Vector getVector(String key);
+
+	public abstract void setVector(String key, Vector value);
+
 
 }

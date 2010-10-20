@@ -1,9 +1,9 @@
 package com.rapidftr.controllers;
 
 import com.rapidftr.controllers.internal.Controller;
+import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
-import com.rapidftr.model.SearchChildFilter;
 import com.rapidftr.screens.ChildHistoryScreen;
 import com.rapidftr.screens.ChildPhotoScreen;
 import com.rapidftr.screens.ManageChildScreen;
@@ -13,30 +13,29 @@ import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.screens.internal.UiStack;
-import com.rapidftr.services.ChildStoreService;
 import com.rapidftr.utilities.ImageCaptureListener;
 
 public class ChildController extends Controller {
 
 	private final FormStore formStore;
-	private final ChildStoreService childStoreService;
 	private final ManageChildScreen manageChildScreen;
 	private final ViewChildScreen viewChildScreen;
 	private final SearchChildScreen searchChildScreen;
 	private final ViewChildrenScreen viewChildrenScreen;
 	private final ChildPhotoScreen childPhotoScreen;
     private CustomScreen currentChildScreen;
+	private ChildrenRecordStore childrenStore;
 
     public ChildController(ManageChildScreen manageChildScreen,
 			ViewChildScreen viewChildScreen,
 			SearchChildScreen searchChildScreen,
 			ViewChildrenScreen viewChildrenScreen, UiStack uiStack,
-			FormStore formStore, ChildStoreService childStoreService, ChildPhotoScreen childPhotoScreen) {
+			FormStore formStore, ChildrenRecordStore childrenStore, ChildPhotoScreen childPhotoScreen) {
 		super(manageChildScreen, uiStack);
 		this.manageChildScreen = manageChildScreen;
 		this.viewChildScreen = viewChildScreen;
 		this.formStore = formStore;
-		this.childStoreService = childStoreService;
+		this.childrenStore = childrenStore;
 		this.searchChildScreen = searchChildScreen;
 		this.viewChildrenScreen = viewChildrenScreen;
         this.childPhotoScreen = childPhotoScreen;
@@ -83,7 +82,7 @@ public class ChildController extends Controller {
 	}
 
 	public void saveChild(Child child) {
-		childStoreService.saveChildInLocalStore(child);
+		childrenStore.addOrUpdate(child);
 	}
 
 	public void syncChild(Child child) {
@@ -108,7 +107,7 @@ public class ChildController extends Controller {
 
 	public void viewChildren() {
 		Child[] children;
-		children = childStoreService.getAllChildrenFromPhoneStoredAsArray();
+		children = childrenStore.getAllAsArray();
 		viewChildrenScreen.setChildren(children);
 		changeScreen(viewChildrenScreen);
 	}
@@ -117,14 +116,13 @@ public class ChildController extends Controller {
 		changeScreen(searchChildScreen);
 	}
 
-	public void searchAndDispalyChildren(SearchChildFilter searchChildFilter) {
-		Child children[] = childStoreService
-				.searchChildrenFromStore(searchChildFilter);
+	public void searchAndDispalyChildren(String searchQuery) {
+		Child children[] = childrenStore.search(searchQuery);
 		if(children.length!=0){
-		viewChildrenScreen.setChildren(children);
-		changeScreen(viewChildrenScreen);
+			viewChildrenScreen.setChildren(children);
+			changeScreen(viewChildrenScreen);
 		}else{
-		searchChildScreen.showNoSearchResultsAlert();	
+			searchChildScreen.showNoSearchResultsAlert();	
 		}
 	}
 

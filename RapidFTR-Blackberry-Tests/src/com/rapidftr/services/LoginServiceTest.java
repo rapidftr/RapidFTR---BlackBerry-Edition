@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import com.rapidftr.net.HttpService;
+import com.rapidftr.utilities.DefaultStore;
 import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.Settings;
 import com.sun.me.web.path.Result;
@@ -28,7 +29,8 @@ public class LoginServiceTest {
 	public void setUp() {
 		httpService = mock(HttpService.class);
 		settings = mock(Settings.class);
-		loginService = new LoginService(httpService, settings);
+		DefaultStore defaultStore = mock(DefaultStore.class);
+		loginService = new LoginService(httpService, settings, defaultStore);
 	}
 
 	@Test

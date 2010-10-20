@@ -16,20 +16,7 @@ public class ChildServiceTest {
     @Test
     @Ignore
     public void should_fetch_from_server_and_parse_child_objects_from_response() throws Exception {
-//        HttpService httpService = mock(HttpService.class);
-//        ChildService childService = new ChildService(httpService);
-//
-//
-//
-//        Response successfulResponse = stubSuccessfulResponse();
-//      //  when(childService.get("/children")).thenReturn(successfulResponse);
-//
-//        Child[] children = childService.getAllChildren();
-//
-//        assertThat(children.length, is(1));
-//        assertThat(children[0].getField("name"), is("Dave"));
-//        assertThat(children[0].getField("age_is"), is("approximate"));
-//        assertThat(children[0].getField("mothers_name"), is("Doris"));
+
     }
 
 

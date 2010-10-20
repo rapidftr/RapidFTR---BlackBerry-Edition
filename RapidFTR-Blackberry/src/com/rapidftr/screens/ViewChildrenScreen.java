@@ -49,12 +49,10 @@ public class ViewChildrenScreen extends CustomScreen {
 	}
 
 	public void cleanUp() {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void setUp() {
-		// TODO Auto-generated method stub
 
 	}
 

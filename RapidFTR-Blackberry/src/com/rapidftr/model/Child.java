@@ -138,6 +138,9 @@ public class Child implements Persistable {
 		return false;
 	}
 
+	
+	
+	
 	public void updateField(String name) {
 		if (!data.containsKey(name)) {
 			data.put(name, "");
@@ -180,42 +183,6 @@ public class Child implements Persistable {
 		if (isUpdated()) {
 			childStatus = ChildStatus.UPDATED;
 		}
-		// try {
-		// JSONArray histories = getField("histories") != null ? new JSONArray(
-		// getField("histories").toString())
-		// : new JSONArray();
-		// boolean isSomeFieldchanged = false;
-		// JSONObject history = new JSONObject();
-		// history.put("datetime", new Date());
-		// history.put("user_name", userName);
-		// JSONObject historyItems = new JSONObject();
-		// for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-		// Form form = (Form) list.nextElement();
-		// for (Enumeration fields = form.getFieldList().elements(); fields
-		// .hasMoreElements();) {
-		// FormField field = (FormField) fields.nextElement();
-		// Object previousValue = getField(field.getName().toString());
-		// if (previousValue != null
-		// && !previousValue.equals(field.getValue())) {
-		// isSomeFieldchanged = true;
-		// setField(field.getName(), field.getValue());
-		// JSONObject historyItem = new JSONObject();
-		// historyItem.put("from", previousValue.toString());
-		// historyItem.put("to", field.getValue().toString());
-		// historyItems.put(field.getName(), historyItem);
-		// }
-		// }
-		// }
-		//
-		// if (isSomeFieldchanged) {
-		// history.put("changes", historyItems);
-		// histories.put(history);
-		// }
-		// setField("histories", histories.toString());
-		// } catch (JSONException e) {
-		// throw new RuntimeException("Invalid  History Format"
-		// + e.getMessage());
-		// }
 	}
 
 	public Vector getHistory() {
@@ -287,6 +254,22 @@ public class Child implements Persistable {
 
 	public boolean isSyncFailed() {
 		return childStatus.equals(ChildStatus.SYNC_FAILED);
+	}
+
+	public boolean matches(String queryString) {
+		String id = (String) getField("unique_identifier");
+		if (id == null) {
+			id = "";
+		}
+
+		String name = (String) getField("name");
+		if (name == null) {
+			name = "";
+		}
+
+		return ((!"".equals(queryString) && (id.equalsIgnoreCase(queryString))) || (!""
+				.equals(queryString) && name.toString().toLowerCase().indexOf(
+				queryString) != -1));
 	}
 
 }

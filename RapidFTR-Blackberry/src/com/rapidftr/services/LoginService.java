@@ -1,27 +1,23 @@
 package com.rapidftr.services;
 
 import java.util.Hashtable;
-
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.Settings;
 import com.rapidftr.utilities.DefaultStore;
-import com.rapidftr.utilities.Store;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Response;
 
 public class LoginService extends RequestAwareService {
-
-	private static final String PORT = "port";
-	private static final String HOST = "host";
 	private Settings settings;
-	private Store store = new DefaultStore();
 	public static final String USER_NAME = "user_name";
+	private final DefaultStore defaultStore;
 
-	public LoginService(HttpService httpService, Settings settingsStore) {
+	public LoginService(HttpService httpService, Settings settingsStore, DefaultStore defaultStore) {
 		super(httpService);
 		this.settings = settingsStore;
+		this.defaultStore = defaultStore;
 	}
 
 	public void login(String userName, String password) {
@@ -46,7 +42,7 @@ public class LoginService extends RequestAwareService {
 	}
 
 	public void clearLoginState() {
-		store.clear();
+		defaultStore.clear();
 	}
 
 	public void onRequestSuccess(Object context, Response result) {
