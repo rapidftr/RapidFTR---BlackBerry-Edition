@@ -14,7 +14,7 @@ import com.rapidftr.screens.internal.CustomScreen;
 public class ViewChildrenScreen extends CustomScreen {
 
 	private ChildrenListField childrenListField;
-	private Child[] childrenArray;
+	private int numberOfChildren;
 
 	public ViewChildrenScreen() {
 		super();
@@ -42,10 +42,8 @@ public class ViewChildrenScreen extends CustomScreen {
 	}
 
 	public void setChildren(Child[] children) {
-
-		childrenArray = children;
+		numberOfChildren = children.length;
 		childrenListField.set(children);
-
 	}
 
 	public void cleanUp() {
@@ -57,8 +55,7 @@ public class ViewChildrenScreen extends CustomScreen {
 	}
 
 	protected void makeMenu(Menu menu, int instance) {
-		if (childrenArray.length > 0) {
-
+		if (numberOfChildren > 0) {
 			MenuItem editChildMenu = new MenuItem("Open Record", 1, 1) {
 				public void run() {
 					int selectedIndex = childrenListField.getSelectedIndex();

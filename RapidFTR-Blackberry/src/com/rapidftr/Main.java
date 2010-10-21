@@ -31,11 +31,7 @@ import com.rapidftr.utilities.Settings;
 import com.rapidftr.utilities.DefaultStore;
 
 public class Main extends UiApplication {
-
-	private static final int CHILDREN_STORE_KEY = "com.rapidftr.utilities.childrenstore"
-			.hashCode();
-	private static final int FTR_PERSISTENT_STORE_KEY = "com.rapidftr.utilities.ftrstore"
-			.hashCode();
+	
 	public static final String APPLICATION_NAME = "Rapid FTR";
 
 	public static void main(String[] args) {
@@ -48,10 +44,10 @@ public class Main extends UiApplication {
 		enablePermission(ApplicationPermissions.PERMISSION_INPUT_SIMULATION);
 		enablePermission(ApplicationPermissions.PERMISSION_FILE_API);
 
-		DefaultStore defaultStore = new DefaultStore(FTR_PERSISTENT_STORE_KEY);
+		DefaultStore defaultStore = new DefaultStore(new Key("com.rapidftr.utilities.ftrstore"));
 		
 		ChildrenRecordStore childrenStore = new ChildrenRecordStore(
-				new DefaultStore(CHILDREN_STORE_KEY));
+				new DefaultStore(new Key("com.rapidftr.utilities.childrenstore")));
 		
 		Settings settings = new Settings(defaultStore);
 

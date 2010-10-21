@@ -2,14 +2,17 @@ package com.rapidftr.utilities;
 
 import java.util.Hashtable;
 import java.util.Vector;
+
+import com.rapidftr.Key;
+
 import net.rim.device.api.system.PersistentObject;
 import net.rim.device.api.system.PersistentStore;
 
 public class DefaultStore implements Store {
 	private PersistentObject persistentObject;
 
-	public DefaultStore(int storeKey) {
-		persistentObject = PersistentStore.getPersistentObject(storeKey);
+	public DefaultStore(Key key) {
+		persistentObject = PersistentStore.getPersistentObject(key.getValue());
 	}
 
 	private void setContents(Hashtable hashtable) {

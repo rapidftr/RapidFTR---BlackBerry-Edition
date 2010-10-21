@@ -13,6 +13,13 @@ public class Children {
 	public Children(Vector vector) {
 		this.vector = vector;
 	}
+	
+	public Children(Child[] array) {
+		vector = new Vector();
+		for(int i=0;i<array.length;i++) {
+			vector.addElement(array[i]);
+		}
+	}
 
 	public int count() {
 		return vector.size();
@@ -29,7 +36,6 @@ public class Children {
 	public Child[] toArray() {
 		Child[] array = new Child[count()];
 		vector.copyInto(array);
-		sortByNameAndLocation(array);
 		return array;
 	}
 
@@ -49,16 +55,17 @@ public class Children {
 
 				return nameComparator;
 			}
-
+			
+			private int stringIgnoreCaseComparator(String firstString,
+					String secondString) {
+				int nameComparator = (firstString.equals(null) ? firstString
+						: firstString.toLowerCase()).compareTo((secondString
+						.equals(null) ? secondString : secondString.toLowerCase()));
+				return nameComparator;
+			}
 		});
 	}
 
-	private int stringIgnoreCaseComparator(String firstString,
-			String secondString) {
-		int nameComparator = (firstString.equals(null) ? firstString
-				: firstString.toLowerCase()).compareTo((secondString
-				.equals(null) ? secondString : secondString.toLowerCase()));
-		return nameComparator;
-	}
+	
 
 }
