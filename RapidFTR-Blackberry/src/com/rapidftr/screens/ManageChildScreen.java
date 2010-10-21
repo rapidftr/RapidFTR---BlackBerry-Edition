@@ -119,6 +119,12 @@ public class ManageChildScreen extends CustomScreen {
 
     }
 
+    public boolean confirmOverWriteAudio() {
+            return Dialog.ask(Dialog.D_YES_NO,
+                    "This will overwrite previously recorded audio. Are you sure?") == Dialog.YES;
+        }
+
+
     public void takePhoto(ImageCaptureListener imageCaptureListener) {
 
         ((ChildController) controller).takeSnapshotAndUpdateWithNewImage(imageCaptureListener);

@@ -103,8 +103,9 @@ public class NewChildScreen extends CustomScreen {
 
 			public void fieldChanged(Field field, int context) {
 				onSaveChildClicked();
-				Dialog.alert("ChildRecord has been stored succesfully\n" +
-						"Please upload record to central server whenever you get Internet Access!!");
+				Dialog
+						.alert("ChildRecord has been stored succesfully\n"
+								+ "Please upload record to central server whenever you get Internet Access!!");
 				controller.popScreen();
 			}
 		});
@@ -140,18 +141,23 @@ public class NewChildScreen extends CustomScreen {
 	private void onSaveChildClicked() {
 
 		Child child = new Child();
-       
+
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			Form form = (Form) list.nextElement();
-			for(Enumeration fields = form.getFieldList().elements(); fields.hasMoreElements();)
-			{
-					FormField field = (FormField) fields.nextElement();
-					child.setField(field.getName(),field.getValue());
+			for (Enumeration fields = form.getFieldList().elements(); fields
+					.hasMoreElements();) {
+				FormField field = (FormField) fields.nextElement();
+				child.setField(field.getName(), field.getValue());
 			}
-			    
-		}
-	    ((NewChildController) controller).saveChild(child);
 
+		}
+		((NewChildController) controller).saveChild(child);
+
+	}
+
+	public boolean confirmOverWriteAudio() {
+		return Dialog.ask(Dialog.D_YES_NO,
+				"This will overwrite previously recorded audio. Are you sure?") == Dialog.YES;
 	}
 
 }

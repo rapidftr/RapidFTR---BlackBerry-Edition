@@ -9,5 +9,6 @@ public class HttpUtility {
 	public static Arg[] makeJSONHeader() {
 		return new Arg[]{HEADER_ACCEPT_JSON};
 	}
+	public static final Arg HEADER_CONTENT_TYPE_AUDIO = new Arg("Content-Type", "audio/amr");
 
 }
