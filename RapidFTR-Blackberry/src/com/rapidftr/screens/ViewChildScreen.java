@@ -13,7 +13,6 @@ import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.FocusChangeListener;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
@@ -23,10 +22,7 @@ import net.rim.device.api.ui.component.*;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.Border;
 import net.rim.device.api.ui.decor.BorderFactory;
-
 import javax.microedition.io.Connector;
-import javax.microedition.lcdui.Display;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,9 +32,9 @@ import java.util.Vector;
 public class ViewChildScreen extends CustomScreen {
 
 	Child child;
-	BitmapField bf;
+	BitmapField bitmapField;
 	boolean isBitmapFieldFocused = false;
-	
+
 	public ViewChildScreen() {
 	}
 
@@ -54,27 +50,29 @@ public class ViewChildScreen extends CustomScreen {
 	private void renderChildFields(Child child) {
 		int index = 0;
 
-		// render the picture
-		HorizontalFieldManager hmanager = new HorizontalFieldManager(
+		HorizontalFieldManager horizontalFieldManager = new HorizontalFieldManager(
 				Manager.HORIZONTAL_SCROLLBAR);
-		renderBitmap(hmanager, (String) child.getField("current_photo_key"));
+		renderBitmap(horizontalFieldManager, (String) child
+				.getField("current_photo_key"));
+		horizontalFieldManager.add(new BoldRichTextField("   "
+				+ child.getField("name")));
+		add(horizontalFieldManager);
 
-		hmanager.add(new BoldRichTextField("   " + child.getField("name")));
-		add(hmanager);
-		// add an empty line
 		LabelField emptyLine = new LabelField("");
 		emptyLine.select(false);
 		add(emptyLine);
 
-		// render the unique id
 		String uniqueIdentifier = (String) child.getField("unique_identifier");
 		uniqueIdentifier = (null == uniqueIdentifier) ? "" : uniqueIdentifier;
-
 		add(BoldRichTextField.getSemiBoldRichTextField("Unique Id" + " :",
 				uniqueIdentifier));
+
 		add(new SeparatorField());
 
-		// render other fields
+		renderFormFields(child, index);
+	}
+
+	private void renderFormFields(Child child, int index) {
 		Vector forms = new FormStore().getForms();
 
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
@@ -94,65 +92,62 @@ public class ViewChildScreen extends CustomScreen {
 
 					key = key.replace('_', ' ');
 
-					add(BoldRichTextField.getSemiBoldRichTextField(field.displayLabel() + " :", value));
+					add(BoldRichTextField.getSemiBoldRichTextField(field
+							.displayLabel()
+							+ " :", value));
 					add(new SeparatorField());
 					index++;
 				}
 			}
-
 		}
-
 	}
 
-	private void renderBitmap(HorizontalFieldManager manager, String currentPhotoKey) {
+	private void renderBitmap(HorizontalFieldManager manager,
+			String currentPhotoKey) {
 		manager.setMargin(10, 10, 10, 10);
 
 		Bitmap image = getChildImage(currentPhotoKey);
 
-		if (image == null)	
-		{
+		if (image == null) {
 			image = getChildImage("res/default.jpg");
 		}
-			
-		bf= new BitmapField(image,BitmapField.FOCUSABLE);
-		bf.select(true);
-		//bf.setVisualStae(Field.VISUAL_STATE_FOCUS);
-		
-		bf.setFocusListener(new FocusChangeListener() {
-			
+
+		final BitmapField bitmapField = new BitmapField(image,
+				BitmapField.FOCUSABLE);
+		bitmapField.select(true);
+
+		bitmapField.setFocusListener(new FocusChangeListener() {
 			public void focusChanged(Field field, int eventType) {
-				
-				if(eventType==FOCUS_GAINED)
-				{
-					isBitmapFieldFocused=true;
-					Border blueBorder = BorderFactory.createSimpleBorder(new XYEdges(2, 2, 2, 2),new  XYEdges(Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE), Border.STYLE_SOLID);
-					bf.setBorder(blueBorder);
+				if (eventType == FOCUS_GAINED) {
+					isBitmapFieldFocused = true;
+					Border blueBorder = BorderFactory.createSimpleBorder(
+							new XYEdges(2, 2, 2, 2), 
+							new XYEdges(Color.BLUE,
+									Color.BLUE, 
+									Color.BLUE, 
+									Color.BLUE),
+							Border.STYLE_SOLID);
+					bitmapField.setBorder(blueBorder);
+				} else if (eventType == FOCUS_LOST) {
+					isBitmapFieldFocused = false;
+					bitmapField.setBorder(null);
+
 				}
-				else if(eventType==FOCUS_LOST)
-				{
-					isBitmapFieldFocused=false;
-					bf.setBorder(null);
-					
-				}
-					
 			}
 		});
-		
-		manager.add(bf);
-		
+
+		manager.add(bitmapField);
 	}
 
-	 protected boolean trackwheelClick(int status, int time) {
-		 	if(isBitmapFieldFocused)
-		 	{
-		 		((ChildController) controller).viewChildPhoto(child);
-		 		return false;
-		 		
-		 	}
+	protected boolean trackwheelClick(int status, int time) {
+		if (isBitmapFieldFocused) {
+			((ChildController) controller).viewChildPhoto(child);
+			return false;
+
+		}
 		return true;
 	}
-	 
-	 
+
 	public void setUp() {
 		// TODO Auto-generated method stub
 	}
@@ -191,6 +186,7 @@ public class ViewChildScreen extends CustomScreen {
 
 		menu.add(editChildMenu);
 		menu.add(photoMenu);
+
 		if (child.isSyncFailed()) {
 			MenuItem syncMenu = new MenuItem("Sync Errors", 2, 1) {
 				public void run() {
@@ -208,7 +204,7 @@ public class ViewChildScreen extends CustomScreen {
 		}
 		menu.add(historyMenu);
 		menu.add(CloseMenu);
-		
+
 		super.makeMenu(menu, instance);
 	}
 

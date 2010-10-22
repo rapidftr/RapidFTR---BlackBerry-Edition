@@ -36,7 +36,6 @@ public class ViewChildrenScreen extends CustomScreen {
 				}
 				return false;
 			}
-
 		};
 		add(childrenListField);
 	}

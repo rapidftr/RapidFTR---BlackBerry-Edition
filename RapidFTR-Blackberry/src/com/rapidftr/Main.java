@@ -49,9 +49,9 @@ public class Main extends UiApplication {
 		ChildrenRecordStore childrenStore = new ChildrenRecordStore(
 				new DefaultStore(new Key("com.rapidftr.utilities.childrenstore")));
 		
-		Settings settings = new Settings(defaultStore);
-
 		FormStore formStore = new FormStore();
+		
+		Settings settings = new Settings(defaultStore);
 
 		HttpServer httpServer = new HttpServer(new HttpSettings(settings));
 
@@ -61,6 +61,7 @@ public class Main extends UiApplication {
 				defaultStore);
 
 		FormService formService = new FormService(httpService, formStore);
+		
 		ChildSyncService childSyncService = new ChildSyncService(httpService,
 				childrenStore);
 

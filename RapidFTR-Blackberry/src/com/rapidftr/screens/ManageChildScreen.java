@@ -57,21 +57,77 @@ public class ManageChildScreen extends CustomScreen {
     }
 
     private void createScreenLayout() {
+        deleteScreenManager();
+        
+        screenManager = new VerticalFieldManager();
+        screenManager.add(prepareTitleManager());
+        screenManager.add(new SeparatorField());        
+        add(screenManager);
 
-        try {
+        askForFormSynchronization();
+
+        final Object[] formArray = formsInArray();
+        
+        final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
+        formManager.add(((Form) formArray[0]).getLayout());
+        screenManager.add(formManager);
+        
+        final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
+        final ObjectChoiceField availableForms = new ObjectChoiceField("Choose form", formArray);
+		formsManager.add(availableForms);
+        screenManager.add(formsManager);
+
+        availableForms.setChangeListener(new FieldChangeListener() {
+            public void fieldChanged(Field field, int context) {
+                formManager.deleteAll();
+                formManager.add(((Form) formArray[availableForms.getSelectedIndex()]).getLayout());
+            }
+        });
+
+        screenManager.add(new BlankSeparatorField(15));
+
+        HorizontalFieldManager saveButtonManager = new HorizontalFieldManager(FIELD_HCENTER);
+        saveButtonManager.add(createSaveButton());
+        screenManager.add(saveButtonManager);
+
+    }
+
+	private Button createSaveButton() {
+		Button saveButton = new Button("Save");
+        saveButton.setChangeListener(new FieldChangeListener() {
+            public void fieldChanged(Field field, int context) {
+            	if (!validateOnSave())
+                    return;
+                controller.popScreen();
+              ((ChildController)controller).viewChild(childToEdit);
+              childToEdit = null;
+            }
+        });
+		return saveButton;
+	}
+
+	private Object[] formsInArray() {
+		final Object[] formArray = new Object[forms.size()];
+        forms.copyInto(formArray);
+		return formArray;
+	}
+
+	private Manager prepareTitleManager() {
+		Manager titleManager = new HorizontalFieldManager(FIELD_HCENTER);
+        titleManager.add(new LabelField("Create New Child"));
+		return titleManager;
+	}
+
+	private void deleteScreenManager() {
+		try {
             delete(screenManager);
         } catch (Exception ex) {
 
         }
-        screenManager = new VerticalFieldManager();
-        Manager titleManager = new HorizontalFieldManager(FIELD_HCENTER);
-        LabelField screenTitle = new LabelField("Create New Child");
-        titleManager.add(screenTitle);
-        screenManager.add(titleManager);
-        screenManager.add(new SeparatorField());
-        add(screenManager);
+	}
 
-        if (forms == null || forms.size() == 0) {
+	private void askForFormSynchronization() {
+		if (formsEmpty()) {
             int result = Dialog.ask(Dialog.D_OK_CANCEL, "There are no form details stored\n" + "press ok to synchronize forms with a server.");
 
             controller.popScreen();
@@ -80,44 +136,11 @@ public class ManageChildScreen extends CustomScreen {
             }
             return;
         }
+	}
 
-        final Object[] formArray = new Object[forms.size()];
-        forms.copyInto(formArray);
-        final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
-        final ObjectChoiceField availableForms = new ObjectChoiceField("Choose form", formArray);
-        formsManager.add(availableForms);
-        screenManager.add(formsManager);
-
-        final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
-        formManager.add(((Form) formArray[0]).getLayout());
-        screenManager.add(formManager);
-        availableForms.setChangeListener(new FieldChangeListener() {
-
-            public void fieldChanged(Field field, int context) {
-                formManager.deleteAll();
-                formManager.add(((Form) formArray[availableForms.getSelectedIndex()]).getLayout());
-
-            }
-
-        });
-
-        screenManager.add(new BlankSeparatorField(15));
-
-        HorizontalFieldManager saveButtonManager = new HorizontalFieldManager(FIELD_HCENTER);
-        Button saveButton = new Button("Save");
-        saveButton.setChangeListener(new FieldChangeListener() {
-            public void fieldChanged(Field field, int context) {
-                if (!validateOnSave())
-                    return;
-                controller.popScreen();
-              ((ChildController)controller).viewChild(childToEdit);
-              childToEdit = null;
-            }
-        });
-        saveButtonManager.add(saveButton);
-        screenManager.add(saveButtonManager);
-
-    }
+	private boolean formsEmpty() {
+		return forms == null || forms.size() == 0;
+	}
 
     public boolean confirmOverWriteAudio() {
             return Dialog.ask(Dialog.D_YES_NO,
@@ -126,9 +149,7 @@ public class ManageChildScreen extends CustomScreen {
 
 
     public void takePhoto(ImageCaptureListener imageCaptureListener) {
-
         ((ChildController) controller).takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
-
     }
 
     public boolean onClose() {
@@ -140,7 +161,6 @@ public class ManageChildScreen extends CustomScreen {
         }
 
         if (result == Dialog.NO) {
-            // Don't do anything just exit
         }
 
         controller.popScreen();
@@ -162,6 +182,7 @@ public class ManageChildScreen extends CustomScreen {
         } else {
             childToEdit.update(settings.getCurrentlyLoggedIn(), forms);
         }
+        
         String invalidDataField = null;
         if ((invalidDataField = validateRequiredFields()) != "") {
             return invalidDataField;
@@ -192,40 +213,39 @@ public class ManageChildScreen extends CustomScreen {
 
         MenuItem syncChildMenu = new MenuItem("Sync Record ", 2, 2) {
             public void run() {
-            
                 if (!validateOnSave())
                     return;
                 ((ChildController) controller).syncChild(childToEdit);
               
                 childToEdit = null;
                 controller.popScreen();
-               
-             
             }
         };
 
-        if(childToEdit!=null && childToEdit.isSyncFailed()){
-        	 MenuItem syncFailesErrorMenu = new MenuItem("Sync Error ", 2, 2) {
-                 public void run() {
-                     Dialog.alert(childToEdit.childStatus().getSyncError());
-                     
-                 }
-             };
-
-        }
-        
         MenuItem CloseMenu = new MenuItem("Close", 3, 1) {
             public void run() {
                 onClose();
             }
         };
-
+        
+        addSyncFailedErrorMenuItem(menu);
         menu.add(saveChildMenu);
         menu.add(syncChildMenu);
         menu.add(CloseMenu);
         
         super.makeMenu(menu, instance);
     }
+
+	private void addSyncFailedErrorMenuItem(Menu menu) {
+		if(childToEdit!=null && childToEdit.isSyncFailed()){
+       	 MenuItem syncFailesErrorMenu = new MenuItem("Sync Error ", 2, 2) {
+                public void run() {
+                    Dialog.alert(childToEdit.childStatus().getSyncError());
+                }
+            };
+            menu.add(syncFailesErrorMenu);
+        }
+	}
 
     public Child getChild() {
         return childToEdit;

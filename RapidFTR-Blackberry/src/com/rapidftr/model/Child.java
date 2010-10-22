@@ -3,13 +3,10 @@ package com.rapidftr.model;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-
 import net.rim.device.api.util.Persistable;
-
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
-
 import com.rapidftr.utilities.FileUtility;
 import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.RandomStringGenerator;
@@ -27,7 +24,7 @@ public class Child implements Persistable {
 	public Child() {
 		changedFields = new Hashtable();
 		data = new Hashtable();
-		data.put("_id", RandomStringGenerator.generate(32));
+		put("_id", RandomStringGenerator.generate(32));
 		childStatus = ChildStatus.NEW;
 	}
 
@@ -84,10 +81,10 @@ public class Child implements Persistable {
 		return postData;
 	}
 
-    private Enumeration getChangedFields() {
-        return changedFields.keys();
-    }
-    
+	private Enumeration getChangedFields() {
+		return changedFields.keys();
+	}
+
 	private Part multiPart(Object value, String paramName, Arg headerContentType) {
 		Arg[] headers = new Arg[2];
 		headers[0] = new Arg("Content-Disposition", "form-data; name=\"child["
@@ -96,17 +93,23 @@ public class Child implements Persistable {
 		byte[] imageData = FileUtility.getByteArray(value.toString());
 		return new Part(imageData, headers);
 	}
-    
+
 	public void setField(String name, Object value) {
 		if (!isNewChild()) {
 			Object oldValue = getField(name);
+
 			if (oldValue != null && !oldValue.equals(value)
 					&& !name.equals("_id")) {
 				changedFields.put(name, value);
 			}
 		}
-		data.put(name, value);
+		put(name, value);
 
+	}
+
+	private void put(String name, Object value) {
+		if(value!=null)
+			data.put(name, value);
 	}
 
 	public Object getField(String key) {
@@ -150,12 +153,9 @@ public class Child implements Persistable {
 		return false;
 	}
 
-	
-	
-	
 	public void updateField(String name) {
 		if (!data.containsKey(name)) {
-			data.put(name, "");
+			put(name, "");
 		}
 
 	}
@@ -170,17 +170,14 @@ public class Child implements Persistable {
 			Object nextElement = list.nextElement();
 			if (nextElement != null) {
 				Form form = (Form) nextElement;
-				System.out.println(form.FORM_NAME);
 				for (Enumeration fields = form.getFieldList().elements(); fields
 						.hasMoreElements();) {
 
 					Object nextFormfieldElement = fields.nextElement();
 					if (nextFormfieldElement != null) {
+
 						FormField field = (FormField) nextFormfieldElement;
-						System.out.println(field.name);
-						if (field.name.equals("dropdown")) {
-							System.out.println(field.name);
-						}
+
 						child.setField(field.getName(), field.getValue());
 					}
 				}

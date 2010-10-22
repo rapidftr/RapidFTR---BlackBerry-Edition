@@ -25,14 +25,14 @@ public class AudioField extends FormField implements AudioRecordListener{
 	private RecordControl rcontrol;
 	private ByteArrayOutputStream output = null;
 	private byte[] data = null;
-	private String location = null;
+	private String location = "";
 	protected static final String TYPE = "audio_upload_box";
 	private static final String DIRECTORY_NAME = "file:///store/rapidftr/";
 	private VerticalFieldManager manager;
 	private ManageChildScreen manageChildScreen;
 
 	protected AudioField(String name) {
-		super(name, "audio", TYPE);
+		super(name, "Audio", TYPE);
 	}
 	
 	public String getValue() {
