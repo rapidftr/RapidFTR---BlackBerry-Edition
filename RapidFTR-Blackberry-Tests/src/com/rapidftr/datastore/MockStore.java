@@ -5,11 +5,11 @@ import java.util.Vector;
 import com.rapidftr.utilities.Store;
 import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
-public class TestStore implements Store {
+public class MockStore implements Store {
 
 	private Hashtable table = new Hashtable();
 	
-	public TestStore(String key) {
+	public MockStore(String key) {
 	}
 
 	@Override

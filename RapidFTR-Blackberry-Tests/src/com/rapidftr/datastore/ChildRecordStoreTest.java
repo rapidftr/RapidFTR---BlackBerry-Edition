@@ -17,7 +17,7 @@ public class ChildRecordStoreTest {
 
 	@Before
 	public void setup() {
-		childrenStore = new ChildrenRecordStore(new TestStore("key"));
+		childrenStore = new ChildrenRecordStore(new MockStore("key"));
 	}
 
 	@Test
