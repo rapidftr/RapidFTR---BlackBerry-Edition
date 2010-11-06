@@ -86,25 +86,7 @@ public class ManageChildScreen extends CustomScreen {
 
         screenManager.add(new BlankSeparatorField(15));
 
-        HorizontalFieldManager saveButtonManager = new HorizontalFieldManager(FIELD_HCENTER);
-        saveButtonManager.add(createSaveButton());
-        screenManager.add(saveButtonManager);
-
     }
-
-	private Button createSaveButton() {
-		Button saveButton = new Button("Save");
-        saveButton.setChangeListener(new FieldChangeListener() {
-            public void fieldChanged(Field field, int context) {
-            	if (!validateOnSave())
-                    return;
-                controller.popScreen();
-              ((ChildController)controller).viewChild(childToEdit);
-              childToEdit = null;
-            }
-        });
-		return saveButton;
-	}
 
 	private Object[] formsInArray() {
 		final Object[] formArray = new Object[forms.size()];
