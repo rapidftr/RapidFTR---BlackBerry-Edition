@@ -153,16 +153,24 @@ public class ManageChildScreen extends CustomScreen {
     }
 
     public boolean onClose() {
-        int result = Dialog.ask(Dialog.D_YES_NO, "Do you want to save the changes before closing?.", Dialog.NO);
+    	String menuMessage = "The current record has been changed. What do you want to do with these changes?";
+    	String[] menuChoices = {"Save", "Discard", "Cancel"};
+    	int defaultChoice = 0;
+        int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
 
-        if (result == Dialog.YES) {
-            if (!validateOnSave())
-                return false;
+        switch (result) {
+        case 0 : {
+        	if (!validateOnSave())
+        		return false;
+        	}
+        case 1 : {
+
+        	}
+        case 2 : {
+
+        	}
         }
-
-        if (result == Dialog.NO) {
-        }
-
+        
         controller.popScreen();
         return true;
     }

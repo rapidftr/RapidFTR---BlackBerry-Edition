@@ -3,6 +3,7 @@
 	<name>RapidFTR-Blackberry</name>
 	<comment></comment>
 	<projects>
+		<project>RapidFTR-Blackberry-Tests</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
