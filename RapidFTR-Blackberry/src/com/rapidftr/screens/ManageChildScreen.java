@@ -1,5 +1,20 @@
 package com.rapidftr.screens;
 
+import java.util.Enumeration;
+import java.util.Vector;
+
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FieldChangeListener;
+import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.component.Dialog;
+import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
+import net.rim.device.api.ui.component.ObjectChoiceField;
+import net.rim.device.api.ui.component.SeparatorField;
+import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.container.VerticalFieldManager;
+
 import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.controls.Button;
@@ -8,16 +23,6 @@ import com.rapidftr.model.Form;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.ImageCaptureListener;
 import com.rapidftr.utilities.Settings;
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.FieldChangeListener;
-import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.MenuItem;
-import net.rim.device.api.ui.component.*;
-import net.rim.device.api.ui.container.HorizontalFieldManager;
-import net.rim.device.api.ui.container.VerticalFieldManager;
-
-import java.util.Enumeration;
-import java.util.Vector;
 
 public class ManageChildScreen extends CustomScreen {
 
@@ -58,20 +63,20 @@ public class ManageChildScreen extends CustomScreen {
 
     private void createScreenLayout() {
         deleteScreenManager();
-        
+
         screenManager = new VerticalFieldManager();
         screenManager.add(prepareTitleManager());
-        screenManager.add(new SeparatorField());        
+        screenManager.add(new SeparatorField());
         add(screenManager);
 
         askForFormSynchronization();
 
         final Object[] formArray = formsInArray();
-        
+
         final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
         formManager.add(((Form) formArray[0]).getLayout());
         screenManager.add(formManager);
-        
+
         final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
         final ObjectChoiceField availableForms = new ObjectChoiceField("Choose form", formArray);
 		formsManager.add(availableForms);
@@ -96,8 +101,9 @@ public class ManageChildScreen extends CustomScreen {
 		Button saveButton = new Button("Save");
         saveButton.setChangeListener(new FieldChangeListener() {
             public void fieldChanged(Field field, int context) {
-            	if (!validateOnSave())
+            	if (!validateOnSave()) {
                     return;
+                }
                 controller.popScreen();
               ((ChildController)controller).viewChild(childToEdit);
               childToEdit = null;
@@ -156,8 +162,9 @@ public class ManageChildScreen extends CustomScreen {
         int result = Dialog.ask(Dialog.D_YES_NO, "Do you want to save the changes before closing?.", Dialog.NO);
 
         if (result == Dialog.YES) {
-            if (!validateOnSave())
+            if (!validateOnSave()) {
                 return false;
+            }
         }
 
         if (result == Dialog.NO) {
@@ -182,7 +189,7 @@ public class ManageChildScreen extends CustomScreen {
         } else {
             childToEdit.update(settings.getCurrentlyLoggedIn(), forms);
         }
-        
+
         String invalidDataField = null;
         if ((invalidDataField = validateRequiredFields()) != "") {
             return invalidDataField;
@@ -194,8 +201,9 @@ public class ManageChildScreen extends CustomScreen {
     private String validateRequiredFields() {
     	StringBuffer invalidFields= new StringBuffer("");
         for (int i = 0; i < REQUIRED_FIELDS.length; i++) {
-            if (childToEdit.getField(REQUIRED_FIELDS[i]) == null || childToEdit.getField(REQUIRED_FIELDS[i]).toString().equals(""))
+            if (childToEdit.getField(REQUIRED_FIELDS[i]) == null || childToEdit.getField(REQUIRED_FIELDS[i]).toString().equals("")) {
                 invalidFields.append(" ," + REQUIRED_FIELDS[i]);
+            }
         }
         return invalidFields.toString();
     }
@@ -203,22 +211,12 @@ public class ManageChildScreen extends CustomScreen {
     protected void makeMenu(Menu menu, int instance) {
         MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
             public void run() {
-                if (!validateOnSave())
+                if (!validateOnSave()) {
                     return;
+                }
                 controller.popScreen();
                 ((ChildController)controller).viewChild(childToEdit);
                 childToEdit = null;
-            }
-        };
-
-        MenuItem syncChildMenu = new MenuItem("Sync Record ", 2, 2) {
-            public void run() {
-                if (!validateOnSave())
-                    return;
-                ((ChildController) controller).syncChild(childToEdit);
-              
-                childToEdit = null;
-                controller.popScreen();
             }
         };
 
@@ -227,12 +225,11 @@ public class ManageChildScreen extends CustomScreen {
                 onClose();
             }
         };
-        
+
         addSyncFailedErrorMenuItem(menu);
         menu.add(saveChildMenu);
-        menu.add(syncChildMenu);
         menu.add(CloseMenu);
-        
+
         super.makeMenu(menu, instance);
     }
 
