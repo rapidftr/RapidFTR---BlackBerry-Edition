@@ -1,14 +1,13 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.controllers.ChildController;
-import com.rapidftr.datastore.FormStore;
-import com.rapidftr.model.Child;
-import com.rapidftr.model.Form;
-import com.rapidftr.model.FormField;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.BoldRichTextField;
-import com.rapidftr.utilities.ChildFieldIgnoreList;
-import com.rapidftr.utilities.ImageUtility;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import javax.microedition.io.Connector;
+
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Color;
@@ -18,16 +17,24 @@ import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.XYEdges;
-import net.rim.device.api.ui.component.*;
+import net.rim.device.api.ui.component.BitmapField;
+import net.rim.device.api.ui.component.Dialog;
+import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
+import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.Border;
 import net.rim.device.api.ui.decor.BorderFactory;
-import javax.microedition.io.Connector;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Vector;
+
+import com.rapidftr.controllers.ChildController;
+import com.rapidftr.datastore.FormStore;
+import com.rapidftr.model.Child;
+import com.rapidftr.model.Form;
+import com.rapidftr.model.FormField;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.BoldRichTextField;
+import com.rapidftr.utilities.ChildFieldIgnoreList;
+import com.rapidftr.utilities.ImageUtility;
 
 public class ViewChildScreen extends CustomScreen {
 
@@ -121,10 +128,10 @@ public class ViewChildScreen extends CustomScreen {
 				if (eventType == FOCUS_GAINED) {
 					isBitmapFieldFocused = true;
 					Border blueBorder = BorderFactory.createSimpleBorder(
-							new XYEdges(2, 2, 2, 2), 
+							new XYEdges(2, 2, 2, 2),
 							new XYEdges(Color.BLUE,
-									Color.BLUE, 
-									Color.BLUE, 
+									Color.BLUE,
+									Color.BLUE,
 									Color.BLUE),
 							Border.STYLE_SOLID);
 					bitmapField.setBorder(blueBorder);
@@ -178,6 +185,14 @@ public class ViewChildScreen extends CustomScreen {
 			}
 		};
 
+		MenuItem syncChildMenu = new MenuItem("Synchronise this Record", 2, 1) {
+            public void run() {
+                ((ChildController) controller).syncChild(child);
+
+                controller.popScreen();
+            }
+        };
+
 		MenuItem CloseMenu = new MenuItem("Close", 2, 1) {
 			public void run() {
 				controller.popScreen();
@@ -186,6 +201,7 @@ public class ViewChildScreen extends CustomScreen {
 
 		menu.add(editChildMenu);
 		menu.add(photoMenu);
+		menu.add(syncChildMenu);
 
 		if (child.isSyncFailed()) {
 			MenuItem syncMenu = new MenuItem("Sync Errors", 2, 1) {
@@ -214,8 +230,9 @@ public class ViewChildScreen extends CustomScreen {
 
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			int i = 0;
-			while ((i = inputStream.read()) != -1)
-				outputStream.write(i);
+			while ((i = inputStream.read()) != -1) {
+                outputStream.write(i);
+            }
 
 			byte[] data = outputStream.toByteArray();
 			EncodedImage eimg = EncodedImage.createEncodedImage(data, 0,

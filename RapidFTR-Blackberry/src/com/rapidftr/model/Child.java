@@ -3,13 +3,17 @@ package com.rapidftr.model;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+
 import net.rim.device.api.util.Persistable;
+
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
+
 import com.rapidftr.utilities.FileUtility;
 import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.RandomStringGenerator;
+import com.rapidftr.utilities.StringUtility;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Part;
 import com.sun.me.web.request.PostData;
@@ -90,7 +94,14 @@ public class Child implements Persistable {
 		headers[0] = new Arg("Content-Disposition", "form-data; name=\"child["
 				+ paramName + "]\"");
 		headers[1] = headerContentType;
-		byte[] imageData = FileUtility.getByteArray(value.toString());
+		byte[] imageData;
+
+		if (StringUtility.isBlank(String.valueOf(value))) {
+		    imageData = new byte[0];
+		} else {
+		    imageData = FileUtility.getByteArray(value.toString());
+		}
+
 		return new Part(imageData, headers);
 	}
 
@@ -108,8 +119,9 @@ public class Child implements Persistable {
 	}
 
 	private void put(String name, Object value) {
-		if(value!=null)
-			data.put(name, value);
+		if(value!=null) {
+            data.put(name, value);
+        }
 	}
 
 	public Object getField(String key) {
@@ -129,25 +141,31 @@ public class Child implements Persistable {
 	}
 
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj) {
+            return true;
+        }
+		if (obj == null) {
+            return false;
+        }
+		if (getClass() != obj.getClass()) {
+            return false;
+        }
 		Child other = (Child) obj;
 		if (data == null) {
-			if (other.data != null)
-				return false;
+			if (other.data != null) {
+                return false;
+            }
 		} else {
 			if (data.get("_id") != null && other.data.get("_id") != null
-					&& data.get("_id").equals((other.data.get("_id"))))
-				return true;
+					&& data.get("_id").equals((other.data.get("_id")))) {
+                return true;
+            }
 			if (data.get("unique_identifier") != null
 					&& other.data.get("unique_identifier") != null
 					&& data.get("unique_identifier").equals(
-							(other.data.get("unique_identifier"))))
-				return true;
+							(other.data.get("unique_identifier")))) {
+                return true;
+            }
 		}
 
 		return false;
