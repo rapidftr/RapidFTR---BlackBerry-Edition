@@ -93,22 +93,7 @@ public class ManageChildScreen extends CustomScreen {
 
     }
 
-	private Button createSaveButton() {
-		Button saveButton = new Button("Save");
-        saveButton.setChangeListener(new FieldChangeListener() {
-            public void fieldChanged(Field field, int context) {
-            	if (!validateOnSave()) {
-                    return;
-                }
-                controller.popScreen();
-              ((ChildController)controller).viewChild(childToEdit);
-              childToEdit = null;
-            }
-        });
-		return saveButton;
-	}
-
-	private Object[] formsInArray() {
+    private Object[] formsInArray() {
 		final Object[] formArray = new Object[forms.size()];
         forms.copyInto(formArray);
 		return formArray;
