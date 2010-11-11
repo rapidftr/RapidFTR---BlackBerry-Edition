@@ -1,28 +1,22 @@
 package com.rapidftr.screens;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.FieldChangeListener;
-import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.MenuItem;
-import net.rim.device.api.ui.component.Dialog;
-import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.component.ObjectChoiceField;
-import net.rim.device.api.ui.component.SeparatorField;
-import net.rim.device.api.ui.container.HorizontalFieldManager;
-import net.rim.device.api.ui.container.VerticalFieldManager;
-
 import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controls.BlankSeparatorField;
-import com.rapidftr.controls.Button;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.ImageCaptureListener;
 import com.rapidftr.utilities.Settings;
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FieldChangeListener;
+import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.component.*;
+import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.container.VerticalFieldManager;
+
+import java.util.Enumeration;
+import java.util.Vector;
 
 public class ManageChildScreen extends CustomScreen {
 
@@ -75,12 +69,14 @@ public class ManageChildScreen extends CustomScreen {
 
         final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
         formManager.add(((Form) formArray[0]).getLayout());
-        screenManager.add(formManager);
+
 
         final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
-        final ObjectChoiceField availableForms = new ObjectChoiceField("Choose form", formArray);
+        final ObjectChoiceField availableForms = new ObjectChoiceField("Choose form: ", formArray);
 		formsManager.add(availableForms);
         screenManager.add(formsManager);
+        screenManager.add(new SeparatorField());
+        screenManager.add(formManager);
 
         availableForms.setChangeListener(new FieldChangeListener() {
             public void fieldChanged(Field field, int context) {
@@ -101,7 +97,7 @@ public class ManageChildScreen extends CustomScreen {
 
 	private Manager prepareTitleManager() {
 		Manager titleManager = new HorizontalFieldManager(FIELD_HCENTER);
-        titleManager.add(new LabelField("Create New Child"));
+        titleManager.add(new LabelField("Register Child"));
 		return titleManager;
 	}
 
