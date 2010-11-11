@@ -97,11 +97,18 @@ public class ManageChildScreen extends CustomScreen {
 
 	private Manager prepareTitleManager() {
 		Manager titleManager = new HorizontalFieldManager(FIELD_HCENTER);
-        titleManager.add(new LabelField("Register Child"));
+        titleManager.add(new LabelField(getScreenTitle()));
 		return titleManager;
 	}
 
-	private void deleteScreenManager() {
+    private String getScreenTitle() {
+        if (childToEdit != null) {
+            return "Edit Child Record";
+        }
+        return "Register Child";
+    }
+
+    private void deleteScreenManager() {
 		try {
             delete(screenManager);
         } catch (Exception ex) {
