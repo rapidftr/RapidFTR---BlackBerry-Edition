@@ -8,8 +8,8 @@ public class LoginSettings {
 		this.settings = settings;
 	}
 
-	public String getUsername() {
-		return settings.getLastUsedLoginUsername();
-	}
+//	public String getUsername() {
+//		return settings.getLastUsedLoginUsername();
+//	}
 
 }

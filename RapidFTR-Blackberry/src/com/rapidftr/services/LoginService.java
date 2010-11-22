@@ -47,7 +47,7 @@ public class LoginService extends RequestAwareService {
 
 	public void onRequestSuccess(Object context, Response result) {
 		Hashtable table = (Hashtable) context;
-		settings.setLastUsedUsername((String) table.get(USER_NAME));
+//		settings.setLastUsedUsername((String) table.get(USER_NAME));
 		settings.setAuthorisationToken(parseAuthorizationToken(result));
 		settings.setCurrentlyLoggedIn((String) table.get(USER_NAME));
 	}

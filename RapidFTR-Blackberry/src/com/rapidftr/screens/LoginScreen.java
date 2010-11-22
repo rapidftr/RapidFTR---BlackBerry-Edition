@@ -50,7 +50,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 
 	private void layoutScreen() {
 		usernameField.setPadding(PADDING);
-		usernameField.setText(loginSettings.getUsername());
+		//usernameField.setText(loginSettings.getUsername());
 		add(usernameField);
 		passwordField.setPadding(PADDING);
 		add(passwordField);
@@ -147,10 +147,10 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		httpSettings.setHost(hostField.getText());
 		httpSettings.setPort(portField.getText());
 		
+		usernameField.setFocus();
 		((LoginController) controller).login(usernameField.getText(),
 				passwordField.getText());
 		showCancelButton();
-		resetCredentials();
 	}
 
 	private void onCancelButtonClicked() {
@@ -202,7 +202,8 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	}
 
 	public void onProcessSuccess() {
-
+		resetCredentials(true);
+		
 	}
 
 	public void onProcessFail(final String message) {
@@ -210,8 +211,10 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 			public void run() {
 				setProgressMsg("Login Failed");
 				showLoginButton();
+				passwordField.setFocus();
 			}
 		});
+		resetCredentials(false);
 	}
 
 	public void setProgressMessage(String message) {
@@ -253,8 +256,9 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 
 	}
 
-	public void resetCredentials() {
-		usernameField.setText(loginSettings.getUsername());
+	public void resetCredentials(boolean resetUsername) {
+		if(resetUsername)
+			usernameField.setText("");
 		passwordField.setText("");
 	}
 

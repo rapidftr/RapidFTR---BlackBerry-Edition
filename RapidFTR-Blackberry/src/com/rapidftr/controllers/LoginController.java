@@ -44,7 +44,7 @@ public class LoginController extends RequestAwareController {
 	}
 
 	public void clearLoginScreen() {
-		((LoginScreen) currentScreen).resetCredentials();
+		((LoginScreen) currentScreen).resetCredentials(true);
 	}
 
 }
