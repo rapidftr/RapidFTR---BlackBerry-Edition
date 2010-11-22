@@ -17,7 +17,6 @@ import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.ChildPhotoScreen;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
-import com.rapidftr.utilities.LoginSettings;
 import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.SearchChildScreen;
 import com.rapidftr.screens.SyncScreen;
@@ -69,8 +68,7 @@ public class Main extends UiApplication {
 
 		HomeScreen homeScreen = new HomeScreen(settings);
 		
-		LoginScreen loginScreen = new LoginScreen(new HttpSettings(settings),
-				new LoginSettings(settings));
+		LoginScreen loginScreen = new LoginScreen(new HttpSettings(settings));
 		
 		ViewChildScreen viewChildScreen = new ViewChildScreen();
 		

@@ -5,9 +5,7 @@ public class Settings {
 
 	private static final String LAST_USED_PORT_KEY = "last.used.port";
 	private static final String LAST_USED_HOST_KEY = "last.used.host";
-//	private static final String LAST_USED_USERNAME_KEY = "last.used.user";
-
-//	private static final String DEFAULT_USERNAME = "rapidftr";
+	
 	private static final String DEFAULT_HOST = "dev.rapidftr.com";
 	private static final String DEFAULT_PORT = "80";
 
@@ -29,10 +27,6 @@ public class Settings {
 		return DEFAULT_PORT;
 	}
 
-//	public String getLastUsedLoginUsername() {
-//		return store.getString(LAST_USED_USERNAME_KEY, DEFAULT_USERNAME);
-//	}
-
 	public String getLastUsedLoginHost() {
 		return store.getString(LAST_USED_HOST_KEY, DEFAULT_HOST);
 	}
@@ -40,10 +34,6 @@ public class Settings {
 	public String getLastUsedLoginPort() {
 		return store.getString(LAST_USED_PORT_KEY, DEFAULT_PORT);
 	}
-
-//	public void setLastUsedUsername(String value) {
-//		store.setString(LAST_USED_USERNAME_KEY, value);
-//	}
 
 	public void setAuthorisationToken(String authorisationToken) {
 		store.setString(AUTHORISATION_TOKEN, authorisationToken);

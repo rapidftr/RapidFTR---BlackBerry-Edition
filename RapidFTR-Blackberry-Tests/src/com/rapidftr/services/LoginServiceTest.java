@@ -54,7 +54,6 @@ public class LoginServiceTest {
 		when(result.getAsString("session.token")).thenReturn("token");
 		loginService.onRequestSuccess(context, response);
 
-		verify(settings).setLastUsedUsername(userName);
 		verify(settings).setAuthorisationToken(authorisationToken);
 	}
 

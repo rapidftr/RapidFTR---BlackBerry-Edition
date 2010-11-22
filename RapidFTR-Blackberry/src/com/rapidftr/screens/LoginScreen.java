@@ -17,7 +17,6 @@ import net.rim.device.api.ui.container.HorizontalFieldManager;
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.utilities.HttpSettings;
-import com.rapidftr.utilities.LoginSettings;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.services.ScreenCallBack;
 
@@ -38,19 +37,16 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	private Button loginButton;
 	private Manager buttonManager;
 	private Button cancelButton;
-	private LoginSettings loginSettings;
 
-	public LoginScreen(HttpSettings httpSettings, LoginSettings loginSettings) {
+	public LoginScreen(HttpSettings httpSettings) {
 		super();
 		this.httpSettings = httpSettings;
-		this.loginSettings = loginSettings;
 		layoutScreen();
 		usernameField.setFocus();
 	}
 
 	private void layoutScreen() {
 		usernameField.setPadding(PADDING);
-		//usernameField.setText(loginSettings.getUsername());
 		add(usernameField);
 		passwordField.setPadding(PADDING);
 		add(passwordField);
@@ -178,7 +174,6 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	}
 
 	public void cleanUp() {
-
 		removeProgressMsgIfExist();
 		showLoginButton();
 		((LoginController) controller).loginCancelled();
@@ -203,7 +198,6 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 
 	public void onProcessSuccess() {
 		resetCredentials(true);
-		
 	}
 
 	public void onProcessFail(final String message) {
@@ -232,14 +226,12 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	public boolean keyDown(int keycode, int time) {
 		if (keycode == Characters.ESCAPE) {
 			((LoginController) controller).homeScreen();
-
 		}
 		return super.keyDown(keycode, time);
 	}
 
 	public boolean keyRepeat(int keycode, int time) {
 		return super.keyRepeat(keycode, time);
-
 	}
 
 	public boolean keyStatus(int keycode, int time) {
@@ -253,7 +245,6 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		} else {
 			return super.keyChar(keycode, time, arg2);
 		}
-
 	}
 
 	public void resetCredentials(boolean resetUsername) {
@@ -261,5 +252,4 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 			usernameField.setText("");
 		passwordField.setText("");
 	}
-
 }
