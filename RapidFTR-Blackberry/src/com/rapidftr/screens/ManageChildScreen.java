@@ -152,9 +152,10 @@ public class ManageChildScreen extends CustomScreen {
 		case 0: {
 			if (!validateOnSave())
 				return false;
+			break;
 		}
 		case 1: {
-
+			break;
 		}
 		case 2: {
 			return false;
