@@ -148,20 +148,20 @@ public class ManageChildScreen extends CustomScreen {
     	int defaultChoice = 0;
         int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
 
-        switch (result) {
-        case 0 : {
-        	if (!validateOnSave())
-        		return false;
-        	}
-        case 1 : {
+		switch (result) {
+		case 0: {
+			if (!validateOnSave())
+				return false;
+		}
+		case 1: {
 
-        	}
-        case 2 : {
-
-        	}
-        }
-        controller.popScreen();
-        return true;
+		}
+		case 2: {
+			return false;
+		}
+		}
+		controller.popScreen();
+		return true;
     }
 
     private boolean validateOnSave() {

@@ -91,7 +91,7 @@ public class SearchChildScreen extends CustomScreen implements
 		String searchQuery = searchTextField.getText();
 		if (!"".equals(searchQuery)) {
 			((ChildController) controller)
-					.searchAndDispalyChildren(searchQuery);
+					.searchAndDisplayChildren(searchQuery);
 		} else {
 			Dialog
 					.alert("Please enter either Child Name or Unique id, to perform search");

@@ -121,7 +121,7 @@ public class ChildController extends Controller {
 		changeScreen(searchChildScreen);
 	}
 
-	public void searchAndDispalyChildren(String searchQuery) {
+	public void searchAndDisplayChildren(String searchQuery) {
 		Child[] children = childrenStore.search(searchQuery);
 		if (children.length != 0) {
 			viewChildrenScreen.setChildren(children);
