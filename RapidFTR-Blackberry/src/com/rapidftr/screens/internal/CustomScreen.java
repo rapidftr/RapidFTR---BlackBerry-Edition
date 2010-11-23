@@ -91,7 +91,7 @@ public abstract class CustomScreen extends MainScreen {
 	}
 
 	protected void makeMenu(Menu menu, int instance) {
-		menu.add(new MenuItem("Go to home", 0, 1) {
+		menu.add(new MenuItem("Main Menu", 0, 1) {
 			public void run() {
 				controller.homeScreen();
 			}
