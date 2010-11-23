@@ -1,10 +1,10 @@
 package com.rapidftr.services;
 
 import java.util.Hashtable;
+
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.Settings;
-import com.rapidftr.utilities.DefaultStore;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Response;
@@ -12,12 +12,10 @@ import com.sun.me.web.request.Response;
 public class LoginService extends RequestAwareService {
 	private Settings settings;
 	public static final String USER_NAME = "user_name";
-	private final DefaultStore defaultStore;
 
-	public LoginService(HttpService httpService, Settings settingsStore, DefaultStore defaultStore) {
+	public LoginService(HttpService httpService, Settings settingsStore) {
 		super(httpService);
 		this.settings = settingsStore;
-		this.defaultStore = defaultStore;
 	}
 
 	public void login(String userName, String password) {
@@ -42,12 +40,11 @@ public class LoginService extends RequestAwareService {
 	}
 
 	public void clearLoginState() {
-		defaultStore.clear();
+		settings.clear();
 	}
 
 	public void onRequestSuccess(Object context, Response result) {
 		Hashtable table = (Hashtable) context;
-//		settings.setLastUsedUsername((String) table.get(USER_NAME));
 		settings.setAuthorisationToken(parseAuthorizationToken(result));
 		settings.setCurrentlyLoggedIn((String) table.get(USER_NAME));
 	}

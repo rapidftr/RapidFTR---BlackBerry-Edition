@@ -56,8 +56,7 @@ public class Main extends UiApplication {
 
 		HttpService httpService = new HttpService(httpServer, settings);
 		
-		LoginService loginService = new LoginService(httpService, settings,
-				defaultStore);
+		LoginService loginService = new LoginService(httpService, settings);
 
 		FormService formService = new FormService(httpService, formStore);
 		

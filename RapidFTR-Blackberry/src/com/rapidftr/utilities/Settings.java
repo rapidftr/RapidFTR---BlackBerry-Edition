@@ -85,4 +85,9 @@ public class Settings {
 		store.remove(AUTHORISATION_TOKEN);
 	}
 
+	public void clear() {
+		store.clear();
+		
+	}
+
 }
