@@ -13,22 +13,29 @@ public class LoginService extends RequestAwareService {
 	private Settings settings;
 	public static final String USER_NAME = "user_name";
 
-	public LoginService(HttpService httpService, Settings settingsStore) {
+	public LoginService(HttpService httpService, Settings settings) {
 		super(httpService);
-		this.settings = settingsStore;
+		this.settings = settings;
 	}
 
-	public void login(String userName, String password) {
-		Arg[] postArgs = new Arg[] { new Arg("user_name", userName),
-				new Arg("password", password) };
+    public void login(String userName, String password) {
+        Arg[] postArgs = new Arg[]{new Arg("user_name", userName),
+                new Arg("password", password)};
 
-		Hashtable context = new Hashtable();
-		context.put(USER_NAME, userName);
+        if (settings.isOfflineLogin() && settings.isAuthorised()
+                && userName.equals(settings.getLastUserLoginName())
+                && password.equals(settings.getLastUsedPassword())) {
+            
+        } else {
 
-		requestHandler.startNewProcess();
-		requestHandler.post("sessions", postArgs, HttpUtility.makeJSONHeader(),
-				null, context);
-	}
+            Hashtable context = new Hashtable();
+            context.put(USER_NAME, userName);
+
+            requestHandler.startNewProcess();
+            requestHandler.post("sessions", postArgs, HttpUtility.makeJSONHeader(),
+                    null, context);
+        }
+    }
 
 	private String parseAuthorizationToken(Response response) {
 		try {
@@ -52,12 +59,6 @@ public class LoginService extends RequestAwareService {
 	public void onRequestFailure(Object context, Exception exception) {
 		requestHandler.markProcessFailed(" Login Failed Due to "
 				+ exception.getMessage()+". ");
-	}
-
-	public void login(Credential credentials) {
-		if(credentials.isOffline()){
-			
-		}
 	}
 
 }

@@ -90,4 +90,19 @@ public class Settings {
 		
 	}
 
+    public boolean isOfflineLogin() {
+        return false;  //To change body of created methods use File | Settings | File Templates.
+    }
+
+    public boolean isAuthorised() {
+        return false;  //To change body of created methods use File | Settings | File Templates.
+    }
+
+    public String getLastUserLoginName() {
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
+
+    public String getLastUsedPassword() {
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
 }
