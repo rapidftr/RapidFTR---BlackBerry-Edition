@@ -23,7 +23,7 @@ public class DateFormField extends FormField
 	}
 
 	public String getValue() {
-		return String.valueOf(dateField.getDate());
+		return dateField.toString();
 	}
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {
