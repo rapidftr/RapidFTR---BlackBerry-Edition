@@ -30,6 +30,7 @@ public class DateFormField extends FormField
 		
 		manager=new VerticalFieldManager();
 		dateField=new DateField(label, System.currentTimeMillis(), DateField.DATE);
+        dateField.setDate(null);
 	    manager.add(dateField);
 	}
 
