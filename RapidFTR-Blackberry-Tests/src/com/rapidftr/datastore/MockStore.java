@@ -1,9 +1,9 @@
 package com.rapidftr.datastore;
 
-import java.util.Vector;
-
 import com.rapidftr.utilities.Store;
 import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
+
+import java.util.Vector;
 
 public class MockStore implements Store {
 
@@ -12,17 +12,14 @@ public class MockStore implements Store {
 	public MockStore(String key) {
 	}
 
-	@Override
 	public void clear() {
 
 	}
 
-	@Override
 	public String getString(String key) {
 		return (String)table.get(key);
 	}
 
-	@Override
 	public String getString(String key, String defaultValue) {
 		if(table.contains(key))
 			return (String)table.get(key);
@@ -30,18 +27,15 @@ public class MockStore implements Store {
 		return defaultValue;
 	}
 
-	@Override
 	public void remove(String key) {
 		table.remove(key);
 
 	}
 
-	@Override
 	public void setString(String key, String value) {
 		table.put(key, value);
 	}
 
-	@Override
 	public Vector getVector(String key) {
 		if(table.containsKey(key))
 			return (Vector)table.get(key);
@@ -49,7 +43,6 @@ public class MockStore implements Store {
 	}
 	
 
-	@Override
 	public void setVector(String key, Vector value) {
 		table.put(key, value);
 	}

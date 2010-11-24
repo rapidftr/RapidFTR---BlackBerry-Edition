@@ -18,7 +18,7 @@ public class FormStoreTest {
 	public void shouldReturnVectorOfForms() throws ResultException {
 
 		FormStore formStore = new FormStore() {
-			@Override
+			
 			void initializePersistentStore() {
 				persistentStore = mock(PersistentStore.class);
 				String sucessfulJsonResponse = stubSuccessfulResponse();

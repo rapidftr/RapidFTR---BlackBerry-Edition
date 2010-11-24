@@ -1,8 +1,9 @@
 package com.rapidftr.datastore;
 
-import java.util.Vector;
 import com.rapidftr.model.Child;
 import com.rapidftr.utilities.Store;
+
+import java.util.Vector;
 
 public class ChildrenRecordStore {
 
@@ -67,7 +68,7 @@ public class ChildrenRecordStore {
 	
 	private void sort(Child[] array) {
 		if(sorter!=null)
-			sorter.sort(array);
+			sorter.sort(array, true);
 	}
 
 

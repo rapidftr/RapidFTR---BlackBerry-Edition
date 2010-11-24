@@ -63,6 +63,20 @@ public class ViewChildrenScreen extends CustomScreen {
 				}
 			};
 			menu.add(editChildMenu);
+
+            MenuItem sortByRecentlyAdded = new MenuItem("Sort by Recently Added", 1, 1) {
+				public void run() {
+
+				}
+			};
+			menu.add(sortByRecentlyAdded);
+
+            MenuItem sortByRecentlyModified = new MenuItem("Sort by Recently Updated", 1, 1) {
+				public void run() {
+
+				}
+			};
+			menu.add(sortByRecentlyModified);
 		}
 		super.makeMenu(menu, instance);
 	}
