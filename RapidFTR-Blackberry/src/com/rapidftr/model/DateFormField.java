@@ -1,5 +1,6 @@
 package com.rapidftr.model;
 
+import net.rim.device.api.io.http.HttpDateParser;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.component.DateField;
 import net.rim.device.api.ui.container.VerticalFieldManager;
@@ -35,16 +36,13 @@ public class DateFormField extends FormField
 	}
 
 	public void setValue(String value) {
-		
-		try
-		{
-			long dateValue = Long.parseLong(value);
-			dateField.setDate(dateValue);
-		}
-		catch (NumberFormatException nfe)
-		{
-			dateField.setDate(System.currentTimeMillis());
-		}
-		
-	}
+
+        String formattedDateStr = value + " 00:00:00 GMT";
+        long httpDate = HttpDateParser.parse(formattedDateStr);
+        if (httpDate == -1) {
+            dateField.setDate(null);
+            return;
+        }
+        dateField.setDate(httpDate);
+    }
 }
