@@ -10,6 +10,7 @@ public class Settings {
 	private static final String DEFAULT_PORT = "80";
 
 	private static final String AUTHORISATION_TOKEN = "authorisation.token";
+	private static final String AUTHORISATION_TOKEN_FOR_OFFLINE_LOGIN = "temp.authorisation.token";
 	private static final String CURRENT_USER = "current.user";
 
 	
@@ -52,14 +53,10 @@ public class Settings {
 	}
 
 	public boolean isUserLoggedIn() {
-		return !getAuthorizationToken().equals("");
+		return !"".equals(getCurrentlyLoggedIn());
 	}
 
-	public boolean isVerifiedUser() {
-		throw new UnsupportedOperationException();
-	}
-
-	public int getTimeOut() {
+    public int getTimeOut() {
 		return 10000;
 	}
 
@@ -82,7 +79,9 @@ public class Settings {
 	}
 
 	public void clearAuthenticationInfo() {
-		store.remove(AUTHORISATION_TOKEN);
+		store.remove(CURRENT_USER);
+        setAuthorisationTokenForOfflineLogin(AUTHORISATION_TOKEN);
+        store.remove(AUTHORISATION_TOKEN);
 	}
 
 	public void clear() {
@@ -90,19 +89,35 @@ public class Settings {
 		
 	}
 
-    public boolean isOfflineLogin() {
-        return false;  //To change body of created methods use File | Settings | File Templates.
-    }
-
-    public boolean isAuthorised() {
-        return false;  //To change body of created methods use File | Settings | File Templates.
+    public boolean hasBeenAuthorised() {
+        return getAuthorisationTokenForOfflineLogin()!= null;
     }
 
     public String getLastUserLoginName() {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        return store.getString("last.used.username");
     }
 
     public String getLastUsedPassword() {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        return store.getString("last.used.password");
+    }
+
+    public void setOfflineMode(boolean mode) {
+        store.setString("offline.mode", String.valueOf(mode));
+    }
+
+    public void setLastUsedUserName(String userName) {
+        store.setString("last.used.username", userName);
+    }
+
+    public void setLastUsedPassword(String pass) {
+        store.setString("last.used.password", pass);
+    }
+
+    public String getAuthorisationTokenForOfflineLogin() {
+        return store.getString(AUTHORISATION_TOKEN_FOR_OFFLINE_LOGIN);
+    }
+
+    public void setAuthorisationTokenForOfflineLogin(String token) {
+        store.setString(AUTHORISATION_TOKEN_FOR_OFFLINE_LOGIN, token);
     }
 }

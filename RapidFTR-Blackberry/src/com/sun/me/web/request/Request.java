@@ -32,16 +32,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sun.me.web.request;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import javax.microedition.io.Connector;
-import javax.microedition.io.HttpConnection;
-
-import com.rapidftr.net.HttpConnectionFactory;
+import com.rapidftr.net.ConnectionFactory;
 import com.sun.me.web.path.Result;
+
+import javax.microedition.io.HttpConnection;
+import java.io.*;
 
 public final class Request implements Runnable {
 
@@ -232,8 +227,7 @@ public final class Request implements Runnable {
 
 		HttpConnection conn = null;
 		try {
-			conn = HttpConnectionFactory.openConnection(location.toString());
-			//conn=(HttpConnection) Connector.open(location.toString());
+			conn = ConnectionFactory.openConnection(location.toString());
 			conn.setRequestMethod(method);
 
 			if (httpArgs != null) {

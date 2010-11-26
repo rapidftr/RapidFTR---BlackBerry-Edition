@@ -1,39 +1,27 @@
 package com.rapidftr;
 
-import net.rim.device.api.applicationcontrol.ApplicationPermissions;
-import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
-import net.rim.device.api.ui.UiApplication;
-import com.rapidftr.controllers.ChildController;
-import com.rapidftr.controllers.HomeScreenController;
-import com.rapidftr.controllers.LoginController;
-import com.rapidftr.controllers.ResetDeviceController;
-import com.rapidftr.controllers.SyncController;
+import com.rapidftr.controllers.*;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
-import com.rapidftr.utilities.HttpSettings;
 import com.rapidftr.net.HttpService;
-import com.rapidftr.screens.ChildPhotoScreen;
-import com.rapidftr.screens.HomeScreen;
-import com.rapidftr.screens.LoginScreen;
-import com.rapidftr.screens.ManageChildScreen;
-import com.rapidftr.screens.SearchChildScreen;
-import com.rapidftr.screens.SyncScreen;
-import com.rapidftr.screens.ViewChildScreen;
-import com.rapidftr.screens.ViewChildrenScreen;
+import com.rapidftr.screens.*;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildSyncService;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
-import com.rapidftr.utilities.Settings;
+import com.rapidftr.services.LoginSettings;
 import com.rapidftr.utilities.DefaultStore;
+import com.rapidftr.utilities.HttpSettings;
+import com.rapidftr.utilities.Settings;
+import net.rim.device.api.applicationcontrol.ApplicationPermissions;
+import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
+import net.rim.device.api.ui.UiApplication;
 
 public class Main extends UiApplication {
-	
-	public static final String APPLICATION_NAME = "Rapid FTR";
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 		Main application = new Main();
 		application.enterEventDispatcher();
 	}
@@ -56,7 +44,7 @@ public class Main extends UiApplication {
 
 		HttpService httpService = new HttpService(httpServer, settings);
 		
-		LoginService loginService = new LoginService(httpService, settings);
+		LoginService loginService = new LoginService(httpService, new LoginSettings(settings));
 
 		FormService formService = new FormService(httpService, formStore);
 		
@@ -102,6 +90,8 @@ public class Main extends UiApplication {
 				restController);
 		
 		dispatcher.homeScreen();
+
+        
 
 	}
 

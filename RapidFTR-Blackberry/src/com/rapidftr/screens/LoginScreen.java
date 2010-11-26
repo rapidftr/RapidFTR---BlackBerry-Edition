@@ -120,7 +120,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 
 		try {
 			add(progressMsgFieldmanager);
-		} catch (IllegalStateException ex) {
+		} catch (IllegalStateException ignored) {
 
 		}
 	}
@@ -133,7 +133,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 
 		try {
 			delete(progressMsgFieldmanager);
-		} catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ignored) {
 
 		}
 
@@ -200,55 +200,51 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		resetCredentials(true);
 	}
 
-	public void onProcessFail(final String message) {
+    public void onProcessFail(final String message) {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-				setProgressMsg("Login Failed");
+                String msg = "".equals(message)? "Login failed" : message;
+                setProgressMsg(msg);
 				showLoginButton();
 				passwordField.setFocus();
 			}
 		});
 		resetCredentials(false);
 	}
-
 	public void setProgressMessage(String message) {
 		setProgressMsg(message);
 	}
 
-	public void onProcessStart() {
-
-	}
-
-	public boolean keyUp(int keycode, int time) {
+    public boolean keyUp(int keycode, int time) {
 		return super.keyUp(keycode, time);
 	}
 
 	public boolean keyDown(int keycode, int time) {
 		if (keycode == Characters.ESCAPE) {
-			((LoginController) controller).homeScreen();
+			controller.homeScreen();
 		}
 		return super.keyDown(keycode, time);
 	}
 
-	public boolean keyRepeat(int keycode, int time) {
-		return super.keyRepeat(keycode, time);
+	public boolean keyRepeat(int code, int time) {
+		return super.keyRepeat(code, time);
 	}
 
-	public boolean keyStatus(int keycode, int time) {
-		return super.keyStatus(keycode, time);
+	public boolean keyStatus(int code, int time) {
+		return super.keyStatus(code, time);
 	}
 
-	public boolean keyChar(char keycode, int time, int arg2) {
-		if (keycode == Characters.ESCAPE) {
-			((LoginController) controller).homeScreen();
+	public boolean keyChar(char code, int time, int arg2) {
+		if (code == Characters.ESCAPE) {
+			controller.homeScreen();
 			return true;
 		} else {
-			return super.keyChar(keycode, time, arg2);
+			return super.keyChar(code, time, arg2);
 		}
 	}
 
-	public void resetCredentials(boolean resetUsername) {
-		if(resetUsername)
+	public void resetCredentials(boolean resetUser) {
+		if(resetUser)
 			usernameField.setText("");
 		passwordField.setText("");
 	}
