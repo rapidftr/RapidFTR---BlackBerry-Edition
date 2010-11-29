@@ -107,7 +107,6 @@ public class SearchChildScreen extends CustomScreen implements
 	public void showNoSearchResultsAlert() {
 		Dialog
 				.alert("No search results found , Please enter a valid search keyword");
-		resetSearchBox();
 	}
 
 	protected void makeMenu(Menu menu, int instance) {
