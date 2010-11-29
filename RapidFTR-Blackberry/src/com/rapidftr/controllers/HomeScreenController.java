@@ -22,8 +22,8 @@ public class HomeScreenController extends Controller {
 		dispatcher.newChild();
 	}
 
-	public void syncChildRecords() {
-		dispatcher.syncChildRecords();
+	public void synchronize() {
+		dispatcher.synchronize();
 	}
 
 	public void showSearch() {

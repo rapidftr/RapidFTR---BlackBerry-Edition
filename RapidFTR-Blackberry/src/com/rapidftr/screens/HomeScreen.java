@@ -3,6 +3,7 @@ package com.rapidftr.screens;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.Settings;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.MenuItem;
@@ -11,10 +12,6 @@ import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.rapidftr.controllers.HomeScreenController;
-import com.rapidftr.controls.Button;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.Settings;
 import java.util.Vector;
 
 public class HomeScreen extends CustomScreen {
@@ -66,18 +63,10 @@ public class HomeScreen extends CustomScreen {
 			}
 		});
 
-		Button syncFormsButton = new Button("Sync Forms");
-		syncFormsButton.setChangeListener(new FieldChangeListener() {
+		Button synchronizeButton = new Button("Synchronize");
+		synchronizeButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
-				onSyncFormsClicked();
-			}
-		});
-
-
-		Button syncChildRecordsButton = new Button("Sync Child Records");
-		syncChildRecordsButton.setChangeListener(new FieldChangeListener() {
-			public void fieldChanged(Field field, int context) {
-				onSyncChildRecordsClicked();
+				onSynchronizeClicked();
 			}
 		});
 
@@ -87,8 +76,7 @@ public class HomeScreen extends CustomScreen {
 		buttonGroup.addElement(viewChildrenButton);
 		buttonGroup.addElement(searchButton);
 
-		buttonGroup.addElement(syncFormsButton);
-		buttonGroup.addElement(syncChildRecordsButton);
+		buttonGroup.addElement(synchronizeButton);
 
 		Button.setOptimimWidthForButtonGroup(buttonGroup);
 		VerticalFieldManager manager = new VerticalFieldManager(FIELD_HCENTER);
@@ -102,11 +90,8 @@ public class HomeScreen extends CustomScreen {
 		searchButton.setPadding(PADDING);
 		manager.add(searchButton);
 
-		syncChildRecordsButton.setPadding(PADDING);
-		manager.add(syncChildRecordsButton);
-
-        syncFormsButton.setPadding(PADDING);
-        manager.add(syncFormsButton);
+		synchronizeButton.setPadding(PADDING);
+		manager.add(synchronizeButton);
 
 		add(manager);
 
@@ -125,8 +110,8 @@ public class HomeScreen extends CustomScreen {
 		((HomeScreenController) controller).logIn();
 	}
 
-	protected void onSyncChildRecordsClicked() {
-		((HomeScreenController) controller).syncChildRecords();
+	protected void onSynchronizeClicked() {
+		((HomeScreenController) controller).synchronize();
 	}
 
 	private void onViewChildrenClicked() {
@@ -139,10 +124,6 @@ public class HomeScreen extends CustomScreen {
 
 	private void onNewChildClicked() {
 		((HomeScreenController) controller).newChild();
-	}
-
-	private void onSyncFormsClicked() {
-		((HomeScreenController) controller).synchronizeForms();
 	}
 
     private void onCleanDeviceClicked() {
