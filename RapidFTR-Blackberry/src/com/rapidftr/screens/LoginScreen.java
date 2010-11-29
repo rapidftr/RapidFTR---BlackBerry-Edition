@@ -1,24 +1,15 @@
 package com.rapidftr.screens;
 
-import net.rim.device.api.system.Characters;
-import net.rim.device.api.system.KeyListener;
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.FieldChangeListener;
-import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.MenuItem;
-import net.rim.device.api.ui.UiApplication;
-import net.rim.device.api.ui.component.BasicEditField;
-import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.component.PasswordEditField;
-import net.rim.device.api.ui.component.SeparatorField;
-import net.rim.device.api.ui.component.TextField;
-import net.rim.device.api.ui.container.HorizontalFieldManager;
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
-import com.rapidftr.utilities.HttpSettings;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.services.ScreenCallBack;
+import com.rapidftr.utilities.HttpSettings;
+import net.rim.device.api.system.Characters;
+import net.rim.device.api.system.KeyListener;
+import net.rim.device.api.ui.*;
+import net.rim.device.api.ui.component.*;
+import net.rim.device.api.ui.container.HorizontalFieldManager;
 
 public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		KeyListener {
@@ -28,8 +19,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	private final PasswordEditField passwordField = new PasswordEditField(
 			"Password:", "", MAX_SIZE, USE_ALL_WIDTH);
 	private final BasicEditField usernameField = basicField("Username:");
-	private final BasicEditField hostField = basicField("Host:");
-	private final BasicEditField portField = basicField("Port:");
+	private final BasicEditField urlField = basicField("Url:");
 
 	private final HttpSettings httpSettings;
 	private Manager progressMsgFieldmanager;
@@ -62,6 +52,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		progressMsgFieldmanager.setPadding(PADDING);
 		progressMsg.setPadding(PADDING);
 		progressMsgFieldmanager.add(progressMsg);
+		add(progressMsgFieldmanager);
 
 	}
 
@@ -100,48 +91,25 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	}
 
 	protected void makeMenu(Menu menu, int instance) {
-		menu.add(new MenuItem("Change Host", 1, 1) {
+		menu.add(new MenuItem("Change Url", 1, 1) {
 			public void run() {
-				addField(hostField, httpSettings.getHost());
+				addField(urlField, httpSettings.getHost());
 			}
 		});
 
-		menu.add(new MenuItem("Change Port", 2, 1) {
-			public void run() {
-				addField(portField, Integer.toString(httpSettings.getPort()));
-			}
-		});
-		
 		super.makeMenu(menu, instance);
 	}
 
-	public void setProgressMsg(String msg) {
-		progressMsg.setText(msg);
-
-		try {
-			add(progressMsgFieldmanager);
-		} catch (IllegalStateException ignored) {
-
-		}
-	}
-
-	public boolean isDirty() {
+    public boolean isDirty() {
 		return false;
 	}
 
-	public void removeProgressMsgIfExist() {
-
-		try {
-			delete(progressMsgFieldmanager);
-		} catch (IllegalArgumentException ignored) {
-
-		}
-
+	private void clearProgressMessage() {
+		progressMsg.setText("");
 	}
 
 	private void onLoginButtonClicked() {
-		httpSettings.setHost(hostField.getText());
-		httpSettings.setPort(portField.getText());
+		httpSettings.setHost(urlField.getText());
 		
 		usernameField.setFocus();
 		((LoginController) controller).login(usernameField.getText(),
@@ -160,7 +128,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 
 	public void setUp() {
 		showLoginButton();
-		removeProgressMsgIfExist();
+		clearProgressMessage();
 	}
 
 	private void showLoginButton() {
@@ -168,16 +136,6 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		buttonManager.add(loginButton);
 	}
 
-	public boolean onClose() {
-		cleanUp();
-		return super.onClose();
-	}
-
-	public void cleanUp() {
-		removeProgressMsgIfExist();
-		showLoginButton();
-		((LoginController) controller).loginCancelled();
-	}
 
 	public void onAuthenticationFailure() {
 		onProcessFail("Authentication Failure ");
@@ -186,7 +144,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 	public void onConnectionProblem() {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-				setProgressMsg(" Connection Problem ");
+				setProgressMessage("Connection Problem ");
 				showLoginButton();
 			}
 		});
@@ -203,17 +161,18 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
     public void onProcessFail(final String message) {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
-                String msg = "".equals(message)? "Login failed" : message;
-                setProgressMsg(msg);
-				showLoginButton();
+                if (!(message == null || "".equals(message.trim())))
+                    setProgressMessage(message);
+                showLoginButton();
+                resetCredentials(false);
 				passwordField.setFocus();
 			}
 		});
-		resetCredentials(false);
 	}
-	public void setProgressMessage(String message) {
-		setProgressMsg(message);
-	}
+
+    public void setProgressMessage(String message) {
+        progressMsg.setText(message);
+    }
 
     public boolean keyUp(int keycode, int time) {
 		return super.keyUp(keycode, time);
@@ -247,5 +206,8 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		if(resetUser)
 			usernameField.setText("");
 		passwordField.setText("");
+	}
+
+	public void cleanUp() {
 	}
 }

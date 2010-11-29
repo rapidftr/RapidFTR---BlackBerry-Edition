@@ -16,16 +16,8 @@ public class HttpSettings {
 		return settings.getLastUsedLoginHost();
 	}
 
-	public int getPort() {
-		return Integer.parseInt(settings.getLastUsedLoginPort());
-	}
-
 	public void setHost(String host) {
 			settings.setLastUsedLoginHost(host);
-	}
-	
-	public void setPort(String port) {
-			settings.setLastUsedLoginPort(port);
 	}
 	
 }

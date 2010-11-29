@@ -3,11 +3,9 @@ package com.rapidftr.utilities;
 
 public class Settings {
 
-	private static final String LAST_USED_PORT_KEY = "last.used.port";
 	private static final String LAST_USED_HOST_KEY = "last.used.host";
 	
-	private static final String DEFAULT_HOST = "dev.rapidftr.com";
-	private static final String DEFAULT_PORT = "80";
+	private static final String DEFAULT_URL = "https://dev.rapidftr.com";
 
 	private static final String AUTHORISATION_TOKEN = "authorisation.token";
 	private static final String AUTHORISATION_TOKEN_FOR_OFFLINE_LOGIN = "temp.authorisation.token";
@@ -21,19 +19,11 @@ public class Settings {
 	}
 
 	public static String getDefaultHost() {
-		return DEFAULT_HOST;
-	}
-
-	public static String getDefaultPort() {
-		return DEFAULT_PORT;
+		return DEFAULT_URL;
 	}
 
 	public String getLastUsedLoginHost() {
-		return store.getString(LAST_USED_HOST_KEY, DEFAULT_HOST);
-	}
-
-	public String getLastUsedLoginPort() {
-		return store.getString(LAST_USED_PORT_KEY, DEFAULT_PORT);
+		return store.getString(LAST_USED_HOST_KEY, DEFAULT_URL);
 	}
 
 	public void setAuthorisationToken(String authorisationToken) {
@@ -67,13 +57,6 @@ public class Settings {
 			store.setString(LAST_USED_HOST_KEY, getDefaultHost());
 	}
 	
-	public void setLastUsedLoginPort(String port) {
-		if (isNotEmpty(port))
-			store.setString(LAST_USED_PORT_KEY, port);
-		else
-			store.setString(LAST_USED_PORT_KEY, getDefaultPort());
-	}
-
 	private boolean isNotEmpty(String value) {
 		return (!"".equals(value) && value != null && value.trim().length() != 0);
 	}
@@ -86,7 +69,6 @@ public class Settings {
 
 	public void clear() {
 		store.clear();
-		
 	}
 
     public boolean hasBeenAuthorised() {
