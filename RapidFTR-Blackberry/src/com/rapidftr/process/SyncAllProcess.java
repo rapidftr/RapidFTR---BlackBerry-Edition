@@ -1,17 +1,20 @@
 package com.rapidftr.process;
 
 import com.rapidftr.services.ChildSyncService;
+import com.rapidftr.services.FormService;
 
 public class SyncAllProcess implements Process {
 
-	ChildSyncService service;
-	String name;
+	ChildSyncService childSyncService;
+    private FormService formService;
+    String name;
 	boolean canceled;
 
-	public SyncAllProcess(ChildSyncService service) {
+	public SyncAllProcess(ChildSyncService childSyncService, FormService formService) {
 		super();
-		this.service = service;
-		this.name="Sync Child Records";
+		this.childSyncService = childSyncService;
+        this.formService = formService;
+        this.name="Synchronize";
 	}
 
 	public String name() {
@@ -19,18 +22,19 @@ public class SyncAllProcess implements Process {
 	}
 
 	public void startProcess() {
-		service.syncAllChildRecords();
+        formService.downloadForms();
+		childSyncService.syncAllChildRecords();
 	}
 
 	public void stopProcess() {
 		canceled = true;
-		service.cancelRequest();
+        formService.cancelRequest();
+		childSyncService.cancelRequest();
 	}
 
 	public boolean isCanceled() {
 		return canceled;
 	}
-	
 	
 
 }

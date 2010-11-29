@@ -48,7 +48,7 @@ public class HomeScreenControllerTest {
 
 	@Test
 	public void shouldDelegateSyncAllActionToDispatcher() {
-		homeScreenController.syncChildRecords();
-		verify(dispatcher).syncChildRecords();
+		homeScreenController.synchronize();
+		verify(dispatcher).synchronize();
 	}
 }

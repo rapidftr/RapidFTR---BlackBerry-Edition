@@ -38,7 +38,7 @@ public class SyncController extends Controller implements ControllerCallback {
 		setUpRequestHandlerForService(formSyncService);
 		setUpRequestHandlerForService(childSyncService);
 		childSyncProcess = new ChildSyncProcess(childSyncService);
-		syncAllProcess = new SyncAllProcess(childSyncService);
+		syncAllProcess = new SyncAllProcess(childSyncService, formSyncService);
 		formSyncProcess = new FormSyncProcess(formSyncService);
 	}
 
@@ -48,7 +48,7 @@ public class SyncController extends Controller implements ControllerCallback {
 			((RequestCallBackImpl) requestHandler.getRequestCallBack())
 					.setScreenCallback(screenCallBack);
 			((RequestCallBackImpl) requestHandler.getRequestCallBack())
-					.setControllerCallback((ControllerCallback) this);
+					.setControllerCallback(this);
 		}
 	}
 
@@ -57,7 +57,7 @@ public class SyncController extends Controller implements ControllerCallback {
 		setAndStartCurrentProcess(childSyncProcess);
 	}
 
-	public void syncAllChildRecords() {
+	public void synchronize() {
 		setAndStartCurrentProcess(syncAllProcess);
 	}
 
