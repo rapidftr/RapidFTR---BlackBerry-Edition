@@ -69,31 +69,29 @@ public class HttpBatchRequestHandler implements RequestListener {
 
 	private void handleResponseErrors(Object context, Response response) {
 		failedRequest = true;
+
 		if (response.getCode() == HttpConnection.HTTP_UNAUTHORIZED
 				|| response.getCode() == HttpConnection.HTTP_FORBIDDEN) {
 			requestCallBack.onAuthenticationFailure();
-			terminateProcess();
-			processCompleted = true;
+            terminateProcessWhenHttpCodeIsNotExpected();
 		} else if (response.getException() != null) {
-			// if (response.getException() instanceof IOException) {
-			// // terminateProcess();
-			// service.cancelRequest();
-			// if (unprocessedRequests < 1) {
-			// requestCallBack.onProcessFail(response.getException()
-			// .getMessage());
-			// }
-			// } else {
 			requestCallBack.onRequestFailure(context, response.getException());
-			// }
-		} else if (response.getCode() != HttpConnection.HTTP_OK
+		} else if (response.getCode() == HttpConnection.HTTP_NOT_ACCEPTABLE){
+            requestCallBack.onProcessFail("The format of data is not acceptable. Please check the record.");
+            terminateProcessWhenHttpCodeIsNotExpected();
+        } else if (response.getCode() != HttpConnection.HTTP_OK
 				&& response.getCode() != HttpConnection.HTTP_CREATED) {
 			requestCallBack.onConnectionProblem();
-			terminateProcess();
-			processCompleted = true;
+            terminateProcessWhenHttpCodeIsNotExpected();
 		}
 	}
 
-	public void readProgress(Object context, int bytes, int total) {
+    private void terminateProcessWhenHttpCodeIsNotExpected() {
+        terminateProcess();
+        processCompleted = true;
+    }
+
+    public void readProgress(Object context, int bytes, int total) {
 		// updateRequestProgress(bytes, total);
 	}
 

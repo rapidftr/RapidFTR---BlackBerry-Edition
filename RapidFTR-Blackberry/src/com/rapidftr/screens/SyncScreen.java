@@ -94,14 +94,14 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 			public void run() {
 
 				int result = Dialog.ask(Dialog.D_OK_CANCEL,
-						"You are not logged in.\n Press ok to  login.");
+						"You are not logged in.\n Press ok to login.");
 				downloadProgressBar.setValue(0);
-				// controller.popScreen();
-				if (result == Dialog.OK) {
-					process.stopProcess();
-					((SyncController) controller).login();
+
+                SyncController syncController = (SyncController) controller;
+                syncController.clearProcess();
+                if (result == Dialog.OK) {
+					syncController.login();
 				}else{
-					((SyncController) controller).clearProcess();
 					controller.popScreen();
 				}
 			}
@@ -172,12 +172,12 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 
-				String msg = "Sync Failed. ";
+				String msg = "Attempt to sync failed.";
 				if (null != failureMessage)
 					msg = failureMessage;
 
 				int result = Dialog.ask(Dialog.D_YES_NO, msg
-						+ " \n Do you want to Retry?");
+						+ " \nDo you want to Retry?");
 				downloadProgressBar.setValue(0);
 				downloadProgressBar.setLabel("Failed");
 

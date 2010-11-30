@@ -158,20 +158,21 @@ public class ChildSyncService extends RequestAwareService {
 				}
 			}
 		} catch (ResultException e) {
-			requestHandler.markProcessFailed("Sync failed due to"
-					+ e.getMessage() + ". ");
-		} catch (JSONException e) {
-			requestHandler.markProcessFailed("Sync failed due to "
-					+ e.getMessage() + ". ");
+            sendMsgToHandlerWhenProcessFailed("There was an exception in the result.");
+        } catch (JSONException e) {
+            sendMsgToHandlerWhenProcessFailed("The data format is not correct.");
 		} catch (IOException e) {
-			requestHandler.markProcessFailed("Sync failed due to "
-					+ e.getMessage() + ". ");
+            sendMsgToHandlerWhenProcessFailed("Check your server address setting or the network status.");
 		}
 
 		return mapping;
 	}
 
-	private Hashtable getOfflineStoredChildrenIdRevMapping() {
+    private void sendMsgToHandlerWhenProcessFailed(String msg) {
+        requestHandler.markProcessFailed(msg);
+    }
+
+    private Hashtable getOfflineStoredChildrenIdRevMapping() {
 		final Hashtable mapping = new Hashtable();
 		childRecordStore.getAll().forEachChild(new ChildAction() {
 
