@@ -19,10 +19,9 @@ import com.rapidftr.services.ScreenCallBack;
 
 public class SyncController extends Controller implements ControllerCallback {
 
-	private Process currentProcess;
-	private Process previousProcess;
+	private Process process;
 
-	final ChildSyncProcess childSyncProcess;
+    final ChildSyncProcess childSyncProcess;
 	final SyncAllProcess syncAllProcess;
 	final FormSyncProcess formSyncProcess;
 
@@ -65,28 +64,29 @@ public class SyncController extends Controller implements ControllerCallback {
 		setAndStartCurrentProcess(formSyncProcess);
 	}
 
-	private void setAndStartCurrentProcess(Process process) {
-		if (currentProcess == null) {
-			previousProcess = currentProcess = process;
-			((SyncScreen) currentScreen).setProcess(currentProcess);
-			show();
-			currentProcess.startProcess();
-		} else if (currentProcess == process) {
-			if (!currentProcess.isCanceled()) {
-				show();
-			} else {
-				currentProcess.startProcess();
-				show();
-			}
-		} else {
-			((SyncScreen) currentScreen).showRunninngProcessAlert();
-		}
+    private void setAndStartCurrentProcess(Process process) {
+        if (this.process == null) {
+            this.process = process;
+            ((SyncScreen) currentScreen).attachProcess(this.process);
+            if (process.isNotBackGround()) {
+                show();
+            }
+            this.process.startProcess();
+        } else if (this.process == process) {
+            if (this.process.isCanceled()) {
+                this.process.startProcess();
+            }
+            if (process.isNotBackGround()) {
+                show();
+            }
+        } else {
+            ((SyncScreen) currentScreen).showRunninngProcessAlert();
+        }
 
-	}
+    }
 
 	public void onProcessComplete(boolean status) {
-		previousProcess = currentProcess;
-		currentProcess = null;
+		process = null;
 	}
 
     public void beforeProcessStart() {
@@ -94,8 +94,8 @@ public class SyncController extends Controller implements ControllerCallback {
 	}
 
 	public void clearProcess() {
-		currentProcess.stopProcess();
-		currentProcess = null;
+		process.stopProcess();
+		process = null;
 	}
 
 }

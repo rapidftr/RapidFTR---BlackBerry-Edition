@@ -143,6 +143,7 @@ public class HomeScreen extends CustomScreen {
         if (result == Dialog.YES) {
             ((HomeScreenController) controller).cleanAll();
             Dialog.alert("Device successfully cleaned");
+            onLoginButtonClicked();
         }
     }
 

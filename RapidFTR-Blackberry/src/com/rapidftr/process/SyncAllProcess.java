@@ -35,6 +35,10 @@ public class SyncAllProcess implements Process {
 	public boolean isCanceled() {
 		return canceled;
 	}
-	
+
+    public boolean isNotBackGround() {
+        return true;
+    }
+
 
 }

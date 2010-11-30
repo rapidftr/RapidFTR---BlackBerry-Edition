@@ -112,12 +112,16 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 		httpSettings.setHost(urlField.getText());
 		
 		usernameField.setFocus();
-		((LoginController) controller).login(usernameField.getText(),
+		getController().login(usernameField.getText(),
 				passwordField.getText());
 		showCancelButton();
 	}
 
-	private void onCancelButtonClicked() {
+    private LoginController getController() {
+        return ((LoginController) controller);
+    }
+
+    private void onCancelButtonClicked() {
 		cleanUp();
 	}
 
@@ -156,6 +160,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
 
 	public void onProcessSuccess() {
 		resetCredentials(true);
+        getController().synchronizeForms();
 	}
 
     public void onProcessFail(final String message) {

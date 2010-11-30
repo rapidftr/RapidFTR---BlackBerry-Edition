@@ -28,4 +28,8 @@ public class FormSyncProcess implements Process {
 		return cancel;
 	}
 
+    public boolean isNotBackGround() {
+        return false;
+    }
+
 }

@@ -5,4 +5,6 @@ public interface Process {
 	public void startProcess();
 	public void stopProcess();
 	public boolean isCanceled();
+
+    boolean isNotBackGround();
 }

@@ -60,4 +60,7 @@ public class LoginController extends RequestAwareController {
 		((LoginScreen) currentScreen).resetCredentials(true);
 	}
 
+    public void synchronizeForms() {
+        dispatcher.synchronizeForms();
+    }
 }

@@ -63,8 +63,6 @@ public class ManageChildScreen extends CustomScreen {
         screenManager.add(new SeparatorField());
         add(screenManager);
 
-        askForFormSynchronization();
-
         final Object[] formArray = formsInArray();
 
         final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
@@ -111,25 +109,9 @@ public class ManageChildScreen extends CustomScreen {
     private void deleteScreenManager() {
 		try {
             delete(screenManager);
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
 
         }
-	}
-
-	private void askForFormSynchronization() {
-		if (formsEmpty()) {
-            int result = Dialog.ask(Dialog.D_OK_CANCEL, "There are no form details stored\n" + "press ok to synchronize forms with a server.");
-
-            controller.popScreen();
-            if (result == Dialog.OK) {
-                ((ChildController) controller).synchronizeForms();
-            }
-            return;
-        }
-	}
-
-	private boolean formsEmpty() {
-		return forms == null || forms.size() == 0;
 	}
 
     public boolean confirmOverWriteAudio() {
@@ -181,7 +163,7 @@ public class ManageChildScreen extends CustomScreen {
             childToEdit.update(settings.getCurrentlyLoggedIn(), forms);
         }
 
-        String invalidDataField = null;
+        String invalidDataField;
         if ((invalidDataField = validateRequiredFields()) != "") {
             return invalidDataField;
         }

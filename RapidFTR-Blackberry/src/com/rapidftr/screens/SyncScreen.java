@@ -133,8 +133,8 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		downloadProgressBar.setLabel(message);
 	}
 
-	public void setProcess(Process process) {
-		this.process = process;
+	public void attachProcess(Process process) {
+            this.process = process;
 	}
 
 	public void showRunninngProcessAlert() {

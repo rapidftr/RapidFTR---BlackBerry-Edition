@@ -35,6 +35,10 @@ public class ChildSyncProcess implements Process {
 	public boolean isCanceled() {
 		return cancel;
 	}
-	
+
+    public boolean isNotBackGround() {
+        return true;  
+    }
+
 
 }
