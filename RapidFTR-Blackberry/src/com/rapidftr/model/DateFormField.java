@@ -24,7 +24,11 @@ public class DateFormField extends FormField
 	}
 
 	public String getValue() {
-		return dateField.toString();
+        String date = dateField.toString();
+        if ("- --- ----".equals(date)){
+            return "";
+        }
+        return date;
 	}
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {
