@@ -2,12 +2,10 @@ package com.rapidftr.screens;
 
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controls.Button;
+import com.rapidftr.net.ConnectionFactory;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.Settings;
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.FieldChangeListener;
-import net.rim.device.api.ui.MenuItem;
-import net.rim.device.api.ui.XYEdges;
+import net.rim.device.api.ui.*;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.VerticalFieldManager;
@@ -63,14 +61,14 @@ public class HomeScreen extends CustomScreen {
 			}
 		});
 
-		Button synchronizeButton = new Button("Synchronize");
-		synchronizeButton.setChangeListener(new FieldChangeListener() {
-			public void fieldChanged(Field field, int context) {
-				onSynchronizeClicked();
-			}
-		});
+        Button synchronizeButton = new Button("Synchronize");
+        synchronizeButton.setChangeListener(new FieldChangeListener() {
+            public void fieldChanged(Field field, int context) {
+                      onSynchronizeClicked();
+            }
+        });
 
-		Vector buttonGroup = new Vector();
+        Vector buttonGroup = new Vector();
 		buttonGroup.addElement(loginButton);
 		buttonGroup.addElement(newChildButton);
 		buttonGroup.addElement(viewChildrenButton);
@@ -110,9 +108,20 @@ public class HomeScreen extends CustomScreen {
 		((HomeScreenController) controller).logIn();
 	}
 
-	protected void onSynchronizeClicked() {
-		((HomeScreenController) controller).synchronize();
-	}
+    protected void onSynchronizeClicked() {
+        if (ConnectionFactory.isNotConnected()) {
+            Dialog.ask(Dialog.D_OK,
+                    "Could not establish connection with host because all connectors are offline");
+        } else if (!settings.isUserLoggedIn()) {
+            int result = Dialog.ask(Dialog.D_OK_CANCEL,
+                    "You are not logged in.\n Press ok to  login.");
+            if (result == Dialog.OK) {
+                onLoginButtonClicked();
+            }
+        } else {
+            ((HomeScreenController) controller).synchronize();
+        }
+    }
 
 	private void onViewChildrenClicked() {
 		((HomeScreenController) controller).viewChildren();

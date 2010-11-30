@@ -89,12 +89,7 @@ public class SyncController extends Controller implements ControllerCallback {
 		currentProcess = null;
 	}
 
-	public void login() {
-		dispatcher.login(previousProcess);
-		requestHandler.terminateProcess();
-	}
-
-	public void beforeProcessStart() {
+    public void beforeProcessStart() {
 		((SyncScreen) currentScreen).onProcessStart();
 	}
 

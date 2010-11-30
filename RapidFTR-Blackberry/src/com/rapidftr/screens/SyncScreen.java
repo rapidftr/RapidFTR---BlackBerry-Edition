@@ -90,23 +90,6 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 	}
 
 	public void onAuthenticationFailure() {
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-			public void run() {
-
-				int result = Dialog.ask(Dialog.D_OK_CANCEL,
-						"You are not logged in.\n Press ok to login.");
-				downloadProgressBar.setValue(0);
-
-                SyncController syncController = (SyncController) controller;
-                syncController.clearProcess();
-                if (result == Dialog.OK) {
-					syncController.login();
-				}else{
-					controller.popScreen();
-				}
-			}
-		});
-
 	}
 
 	public void cleanUp() {
