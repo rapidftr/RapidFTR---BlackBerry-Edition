@@ -46,6 +46,7 @@ public class ChildSorterTest {
         assertThat(compareChildArraysOnAttribute(new Child[] {child2, child1, child3}, childArray, "name"), is(true));
     }
 
+    @Ignore
     @Test
     public void shouldSort3RecordsByDateCreated() {
         testChildSorter = new TestChildSorter(new String[] {"created_at"});
@@ -68,7 +69,8 @@ public class ChildSorterTest {
         
         assertThat(compareChildArraysOnAttribute(new Child[]{child2, child1, child3}, childArray, "created_at"), is(true));
     }
-    
+
+    @Ignore
     @Test
     public void shouldSort3RecordsByDateModified() {
         testChildSorter = new TestChildSorter(new String[] {"last_updated_at"});
