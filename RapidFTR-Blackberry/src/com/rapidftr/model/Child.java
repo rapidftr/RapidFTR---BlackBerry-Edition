@@ -1,15 +1,5 @@
 package com.rapidftr.model;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import net.rim.device.api.util.Persistable;
-
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
-
 import com.rapidftr.utilities.FileUtility;
 import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.RandomStringGenerator;
@@ -17,6 +7,14 @@ import com.rapidftr.utilities.StringUtility;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Part;
 import com.sun.me.web.request.PostData;
+import net.rim.device.api.util.Persistable;
+import org.json.me.JSONArray;
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class Child implements Persistable {
 
@@ -62,13 +60,15 @@ public class Child implements Persistable {
 						HttpUtility.HEADER_CONTENT_TYPE_IMAGE));
 				continue;
 			}
-			if (key.equals("recorded_audio")) {
-				if (value != null) {
-					parts.addElement(multiPart(value, "audio",
-							HttpUtility.HEADER_CONTENT_TYPE_AUDIO));
-				}
-				continue;
-			}
+            if (key.equals("recorded_audio")) {
+                if (value != null) {
+                    if (!StringUtility.isBlank(String.valueOf(value))) {
+                        parts.addElement(multiPart(value, "audio",
+                                HttpUtility.HEADER_CONTENT_TYPE_AUDIO));
+                    }
+                }
+                continue;
+            }
 
 			Arg[] headers = new Arg[1];
 			headers[0] = new Arg("Content-Disposition",
