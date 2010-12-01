@@ -1,5 +1,9 @@
 package com.rapidftr.utilities;
 
+import net.rim.device.api.i18n.Locale;
+import net.rim.device.api.i18n.SimpleDateFormat;
+
+import java.util.Calendar;
 
 public class Settings {
 
@@ -10,7 +14,7 @@ public class Settings {
 	private static final String AUTHORISATION_TOKEN = "authorisation.token";
 	private static final String AUTHORISATION_TOKEN_FOR_OFFLINE_LOGIN = "temp.authorisation.token";
 	private static final String CURRENT_USER = "current.user";
-
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm", Locale.getDefault());
 	
 	private Store store;
 
@@ -101,5 +105,15 @@ public class Settings {
 
     public void setAuthorisationTokenForOfflineLogin(String token) {
         store.setString(AUTHORISATION_TOKEN_FOR_OFFLINE_LOGIN, token);
+    }
+
+    public void updateLastSyncInfo() {
+        Calendar calendar = Calendar.getInstance();
+        store.setString("last.sync", formatter.format(calendar.getTime()));
+    }
+
+    public String getLastSyncInfo() {
+        String lastSync = store.getString("last.sync");
+        return StringUtility.isBlank(lastSync) ? "Records yet to be synchronized" : lastSync ; 
     }
 }

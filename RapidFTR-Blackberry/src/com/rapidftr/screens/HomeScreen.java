@@ -155,6 +155,12 @@ public class HomeScreen extends CustomScreen {
 		};
 		menu.add(cleanDeviceMenuItem);
 		
+        MenuItem syncInfoItem = new MenuItem("Last Sync Info", 1, 1) {
+			public void run() {
+                Dialog.alert(settings.getLastSyncInfo());
+			}
+		};
+		menu.add(syncInfoItem);
 		//super.makeMenu(menu, instance);
     }
 

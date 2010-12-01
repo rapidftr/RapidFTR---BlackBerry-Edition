@@ -6,6 +6,7 @@ import com.rapidftr.process.Process;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.services.ScreenCallBack;
 
+import com.rapidftr.utilities.Settings;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
@@ -30,9 +31,11 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 	private Manager hButtonManager;
 	private Button cancelButton;
 	LabelField labelField;
+    private Settings settings;
 
-	public SyncScreen() {
-		layoutScreen();
+    public SyncScreen(Settings settings) {
+        this.settings = settings;
+        layoutScreen();
 	}
 
 	private void layoutScreen() {
@@ -125,6 +128,7 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 				downloadProgressBar.setValue(100);
 				hButtonManager.deleteAll();
 				hButtonManager.add(okButton);
+                settings.updateLastSyncInfo();
 			}
 		});
 	}

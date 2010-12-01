@@ -65,7 +65,7 @@ public class Main extends UiApplication {
 		
 		ManageChildScreen newChildScreen = new ManageChildScreen(settings);
 		
-		SyncScreen syncScreen = new SyncScreen();
+		SyncScreen syncScreen = new SyncScreen(settings);
 		
 		LoginController loginController = new LoginController(loginScreen,
 				uiStack, loginService);
