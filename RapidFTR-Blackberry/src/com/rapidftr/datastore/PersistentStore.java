@@ -1,5 +1,8 @@
 package com.rapidftr.datastore;
 
+import net.rim.device.api.system.ApplicationDescriptor;
+import net.rim.device.api.system.CodeSigningKey;
+import net.rim.device.api.system.ControlledAccess;
 import net.rim.device.api.system.PersistentObject;
 
 public class PersistentStore {
@@ -16,10 +19,9 @@ public class PersistentStore {
 	}
 
 	public void setContents(Object contents) {
-		persistentObject.setContents(contents);
+		int moduleHandle = ApplicationDescriptor.currentApplicationDescriptor().getModuleHandle();
+		CodeSigningKey codeSigningKey = CodeSigningKey.get(moduleHandle, "RFTR");
+		persistentObject.setContents(new ControlledAccess(contents, codeSigningKey));
 		persistentObject.commit();
 	}
-
-	
-
 }
