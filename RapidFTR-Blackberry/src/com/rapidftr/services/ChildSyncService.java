@@ -161,8 +161,7 @@ public class ChildSyncService extends RequestAwareService {
             sendMsgToHandlerWhenProcessFailed("There was an exception in the result.");
         } catch (JSONException e) {
             sendMsgToHandlerWhenProcessFailed("The data format is not correct.");
-		} catch (IOException e) {
-            sendMsgToHandlerWhenProcessFailed("Check your server address setting or the network status.");
+		} catch (IOException ignore) {
 		}
 
 		return mapping;
