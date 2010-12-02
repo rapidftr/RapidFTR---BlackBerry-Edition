@@ -14,8 +14,7 @@ public class Settings {
 	private static final String AUTHORISATION_TOKEN = "authorisation.token";
 	private static final String AUTHORISATION_TOKEN_FOR_OFFLINE_LOGIN = "temp.authorisation.token";
 	private static final String CURRENT_USER = "current.user";
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm", Locale.getDefault());
-	
+
 	private Store store;
 
 	public Settings(Store store) {
@@ -109,6 +108,7 @@ public class Settings {
 
     public void updateLastSyncInfo() {
         Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy HH:mm", Locale.getDefault());
         store.setString("last.sync", formatter.format(calendar.getTime()));
     }
 
