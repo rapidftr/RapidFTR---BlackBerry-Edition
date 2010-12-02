@@ -55,11 +55,15 @@ public class Child implements Persistable {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
 
-			if (key.equals("current_photo_key")) {
-				parts.addElement(multiPart(value, "photo",
-						HttpUtility.HEADER_CONTENT_TYPE_IMAGE));
-				continue;
-			}
+            if (key.equals("current_photo_key")) {
+                if (value != null) {
+                    if (!StringUtility.isBlank(String.valueOf(value))) {
+                        parts.addElement(multiPart(value, "photo",
+                                HttpUtility.HEADER_CONTENT_TYPE_IMAGE));
+                    }
+                }
+                continue;
+            }
             if (key.equals("recorded_audio")) {
                 if (value != null) {
                     if (!StringUtility.isBlank(String.valueOf(value))) {
