@@ -56,20 +56,16 @@ public class Child implements Persistable {
 			Object value = data.get(key);
 
             if (key.equals("current_photo_key")) {
-                if (value != null) {
-                    if (!StringUtility.isBlank(String.valueOf(value))) {
-                        parts.addElement(multiPart(value, "photo",
-                                HttpUtility.HEADER_CONTENT_TYPE_IMAGE));
-                    }
+                if (!StringUtility.isBlank(String.valueOf(value))) {
+                    parts.addElement(multiPart(value, "photo",
+                        HttpUtility.HEADER_CONTENT_TYPE_IMAGE));
                 }
                 continue;
             }
             if (key.equals("recorded_audio")) {
-                if (value != null) {
-                    if (!StringUtility.isBlank(String.valueOf(value))) {
-                        parts.addElement(multiPart(value, "audio",
-                                HttpUtility.HEADER_CONTENT_TYPE_AUDIO));
-                    }
+                if (value != null && !StringUtility.isBlank(String.valueOf(value))) {
+                    parts.addElement(multiPart(value, "audio",
+                            HttpUtility.HEADER_CONTENT_TYPE_AUDIO));
                 }
                 continue;
             }
@@ -99,12 +95,7 @@ public class Child implements Persistable {
 				+ paramName + "]\"");
 		headers[1] = headerContentType;
 		byte[] imageData;
-
-		if (StringUtility.isBlank(String.valueOf(value))) {
-		    imageData = new byte[0];
-		} else {
-		    imageData = FileUtility.getByteArray(value.toString());
-		}
+        imageData = FileUtility.getByteArray(value.toString());
 
 		return new Part(imageData, headers);
 	}
