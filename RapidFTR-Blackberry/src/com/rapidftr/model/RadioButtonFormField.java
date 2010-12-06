@@ -33,7 +33,6 @@ public class RadioButtonFormField extends FormField {
 					text, group, false);
 			manager.add(radioButtonField);
 		}
-		group.setSelectedIndex(0);
 	}
 
 	public Manager getLayout() {
@@ -41,8 +40,7 @@ public class RadioButtonFormField extends FormField {
 	}
 
 	public String getValue() {
-
-		return (String) optionStrings.elementAt(group.getSelectedIndex());
+		return group.getSelectedIndex() >=0 ? (String) optionStrings.elementAt(group.getSelectedIndex()) : "";
 	}
 
 	public boolean equals(Object obj) {
