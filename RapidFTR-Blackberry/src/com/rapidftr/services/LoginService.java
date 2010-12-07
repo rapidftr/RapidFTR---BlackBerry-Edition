@@ -6,12 +6,17 @@ import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Response;
 
+import net.rim.blackberry.api.phone.Phone;
+import net.rim.device.api.system.GPRSInfo;
+
 import java.util.Hashtable;
 
 public class LoginService extends RequestAwareService {
     private LoginSettings settings;
     private static final String USER_NAME = "user_name";
     private static final String PASSWORD = "password";
+    private static final String IMEI = "imei";
+    private static final String MOBILE_NUMBER = "mobile_number";
 
     public LoginService(HttpService httpService, LoginSettings settings) {
         super(httpService);
@@ -19,12 +24,19 @@ public class LoginService extends RequestAwareService {
     }
 
     public void login(String user, String password) {
-        Arg[] postArgs = new Arg[]{new Arg("user_name", user),
-                new Arg("password", password)};
+        String imei = GPRSInfo.imeiToString(GPRSInfo.getIMEI());
+        String mobile = Phone.getDevicePhoneNumber(false);
+        
+        Arg[] postArgs = new Arg[]{new Arg(USER_NAME, user),
+                new Arg(PASSWORD, password),
+                new Arg(IMEI, imei),
+                new Arg(MOBILE_NUMBER, mobile)};
 
         Hashtable context = new Hashtable();
         context.put(USER_NAME, user);
         context.put(PASSWORD, password);
+        context.put(IMEI, imei);
+        context.put(MOBILE_NUMBER, mobile);
 
         requestHandler.startNewProcess();
         requestHandler.post("sessions", postArgs, HttpUtility.makeJSONHeader(),
