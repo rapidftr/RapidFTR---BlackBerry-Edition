@@ -55,6 +55,19 @@ public class ManageChildScreen extends CustomScreen {
         }
     }
 
+	private boolean formsEmpty() {
+        for (Enumeration e = forms.elements(); e.hasMoreElements();) {
+            Object nextElement = e.nextElement();
+            if (nextElement != null) {
+                Form form = (Form) nextElement;
+                if (!form.isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private void createScreenLayout() {
         deleteScreenManager();
 
@@ -125,24 +138,26 @@ public class ManageChildScreen extends CustomScreen {
     }
 
     public boolean onClose() {
-    	String menuMessage = "The current record has been changed. What do you want to do with these changes?";
-    	String[] menuChoices = {"Save", "Discard", "Cancel"};
-    	int defaultChoice = 0;
-        int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
+        if (!formsEmpty()) {
+    	    String menuMessage = "The current record has been changed. What do you want to do with these changes?";
+            String[] menuChoices = {"Save", "Discard", "Cancel"};
+            int defaultChoice = 0;
+            int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
 
-		switch (result) {
-		case 0: {
-			if (!validateOnSave())
-				return false;
-			break;
-		}
-		case 1: {
-			break;
-		}
-		case 2: {
-			return false;
-		}
-		}
+            switch (result) {
+            case 0: {
+                if (!validateOnSave())
+                    return false;
+                break;
+            }
+            case 1: {
+                break;
+            }
+            case 2: {
+                return false;
+            }
+		    }
+        }
 		controller.popScreen();
 		return true;
     }
@@ -182,16 +197,19 @@ public class ManageChildScreen extends CustomScreen {
     }
 
     protected void makeMenu(Menu menu, int instance) {
-        MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
-            public void run() {
-                if (!validateOnSave()) {
-                    return;
+        if (!formsEmpty()) {
+            MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
+                public void run() {
+                    if (!validateOnSave()) {
+                        return;
+                    }
+                    controller.popScreen();
+                    ((ChildController)controller).viewChild(childToEdit);
+                    childToEdit = null;
                 }
-                controller.popScreen();
-                ((ChildController)controller).viewChild(childToEdit);
-                childToEdit = null;
-            }
-        };
+            };
+            menu.add(saveChildMenu);
+        }
 
         MenuItem CloseMenu = new MenuItem("Close", 3, 1) {
             public void run() {
@@ -200,7 +218,6 @@ public class ManageChildScreen extends CustomScreen {
         };
 
         addSyncFailedErrorMenuItem(menu);
-        menu.add(saveChildMenu);
         menu.add(CloseMenu);
 
         super.makeMenu(menu, instance);
