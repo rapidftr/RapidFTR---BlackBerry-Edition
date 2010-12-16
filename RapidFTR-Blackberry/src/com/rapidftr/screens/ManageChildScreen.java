@@ -7,6 +7,8 @@ import com.rapidftr.model.Form;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.ImageCaptureListener;
 import com.rapidftr.utilities.Settings;
+
+import net.rim.device.api.system.Characters;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
@@ -134,18 +136,26 @@ public class ManageChildScreen extends CustomScreen {
 		case 0: {
 			if (!validateOnSave())
 				return false;
+			closeEditScreen();
+			((ChildController) controller).viewChild(childToEdit);
 			break;
 		}
 		case 1: {
+			closeEditScreen();
+			if(childToEdit != null)
+				((ChildController) controller).viewChild(childToEdit);
 			break;
 		}
-		case 2: {
-			return false;
+		default: {
+			return true;
 		}
 		}
-		controller.popScreen();
 		return true;
     }
+
+	private void closeEditScreen() {
+			controller.popScreen();
+	}
 
     private boolean validateOnSave() {
         String invalidDataField = onSaveChildClicked();
@@ -187,7 +197,7 @@ public class ManageChildScreen extends CustomScreen {
                 if (!validateOnSave()) {
                     return;
                 }
-                controller.popScreen();
+                closeEditScreen();
                 ((ChildController)controller).viewChild(childToEdit);
                 childToEdit = null;
             }
@@ -220,4 +230,24 @@ public class ManageChildScreen extends CustomScreen {
     public Child getChild() {
         return childToEdit;
     }
+    
+	public boolean keyChar( char key, int status, int time ) 
+    {
+        if ( key == Characters.ESCAPE ) 
+        {
+        	return onClose();
+        }
+        
+        return super.keyChar(key, status, time);
+    }
+
+    
+    public boolean keyDown(int keycode, int time) 
+    {
+		if (keycode == Characters.ESCAPE) {
+			return onClose();
+		}
+		return super.keyDown(keycode, time);
+    }
+
 }

@@ -5,6 +5,8 @@ import com.rapidftr.controls.Button;
 import com.rapidftr.net.ConnectionFactory;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.Settings;
+
+import net.rim.device.api.system.Characters;
 import net.rim.device.api.ui.*;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
@@ -177,5 +179,15 @@ public class HomeScreen extends CustomScreen {
 		layoutScreen();
 		super.onExposed();
 	}
+	
+	public boolean keyChar( char key, int status, int time ) 
+    {
+		return false;
+    }
+    
+    public boolean keyDown(int keycode, int time) 
+    {
+		return false;
+    }
 
 }

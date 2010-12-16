@@ -11,8 +11,7 @@ import net.rim.device.api.ui.*;
 import net.rim.device.api.ui.component.*;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 
-public class LoginScreen extends CustomScreen implements ScreenCallBack,
-		KeyListener {
+public class LoginScreen extends CustomScreen implements ScreenCallBack {
 
 	private static final int MAX_SIZE = 200;
 
@@ -179,23 +178,11 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack,
         progressMsg.setText(message);
     }
 
-    public boolean keyUp(int keycode, int time) {
-		return super.keyUp(keycode, time);
-	}
-
 	public boolean keyDown(int keycode, int time) {
 		if (keycode == Characters.ESCAPE) {
 			controller.homeScreen();
 		}
 		return super.keyDown(keycode, time);
-	}
-
-	public boolean keyRepeat(int code, int time) {
-		return super.keyRepeat(code, time);
-	}
-
-	public boolean keyStatus(int code, int time) {
-		return super.keyStatus(code, time);
 	}
 
 	public boolean keyChar(char code, int time, int arg2) {
