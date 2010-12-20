@@ -65,7 +65,7 @@ public class TabTest {
 
         CustomScreen customScreen = mock(CustomScreen.class);
 
-        Tab tabView = new Tab(form, child);
+        Tab tabView = new Tab(form.toString(),form, child);
         tabView.RenderOn(customScreen);
         verify(customScreen, never()).add(null);
     }

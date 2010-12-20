@@ -4,6 +4,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.Vector;
+
+import com.rapidftr.screens.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,11 +14,6 @@ import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
-import com.rapidftr.screens.ChildPhotoScreen;
-import com.rapidftr.screens.ManageChildScreen;
-import com.rapidftr.screens.SearchChildScreen;
-import com.rapidftr.screens.ViewChildScreen;
-import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.UiStack;
 
 public class ChildControllerTest {
@@ -37,6 +34,9 @@ public class ChildControllerTest {
 	@Mock
 	private ChildPhotoScreen childPhotoScreen;
 
+    @Mock
+	private ChildHistoryScreen childHistoryScreen;
+
 	private ChildController childController;
 	@Mock
 	private Vector forms;
@@ -51,7 +51,7 @@ public class ChildControllerTest {
 		when(formStore.getForms()).thenReturn(forms);
 		childController = new ChildController(newChildScreen, viewChildScreen,
 				searchChildScreen, viewChildrenScreen, uiStack, formStore,
-				childrenStore, childPhotoScreen);
+				childrenStore, childPhotoScreen,childHistoryScreen );
 		childController.setDispatcher(dispatcher);
 	}
 
