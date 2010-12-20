@@ -24,6 +24,7 @@ public class ChildController extends Controller {
 	private final SearchChildScreen searchChildScreen;
 	private final ViewChildrenScreen viewChildrenScreen;
 	private final ChildPhotoScreen childPhotoScreen;
+	private final ChildHistoryScreen childHistoryScreen;
 	private CustomScreen currentChildScreen;
 	private ChildrenRecordStore childrenStore;
 
@@ -32,7 +33,7 @@ public class ChildController extends Controller {
 			SearchChildScreen searchChildScreen,
 			ViewChildrenScreen viewChildrenScreen, UiStack uiStack,
 			FormStore formStore, ChildrenRecordStore childrenStore,
-			ChildPhotoScreen childPhotoScreen) {
+			ChildPhotoScreen childPhotoScreen, ChildHistoryScreen childHistoryScreen) {
 
 		super(manageChildScreen, uiStack);
 		this.manageChildScreen = manageChildScreen;
@@ -42,6 +43,7 @@ public class ChildController extends Controller {
 		this.searchChildScreen = searchChildScreen;
 		this.viewChildrenScreen = viewChildrenScreen;
 		this.childPhotoScreen = childPhotoScreen;
+		this.childHistoryScreen = childHistoryScreen;
 		this.currentChildScreen = this.manageChildScreen;
 
 		childrenStore.attachSorter(new ChildSorter(new String[] { "name",
@@ -106,9 +108,8 @@ public class ChildController extends Controller {
 	}
 
 	public void showHistory(Child child) {
-		ChildHistoryScreen historyScreen = new ChildHistoryScreen(child);
-		uiStack.pushScreen(historyScreen);
-		historyScreen.setUp();
+		childHistoryScreen.setChild(child);
+		changeScreen(childHistoryScreen);
 	}
 
 	public void viewChildren() {

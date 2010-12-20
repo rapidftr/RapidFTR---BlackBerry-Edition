@@ -78,9 +78,11 @@ public class Main extends UiApplication {
 		
 		ChildPhotoScreen childPhotoScreen = new ChildPhotoScreen();
 		
+		ChildHistoryScreen childHistoryScreen = new ChildHistoryScreen();
+		
 		ChildController childController = new ChildController(newChildScreen,
 				viewChildScreen, searchChildScreen, viewChildrenScreen,
-				uiStack, formStore, childrenStore, childPhotoScreen);
+				uiStack, formStore, childrenStore, childPhotoScreen,childHistoryScreen);
 		
 		SyncController syncController = new SyncController(syncScreen, uiStack,
 				childSyncService, formService);
