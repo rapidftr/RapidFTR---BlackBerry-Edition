@@ -13,6 +13,7 @@ import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FocusChangeListener;
+import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.UiApplication;
@@ -23,17 +24,20 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.container.VerticalFieldManager;
+import net.rim.device.api.ui.decor.BackgroundFactory;
 import net.rim.device.api.ui.decor.Border;
 import net.rim.device.api.ui.decor.BorderFactory;
 
 import com.rapidftr.controllers.ChildController;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
+import com.rapidftr.model.ChildStatus;
 import com.rapidftr.model.Form;
-import com.rapidftr.model.FormField;
+import com.rapidftr.model.Tab;
+import com.rapidftr.model.TabControl;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.BoldRichTextField;
-import com.rapidftr.utilities.ChildFieldIgnoreList;
 import com.rapidftr.utilities.ImageUtility;
 
 public class ViewChildScreen extends CustomScreen {
@@ -48,70 +52,72 @@ public class ViewChildScreen extends CustomScreen {
 	public void setChild(Child child) {
 		this.child = child;
 		clearFields();
-		add(new LabelField("Child Details"));
-		add(new SeparatorField());
+		HorizontalFieldManager titleManager = new HorizontalFieldManager(USE_ALL_WIDTH);
+		titleManager.setPadding(new XYEdges(2,2,2,0));
+		titleManager.add(new LabelField("Child Details"));
+		VerticalFieldManager titleSyncStatusManager = new VerticalFieldManager(USE_ALL_WIDTH);
+		ChildStatus childSyncStatus = child.childStatus();
+		String syncMessage = child.childStatus().getStatusString();
+		LabelField syncStatus = new LabelField(syncMessage,FIELD_RIGHT){
+			protected void paint(Graphics graphics) {
+				graphics.setColor(Color.WHITE);
+				super.paint(graphics);
+			}
+		};
+		XYEdges labelEdges = new XYEdges(1, 1, 1, 1);
+		syncStatus.setBorder(BorderFactory.createBevelBorder(labelEdges));
+		syncStatus.setBackground(BackgroundFactory.createSolidBackground(childSyncStatus.getStatusColor()));
+		titleSyncStatusManager.add(syncStatus);
+		titleManager.add(titleSyncStatusManager);
+		this.add(titleManager);
+		this.add(new SeparatorField());
 		renderChildFields(child);
 
 	}
 
-	private void renderChildFields(Child child) {
-		int index = 0;
-
-		HorizontalFieldManager horizontalFieldManager = new HorizontalFieldManager(
-				Manager.HORIZONTAL_SCROLLBAR);
+	private void renderChildFields(final Child child) {
+		
+		final HorizontalFieldManager horizontalFieldManager = new HorizontalFieldManager(
+				Manager.HORIZONTAL_SCROLLBAR | Manager.USE_ALL_WIDTH);		
+		
 		renderBitmap(horizontalFieldManager, (String) child
 				.getField("current_photo_key"));
-		horizontalFieldManager.add(new BoldRichTextField("   "
-				+ child.getField("name")));
-		add(horizontalFieldManager);
-
-		LabelField emptyLine = new LabelField("");
-		emptyLine.select(false);
-		add(emptyLine);
-
+		
 		String uniqueIdentifier = (String) child.getField("unique_identifier");
 		uniqueIdentifier = (null == uniqueIdentifier) ? "" : uniqueIdentifier;
-		add(BoldRichTextField.getSemiBoldRichTextField("Unique Id" + " :",
-				uniqueIdentifier));
+		horizontalFieldManager.add(BoldRichTextField.getSemiBoldRichTextField(" ",uniqueIdentifier));
+		
+		add(horizontalFieldManager);
 
-		add(new SeparatorField());
 
-		renderFormFields(child, index);
+		LabelField emptyLineAfterUID = new LabelField("");
+		emptyLineAfterUID.select(false);
+		add(emptyLineAfterUID);
+
+		renderFormFields(child);
 	}
 
-	private void renderFormFields(Child child, int index) {
+	private void renderFormFields(Child child) {
+		
 		Vector forms = new FormStore().getForms();
+		
+		Tab[] tabList = new Tab[forms.size()];
+		
+		int i = 0;
 
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 			Form form = (Form) list.nextElement();
-			for (Enumeration fields = form.getFieldList().elements(); fields
-					.hasMoreElements();) {
-				Object nextElement = fields.nextElement();
-
-				if (nextElement != null) {
-					FormField field = (FormField) nextElement;
-					String key = field.getName();
-					child.updateField(key);
-					String value = (String) child.getField(key);
-					if (ChildFieldIgnoreList.isInIgnoreList(key)) {
-						continue;
-					}
-
-					key = key.replace('_', ' ');
-
-					add(BoldRichTextField.getSemiBoldRichTextField(field
-							.displayLabel()
-							+ " :", value));
-					add(new SeparatorField());
-					index++;
-				}
-			}
+			tabList[i++] = new Tab(form.toString(), form, child);
 		}
+		
+		TabControl tabView = new TabControl(tabList);
+		
+		this.add(tabView);
 	}
 
 	private void renderBitmap(HorizontalFieldManager manager,
 			String currentPhotoKey) {
-		manager.setMargin(10, 10, 10, 10);
+		manager.setMargin(10,10,10,10);
 
 		Bitmap image = getChildImage(currentPhotoKey);
 
@@ -156,7 +162,6 @@ public class ViewChildScreen extends CustomScreen {
 	}
 
 	public void setUp() {
-		// TODO Auto-generated method stub
 	}
 
 	public void cleanUp() {

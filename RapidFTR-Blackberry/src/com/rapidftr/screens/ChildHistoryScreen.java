@@ -4,29 +4,30 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.component.SeparatorField;
-import net.rim.device.api.ui.component.Dialog;
 
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.internal.CustomScreen;
 
 public class ChildHistoryScreen extends CustomScreen {
-
-	public ChildHistoryScreen(Child child) {
-		if(child != null)
-		{	Vector history = child.getHistory();
-			if (history==null || history.size() == 0) {
-				add(new RichTextField("No History Logs Present"));
 	
-			} else {
-				layoutScreen(history);
+	private Child child;
 	
-			}
-		}
-		else
-		{
+	public ChildHistoryScreen(){
+		super();
+	}
+	
+	public void setChild(Child child){
+		this.child = child;
+		Vector history = this.child.getHistory();
+		if (history==null || history.size() == 0) {
 			add(new RichTextField("No History Logs Present"));
+
+		} else {
+			layoutScreen(history);
+
 		}
 	}
 

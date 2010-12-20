@@ -17,6 +17,20 @@ public class ChildStatus implements Persistable {
 	private ChildStatus(int colorCode) {
 		this.colorCode = colorCode;
 	}
+	
+	public String getStatusString(){
+		String statusString = "";
+		if(this == ChildStatus.NEW){
+			statusString = "New";
+		}else if(this == ChildStatus.SYNC_FAILED){
+			statusString = "Sync Failed";
+		}else if(this == ChildStatus.SYNCED){
+			statusString = "Synced";
+		}else if(this == ChildStatus.UPDATED){
+			statusString = "Updated";
+		}
+		return statusString;
+	}
 
 	public int getStatusColor() {
 		return colorCode;
