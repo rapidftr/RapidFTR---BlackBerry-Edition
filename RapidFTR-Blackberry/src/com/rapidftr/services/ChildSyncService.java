@@ -78,6 +78,7 @@ public class ChildSyncService extends RequestAwareService {
 		childrenList.addElement(child);
 		requestHandler.startNewProcess();
 		uploadChildren(new Children(childrenList));
+        requestHandler.checkForProcessCompletion();
 	}
 
 	public void syncAllChildRecords() throws ServiceException {
@@ -89,7 +90,6 @@ public class ChildSyncService extends RequestAwareService {
 				uploadChildRecords();
 				downloadNewChildRecords();
 				requestHandler.checkForProcessCompletion();
-				// requestHandler.checkAndMarkProcessComplete();
 			};
 		}.start();
 
