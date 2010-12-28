@@ -1,14 +1,12 @@
 package com.rapidftr.datastore;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-
-import java.util.Vector;
-
 import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import com.rapidftr.model.Child;
 
 public class ChildRecordStoreTest {
@@ -17,8 +15,8 @@ public class ChildRecordStoreTest {
 
 	@Before
 	public void setup() {
-		childrenStore = new ChildrenRecordStore(new MockStore("key"));
-	}
+		childrenStore = new ChildrenRecordStore(new MockStore("key"), new ChildSorter(new String[]{"created_at"},false));
+	}	
 
 	@Test
 	public void saveShouldAppendNewChildAndSaveInStore() {
@@ -129,7 +127,7 @@ public class ChildRecordStoreTest {
 		secondChild.setField("name", "Harry");
 		childrenStore.addOrUpdate(secondChild);
 		
-		childrenStore.attachSorter(new ChildSorter(new String[] {"name"}));
+		childrenStore.attachSorter(new ChildSorter(new String[] {"name"}, true));
 		Children children = childrenStore.getAll();
 		assertEquals(secondChild, children.toArray()[0]);
 	}

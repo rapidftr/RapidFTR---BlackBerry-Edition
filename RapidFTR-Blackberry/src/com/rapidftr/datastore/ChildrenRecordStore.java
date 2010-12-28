@@ -11,8 +11,9 @@ public class ChildrenRecordStore {
 	private final Store store;
 	private ChildSorter sorter;
 
-	public ChildrenRecordStore(Store store) {
+	public ChildrenRecordStore(Store store, ChildSorter sorter) {
 		this.store = store;
+		this.sorter = sorter;
 	}
 
 	public void addOrUpdate(Child child) {
@@ -27,12 +28,13 @@ public class ChildrenRecordStore {
 		} else {
 			children.addElement(child);
 		}
-		
+
 		store.setVector(GET_ALL_CHILDREN_KEY, children);
 	}
 
 	public Children getAll() {
-		Child[] array = new Children(store.getVector(GET_ALL_CHILDREN_KEY)).toArray();
+		Child[] array = new Children(store.getVector(GET_ALL_CHILDREN_KEY))
+				.toArray();
 		sort(array);
 		return new Children(array);
 	}
@@ -60,16 +62,11 @@ public class ChildrenRecordStore {
 	}
 
 	public void attachSorter(ChildSorter sorter) {
-		if(sorter!=null)
-			this.sorter = sorter;
-		else
-			this.sorter = new ChildSorter(new String[] {"name"});
-	}
-	
-	private void sort(Child[] array) {
-		if(sorter!=null)
-			sorter.sort(array, true);
+		this.sorter = sorter;
 	}
 
+	private void sort(Child[] array) {
+			sorter.sort(array);
+	}
 
 }

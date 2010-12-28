@@ -7,14 +7,17 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 @Ignore
-public class TestChildSorter extends ChildSorter{
+public class MockChildSorter extends ChildSorter{
 
-    public TestChildSorter(String[] attributes) {
-        super(attributes);
+    private boolean isAscending;
+
+	public MockChildSorter(String[] attributes, boolean isAscending) {
+        super(attributes, isAscending);
+		this.isAscending = isAscending;
     }
 
     @Override
-    public void sort(Child[] array, boolean isAscending){
+    public void sort(Child[] array){
 	    Arrays.sort(array, getComparator(isAscending));
     }
 

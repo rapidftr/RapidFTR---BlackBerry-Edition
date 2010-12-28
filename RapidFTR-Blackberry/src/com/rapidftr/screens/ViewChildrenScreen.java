@@ -52,6 +52,10 @@ public class ViewChildrenScreen extends CustomScreen {
 	public void setUp() {
 
 	}
+	
+	private ChildController getController() {
+		return (ChildController) controller;
+	}
 
 	protected void makeMenu(Menu menu, int instance) {
 		if (numberOfChildren > 0) {
@@ -59,21 +63,23 @@ public class ViewChildrenScreen extends CustomScreen {
 				public void run() {
 					int selectedIndex = childrenListField.getSelectedIndex();
 					Child child = (Child) childrenListField.get(childrenListField, selectedIndex);
-					((ChildController) controller).viewChild(child);
+					getController().viewChild(child);
 				}
+
+				
 			};
 			menu.add(editChildMenu);
 
             MenuItem sortByRecentlyAdded = new MenuItem("Sort by Recently Added", 1, 1) {
 				public void run() {
-
+					getController().sortByRecentlyAdded();
 				}
 			};
 			menu.add(sortByRecentlyAdded);
 
             MenuItem sortByRecentlyModified = new MenuItem("Sort by Recently Updated", 1, 1) {
 				public void run() {
-
+					getController().sortByRecentlyUpdated();
 				}
 			};
 			menu.add(sortByRecentlyModified);

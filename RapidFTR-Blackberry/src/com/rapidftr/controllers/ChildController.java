@@ -46,8 +46,6 @@ public class ChildController extends Controller {
 		this.childHistoryScreen = childHistoryScreen;
 		this.currentChildScreen = this.manageChildScreen;
 
-		childrenStore.attachSorter(new ChildSorter(new String[] { "name",
-				"last_known_location" }));
 	}
 
 	public void synchronizeForms() {
@@ -135,4 +133,15 @@ public class ChildController extends Controller {
 	public void popScreen() {
 		currentChildScreen.popScreen(uiStack, this);
 	}
+
+	public void sortByRecentlyAdded() {
+		childrenStore.attachSorter(new ChildSorter(new String[]{"created_at"}, false));
+		viewChildren();
+	}
+
+	public void sortByRecentlyUpdated() {
+		childrenStore.attachSorter(new ChildSorter(new String[]{"last_updated_at"}, false));
+		viewChildren();
+	}
+	
 }

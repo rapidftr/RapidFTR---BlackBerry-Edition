@@ -18,7 +18,7 @@ public class ChildSorterTest {
     private Child child2;
     private Child child3;
     private Child[] childArray;
-    private TestChildSorter testChildSorter;
+    private MockChildSorter testChildSorter;
 
     private SimpleDateFormat formatter;
 
@@ -35,13 +35,13 @@ public class ChildSorterTest {
     @Test
     public void shouldSort3RecordsByAlphabeticalOrder() {
 
-        testChildSorter = new TestChildSorter(new String[] {"name"});
+        testChildSorter = new MockChildSorter(new String[] {"name"}, true);
 
         child1.setField("name","kiddo2");
         child2.setField("name","kiddo1");
         child3.setField("name","kiddo3");
 
-        testChildSorter.sort(childArray, true);
+        testChildSorter.sort(childArray);
 
         assertThat(compareChildArraysOnAttribute(new Child[] {child2, child1, child3}, childArray, "name"), is(true));
     }
@@ -49,7 +49,7 @@ public class ChildSorterTest {
     @Ignore
     @Test
     public void shouldSort3RecordsByDateCreated() {
-        testChildSorter = new TestChildSorter(new String[] {"created_at"});
+        testChildSorter = new MockChildSorter(new String[] {"created_at"}, true);
 
         Calendar calendar = Calendar.getInstance();
 
@@ -65,7 +65,7 @@ public class ChildSorterTest {
         child2.setField("created_at",today);
         child3.setField("created_at",dayBeforeYesterday);
 
-        testChildSorter.sort(childArray, false);
+        testChildSorter.sort(childArray);
         
         assertThat(compareChildArraysOnAttribute(new Child[]{child2, child1, child3}, childArray, "created_at"), is(true));
     }
@@ -73,7 +73,7 @@ public class ChildSorterTest {
     @Ignore
     @Test
     public void shouldSort3RecordsByDateModified() {
-        testChildSorter = new TestChildSorter(new String[] {"last_updated_at"});
+        testChildSorter = new MockChildSorter(new String[] {"last_updated_at"}, true);
 
         Calendar calendar = Calendar.getInstance();
 
@@ -89,7 +89,7 @@ public class ChildSorterTest {
         child2.setField("last_updated_at",today);
         child3.setField("last_updated_at",dayBeforeYesterday);
 
-        testChildSorter.sort(childArray, false);
+        testChildSorter.sort(childArray);
 
         assertThat(compareChildArraysOnAttribute(new Child[]{child2, child1, child3}, childArray, "last_updated_at"), is(true));
     }

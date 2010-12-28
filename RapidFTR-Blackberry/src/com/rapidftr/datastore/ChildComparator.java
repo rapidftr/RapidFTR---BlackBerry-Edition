@@ -11,9 +11,6 @@ public class ChildComparator {
 	}
 
 	public void setAttributes(String[] attributes) {
-		if (attributes == null || attributes.length == 0)
-			this.attributes = new String[] { "name" };
-		else
 			this.attributes = attributes;
 	}
 

@@ -1,12 +1,29 @@
 package com.rapidftr;
 
-import com.rapidftr.controllers.*;
+import net.rim.device.api.applicationcontrol.ApplicationPermissions;
+import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
+import net.rim.device.api.ui.UiApplication;
+
+import com.rapidftr.controllers.ChildController;
+import com.rapidftr.controllers.HomeScreenController;
+import com.rapidftr.controllers.LoginController;
+import com.rapidftr.controllers.ResetDeviceController;
+import com.rapidftr.controllers.SyncController;
 import com.rapidftr.controllers.internal.Dispatcher;
+import com.rapidftr.datastore.ChildSorter;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
-import com.rapidftr.screens.*;
+import com.rapidftr.screens.ChildHistoryScreen;
+import com.rapidftr.screens.ChildPhotoScreen;
+import com.rapidftr.screens.HomeScreen;
+import com.rapidftr.screens.LoginScreen;
+import com.rapidftr.screens.ManageChildScreen;
+import com.rapidftr.screens.SearchChildScreen;
+import com.rapidftr.screens.SyncScreen;
+import com.rapidftr.screens.ViewChildScreen;
+import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildSyncService;
 import com.rapidftr.services.FormService;
@@ -15,9 +32,6 @@ import com.rapidftr.services.LoginSettings;
 import com.rapidftr.utilities.DefaultStore;
 import com.rapidftr.utilities.HttpSettings;
 import com.rapidftr.utilities.Settings;
-import net.rim.device.api.applicationcontrol.ApplicationPermissions;
-import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
-import net.rim.device.api.ui.UiApplication;
 
 public class Main extends UiApplication {
 
@@ -34,7 +48,8 @@ public class Main extends UiApplication {
 		DefaultStore defaultStore = new DefaultStore(new Key("com.rapidftr.utilities.ftrstore"));
 		
 		ChildrenRecordStore childrenStore = new ChildrenRecordStore(
-				new DefaultStore(new Key("com.rapidftr.utilities.childrenstore")));
+				new DefaultStore(new Key("com.rapidftr.utilities.childrenstore")),
+				new ChildSorter(new String[] { "name","last_known_location" }, true));
 		
 		FormStore formStore = new FormStore();
 		

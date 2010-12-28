@@ -5,12 +5,14 @@ import com.rapidftr.model.Child;
 public class ChildSorter {
 
 	protected String[] attributes;
+	private boolean isAscending;
 
-	public ChildSorter(String[] attributes) {
+	public ChildSorter(String[] attributes, boolean isAscending) {
 		this.attributes = attributes;
+		this.isAscending = isAscending;
 	}
 	
-	public void sort(Child[] array, boolean isAscending) {
+	public void sort(Child[] array) {
 		net.rim.device.api.util.Arrays.sort(array, getComparator(isAscending));
 	}
 

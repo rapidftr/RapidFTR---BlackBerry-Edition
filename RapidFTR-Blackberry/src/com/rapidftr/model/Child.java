@@ -7,11 +7,14 @@ import com.rapidftr.utilities.StringUtility;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Part;
 import com.sun.me.web.request.PostData;
+
+import net.rim.device.api.i18n.SimpleDateFormat;
 import net.rim.device.api.util.Persistable;
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -27,6 +30,7 @@ public class Child implements Persistable {
 		changedFields = new Hashtable();
 		data = new Hashtable();
 		put("_id", RandomStringGenerator.generate(32));
+		put("created_at", new Date().toString());
 		childStatus = ChildStatus.NEW;
 	}
 
@@ -55,20 +59,21 @@ public class Child implements Persistable {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
 
-            if (key.equals("current_photo_key")) {
-                if (!StringUtility.isBlank(String.valueOf(value))) {
-                    parts.addElement(multiPart(value, "photo",
-                        HttpUtility.HEADER_CONTENT_TYPE_IMAGE));
-                }
-                continue;
-            }
-            if (key.equals("recorded_audio")) {
-                if (value != null && !StringUtility.isBlank(String.valueOf(value))) {
-                    parts.addElement(multiPart(value, "audio",
-                            HttpUtility.HEADER_CONTENT_TYPE_AUDIO));
-                }
-                continue;
-            }
+			if (key.equals("current_photo_key")) {
+				if (!StringUtility.isBlank(String.valueOf(value))) {
+					parts.addElement(multiPart(value, "photo",
+							HttpUtility.HEADER_CONTENT_TYPE_IMAGE));
+				}
+				continue;
+			}
+			if (key.equals("recorded_audio")) {
+				if (value != null
+						&& !StringUtility.isBlank(String.valueOf(value))) {
+					parts.addElement(multiPart(value, "audio",
+							HttpUtility.HEADER_CONTENT_TYPE_AUDIO));
+				}
+				continue;
+			}
 
 			Arg[] headers = new Arg[1];
 			headers[0] = new Arg("Content-Disposition",
@@ -95,7 +100,7 @@ public class Child implements Persistable {
 				+ paramName + "]\"");
 		headers[1] = headerContentType;
 		byte[] imageData;
-        imageData = FileUtility.getByteArray(value.toString());
+		imageData = FileUtility.getByteArray(value.toString());
 
 		return new Part(imageData, headers);
 	}
@@ -114,9 +119,9 @@ public class Child implements Persistable {
 	}
 
 	private void put(String name, Object value) {
-		if(value!=null) {
-            data.put(name, value);
-        }
+		if (value != null) {
+			data.put(name, value);
+		}
 	}
 
 	public Object getField(String key) {
@@ -137,30 +142,30 @@ public class Child implements Persistable {
 
 	public boolean equals(Object obj) {
 		if (this == obj) {
-            return true;
-        }
+			return true;
+		}
 		if (obj == null) {
-            return false;
-        }
+			return false;
+		}
 		if (getClass() != obj.getClass()) {
-            return false;
-        }
+			return false;
+		}
 		Child other = (Child) obj;
 		if (data == null) {
 			if (other.data != null) {
-                return false;
-            }
+				return false;
+			}
 		} else {
 			if (data.get("_id") != null && other.data.get("_id") != null
 					&& data.get("_id").equals((other.data.get("_id")))) {
-                return true;
-            }
+				return true;
+			}
 			if (data.get("unique_identifier") != null
 					&& other.data.get("unique_identifier") != null
 					&& data.get("unique_identifier").equals(
 							(other.data.get("unique_identifier")))) {
-                return true;
-            }
+				return true;
+			}
 		}
 
 		return false;
@@ -196,7 +201,7 @@ public class Child implements Persistable {
 				}
 			}
 		}
-
+		child.setField("last_updated_at", new Date().toString());
 		return child;
 	}
 
