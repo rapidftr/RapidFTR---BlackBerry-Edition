@@ -107,4 +107,12 @@ public class PhotoUploadFormField extends FormField implements
 	public void setValue(String value) {
 		imageLocation = value;		
 	}
+
+    public boolean isEmpty() {
+        if (imageLocation == "") {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -62,4 +62,12 @@ public class TextboxFormField extends FormField {
 	public void setValue(String value) {
 		field.setText(value);		
 	}
+
+    public boolean isEmpty() {
+        if (field.getText().equals("")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

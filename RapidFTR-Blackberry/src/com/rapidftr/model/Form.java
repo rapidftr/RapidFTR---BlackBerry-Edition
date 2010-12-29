@@ -93,6 +93,19 @@ public class Form {
 		}
 	}
 
+    public boolean isEmpty() {
+        for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
+            Object nextElement = list.nextElement();
+            if (nextElement != null) {
+                FormField formField = (FormField) nextElement;
+                if (!formField.isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+	}
+
 	public Manager getLayout() {
 		return layoutManager;
 	}
