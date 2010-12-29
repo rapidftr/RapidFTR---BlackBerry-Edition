@@ -10,7 +10,6 @@ import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controllers.ResetDeviceController;
 import com.rapidftr.controllers.SyncController;
 import com.rapidftr.controllers.internal.Dispatcher;
-import com.rapidftr.datastore.ChildSorter;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
@@ -48,8 +47,7 @@ public class Main extends UiApplication {
 		DefaultStore defaultStore = new DefaultStore(new Key("com.rapidftr.utilities.ftrstore"));
 		
 		ChildrenRecordStore childrenStore = new ChildrenRecordStore(
-				new DefaultStore(new Key("com.rapidftr.utilities.childrenstore")),
-				new ChildSorter(new String[] { "name","last_known_location" }, true));
+				new DefaultStore(new Key("com.rapidftr.utilities.childrenstore")));
 		
 		FormStore formStore = new FormStore();
 		

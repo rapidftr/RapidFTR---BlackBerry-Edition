@@ -9,11 +9,8 @@ public class ChildrenRecordStore {
 
 	private static final String GET_ALL_CHILDREN_KEY = "children";
 	private final Store store;
-	private ChildSorter sorter;
-
-	public ChildrenRecordStore(Store store, ChildSorter sorter) {
+	public ChildrenRecordStore(Store store) {
 		this.store = store;
-		this.sorter = sorter;
 	}
 
 	public void addOrUpdate(Child child) {
@@ -33,21 +30,19 @@ public class ChildrenRecordStore {
 	}
 
 	public Children getAll() {
-		Child[] array = new Children(store.getVector(GET_ALL_CHILDREN_KEY))
-				.toArray();
-		sort(array);
-		return new Children(array);
+		return getChildren();
 	}
 
+	private Children getChildren() {
+		return new Children(store.getVector(GET_ALL_CHILDREN_KEY));
+	}
+
+	
 	public void deleteAll() {
 		store.clear();
 	}
 
-	public Child[] getAllAsArray() {
-		return getAll().toArray();
-	}
-
-	public Child[] search(final String query) {
+	public Children search(final String query) {
 		final Vector results = new Vector();
 		getAll().forEachChild(new ChildAction() {
 
@@ -58,15 +53,19 @@ public class ChildrenRecordStore {
 			}
 		});
 
-		return new Children(results).toArray();
+		return new Children(results);
 	}
 
-	public void attachSorter(ChildSorter sorter) {
-		this.sorter = sorter;
+	public Children getAllSortedByRecentlyAdded() {
+		return getChildren().sortRecentlyAdded();
 	}
 
-	private void sort(Child[] array) {
-			sorter.sort(array);
+	public Children getAllSortedByRecentlyUpdated() {
+		return getChildren().sortRecentlyUpdated();
+	}
+
+	public Children getAllSortedByName() {
+		return getChildren().sortName();
 	}
 
 }
