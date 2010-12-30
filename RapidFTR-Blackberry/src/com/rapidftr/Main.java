@@ -17,6 +17,7 @@ import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.ChildHistoryScreen;
 import com.rapidftr.screens.ChildPhotoScreen;
+import com.rapidftr.screens.ContactInformation;
 import com.rapidftr.screens.ContactScreen;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
@@ -27,6 +28,7 @@ import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildSyncService;
+import com.rapidftr.services.ContactInformationSyncService;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
 import com.rapidftr.services.LoginSettings;
@@ -40,6 +42,8 @@ public class Main extends UiApplication {
 		Main application = new Main();
 		application.enterEventDispatcher();
 	}
+
+	private ContactInformation contactInformation;
 
 	public Main() {
 
@@ -70,7 +74,7 @@ public class Main extends UiApplication {
 
 		HomeScreen homeScreen = new HomeScreen(settings);
 		
-		ContactScreen contactScreen = new ContactScreen();
+		ContactScreen contactScreen = new ContactScreen(new ContactInformation(defaultStore));
 		
 		LoginScreen loginScreen = new LoginScreen(new HttpSettings(settings));
 		
@@ -105,7 +109,7 @@ public class Main extends UiApplication {
 				uiStack, formStore, childrenStore, childPhotoScreen,childHistoryScreen);
 		
 		SyncController syncController = new SyncController(syncScreen, uiStack,
-				childSyncService, formService);
+				childSyncService, formService, new ContactInformationSyncService(httpService, contactInformation));
 		
 		
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,

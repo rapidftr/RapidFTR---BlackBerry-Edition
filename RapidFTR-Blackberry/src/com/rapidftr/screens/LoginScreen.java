@@ -159,6 +159,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
 	public void onProcessSuccess() {
 		resetCredentials(true);
         getController().synchronizeForms();
+        getController().synchronizeContactInformation();
 	}
 
     public void onProcessFail(final String message) {

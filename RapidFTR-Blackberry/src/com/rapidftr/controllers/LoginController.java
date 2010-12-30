@@ -63,4 +63,8 @@ public class LoginController extends RequestAwareController {
     public void synchronizeForms() {
         dispatcher.synchronizeForms();
     }
+
+	public void synchronizeContactInformation() {
+		dispatcher.synchronizeContactInformation();
+	}
 }

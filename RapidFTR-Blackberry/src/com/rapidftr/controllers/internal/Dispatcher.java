@@ -73,4 +73,8 @@ public class Dispatcher {
 		contactScreenController.show();
 	}
 
+	public void synchronizeContactInformation() {
+		syncController.synchronizeContactInformation();
+	}
+
 }
