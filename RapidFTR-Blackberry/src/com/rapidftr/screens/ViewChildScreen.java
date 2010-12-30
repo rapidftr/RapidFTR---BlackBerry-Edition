@@ -161,13 +161,6 @@ public class ViewChildScreen extends CustomScreen {
 		return true;
 	}
 
-	public void setUp() {
-	}
-
-	public void cleanUp() {
-
-	}
-
 	protected void makeMenu(Menu menu, int instance) {
 		MenuItem editChildMenu = new MenuItem("Edit Child Detail", 1, 1) {
 			public void run() {

@@ -38,4 +38,8 @@ public class HomeScreenController extends Controller {
 		dispatcher.login(null);
 	}
 
+	public void showcontact() {
+		dispatcher.showcontact();
+	}
+
 }

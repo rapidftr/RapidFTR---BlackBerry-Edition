@@ -33,10 +33,6 @@ public class ManageChildScreen extends CustomScreen {
         this.settings = settings;
     }
 
-    public void cleanUp() {
-
-    }
-
     public void setUp() {
         createScreenLayout();
     }

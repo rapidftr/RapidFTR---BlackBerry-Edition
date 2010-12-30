@@ -5,6 +5,7 @@ import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 
 import com.rapidftr.controllers.ChildController;
+import com.rapidftr.controllers.ContactScreenController;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controllers.ResetDeviceController;
@@ -16,6 +17,7 @@ import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.ChildHistoryScreen;
 import com.rapidftr.screens.ChildPhotoScreen;
+import com.rapidftr.screens.ContactScreen;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.ManageChildScreen;
@@ -68,6 +70,8 @@ public class Main extends UiApplication {
 
 		HomeScreen homeScreen = new HomeScreen(settings);
 		
+		ContactScreen contactScreen = new ContactScreen();
+		
 		LoginScreen loginScreen = new LoginScreen(new HttpSettings(settings));
 		
 		ViewChildScreen viewChildScreen = new ViewChildScreen();
@@ -89,6 +93,9 @@ public class Main extends UiApplication {
 		HomeScreenController homeScreenController = new HomeScreenController(
 				homeScreen, uiStack);
 		
+		ContactScreenController contactScreenController = new ContactScreenController(
+				contactScreen, uiStack);
+		
 		ChildPhotoScreen childPhotoScreen = new ChildPhotoScreen();
 		
 		ChildHistoryScreen childHistoryScreen = new ChildHistoryScreen();
@@ -99,10 +106,11 @@ public class Main extends UiApplication {
 		
 		SyncController syncController = new SyncController(syncScreen, uiStack,
 				childSyncService, formService);
-
+		
+		
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,
 				loginController, childController, syncController,
-				restController);
+				restController, contactScreenController);
 		
 		dispatcher.homeScreen();
 

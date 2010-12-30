@@ -121,7 +121,6 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
     }
 
     private void onCancelButtonClicked() {
-		cleanUp();
 	}
 
 	private void showCancelButton() {
@@ -198,8 +197,5 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
 		if(resetUser)
 			usernameField.setText("");
 		passwordField.setText("");
-	}
-
-	public void cleanUp() {
 	}
 }

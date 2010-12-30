@@ -1,22 +1,20 @@
 package com.rapidftr.screens.internal;
 
 import net.rim.device.api.system.Bitmap;
+import net.rim.device.api.system.Characters;
 import net.rim.device.api.system.KeyListener;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BitmapField;
-import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.decor.BackgroundFactory;
 
 import com.rapidftr.controllers.ChildController;
-import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.controls.TitleField;
 import com.rapidftr.utilities.Styles;
-import net.rim.device.api.system.Characters; 
 
 public abstract class CustomScreen extends MainScreen  implements KeyListener{
 
@@ -47,9 +45,9 @@ public abstract class CustomScreen extends MainScreen  implements KeyListener{
 		return UiApplication.getUiApplication().getActiveScreen().equals(this);
 	}
 
-	public abstract void setUp();
-
-	public abstract void cleanUp();
+	public void setUp(){
+		
+	};
 
 	public void popScreen(final UiStack uiStack) {
 		final CustomScreen screen = this;

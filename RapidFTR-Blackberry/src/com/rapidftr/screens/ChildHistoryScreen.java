@@ -52,12 +52,4 @@ public class ChildHistoryScreen extends CustomScreen {
 		}
 	}
 
-	public void cleanUp() {
-
-	}
-
-	public void setUp() {
-
-	}
-
 }

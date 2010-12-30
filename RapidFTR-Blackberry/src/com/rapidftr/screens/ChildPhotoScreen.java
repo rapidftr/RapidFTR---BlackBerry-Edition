@@ -46,11 +46,6 @@ public class ChildPhotoScreen extends CustomScreen{
 		}
 		
 	}
-	public void cleanUp() {
-		
-	}
-	public void setUp() {
-	}
 
 	protected void makeMenu(Menu menu, int instance) {
 		super.makeMenu(menu, instance);

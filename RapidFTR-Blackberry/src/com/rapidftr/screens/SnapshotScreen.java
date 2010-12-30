@@ -34,7 +34,8 @@ public class SnapshotScreen extends CustomScreen {
 
 	protected void onExposed() {
 		controller.popScreen();
-		cleanUp();
+		UiApplication.getUiApplication().removeFileSystemJournalListener(
+		listener);
 		super.onExposed();
 	}
 
@@ -43,11 +44,6 @@ public class SnapshotScreen extends CustomScreen {
 			return;
 		Invoke.invokeApplication(Invoke.APP_TYPE_CAMERA, new CameraArguments());
 		super.onUiEngineAttached(attached);
-	}
-
-	public void cleanUp() {
-		UiApplication.getUiApplication().removeFileSystemJournalListener(
-				listener);
 	}
 
 	public void setUp() {

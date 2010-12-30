@@ -43,14 +43,6 @@ public class ViewChildrenScreen extends CustomScreen {
 		field.set(children.toArray());
 	}
 
-	public void cleanUp() {
-
-	}
-
-	public void setUp() {
-
-	}
-
 	private ChildController getController() {
 		return (ChildController) controller;
 	}

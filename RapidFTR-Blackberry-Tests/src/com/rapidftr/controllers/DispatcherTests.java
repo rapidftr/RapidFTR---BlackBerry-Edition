@@ -25,11 +25,13 @@ public class DispatcherTests {
 	@Mock
 	private ResetDeviceController resetDeviceController;
 
+	private ContactScreenController contactScreenController;
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		dispatcher = new Dispatcher(homeScreenController, loginController,
-				childController, syncController, resetDeviceController);
+				childController, syncController, resetDeviceController, contactScreenController);
 
 	}
 

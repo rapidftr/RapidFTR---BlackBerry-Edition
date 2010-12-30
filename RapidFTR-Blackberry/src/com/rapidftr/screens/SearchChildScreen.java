@@ -62,9 +62,6 @@ public class SearchChildScreen extends CustomScreen implements
 		add(buttonManager);
 	}
 
-	public void cleanUp() {
-	}
-
 	public void setUp() {
 		resetSearchBox();
 	}
