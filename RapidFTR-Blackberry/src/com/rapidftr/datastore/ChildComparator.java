@@ -7,13 +7,14 @@ public class ChildComparator {
 	private String[] attributes;
 
 	public ChildComparator() {
-		setAttributes(new String[] { "name" });
+		this(new String[] { "name" });
 	}
 
+	public ChildComparator(String[] attributes) {
+		setAttributes(attributes);
+	}
+	
 	public void setAttributes(String[] attributes) {
-		if (attributes == null || attributes.length == 0)
-			this.attributes = new String[] { "name" };
-		else
 			this.attributes = attributes;
 	}
 

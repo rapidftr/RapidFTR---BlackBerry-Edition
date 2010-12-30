@@ -1,7 +1,7 @@
 package com.rapidftr.controllers;
 
 import com.rapidftr.controllers.internal.Controller;
-import com.rapidftr.datastore.ChildSorter;
+import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
@@ -45,9 +45,6 @@ public class ChildController extends Controller {
 		this.childPhotoScreen = childPhotoScreen;
 		this.childHistoryScreen = childHistoryScreen;
 		this.currentChildScreen = this.manageChildScreen;
-
-		childrenStore.attachSorter(new ChildSorter(new String[] { "name",
-				"last_known_location" }));
 	}
 
 	public void synchronizeForms() {
@@ -113,7 +110,10 @@ public class ChildController extends Controller {
 	}
 
 	public void viewChildren() {
-		Child[] children = childrenStore.getAllAsArray();
+		viewChildren(childrenStore.getAll());
+	}
+
+	private void viewChildren(Children children) {
 		viewChildrenScreen.setChildren(children);
 		changeScreen(viewChildrenScreen);
 	}
@@ -123,9 +123,10 @@ public class ChildController extends Controller {
 	}
 
 	public void searchAndDisplayChildren(String searchQuery) {
-		Child[] children = childrenStore.search(searchQuery);
-		if (children.length != 0) {
+		Children children = childrenStore.search(searchQuery);
+		if (children.count() != 0) {
 			viewChildrenScreen.setChildren(children);
+			
 			changeScreen(viewChildrenScreen);
 		} else {
 			searchChildScreen.showNoSearchResultsAlert();
@@ -135,4 +136,17 @@ public class ChildController extends Controller {
 	public void popScreen() {
 		currentChildScreen.popScreen(uiStack, this);
 	}
+
+	public void sortByRecentlyAdded() {
+		viewChildren(childrenStore.getAllSortedByRecentlyAdded());
+	}
+
+	public void sortByRecentlyUpdated() {
+		viewChildren(childrenStore.getAllSortedByRecentlyUpdated());
+	}
+
+	public void sortByName() {
+		viewChildren(childrenStore.getAllSortedByName());
+	}
+	
 }

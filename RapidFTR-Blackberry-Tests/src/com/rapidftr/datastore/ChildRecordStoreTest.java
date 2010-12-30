@@ -1,14 +1,12 @@
 package com.rapidftr.datastore;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-
-import java.util.Vector;
-
 import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import com.rapidftr.model.Child;
 
 public class ChildRecordStoreTest {
@@ -18,7 +16,7 @@ public class ChildRecordStoreTest {
 	@Before
 	public void setup() {
 		childrenStore = new ChildrenRecordStore(new MockStore("key"));
-	}
+	}	
 
 	@Test
 	public void saveShouldAppendNewChildAndSaveInStore() {
@@ -46,12 +44,12 @@ public class ChildRecordStoreTest {
 
 	@Test
 	public void ifPersistentStoreIsEmptySearchShouldResultAnEmptyArray() {
-		Assert.assertEquals(childrenStore.search("Tom").length, 0);
+		Assert.assertEquals(childrenStore.search("Tom").count(), 0);
 	}
 	
 	@Test
 	public void ifChildIsNotPresentInPersistentStoreSearchShouldReturnEmptyResults() {
-		Assert.assertEquals(childrenStore.search("Harry").length, 0);
+		Assert.assertEquals(childrenStore.search("Harry").count(), 0);
 	}
 	
 	@Test
@@ -61,10 +59,10 @@ public class ChildRecordStoreTest {
 		Tom.setField("name", childName);
 		childrenStore.addOrUpdate(Tom);
 		
-		Child[] searchResults = childrenStore.search(childName);
+		Children searchResults = childrenStore.search(childName);
 
-		Assert.assertEquals(searchResults.length, 1);
-		Assert.assertEquals(searchResults[0], Tom);
+		Assert.assertEquals(searchResults.count(), 1);
+		Assert.assertEquals(searchResults.toArray()[0], Tom);
 	}
 	
 	@Test
@@ -78,11 +76,11 @@ public class ChildRecordStoreTest {
 		child2.setField("name", childName);
 		childrenStore.addOrUpdate(child2);
 		
-		Child[] searchResults = childrenStore.search(childName);
+		Children searchResults = childrenStore.search(childName);
 
-		Assert.assertEquals(searchResults.length, 2);
-		Assert.assertEquals(searchResults[0], child);
-		Assert.assertEquals(searchResults[1], child2);
+		Assert.assertEquals(searchResults.count(), 2);
+		Assert.assertEquals(searchResults.toArray()[0], child);
+		Assert.assertEquals(searchResults.toArray()[1], child2);
 	}
 	
 	@Test
@@ -93,10 +91,10 @@ public class ChildRecordStoreTest {
 		child.setField("unique_identifier", childUID);
 		childrenStore.addOrUpdate(child);
 		
-		Child[] searchResults = childrenStore.search(childUID);
+		Children searchResults = childrenStore.search(childUID);
 
-		Assert.assertEquals(searchResults.length, 1);
-		Assert.assertEquals(searchResults[0], child);
+		Assert.assertEquals(searchResults.count(), 1);
+		Assert.assertEquals(searchResults.toArray()[0], child);
 	}
 
 	@Test
@@ -111,11 +109,11 @@ public class ChildRecordStoreTest {
 		child2.setField("unique_identifier", childNameAndUID);
 		childrenStore.addOrUpdate(child2);
 
-		Child[] searchResults = childrenStore.search(childNameAndUID);
+		Children searchResults = childrenStore.search(childNameAndUID);
 
-		Assert.assertEquals(searchResults.length, 2);
-		Assert.assertEquals(searchResults[0], child);
-		Assert.assertEquals(searchResults[1], child2);
+		Assert.assertEquals(searchResults.count(), 2);
+		Assert.assertEquals(searchResults.toArray()[0], child);
+		Assert.assertEquals(searchResults.toArray()[1], child2);
 	}
 	
 	@Ignore
@@ -129,14 +127,9 @@ public class ChildRecordStoreTest {
 		secondChild.setField("name", "Harry");
 		childrenStore.addOrUpdate(secondChild);
 		
-		childrenStore.attachSorter(new ChildSorter(new String[] {"name"}));
 		Children children = childrenStore.getAll();
 		assertEquals(secondChild, children.toArray()[0]);
 	}
-	
-	@Test
-	public void shouldAttachASorterIfNullObjectIsPassed() throws Exception {
-		childrenStore.attachSorter(null);
-	}
+
 	
 }

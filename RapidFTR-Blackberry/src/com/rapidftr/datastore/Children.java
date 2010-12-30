@@ -2,8 +2,7 @@ package com.rapidftr.datastore;
 
 import java.util.Enumeration;
 import java.util.Vector;
-import net.rim.device.api.util.Arrays;
-import net.rim.device.api.util.Comparator;
+
 import com.rapidftr.model.Child;
 
 public class Children {
@@ -39,33 +38,34 @@ public class Children {
 		return array;
 	}
 
-	private void sortByNameAndLocation(Child[] childList) {
-		Arrays.sort(childList, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				Child child1 = (Child) o1;
-				Child child2 = (Child) o2;
-				int nameComparator = stringIgnoreCaseComparator((String) child1
-						.getField("name"), (String) child2
-						.getField("name"));
-				if (nameComparator == 0) {
-					return stringIgnoreCaseComparator((String) child1
-							.getField("last_known_location"), (String) child2
-							.getField("last_known_location"));
-				}
-
-				return nameComparator;
-			}
-			
-			private int stringIgnoreCaseComparator(String firstString,
-					String secondString) {
-				int nameComparator = (firstString.equals(null) ? firstString
-						: firstString.toLowerCase()).compareTo((secondString
-						.equals(null) ? secondString : secondString.toLowerCase()));
-				return nameComparator;
-			}
-		});
+	protected Children sort(final String[] attributes, final boolean isAscending) {
+		Child[] children = toArray();
+		net.rim.device.api.util.Arrays.sort(children,
+				new net.rim.device.api.util.Comparator() {
+					public int compare(Object o1, Object o2) {
+						ChildComparator childComparator = new ChildComparator(attributes);
+						return isAscending ? childComparator.compare(
+								(Child) o1, (Child) o2) : childComparator
+								.compare((Child) o2, (Child) o1);
+					}
+				});
+		return new Children(children);
 	}
 
-	
+	public Children sortByName() {
+		return sort(new String[]{"name"}, true);
+	}
+
+	public Children sortRecentlyAdded() {
+		return sort(new String[]{"created_at"}, false);
+	}
+
+	public Children sortRecentlyUpdated() {
+		return sort(new String[]{"last_updated_at"}, false);
+	}
+
+	public Children sortName() {
+		return sort(new String[]{"name"}, true);
+	}
 
 }
