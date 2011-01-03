@@ -1,6 +1,6 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.controllers.ContactScreenController;
+import com.rapidftr.controllers.ContactInformationScreenController;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.net.ConnectionFactory;
@@ -164,7 +164,6 @@ public class HomeScreen extends CustomScreen {
 			}
 		};
 		menu.add(syncInfoItem);
-		//super.makeMenu(menu, instance);
 		
 		MenuItem contactHelpItem = new MenuItem("Contact & Help", 1, 1) {
 			public void run() {

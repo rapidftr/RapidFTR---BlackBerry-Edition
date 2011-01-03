@@ -1,7 +1,7 @@
 package com.rapidftr.controllers.internal;
 
 import com.rapidftr.controllers.ChildController;
-import com.rapidftr.controllers.ContactScreenController;
+import com.rapidftr.controllers.ContactInformationScreenController;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controllers.ResetDeviceController;
@@ -15,11 +15,11 @@ public class Dispatcher {
 	private final ChildController childController;
 	private final SyncController syncController;
 	private ResetDeviceController resetDeviceController;
-	private ContactScreenController contactScreenController;
+	private ContactInformationScreenController contactScreenController;
 
 	public Dispatcher(HomeScreenController homeScreenController,
 			LoginController loginController, ChildController childController,
-			SyncController syncController, ResetDeviceController restController, ContactScreenController contactScreenController) {
+			SyncController syncController, ResetDeviceController restController, ContactInformationScreenController contactScreenController) {
 		this.homeScreenController = homeScreenController;
 		this.homeScreenController.setDispatcher(this);
 		this.loginController = loginController;
@@ -30,6 +30,7 @@ public class Dispatcher {
 		this.syncController.setDispatcher(this);
 		this.resetDeviceController = restController;
 		this.contactScreenController = contactScreenController;
+		this.contactScreenController.setDispatcher(this);
 	}
 
 	public void homeScreen() {
@@ -71,10 +72,6 @@ public class Dispatcher {
 
 	public void showcontact() {
 		contactScreenController.show();
-	}
-
-	public void synchronizeContactInformation() {
-		syncController.synchronizeContactInformation();
 	}
 
 }

@@ -4,7 +4,6 @@ import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpBatchRequestHandler;
 import com.rapidftr.process.ChildSyncProcess;
-import com.rapidftr.process.ContactInformationProcess;
 import com.rapidftr.process.FormSyncProcess;
 import com.rapidftr.process.Process;
 import com.rapidftr.process.SyncAllProcess;
@@ -12,7 +11,6 @@ import com.rapidftr.screens.SyncScreen;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildSyncService;
-import com.rapidftr.services.ContactInformationSyncService;
 import com.rapidftr.services.ControllerCallback;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.RequestAwareService;
@@ -26,7 +24,6 @@ public class SyncController extends Controller implements ControllerCallback {
     final ChildSyncProcess childSyncProcess;
 	final Process syncAllProcess;
 	final Process formSyncProcess;
-	private Process contactInformationSyncProcess;
 	
 	protected HttpBatchRequestHandler requestHandler;
 	private ScreenCallBack screenCallBack;
@@ -34,18 +31,15 @@ public class SyncController extends Controller implements ControllerCallback {
 
 
 	public SyncController(CustomScreen screen, UiStack uiStack,
-			ChildSyncService childSyncService, FormService formSyncService,
-			ContactInformationSyncService contactInformationSyncService) {
+			ChildSyncService childSyncService, FormService formSyncService) {
 		super(screen, uiStack);
 		screen.setController(this);
 		screenCallBack = (ScreenCallBack) screen;
 		setUpRequestHandlerForService(formSyncService);
 		setUpRequestHandlerForService(childSyncService);
-		setUpRequestHandlerForService(contactInformationSyncService);
 		childSyncProcess = new ChildSyncProcess(childSyncService);
 		syncAllProcess = new SyncAllProcess(childSyncService, formSyncService);
 		formSyncProcess = new FormSyncProcess(formSyncService);
-		contactInformationSyncProcess = new ContactInformationProcess(contactInformationSyncService);
 	}
 
 	private void setUpRequestHandlerForService(RequestAwareService service) {
@@ -76,6 +70,7 @@ public class SyncController extends Controller implements ControllerCallback {
             this.currentRunningProcess = process;
             ((SyncScreen) currentScreen).attachProcess(this.currentRunningProcess);
             if (process.isNotBackGround()) {
+                
                 show();
             }
             this.currentRunningProcess.startProcess();
@@ -103,10 +98,6 @@ public class SyncController extends Controller implements ControllerCallback {
 	public void clearProcess() {
 		currentRunningProcess.stopProcess();
 		currentRunningProcess = null;
-	}
-
-	public void synchronizeContactInformation() {
-		setAndStartCurrentProcess(contactInformationSyncProcess);
 	}
 
 }

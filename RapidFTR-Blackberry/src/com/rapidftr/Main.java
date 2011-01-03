@@ -5,7 +5,7 @@ import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
 
 import com.rapidftr.controllers.ChildController;
-import com.rapidftr.controllers.ContactScreenController;
+import com.rapidftr.controllers.ContactInformationScreenController;
 import com.rapidftr.controllers.HomeScreenController;
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controllers.ResetDeviceController;
@@ -18,7 +18,7 @@ import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.ChildHistoryScreen;
 import com.rapidftr.screens.ChildPhotoScreen;
 import com.rapidftr.screens.ContactInformation;
-import com.rapidftr.screens.ContactScreen;
+import com.rapidftr.screens.ContactInformationScreen;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.ManageChildScreen;
@@ -42,8 +42,6 @@ public class Main extends UiApplication {
 		Main application = new Main();
 		application.enterEventDispatcher();
 	}
-
-	private ContactInformation contactInformation;
 
 	public Main() {
 
@@ -74,7 +72,7 @@ public class Main extends UiApplication {
 
 		HomeScreen homeScreen = new HomeScreen(settings);
 		
-		ContactScreen contactScreen = new ContactScreen(new ContactInformation(defaultStore));
+		ContactInformationScreen contactScreen = new ContactInformationScreen(new ContactInformation(defaultStore));
 		
 		LoginScreen loginScreen = new LoginScreen(new HttpSettings(settings));
 		
@@ -97,8 +95,8 @@ public class Main extends UiApplication {
 		HomeScreenController homeScreenController = new HomeScreenController(
 				homeScreen, uiStack);
 		
-		ContactScreenController contactScreenController = new ContactScreenController(
-				contactScreen, uiStack);
+		ContactInformationScreenController contactScreenController = new ContactInformationScreenController(
+				contactScreen, uiStack, new ContactInformationSyncService(httpService, new ContactInformation(defaultStore)));
 		
 		ChildPhotoScreen childPhotoScreen = new ChildPhotoScreen();
 		
@@ -109,7 +107,7 @@ public class Main extends UiApplication {
 				uiStack, formStore, childrenStore, childPhotoScreen,childHistoryScreen);
 		
 		SyncController syncController = new SyncController(syncScreen, uiStack,
-				childSyncService, formService, new ContactInformationSyncService(httpService, contactInformation));
+				childSyncService, formService);
 		
 		
 		Dispatcher dispatcher = new Dispatcher(homeScreenController,

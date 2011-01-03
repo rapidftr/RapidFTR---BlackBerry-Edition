@@ -25,7 +25,7 @@ public class DispatcherTests {
 	@Mock
 	private ResetDeviceController resetDeviceController;
 
-	private ContactScreenController contactScreenController;
+	private ContactInformationScreenController contactScreenController;
 
 	@Before
 	public void setUp() {

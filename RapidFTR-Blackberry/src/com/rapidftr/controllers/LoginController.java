@@ -52,6 +52,7 @@ public class LoginController extends RequestAwareController {
 	}
 
 	public void homeScreen() {
+
 		uiStack.clear();
 		dispatcher.homeScreen();
 	}
@@ -64,7 +65,4 @@ public class LoginController extends RequestAwareController {
         dispatcher.synchronizeForms();
     }
 
-	public void synchronizeContactInformation() {
-		dispatcher.synchronizeContactInformation();
-	}
 }

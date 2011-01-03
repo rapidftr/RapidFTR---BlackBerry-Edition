@@ -6,6 +6,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/RapidFTR-Blackberry/bin" sourcepath="/RapidFTR-Blackberry"/>
 	<classpathentry kind="lib" path="lib/net_rim_api.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/RapidFTR-Blackberry"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

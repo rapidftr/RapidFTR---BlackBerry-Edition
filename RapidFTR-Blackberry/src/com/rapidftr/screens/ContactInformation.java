@@ -28,25 +28,25 @@ public class ContactInformation {
 	public String getOther(){
 		return store.getString("contact.other");
 	}
-	public void setName(String name){
-		store.setString("contact.name", name);
+	public void setName(String value){
+		store.setString("contact.name", value);
 	}
-	public void setPosition(String name){
-		store.setString("contact.position", name);
+	public void setPosition(String value){
+		store.setString("contact.position", value);
 	}
-	public void setOrganization(String name){
-		store.setString("contact.organization", name);
+	public void setOrganization(String value){
+		store.setString("contact.organization", value);
 	}
-	public void setEmail(String name){
-		store.setString("contact.email", name);
+	public void setEmail(String value){
+		store.setString("contact.email", value);
 	}
-	public void setPhone(String name){
-		store.setString("contact.phone", name);
+	public void setPhone(String value){
+		store.setString("contact.phone", value);
 	}
-	public void setLocation(String name){
-		store.setString("contact.location", name);
+	public void setLocation(String value){
+		store.setString("contact.location", value);
 	}
-	public void setOther(String name){
-		store.setString("contact.other", name);
+	public void setOther(String value){
+		store.setString("contact.other", value);
 	}
 }
