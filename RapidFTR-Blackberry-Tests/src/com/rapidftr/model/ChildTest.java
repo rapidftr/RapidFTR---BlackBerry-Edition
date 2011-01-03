@@ -95,7 +95,14 @@ public class ChildTest {
 		joy.setField("unique_identifier", "unique_identifier");
 		assertFalse(joy.isNewChild());
 	}
-	
+
+    @Test
+    public void isNewChildShouldReturnFalseEvenIfThereIsASynchFailure(){
+        Child child = new Child();
+        child.syncFailed("Some synch failure");
+        assertTrue(child.isNewChild());
+    }
+
 	@Test
 	public void shouldNotPutNullValuesInHashTable() {
 		Child child = new Child();

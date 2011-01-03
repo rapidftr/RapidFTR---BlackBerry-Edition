@@ -21,7 +21,7 @@ import com.rapidftr.services.ScreenCallBack;
 
 public class SyncController extends Controller implements ControllerCallback {
 
-	private Process process;
+	private Process currentRunningProcess;
 
     final ChildSyncProcess childSyncProcess;
 	final Process syncAllProcess;
@@ -34,8 +34,8 @@ public class SyncController extends Controller implements ControllerCallback {
 
 
 	public SyncController(CustomScreen screen, UiStack uiStack,
-			ChildSyncService childSyncService, FormService formSyncService, ContactInformationSyncService contactInformationSyncService) {
-		// super(screen, uiStack, childSyncService);
+			ChildSyncService childSyncService, FormService formSyncService,
+			ContactInformationSyncService contactInformationSyncService) {
 		super(screen, uiStack);
 		screen.setController(this);
 		screenCallBack = (ScreenCallBack) screen;
@@ -72,16 +72,16 @@ public class SyncController extends Controller implements ControllerCallback {
 	}
 
     private void setAndStartCurrentProcess(Process process) {
-        if (this.process == null) {
-            this.process = process;
-            ((SyncScreen) currentScreen).attachProcess(this.process);
+        if (this.currentRunningProcess == null) {
+            this.currentRunningProcess = process;
+            ((SyncScreen) currentScreen).attachProcess(this.currentRunningProcess);
             if (process.isNotBackGround()) {
                 show();
             }
-            this.process.startProcess();
-        } else if (this.process == process) {
-            if (this.process.isCanceled()) {
-                this.process.startProcess();
+            this.currentRunningProcess.startProcess();
+        } else if (this.currentRunningProcess == process) {
+            if (this.currentRunningProcess.isCanceled()) {
+                this.currentRunningProcess.startProcess();
             }
             if (process.isNotBackGround()) {
                 show();
@@ -93,7 +93,7 @@ public class SyncController extends Controller implements ControllerCallback {
     }
 
 	public void onProcessComplete(boolean status) {
-		process = null;
+		currentRunningProcess = null;
 	}
 
     public void beforeProcessStart() {
@@ -101,8 +101,8 @@ public class SyncController extends Controller implements ControllerCallback {
 	}
 
 	public void clearProcess() {
-		process.stopProcess();
-		process = null;
+		currentRunningProcess.stopProcess();
+		currentRunningProcess = null;
 	}
 
 	public void synchronizeContactInformation() {

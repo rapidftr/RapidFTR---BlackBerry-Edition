@@ -14,13 +14,13 @@ public class ContactScreen extends CustomScreen {
 	}
 
 	public void showInformation() {
-		addInformation("Name\t: " + info.getName());
-		addInformation("Position\t: " + info.getPosition());
+		addInformation("Name\t\t: " + info.getName());
+		addInformation("Position\t\t: " + info.getPosition());
 		addInformation("Organization\t: " + info.getOrganization());
-		addInformation("Email\t: " + info.getEmail());
-		addInformation("Phone\t: " + info.getPhone());
-		addInformation("Location\t: " + info.getLocation());
-		addInformation("Other Information\t: " + info.getOther());
+		addInformation("Email\t\t: " + info.getEmail());
+		addInformation("Phone\t\t: " + info.getPhone());
+		addInformation("Location\t\t: " + info.getLocation());
+		addInformation("Other Information: " + info.getOther());
 	}
 
 	private void addInformation(String name) {

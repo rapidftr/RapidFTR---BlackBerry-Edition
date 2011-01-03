@@ -256,8 +256,7 @@ public class Child implements Persistable {
 	}
 
 	public boolean isNewChild() {
-		return getField("unique_identifier") == null
-				&& childStatus.equals(ChildStatus.NEW);
+		return getField("unique_identifier") == null;
 	}
 
 	public boolean isUpdated() {

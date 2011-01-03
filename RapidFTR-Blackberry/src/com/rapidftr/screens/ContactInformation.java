@@ -2,8 +2,6 @@ package com.rapidftr.screens;
 
 import com.rapidftr.utilities.Store;
 
-
-
 public class ContactInformation {
 	private final Store store;
 	public ContactInformation(Store store) {
