@@ -9,7 +9,6 @@ import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.MainScreen;
 import net.rim.device.api.ui.decor.BackgroundFactory;
 
-import com.rapidftr.controllers.ChildController;
 import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.controls.TitleField;
 import com.rapidftr.utilities.Styles;
@@ -53,19 +52,6 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 
 			public void run() {
 				uiStack.popScreen(screen);
-			}
-		});
-
-	}
-
-	public void popScreen(final UiStack uiStack,
-			final ChildController controller) {
-		final CustomScreen screen = this;
-		UiApplication.getUiApplication().invokeLater(new Runnable() {
-
-			public void run() {
-				uiStack.popScreen(screen);
-				controller.changeBackToScreen(uiStack.getCurrentScreen());
 			}
 		});
 

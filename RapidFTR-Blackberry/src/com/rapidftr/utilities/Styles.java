@@ -24,22 +24,6 @@ public class Styles {
 		return getFont(familyIndex, fontType, fontSize);
 	}
 
-	public static Font getAuxFont() {
-		int familyIndex = 2;
-		int fontType = FontFamily.CBTF_FONT;
-		int fontSize = 12;
-		
-		return getFont(familyIndex, fontType, fontSize);		
-	}
-	
-	public static Font getSecondaryFont() {
-		int familyIndex = 6;
-		int fontType = FontFamily.CBTF_FONT;
-		int fontSize = 12;
-		
-		return getFont(familyIndex, fontType, fontSize);
-	}
-	
 	public static Font getTitleFont() {
 		int familyIndex = 0;
 		int fontType = FontFamily.TRUE_TYPE_FONT;

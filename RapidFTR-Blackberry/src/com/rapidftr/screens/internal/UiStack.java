@@ -10,7 +10,6 @@ public class UiStack {
 
 	public UiStack(UiApplication application) {
 		this.application = application;
-		// TODO Auto-generated constructor stub
 	}
 
 	public void pushScreen(Screen screen) {
@@ -28,7 +27,4 @@ public class UiStack {
 		}
 	}
 
-    public CustomScreen getCurrentScreen() {
-        return (CustomScreen)application.getActiveScreen();
-    }
 }

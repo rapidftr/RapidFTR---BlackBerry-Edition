@@ -1,13 +1,11 @@
 package com.rapidftr.screens;
 
 import java.io.IOException;
-import java.io.InputStream;
-import javax.microedition.io.Connector;
-import javax.microedition.io.file.FileConnection;
+
 import net.rim.blackberry.api.invoke.CameraArguments;
 import net.rim.blackberry.api.invoke.Invoke;
-import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.UiApplication;
+
 import com.rapidftr.controllers.SnapshotController;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.ImageEncoder;
@@ -33,12 +31,15 @@ public class SnapshotScreen extends CustomScreen {
 	}
 
 	protected void onExposed() {
-		controller.popScreen();
 		UiApplication.getUiApplication().removeFileSystemJournalListener(
 		listener);
+		getSnapshotController().popScreen();
 		super.onExposed();
 	}
 
+	private SnapshotController getSnapshotController(){
+		return (SnapshotController) controller;
+	}
 	protected void onUiEngineAttached(boolean attached) {
 		if (!attached)
 			return;
@@ -50,7 +51,6 @@ public class SnapshotScreen extends CustomScreen {
 		UiApplication.getUiApplication().addFileSystemJournalListener(listener);
 	}
 
-	
 }
 
 

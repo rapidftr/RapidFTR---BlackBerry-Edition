@@ -146,24 +146,6 @@ public class Result {
 		}
 	}
 
-	public boolean getAsBoolean(final String path) throws ResultException {
-		final Vector tokens = new ResultTokenizer(path).tokenize();
-		final JSONObject obj = isArray ? apply(array, tokens, 0) : apply(json, tokens, 0);
-		return obj == null ? false : obj.optBoolean((String) tokens.lastElement());
-	}
-
-	public int getAsInteger(final String path) throws ResultException {
-		final Vector tokens = new ResultTokenizer(path).tokenize();
-		final JSONObject obj = isArray ? apply(array, tokens, 0) : apply(json, tokens, 0);
-		return obj == null ? 0 : obj.optInt((String) tokens.lastElement());
-	}
-
-	public long getAsLong(final String path) throws ResultException {
-		final Vector tokens = new ResultTokenizer(path).tokenize();
-		final JSONObject obj = isArray ? apply(array, tokens, 0) : apply(json, tokens, 0);
-		return obj == null ? 0 : obj.optLong((String) tokens.lastElement());
-	}
-
 	// #if CLDC!="1.0"
 	// # public double getAsDouble(final String path) throws ResultException {
 	// # final Vector tokens = new ResultTokenizer(path).tokenize();
@@ -176,31 +158,6 @@ public class Result {
 		final Vector tokens = new ResultTokenizer(path).tokenize();
 		final JSONObject obj = isArray ? apply(array, tokens, 0) : apply(json, tokens, 0);
 		return obj == null ? null : obj.optString((String) tokens.lastElement());
-	}
-
-	public int getSizeOfArray(final String path) throws ResultException {
-		final JSONArray array = getAsArray(path);
-		return array == null ? 0 : array.length();
-	}
-
-	// TODO: add array accessors for other types, or parameterize by type
-
-	public String[] getAsStringArray(final String path) throws ResultException {
-		final JSONArray jarr = getAsArray(path);
-		final String[] arr = new String[jarr == null ? 0 : jarr.length()];
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = (String) jarr.opt(i);
-		}
-		return arr;
-	}
-
-	public int[] getAsIntegerArray(final String path) throws ResultException {
-		final JSONArray jarr = getAsArray(path);
-		final int[] arr = new int[jarr == null ? 0 : jarr.length()];
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = ((Integer) jarr.opt(i)).intValue();
-		}
-		return arr;
 	}
 
 	public JSONArray getAsArray(final String path) throws ResultException {
@@ -219,7 +176,7 @@ public class Result {
 		if (start == null) { return null; }
 
 		final int nTokens = tokens.size();
-		for (int i = firstToken; i < nTokens; i++) {
+		for (int i = firstToken; i < nTokens;) {
 			final String tok1 = (String) tokens.elementAt(i);
 			final char t1 = tok1.charAt(0);
 			switch (t1) {

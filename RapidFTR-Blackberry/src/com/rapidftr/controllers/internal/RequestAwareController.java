@@ -30,7 +30,6 @@ public abstract class  RequestAwareController extends Controller implements Cont
 	}
 
 	public void beforeProcessStart() {
-		// TODO Auto-generated method stub
 		
 	}
 

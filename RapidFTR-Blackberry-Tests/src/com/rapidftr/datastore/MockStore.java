@@ -36,9 +36,9 @@ public class MockStore implements Store {
 		table.put(key, value);
 	}
 
-	public Vector getVector(String key) {
+	public Vector<?> getVector(String key) {
 		if(table.containsKey(key))
-			return (Vector)table.get(key);
+			return (Vector<?>)table.get(key);
 		return new Vector();
 	}
 	

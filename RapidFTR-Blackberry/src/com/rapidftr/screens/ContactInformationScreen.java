@@ -4,7 +4,7 @@ import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
-import com.rapidftr.controllers.ContactInformationScreenController;
+import com.rapidftr.controllers.ContactInformationController;
 
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.services.ScreenCallBack;
@@ -19,7 +19,7 @@ public class ContactInformationScreen extends CustomScreen implements
 
 	public void setUp() {
 		clearFields();
-		((ContactInformationScreenController) this.controller)
+		((ContactInformationController) this.controller)
 				.fetchContactInformation();
 	}
 

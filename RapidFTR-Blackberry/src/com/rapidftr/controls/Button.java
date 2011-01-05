@@ -3,18 +3,14 @@ package com.rapidftr.controls;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.rapidftr.utilities.Styles;
-
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.XYRect;
-import net.rim.device.api.ui.component.ButtonField;
-import net.rim.device.api.ui.decor.Background;
-import net.rim.device.api.ui.decor.BackgroundFactory;
+
+import com.rapidftr.utilities.Styles;
 
 public class Button extends Field {
 	private int fieldWidth;

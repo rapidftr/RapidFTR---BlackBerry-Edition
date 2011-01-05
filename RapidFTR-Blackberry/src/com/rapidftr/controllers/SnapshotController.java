@@ -1,6 +1,5 @@
 package com.rapidftr.controllers;
 
-
 import net.rim.device.api.system.EncodedImage;
 
 import com.rapidftr.controllers.internal.Controller;
@@ -14,11 +13,10 @@ public class SnapshotController extends Controller {
 
 	public SnapshotController(SnapshotScreen screen, UiStack uiStack) {
 		super(screen, uiStack);
-		screen.setController(this);
 	}
 
 	public void capturedImage(String imageLocation, EncodedImage encodedImage) {
-		imageListener.onImagedSaved(imageLocation,encodedImage);
+		imageListener.onImagedSaved(imageLocation, encodedImage);
 	}
 
 	public void setImageListener(ImageCaptureListener imageListener) {

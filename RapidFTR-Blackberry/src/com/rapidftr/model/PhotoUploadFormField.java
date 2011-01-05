@@ -70,6 +70,7 @@ public class PhotoUploadFormField extends FormField implements
 		return manager;
 	}
 
+	//TODO: re render the field in the manage screen onExposed instead of doing it this way
 	public void onImagedSaved(String imageLocation, EncodedImage encodedImage) {
 
 		this.imageLocation = "file://" + imageLocation;
@@ -82,7 +83,6 @@ public class PhotoUploadFormField extends FormField implements
 				requiredHeight);
 
 		capturePhoto.setBitmap(bitmap);
-		//this.imageLocation="";
 
 	}
 

@@ -70,7 +70,6 @@ public class SyncController extends Controller implements ControllerCallback {
             this.currentRunningProcess = process;
             ((SyncScreen) currentScreen).attachProcess(this.currentRunningProcess);
             if (process.isNotBackGround()) {
-                
                 show();
             }
             this.currentRunningProcess.startProcess();

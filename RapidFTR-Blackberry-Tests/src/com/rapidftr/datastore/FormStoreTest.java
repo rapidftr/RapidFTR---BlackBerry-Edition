@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 public class FormStoreTest {
 
+	@SuppressWarnings("serial")
 	@Test
 	public void shouldReturnVectorOfForms() throws ResultException {
 
@@ -27,24 +28,24 @@ public class FormStoreTest {
 			}
 		};
 
-		Vector forms = new Vector();
+		final FormFieldFactory formFieldFactory = new FormFieldFactory();
 
-		Vector fieldList = new Vector();
+		final Vector<FormField> fields = new Vector<FormField>(){{
+			add(formFieldFactory.createFormField("age", "Age", "text_box", null));
+			add(formFieldFactory.createFormField("age_is", "Age is", "select_box", new Vector<String>() {
+				{
+					add("Approximate");
+					add("Exact");
 
-		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField textFormField = formFieldFactory.createFormField("age", "Age", "text_box", null);
-		fieldList.add(textFormField);
+				}
+			}));
+			
+		}};
 
-		Vector optionString = new Vector();
-		optionString.add("Approximate");
-		optionString.add("Exact");
+		Vector<Form> forms = new Vector<Form>(){{
+			add(new Form("Basic_details", "basic_details", fields));			
+		}};		
 
-		FormField selectBoxFormField = formFieldFactory.createFormField("age_is", "Age is", "select_box", optionString);
-		fieldList.add(selectBoxFormField);
-
-		Form form = new Form("Basic_details", "basic_details", fieldList);
-
-		forms.add(form);
 
 		assertEquals(formStore.getForms(), forms);
 
@@ -52,10 +53,30 @@ public class FormStoreTest {
 
 	private String stubSuccessfulResponse() {
 		String jsonFormString = String
-				.format("[{\"name\":\"Basic_details\",\"unique_id\":\"basic_details\",\"fields\":[{\"name\":\"age\",\"display_name\":\"Age\",\"type\":\"text_box\"},{\"name\":\"age_is\",\"display_name\":\"Age is\",\"type\":\"select_box\",\"option_strings\":"
-						+
-
-						"[\"Approximate\",\"Exact\"]}]}]");
+				.format("[" +
+							"{'name':'Basic_details'" +
+							",'unique_id':'basic_details'" +
+							",'fields':" +
+									"[" +
+										"{'name':'age'" +
+										",'display_name':'Age'" +
+										",'enabled':'true'" +
+										",'type':'text_box'}" +
+										",{'name':'age_is'" +
+										",'display_name':'Age is'" +
+										",'enabled':'true'" +
+										",'type':'select_box'" +
+										",'option_strings':" +
+											"['Approximate','Exact']" +
+											"}" +
+										",{'name':'donotshow'" +
+										",'display_name':'donotshow'" +
+										",'enabled':'false'" +
+										",'type':'text_box'" +
+										"}"+											
+									  "]" +
+							   "}" +
+						  "]");
 		return jsonFormString;
 	}
 }

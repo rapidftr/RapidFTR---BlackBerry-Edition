@@ -33,10 +33,6 @@ public class LoginController extends RequestAwareController {
         }
     }
 
-    public void loginCancelled() {
-		service.cancelRequest();
-	}
-
 	public void onProcessComplete(boolean status) {
 		if (status) {
 			popScreen();

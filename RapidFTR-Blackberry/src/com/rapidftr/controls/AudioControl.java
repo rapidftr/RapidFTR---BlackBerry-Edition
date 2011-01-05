@@ -1,7 +1,6 @@
 package com.rapidftr.controls;
 
 
-import net.rim.blackberry.api.mail.SupportedAttachmentPart;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Graphics;

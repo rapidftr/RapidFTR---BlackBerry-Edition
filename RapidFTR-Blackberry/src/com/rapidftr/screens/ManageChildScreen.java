@@ -1,24 +1,28 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.controllers.ChildController;
-import com.rapidftr.controls.BlankSeparatorField;
-import com.rapidftr.model.Child;
-import com.rapidftr.model.Form;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.ImageCaptureListener;
-import com.rapidftr.utilities.Settings;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import net.rim.device.api.system.Characters;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
-import net.rim.device.api.ui.component.*;
+import net.rim.device.api.ui.component.Dialog;
+import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
+import net.rim.device.api.ui.component.ObjectChoiceField;
+import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import com.rapidftr.controllers.ManageChildController;
+import com.rapidftr.controls.BlankSeparatorField;
+import com.rapidftr.model.Child;
+import com.rapidftr.model.Form;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.ImageCaptureListener;
+import com.rapidftr.utilities.Settings;
 
 public class ManageChildScreen extends CustomScreen {
 
@@ -132,7 +136,7 @@ public class ManageChildScreen extends CustomScreen {
 
 
     public void takePhoto(ImageCaptureListener imageCaptureListener) {
-        ((ChildController) controller).takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
+        getController().takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
     }
 
     public boolean onClose() {
@@ -156,15 +160,11 @@ public class ManageChildScreen extends CustomScreen {
             }
 		    }
         }
-		controller.popScreen();
+        controller.popScreen();
 		return true;
     }
 
-	private void closeEditScreen() {
-			controller.popScreen();
-	}
-
-    private boolean validateOnSave() {
+	private boolean validateOnSave() {
         String invalidDataField = onSaveChildClicked();
         if (invalidDataField != null) {
             Dialog.alert("Please input the following mandatory field(s)" + invalidDataField + " .");
@@ -184,9 +184,13 @@ public class ManageChildScreen extends CustomScreen {
         if ((invalidDataField = validateRequiredFields()) != "") {
             return invalidDataField;
         }
-        ((ChildController) controller).saveChild(childToEdit);
+        getController().saveChild(childToEdit);
         return null;
     }
+
+	private ManageChildController getController() {
+		return ((ManageChildController) controller);
+	}
 
     private String validateRequiredFields() {
     	StringBuffer invalidFields= new StringBuffer("");
@@ -205,8 +209,7 @@ public class ManageChildScreen extends CustomScreen {
                     if (!validateOnSave()) {
                         return;
                     }
-                    controller.popScreen();
-                    ((ChildController)controller).viewChild(childToEdit);
+                    getController().viewChild(childToEdit);
                     childToEdit = null;
                 }
             };

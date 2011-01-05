@@ -1,36 +1,25 @@
 package com.rapidftr.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Vector;
 
-import javax.xml.ws.ServiceMode;
-
-import junit.framework.Assert;
-
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.rapidftr.controllers.ChildController;
-import com.rapidftr.controllers.internal.Dispatcher;
-import com.rapidftr.datastore.ChildrenRecordStore;
-import com.rapidftr.datastore.FormStore;
-import com.rapidftr.screens.ManageChildScreen;
-import com.rapidftr.screens.internal.UiStack;
-
 public class ChildTest {
 
-	private Vector forms;
+	private Vector<Form> forms;
 
 	@Before
 	public void setUp() {
-		forms = new Vector();
-		Vector fieldList = new Vector();
+		forms = new Vector<Form>();
+		Vector<FormField> fieldList = new Vector<FormField>();
     	FormField nameTextField = mock(FormField.class);
     	nameTextField.name="name";
 		when(nameTextField.getValue()).thenReturn("someName");
