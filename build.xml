@@ -1,4 +1,6 @@
 <project name="RapidFTR---BlackBerry-Edition" default="compile">
+    <property environment="env"/>
+    <property file="${env.BUILD_PROPERTIES_OVERRIDE}"/>
     <property file="build.properties"/>
 
     <taskdef resource="bb-ant-defs.xml" classpath="${bb-ant-tools-jar}"/>
