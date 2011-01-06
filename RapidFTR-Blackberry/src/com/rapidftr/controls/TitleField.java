@@ -1,15 +1,13 @@
 package com.rapidftr.controls;
 
-import com.rapidftr.utilities.Styles;
-
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.Display;
-import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.XYRect;
 import net.rim.device.api.ui.decor.BackgroundFactory;
+
+import com.rapidftr.utilities.Styles;
 
 public class TitleField extends Field {
 
@@ -21,7 +19,6 @@ public class TitleField extends Field {
 
 		bitmap = Bitmap.getBitmapResource("res/logo_header.jpg");
 
-		Font defaultFont = Font.getDefault();
 		fieldHeight = bitmap.getHeight();
 		fieldWidth = Display.getWidth();
 		setBackground(BackgroundFactory

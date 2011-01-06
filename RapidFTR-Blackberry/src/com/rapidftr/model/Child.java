@@ -1,5 +1,16 @@
 package com.rapidftr.model;
 
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import net.rim.device.api.util.Persistable;
+
+import org.json.me.JSONArray;
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
+
 import com.rapidftr.utilities.FileUtility;
 import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.RandomStringGenerator;
@@ -7,17 +18,6 @@ import com.rapidftr.utilities.StringUtility;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Part;
 import com.sun.me.web.request.PostData;
-
-import net.rim.device.api.i18n.SimpleDateFormat;
-import net.rim.device.api.util.Persistable;
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
-
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
 
 public class Child implements Persistable {
 
@@ -126,10 +126,6 @@ public class Child implements Persistable {
 
 	public Object getField(String key) {
 		return data.get(key);
-	}
-
-	public Hashtable getKeyMap() {
-		return data;
 	}
 
 	public int hashCode() {

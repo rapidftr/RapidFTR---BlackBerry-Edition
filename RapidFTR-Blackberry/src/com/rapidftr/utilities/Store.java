@@ -1,6 +1,5 @@
 package com.rapidftr.utilities;
 
-import java.util.Hashtable;
 import java.util.Vector;
 
 public interface Store {

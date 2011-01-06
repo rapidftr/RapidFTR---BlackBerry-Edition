@@ -81,7 +81,7 @@ public class ChildrenTest {
 		child3.setField("created_at", dayBeforeYesterday);
 
 		assertThat(compareChildArraysOnAttribute(new Child[] { child2, child1,
-				child3 }, children.sortRecentlyAdded().toArray(), "created_at"), is(true));
+				child3 }, children.sortByRecentlyAdded().toArray(), "created_at"), is(true));
 	}
 
 	@Test
@@ -104,7 +104,7 @@ public class ChildrenTest {
 		
 
 		assertThat(compareChildArraysOnAttribute(new Child[] { child2, child1,
-				child3 }, children.sortRecentlyUpdated().toArray(), "last_updated_at"), is(true));
+				child3 }, children.sortByRecentlyUpdated().toArray(), "last_updated_at"), is(true));
 	}
 
 	private boolean compareChildArraysOnAttribute(Child[] Expected,

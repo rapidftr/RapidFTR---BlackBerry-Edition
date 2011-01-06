@@ -1,18 +1,20 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.controllers.HomeScreenController;
-import com.rapidftr.controls.Button;
-import com.rapidftr.net.ConnectionFactory;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.Settings;
+import java.util.Vector;
 
-import net.rim.device.api.system.Characters;
-import net.rim.device.api.ui.*;
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FieldChangeListener;
+import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import java.util.Vector;
+import com.rapidftr.controllers.HomeController;
+import com.rapidftr.controls.Button;
+import com.rapidftr.net.ConnectionFactory;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.Settings;
 
 public class HomeScreen extends CustomScreen {
 
@@ -107,7 +109,7 @@ public class HomeScreen extends CustomScreen {
 	}
 
 	protected void onLoginButtonClicked() {
-		((HomeScreenController) controller).logIn();
+		((HomeController) controller).logIn();
 	}
 
     protected void onSynchronizeClicked() {
@@ -121,20 +123,20 @@ public class HomeScreen extends CustomScreen {
                 onLoginButtonClicked();
             }
         } else {
-            ((HomeScreenController) controller).synchronize();
+            ((HomeController) controller).synchronize();
         }
     }
 
 	private void onViewChildrenClicked() {
-		((HomeScreenController) controller).viewChildren();
+		((HomeController) controller).viewChildren();
 	}
 
 	private void onSearchClicked() {
-		((HomeScreenController) controller).showSearch();
+		((HomeController) controller).showSearch();
 	}
 
 	private void onNewChildClicked() {
-		((HomeScreenController) controller).newChild();
+		((HomeController) controller).newChild();
 	}
 
     private void onCleanDeviceClicked() {
@@ -143,7 +145,7 @@ public class HomeScreen extends CustomScreen {
                         Dialog.D_YES_NO,
                         "Do you want to clean the device? This will clear all the locally stored child records and login information");
         if (result == Dialog.YES) {
-            ((HomeScreenController) controller).cleanAll();
+            ((HomeController) controller).cleanAll();
             Dialog.alert("Device successfully cleaned");
             onLoginButtonClicked();
         }
@@ -163,16 +165,15 @@ public class HomeScreen extends CustomScreen {
 			}
 		};
 		menu.add(syncInfoItem);
-		//super.makeMenu(menu, instance);
+		
+		MenuItem contactHelpItem = new MenuItem("Contact & Help", 1, 1) {
+			public void run() {
+				((HomeController) controller).showcontact();             
+			}
+		};
+		menu.add(contactHelpItem);
     }
 
-    public void setUp() {
-
-	}
-
-	public void cleanUp() {
-
-	}
 
 	protected void onExposed() {
 		clearFields();

@@ -50,10 +50,6 @@ public class AudioField extends FormField implements AudioRecordListener{
 		this.manageChildScreen =newChildScreen;
 	}
 	
-	public boolean alreadyRecorded() {
-		return data != null;
-	}
-
 	public boolean start() {
 		if(data==null|| manageChildScreen.confirmOverWriteAudio()){
 			record();

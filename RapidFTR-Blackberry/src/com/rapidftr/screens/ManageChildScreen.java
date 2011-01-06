@@ -1,24 +1,28 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.controllers.ChildController;
-import com.rapidftr.controls.BlankSeparatorField;
-import com.rapidftr.model.Child;
-import com.rapidftr.model.Form;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.ImageCaptureListener;
-import com.rapidftr.utilities.Settings;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import net.rim.device.api.system.Characters;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
-import net.rim.device.api.ui.component.*;
+import net.rim.device.api.ui.component.Dialog;
+import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
+import net.rim.device.api.ui.component.ObjectChoiceField;
+import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import com.rapidftr.controllers.ManageChildController;
+import com.rapidftr.controls.BlankSeparatorField;
+import com.rapidftr.model.Child;
+import com.rapidftr.model.Form;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.ImageCaptureListener;
+import com.rapidftr.utilities.Settings;
 
 public class ManageChildScreen extends CustomScreen {
 
@@ -31,10 +35,6 @@ public class ManageChildScreen extends CustomScreen {
 
     public ManageChildScreen(Settings settings) {
         this.settings = settings;
-    }
-
-    public void cleanUp() {
-
     }
 
     public void setUp() {
@@ -55,6 +55,19 @@ public class ManageChildScreen extends CustomScreen {
         for (Enumeration list = forms.elements(); list.hasMoreElements();) {
             ((Form) list.nextElement()).initializeLayoutWithChild(this, childToEdit);
         }
+    }
+
+	private boolean formsEmpty() {
+        for (Enumeration e = forms.elements(); e.hasMoreElements();) {
+            Object nextElement = e.nextElement();
+            if (nextElement != null) {
+                Form form = (Form) nextElement;
+                if (!form.isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void createScreenLayout() {
@@ -123,41 +136,35 @@ public class ManageChildScreen extends CustomScreen {
 
 
     public void takePhoto(ImageCaptureListener imageCaptureListener) {
-        ((ChildController) controller).takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
+        getController().takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
     }
 
     public boolean onClose() {
-    	String menuMessage = "The current record has been changed. What do you want to do with these changes?";
-    	String[] menuChoices = {"Save", "Discard", "Cancel"};
-    	int defaultChoice = 0;
-        int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
+        if (!formsEmpty()) {
+    	    String menuMessage = "The current record has been changed. What do you want to do with these changes?";
+            String[] menuChoices = {"Save", "Discard", "Cancel"};
+            int defaultChoice = 0;
+            int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
 
-		switch (result) {
-		case 0: {
-			if (!validateOnSave())
-				return false;
-			closeEditScreen();
-			((ChildController) controller).viewChild(childToEdit);
-			break;
-		}
-		case 1: {
-			closeEditScreen();
-			if(childToEdit != null)
-				((ChildController) controller).viewChild(childToEdit);
-			break;
-		}
-		default: {
-			return true;
-		}
-		}
+            switch (result) {
+            case 0: {
+                if (!validateOnSave())
+                    return false;
+                break;
+            }
+            case 1: {
+                break;
+            }
+            case 2: {
+                return false;
+            }
+		    }
+        }
+        controller.popScreen();
 		return true;
     }
 
-	private void closeEditScreen() {
-			controller.popScreen();
-	}
-
-    private boolean validateOnSave() {
+	private boolean validateOnSave() {
         String invalidDataField = onSaveChildClicked();
         if (invalidDataField != null) {
             Dialog.alert("Please input the following mandatory field(s)" + invalidDataField + " .");
@@ -177,9 +184,13 @@ public class ManageChildScreen extends CustomScreen {
         if ((invalidDataField = validateRequiredFields()) != "") {
             return invalidDataField;
         }
-        ((ChildController) controller).saveChild(childToEdit);
+        getController().saveChild(childToEdit);
         return null;
     }
+
+	private ManageChildController getController() {
+		return ((ManageChildController) controller);
+	}
 
     private String validateRequiredFields() {
     	StringBuffer invalidFields= new StringBuffer("");
@@ -192,16 +203,18 @@ public class ManageChildScreen extends CustomScreen {
     }
 
     protected void makeMenu(Menu menu, int instance) {
-        MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
-            public void run() {
-                if (!validateOnSave()) {
-                    return;
+        if (!formsEmpty()) {
+            MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
+                public void run() {
+                    if (!validateOnSave()) {
+                        return;
+                    }
+                    getController().viewChild(childToEdit);
+                    childToEdit = null;
                 }
-                closeEditScreen();
-                ((ChildController)controller).viewChild(childToEdit);
-                childToEdit = null;
-            }
-        };
+            };
+            menu.add(saveChildMenu);
+        }
 
         MenuItem CloseMenu = new MenuItem("Close", 3, 1) {
             public void run() {
@@ -210,7 +223,6 @@ public class ManageChildScreen extends CustomScreen {
         };
 
         addSyncFailedErrorMenuItem(menu);
-        menu.add(saveChildMenu);
         menu.add(CloseMenu);
 
         super.makeMenu(menu, instance);

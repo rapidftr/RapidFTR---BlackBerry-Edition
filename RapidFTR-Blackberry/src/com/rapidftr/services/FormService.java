@@ -39,7 +39,6 @@ public class FormService extends RequestAwareService {
     }
 
     public void onRequestFailure(Object context, Exception exception) {
-//        sendFailedMsg();     //if you add this line, there will be two different popup windows on the screen.
     }
 
 }

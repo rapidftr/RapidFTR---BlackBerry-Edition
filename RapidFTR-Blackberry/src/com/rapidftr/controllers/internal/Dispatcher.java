@@ -1,24 +1,53 @@
 package com.rapidftr.controllers.internal;
 
-import com.rapidftr.controllers.ChildController;
-import com.rapidftr.controllers.HomeScreenController;
+import com.rapidftr.controllers.ViewChildController;
+import com.rapidftr.controllers.ChildHistoryController;
+import com.rapidftr.controllers.ContactInformationController;
+import com.rapidftr.controllers.HomeController;
 import com.rapidftr.controllers.LoginController;
+import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controllers.ResetDeviceController;
+import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controllers.SyncController;
+import com.rapidftr.controllers.ViewChildPhotoController;
+import com.rapidftr.controllers.ViewChildrenController;
+import com.rapidftr.datastore.Children;
 import com.rapidftr.model.Child;
 import com.rapidftr.process.Process;
 
 public class Dispatcher {
-	private final HomeScreenController homeScreenController;
+	private final HomeController homeScreenController;
 	private final LoginController loginController;
-	private final ChildController childController;
+	private final ViewChildController childController;
 	private final SyncController syncController;
 	private ResetDeviceController resetDeviceController;
+	private ContactInformationController contactScreenController;
+	private final ManageChildController manageChildController;
+	private final ViewChildrenController viewChildrenController;
+	private final ViewChildPhotoController childPhotoController;
+	private final ChildHistoryController childHistoryController;
+	private final SearchChildController searchChildController;
 
-	public Dispatcher(HomeScreenController homeScreenController,
-			LoginController loginController, ChildController childController,
-			SyncController syncController, ResetDeviceController restController) {
+	public Dispatcher(HomeController homeScreenController,
+			LoginController loginController, ViewChildController childController,
+			SyncController syncController,
+			ResetDeviceController restController,
+			ContactInformationController contactScreenController,
+			ManageChildController manageChildController,
+			ViewChildrenController viewChildrenController,
+			ViewChildPhotoController childPhotoController,
+			ChildHistoryController showHistoryController, SearchChildController searchChildController) {
 		this.homeScreenController = homeScreenController;
+		this.manageChildController = manageChildController;
+		this.manageChildController.setDispatcher(this);
+		this.viewChildrenController = viewChildrenController;
+		this.viewChildrenController.setDispatcher(this);
+		this.childPhotoController = childPhotoController;
+		this.childPhotoController.setDispatcher(this);
+		this.childHistoryController = showHistoryController;
+		this.childHistoryController.setDispatcher(this);
+		this.searchChildController = searchChildController;
+		this.searchChildController.setDispatcher(this);
 		this.homeScreenController.setDispatcher(this);
 		this.loginController = loginController;
 		this.loginController.setDispatcher(this);
@@ -27,6 +56,8 @@ public class Dispatcher {
 		this.syncController = syncController;
 		this.syncController.setDispatcher(this);
 		this.resetDeviceController = restController;
+		this.contactScreenController = contactScreenController;
+		this.contactScreenController.setDispatcher(this);
 	}
 
 	public void homeScreen() {
@@ -34,7 +65,7 @@ public class Dispatcher {
 	}
 
 	public void viewChildren() {
-		childController.viewChildren();
+		viewChildrenController.viewAllChildren();
 	}
 
 	public void synchronizeForms() {
@@ -42,7 +73,7 @@ public class Dispatcher {
 	}
 
 	public void newChild() {
-		childController.newChild();
+		manageChildController.newChild();
 	}
 
 	public void synchronize() {
@@ -50,7 +81,7 @@ public class Dispatcher {
 	}
 
 	public void searchChild() {
-		childController.showChildSearchScreen();
+		searchChildController.showChildSearchScreen();
 	}
 
 	public void syncChild(Child child) {
@@ -64,6 +95,34 @@ public class Dispatcher {
 	public void login(Process process) {
 		loginController.showLoginScreen(process);
 
+	}
+
+	public void showcontact() {
+		contactScreenController.show();
+	}
+
+	public void editChild(Child child) {
+		manageChildController.editChild(child);
+
+	}
+
+	public void viewChild(Child child) {
+		childController.viewChild(child);
+		
+	}
+
+	public void viewChildren(Children children) {
+		viewChildrenController.viewChildren(children);
+		
+	}
+
+	public void viewChildPhoto(Child child) {
+		childPhotoController.viewChildPhoto(child);
+		
+	}
+
+	public void showHistory(Child child) {
+		childHistoryController.showHistory(child);
 	}
 
 }

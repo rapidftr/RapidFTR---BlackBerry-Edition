@@ -95,12 +95,8 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 	public void onAuthenticationFailure() {
 	}
 
-	public void cleanUp() {
-		process.stopProcess();
-	}
-
 	public boolean onClose() {
-		cleanUp();
+		process.stopProcess();
 		return super.onClose();
 	}
 

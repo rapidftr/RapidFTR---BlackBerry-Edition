@@ -51,6 +51,7 @@ public class FormStore {
                         String name = jsonFormField.getString("name");
                         String displayName = jsonFormField.getString("display_name");
                         String type = jsonFormField.getString("type");
+                        String enabled = jsonFormField.getString("enabled");
                         try {
                             JSONArray jsonOptionString = jsonFormField
                                     .getJSONArray("option_strings");
@@ -62,8 +63,12 @@ public class FormStore {
                             //The JSON array does not contains "option_strings"
                             //ex.printStackTrace();
                         }
+						if ("true".equals(enabled)) {
+							formFields.addElement(formFieldFactory
+									.createFormField(name, displayName, type,
+											optionStrings));
+						}                        	
 
-                        formFields.addElement(formFieldFactory.createFormField(name, displayName, type, optionStrings));
                     }
                     catch (JSONException e) {
                         e.printStackTrace();

@@ -33,9 +33,6 @@ public class ScrollableImageField extends BitmapField
     private int _xCoord = 0;         //The x coordinate for the top left corner of the image.
     private int _yCoord = 0;         //The y coordinate for the top left corner of the image.
     
-    private int _xTouch = 0;		//The x coordinate of the previous touch point.
-    private int _yTouch = 0;		//The y coordinate of the previous touch point.
-    
     private static final int[] COLOURS = {Color.WHITE, Color.GRAY, Color.GRAY, Color.WHITE};  //Colours used to draw the scroll arrows.
     
     private static final int TRIANGLE_SIZE = 6;     //The scroll arrow size.

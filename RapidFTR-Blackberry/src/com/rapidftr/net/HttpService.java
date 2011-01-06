@@ -2,7 +2,6 @@ package com.rapidftr.net;
 
 import java.io.IOException;
 
-import com.rapidftr.utilities.Properties;
 import com.rapidftr.utilities.Settings;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;

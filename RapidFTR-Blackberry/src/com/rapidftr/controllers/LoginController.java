@@ -33,10 +33,6 @@ public class LoginController extends RequestAwareController {
         }
     }
 
-    public void loginCancelled() {
-		service.cancelRequest();
-	}
-
 	public void onProcessComplete(boolean status) {
 		if (status) {
 			popScreen();
@@ -52,6 +48,7 @@ public class LoginController extends RequestAwareController {
 	}
 
 	public void homeScreen() {
+
 		uiStack.clear();
 		dispatcher.homeScreen();
 	}
@@ -63,4 +60,5 @@ public class LoginController extends RequestAwareController {
     public void synchronizeForms() {
         dispatcher.synchronizeForms();
     }
+
 }

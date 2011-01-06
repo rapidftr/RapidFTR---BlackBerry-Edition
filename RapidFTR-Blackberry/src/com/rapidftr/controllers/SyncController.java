@@ -22,11 +22,13 @@ public class SyncController extends Controller implements ControllerCallback {
 	private Process currentRunningProcess;
 
     final ChildSyncProcess childSyncProcess;
-	final SyncAllProcess syncAllProcess;
-	final FormSyncProcess formSyncProcess;
-
+	final Process syncAllProcess;
+	final Process formSyncProcess;
+	
 	protected HttpBatchRequestHandler requestHandler;
 	private ScreenCallBack screenCallBack;
+
+
 
 	public SyncController(CustomScreen screen, UiStack uiStack,
 			ChildSyncService childSyncService, FormService formSyncService) {

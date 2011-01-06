@@ -86,10 +86,6 @@ public class Settings {
         return store.getString("last.used.password");
     }
 
-    public void setOfflineMode(boolean mode) {
-        store.setString("offline.mode", String.valueOf(mode));
-    }
-
     public void setLastUsedUserName(String userName) {
         store.setString("last.used.username", userName);
     }

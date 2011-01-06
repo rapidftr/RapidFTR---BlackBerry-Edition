@@ -4,18 +4,14 @@ import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.screens.internal.UiStack;
 
-public class HomeScreenController extends Controller {
+public class HomeController extends Controller {
 
-	public HomeScreenController(CustomScreen screen, UiStack uiStack) {
+	public HomeController(CustomScreen screen, UiStack uiStack) {
 		super(screen, uiStack);
 	}
 
 	public void viewChildren() {
 		dispatcher.viewChildren();
-	}
-
-	public void synchronizeForms() {
-		dispatcher.synchronizeForms();
 	}
 
 	public void newChild() {
@@ -36,6 +32,10 @@ public class HomeScreenController extends Controller {
 
 	public void logIn() {
 		dispatcher.login(null);
+	}
+
+	public void showcontact() {
+		dispatcher.showcontact();
 	}
 
 }

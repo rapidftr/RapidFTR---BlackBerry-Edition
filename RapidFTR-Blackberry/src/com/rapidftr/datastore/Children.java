@@ -52,19 +52,15 @@ public class Children {
 		return new Children(children);
 	}
 
-	public Children sortByName() {
-		return sort(new String[]{"name"}, true);
-	}
-
-	public Children sortRecentlyAdded() {
+	public Children sortByRecentlyAdded() {
 		return sort(new String[]{"created_at"}, false);
 	}
 
-	public Children sortRecentlyUpdated() {
+	public Children sortByRecentlyUpdated() {
 		return sort(new String[]{"last_updated_at"}, false);
 	}
 
-	public Children sortName() {
+	public Children sortByName() {
 		return sort(new String[]{"name"}, true);
 	}
 

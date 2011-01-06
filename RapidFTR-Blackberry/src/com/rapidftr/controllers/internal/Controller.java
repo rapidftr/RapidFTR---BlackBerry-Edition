@@ -6,7 +6,7 @@ import com.rapidftr.screens.internal.UiStack;
 abstract public class Controller {
 
 	protected Dispatcher dispatcher;
-	protected final CustomScreen currentScreen;
+	protected CustomScreen currentScreen;
 	protected UiStack uiStack;
 
 	public Controller(CustomScreen screen, UiStack uiStack) {

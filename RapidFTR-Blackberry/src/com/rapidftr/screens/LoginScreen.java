@@ -1,15 +1,24 @@
 package com.rapidftr.screens;
 
+import net.rim.device.api.system.Characters;
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FieldChangeListener;
+import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.component.BasicEditField;
+import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
+import net.rim.device.api.ui.component.PasswordEditField;
+import net.rim.device.api.ui.component.SeparatorField;
+import net.rim.device.api.ui.component.TextField;
+import net.rim.device.api.ui.container.HorizontalFieldManager;
+
 import com.rapidftr.controllers.LoginController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.services.ScreenCallBack;
 import com.rapidftr.utilities.HttpSettings;
-import net.rim.device.api.system.Characters;
-import net.rim.device.api.system.KeyListener;
-import net.rim.device.api.ui.*;
-import net.rim.device.api.ui.component.*;
-import net.rim.device.api.ui.container.HorizontalFieldManager;
 
 public class LoginScreen extends CustomScreen implements ScreenCallBack {
 
@@ -121,7 +130,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
     }
 
     private void onCancelButtonClicked() {
-		cleanUp();
+    	showLoginButton();
 	}
 
 	private void showCancelButton() {
@@ -198,8 +207,5 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
 		if(resetUser)
 			usernameField.setText("");
 		passwordField.setText("");
-	}
-
-	public void cleanUp() {
 	}
 }

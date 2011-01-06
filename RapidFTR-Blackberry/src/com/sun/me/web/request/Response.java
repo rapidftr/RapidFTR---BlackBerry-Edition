@@ -32,8 +32,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sun.me.web.request;
 
-import com.sun.me.web.path.Result;
 import javax.microedition.io.HttpConnection;
+
+import com.sun.me.web.path.Result;
 
 public class Response {
 
@@ -49,15 +50,7 @@ public class Response {
     public Result getResult() {
         return result;
     }
-    
-    public String getContentType() {
-        return contentType;
-    }
-    
-    public String getCharset() {
-        return charset;
-    }
-    
+           
     public int getCode() {
         return responseCode;
     }

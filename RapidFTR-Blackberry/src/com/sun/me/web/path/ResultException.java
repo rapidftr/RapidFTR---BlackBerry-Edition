@@ -50,8 +50,5 @@ public class ResultException extends IOException {
         super(th.getMessage());
         cause = th;
     }
-
-    public Throwable getCause() {
-        return cause;
-    }
+    
 }

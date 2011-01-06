@@ -3,10 +3,9 @@ package com.rapidftr.screens;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
-
 import net.rim.device.api.ui.component.SeparatorField;
 
-import com.rapidftr.controllers.ChildController;
+import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildrenListField;
@@ -29,7 +28,7 @@ public class ViewChildrenScreen extends CustomScreen {
 				if (this.getSelectedIndex() > 0) {
 					Object child = this.get(this, this.getSelectedIndex());
 					if (child instanceof Child) {
-						((ChildController) controller).viewChild((Child) child);
+						getController().viewChild((Child) child);
 						return super.navigationClick(i, i1);
 					}
 				}
@@ -43,16 +42,8 @@ public class ViewChildrenScreen extends CustomScreen {
 		field.set(children.toArray());
 	}
 
-	public void cleanUp() {
-
-	}
-
-	public void setUp() {
-
-	}
-
-	private ChildController getController() {
-		return (ChildController) controller;
+	private ViewChildrenController getController() {
+		return (ViewChildrenController) controller;
 	}
 
 	protected void makeMenu(Menu menu, int instance) {

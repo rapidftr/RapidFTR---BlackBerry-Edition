@@ -29,7 +29,7 @@ import net.rim.device.api.ui.decor.BackgroundFactory;
 import net.rim.device.api.ui.decor.Border;
 import net.rim.device.api.ui.decor.BorderFactory;
 
-import com.rapidftr.controllers.ChildController;
+import com.rapidftr.controllers.ViewChildController;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildStatus;
@@ -154,47 +154,40 @@ public class ViewChildScreen extends CustomScreen {
 
 	protected boolean trackwheelClick(int status, int time) {
 		if (isBitmapFieldFocused) {
-			((ChildController) controller).viewChildPhoto(child);
+			((ViewChildController) controller).viewChildPhoto(child);
 			return false;
 
 		}
 		return true;
 	}
 
-	public void setUp() {
+	private ViewChildController getViewChildController() {
+		return ((ViewChildController) controller);
 	}
-
-	public void cleanUp() {
-
-	}
-
+	
 	protected void makeMenu(Menu menu, int instance) {
 		MenuItem editChildMenu = new MenuItem("Edit Child Detail", 1, 1) {
 			public void run() {
-				// Move from edit screen directly to the main menu application
-				// screen
 				controller.popScreen();
-				((ChildController) controller).editChild(child);
+				getViewChildController().editChild(child);
 			}
 		};
 
 		MenuItem photoMenu = new MenuItem("View Child Photo", 2, 1) {
 			public void run() {
-				((ChildController) controller).viewChildPhoto(child);
+				getViewChildController().viewChildPhoto(child);
 			}
 		};
 
 		MenuItem historyMenu = new MenuItem("View The Change Log", 2, 1) {
 			public void run() {
-				((ChildController) controller).showHistory(child);
+				getViewChildController().showHistory(child);
 			}
 		};
 
 		MenuItem syncChildMenu = new MenuItem("Synchronise this Record", 2, 1) {
             public void run() {
-                ((ChildController) controller).syncChild(child);
-
-                controller.popScreen();
+            	getViewChildController().syncChild(child);
             }
         };
 

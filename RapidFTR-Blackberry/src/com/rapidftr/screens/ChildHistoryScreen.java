@@ -20,6 +20,7 @@ public class ChildHistoryScreen extends CustomScreen {
 	}
 	
 	public void setChild(Child child){
+		clearFields();
 		this.child = child;
 		Vector history = this.child.getHistory();
 		if (history==null || history.size() == 0) {
@@ -50,14 +51,6 @@ public class ChildHistoryScreen extends CustomScreen {
 				}
 			});
 		}
-	}
-
-	public void cleanUp() {
-
-	}
-
-	public void setUp() {
-
 	}
 
 }

@@ -12,7 +12,8 @@ import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.component.TextField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.BorderFactory;
-import com.rapidftr.controllers.ChildController;
+
+import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.screens.internal.CustomScreen;
 
@@ -62,9 +63,6 @@ public class SearchChildScreen extends CustomScreen implements
 		add(buttonManager);
 	}
 
-	public void cleanUp() {
-	}
-
 	public void setUp() {
 		resetSearchBox();
 	}
@@ -90,7 +88,7 @@ public class SearchChildScreen extends CustomScreen implements
 	private void onSearchButtonClicked() {
 		String searchQuery = searchTextField.getText();
 		if (!"".equals(searchQuery)) {
-			((ChildController) controller)
+			((SearchChildController) controller)
 					.searchAndDisplayChildren(searchQuery);
 		} else {
 			Dialog
@@ -98,6 +96,7 @@ public class SearchChildScreen extends CustomScreen implements
 			searchTextField.setFocus();
 		}
 
+		
 	}
 
 	protected boolean onSavePrompt() {

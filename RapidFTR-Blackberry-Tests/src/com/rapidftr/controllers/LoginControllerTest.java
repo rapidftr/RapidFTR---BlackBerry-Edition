@@ -37,12 +37,6 @@ public class LoginControllerTest {
 		verify(loginService).login("rapidftr", "rapidftr");
 	}
 
-	@Test
-	public void shouldCancelLoginRequest() {
-		loginController.loginCancelled();
-		verify(loginService).cancelRequest();
-	}
-
     @Ignore
 	@Test
 	public void shouldAttemptLoginOverHttpProviderWithGivenCredentials()

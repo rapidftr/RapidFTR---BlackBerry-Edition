@@ -24,20 +24,12 @@ public class LoginSettings {
         settings.clear();
     }
 
-    public void setOfflineMode(boolean offline) {
-        settings.setOfflineMode(offline);
-    }
-
     public void setLastUsedUserName(String userName) {
         settings.setLastUsedUserName(userName);
     }
 
     public void setLastUsedPassword(String pass) {
         settings.setLastUsedPassword(pass);
-    }
-
-    public void setAuthorisationToken(String token) {
-        settings.setAuthorisationToken(token);        
     }
 
     public String getAuthorizationTokenForOfflineLogin() {

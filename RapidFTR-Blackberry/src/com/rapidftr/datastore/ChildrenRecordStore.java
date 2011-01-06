@@ -57,15 +57,15 @@ public class ChildrenRecordStore {
 	}
 
 	public Children getAllSortedByRecentlyAdded() {
-		return getChildren().sortRecentlyAdded();
+		return getChildren().sortByRecentlyAdded();
 	}
 
 	public Children getAllSortedByRecentlyUpdated() {
-		return getChildren().sortRecentlyUpdated();
+		return getChildren().sortByRecentlyUpdated();
 	}
 
 	public Children getAllSortedByName() {
-		return getChildren().sortName();
+		return getChildren().sortByName();
 	}
 
 }
