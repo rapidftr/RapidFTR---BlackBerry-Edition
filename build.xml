@@ -1,4 +1,4 @@
-<project name="RapidFTR---BlackBerry-Edition" default="compile">
+<project name="RapidFTR---BlackBerry-Edition" default="test">
     <property environment="env"/>
     <property file="${env.BUILD_PROPERTIES_OVERRIDE}"/>
     <property file="build.properties"/>
@@ -92,7 +92,7 @@
         </rapc>
     </target>
 
-    <target name="sign" depends="compile">
+    <target name="sign" depends="test">
         <echo message="${output.dir}"/>
         <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
             <arg line=" -a -p ${signing.code} -c -C  RapidFTR.cod"/>
