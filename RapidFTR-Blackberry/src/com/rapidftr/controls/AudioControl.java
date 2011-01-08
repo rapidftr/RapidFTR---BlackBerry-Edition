@@ -1,20 +1,21 @@
 package com.rapidftr.controls;
 
 
+import net.rim.blackberry.api.mail.SupportedAttachmentPart;
+import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Graphics;
-import net.rim.device.api.ui.component.ButtonField;
 
-public class AudioControl extends ButtonField {
+public class AudioControl extends Field {
 
-	private static final int WIDTH = 20;
-	private static final int HEIGHT = 20;
+	private static final int WIDTH = 60;
+	private static final int HEIGHT = 60;
 	private State state;
 	private final AudioRecordListener listener;
 
 	public AudioControl(AudioRecordListener listener) {
-		super(Field.FOCUSABLE | ButtonField.CONSUME_CLICK);
+		super(Field.FOCUSABLE);
 		this.listener = listener;
 		this.state=State.STOPPED;
 	}
@@ -36,10 +37,11 @@ public class AudioControl extends ButtonField {
 	public static abstract class State {
 		public abstract void drawControl(Graphics graphics);
 		public abstract State nextState(AudioRecordListener listener);
+		public static Bitmap stop=Bitmap.getBitmapResource("res/audio_stop.png");
+		public static Bitmap start=Bitmap.getBitmapResource("res/audio_start.png");
 		public static final State PLAYING = new State() {
 			public void drawControl(Graphics graphics) {
-				graphics.setColor(Color.RED);
-				graphics.fillRect(0, 0, WIDTH, HEIGHT);
+				graphics.drawBitmap(2,2,WIDTH,HEIGHT,stop, 0, 0);
 			}
 
 			public State nextState(AudioRecordListener listener) {
@@ -50,13 +52,13 @@ public class AudioControl extends ButtonField {
 		};
 		public static final State STOPPED = new State() {
 			public void drawControl(Graphics graphics) {
-				graphics.setColor(Color.GREEN);
-				graphics.fillRoundRect(0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
+				graphics.drawBitmap(2,2,WIDTH,HEIGHT,start, 0, 0);
 			}
 
 			public State nextState(AudioRecordListener listener) {
-				return listener.start() ? PLAYING : STOPPED;
+				return listener.start()?PLAYING:STOPPED;
 			}
 		};
 	}
 }
+
