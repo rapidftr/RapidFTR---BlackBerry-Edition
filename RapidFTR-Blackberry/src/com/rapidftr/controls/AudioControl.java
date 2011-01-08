@@ -4,8 +4,9 @@ package com.rapidftr.controls;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.Graphics;
+import net.rim.device.api.ui.component.ButtonField;
 
-public class AudioControl extends Field {
+public class AudioControl extends ButtonField {
 
 	private static final int WIDTH = 20;
 	private static final int HEIGHT = 20;
@@ -13,7 +14,7 @@ public class AudioControl extends Field {
 	private final AudioRecordListener listener;
 
 	public AudioControl(AudioRecordListener listener) {
-		super(Field.FOCUSABLE);
+		super(Field.FOCUSABLE | ButtonField.CONSUME_CLICK);
 		this.listener = listener;
 		this.state=State.STOPPED;
 	}
@@ -54,7 +55,7 @@ public class AudioControl extends Field {
 			}
 
 			public State nextState(AudioRecordListener listener) {
-				return listener.start()?PLAYING:STOPPED;
+				return listener.start() ? PLAYING : STOPPED;
 			}
 		};
 	}
