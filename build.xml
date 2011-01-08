@@ -1,4 +1,6 @@
-<project name="RapidFTR---BlackBerry-Edition" default="compile">
+<project name="RapidFTR---BlackBerry-Edition" default="test">
+    <property environment="env"/>
+    <property file="${env.BUILD_PROPERTIES_OVERRIDE}"/>
     <property file="build.properties"/>
 
     <taskdef resource="bb-ant-defs.xml" classpath="${bb-ant-tools-jar}"/>
@@ -69,7 +71,7 @@
     <target name="compile" depends="init">
 
         <rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}/temp" exepath="${verify.path}">
-            <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"/>
+            <jdp title="${app.title}" vendor="${app.vendor}" version="${app.version}" type="cldc"/>
         </rapc>
 
         <jar destfile="${output.dir}/temp/${output.file}.jar" update="true">
@@ -86,11 +88,11 @@
         </delete>
 
         <rapc srcdir="${output.dir}" output="${output.file}" destdir="${output.dir}" exepath="${verify.path}">
-            <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"/>
+            <jdp title="${app.title}" vendor="${app.vendor}" version="#{app.version}" type="cldc"/>
         </rapc>
     </target>
 
-    <target name="sign" depends="compile">
+    <target name="sign" depends="test">
         <echo message="${output.dir}"/>
         <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
             <arg line=" -a -p ${signing.code} -c -C  RapidFTR.cod"/>
@@ -108,6 +110,7 @@
         <jadtool input="${output.dir}/${output.file}.jad" destdir="${release.dir}">
             <fileset dir="build" includes="*.cod"/>
         </jadtool>
+        <echo file="${release.dir}/version.txt" message="${app.version}"/>
     </target>
 
     <!-- Load to device -->
@@ -124,11 +127,12 @@
     </target>
 
     <target name="test" depends="compile-tests">
-        <junit printsummary="yes" haltonfailure="no" failureproperty="unit.tests.failed">
+        <junit printsummary="yes" haltonfailure="no" failureproperty="unit.tests.failed"
+               fork="yes" forkmode="once">
             <classpath refid="test.classpath">
             </classpath>
             <formatter type="xml"/>
-            <batchtest fork="yes" todir="${report.dir}">
+            <batchtest todir="${report.dir}">
                 <fileset dir="${tests.src.dir}">
 		 <include name="**/*Test*"/>	
 		</fileset>
