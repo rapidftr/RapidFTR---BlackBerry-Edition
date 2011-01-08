@@ -71,7 +71,7 @@
     <target name="compile" depends="init">
 
         <rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}/temp" exepath="${verify.path}">
-            <jdp title="${app.title}" vendor="${app.vendor}" version="1.0" type="cldc"/>
+            <jdp title="${app.title}" vendor="${app.vendor}" version="${app.version}" type="cldc"/>
         </rapc>
 
         <jar destfile="${output.dir}/temp/${output.file}.jar" update="true">
