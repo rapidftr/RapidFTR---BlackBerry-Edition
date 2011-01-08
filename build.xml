@@ -110,6 +110,7 @@
         <jadtool input="${output.dir}/${output.file}.jad" destdir="${release.dir}">
             <fileset dir="build" includes="*.cod"/>
         </jadtool>
+        <echo file="${release.dir}/version.txt" message="${app.version}"/>
     </target>
 
     <!-- Load to device -->
