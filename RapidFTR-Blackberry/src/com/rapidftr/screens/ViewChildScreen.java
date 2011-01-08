@@ -51,14 +51,19 @@ public class ViewChildScreen extends CustomScreen {
 
 	public void setChild(Child child) {
 		this.child = child;
+	}
+
+	public void setUp() {
 		clearFields();
-		HorizontalFieldManager titleManager = new HorizontalFieldManager(USE_ALL_WIDTH);
-		titleManager.setPadding(new XYEdges(2,2,2,0));
+		HorizontalFieldManager titleManager = new HorizontalFieldManager(
+				USE_ALL_WIDTH);
+		titleManager.setPadding(new XYEdges(2, 2, 2, 0));
 		titleManager.add(new LabelField("Child Details"));
-		VerticalFieldManager titleSyncStatusManager = new VerticalFieldManager(USE_ALL_WIDTH);
+		VerticalFieldManager titleSyncStatusManager = new VerticalFieldManager(
+				USE_ALL_WIDTH);
 		ChildStatus childSyncStatus = child.childStatus();
 		String syncMessage = child.childStatus().getStatusString();
-		LabelField syncStatus = new LabelField(syncMessage,FIELD_RIGHT){
+		LabelField syncStatus = new LabelField(syncMessage, FIELD_RIGHT) {
 			protected void paint(Graphics graphics) {
 				graphics.setColor(Color.WHITE);
 				super.paint(graphics);
@@ -66,15 +71,19 @@ public class ViewChildScreen extends CustomScreen {
 		};
 		XYEdges labelEdges = new XYEdges(1, 1, 1, 1);
 		syncStatus.setBorder(BorderFactory.createBevelBorder(labelEdges));
-		syncStatus.setBackground(BackgroundFactory.createSolidBackground(childSyncStatus.getStatusColor()));
+		syncStatus.setBackground(BackgroundFactory
+				.createSolidBackground(childSyncStatus.getStatusColor()));
 		titleSyncStatusManager.add(syncStatus);
 		titleManager.add(titleSyncStatusManager);
 		this.add(titleManager);
 		this.add(new SeparatorField());
 		renderChildFields(child);
-
 	}
 
+	protected void onExposed() {
+		setUp();
+	}
+	
 	private void renderChildFields(final Child child) {
 		
 		final HorizontalFieldManager horizontalFieldManager = new HorizontalFieldManager(
