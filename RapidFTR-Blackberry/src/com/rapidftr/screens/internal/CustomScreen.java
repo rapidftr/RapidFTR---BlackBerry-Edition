@@ -51,7 +51,9 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 
 			public void run() {
-				uiStack.popScreen(screen);
+				if(screen.isActive()){
+					uiStack.popScreen(screen);					
+				}
 			}
 		});
 
