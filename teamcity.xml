@@ -1,10 +1,10 @@
 <project name="RapidFTR---BlackBerry-Edition CI" default="package">
 
+    <property environment="env"/>
+
     <property name="app.version" value="1.0.${env.BUILD_NUMBER}"/>
 
     <import file="${basedir}/build.xml"/>
-
-    <property environment="env"/>
 
     <property file="teamcity.properties"/>
 
