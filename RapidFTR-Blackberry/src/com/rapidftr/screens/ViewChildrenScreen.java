@@ -1,11 +1,11 @@
 package com.rapidftr.screens;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.microedition.io.Connector;
-
+import com.rapidftr.controllers.ViewChildrenController;
+import com.rapidftr.datastore.Children;
+import com.rapidftr.model.Child;
+import com.rapidftr.model.ChildrenListField;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.ImageUtility;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.MenuItem;
@@ -13,17 +13,15 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
 
-import com.rapidftr.controllers.ViewChildrenController;
-import com.rapidftr.datastore.Children;
-import com.rapidftr.model.Child;
-import com.rapidftr.model.ChildrenListField;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.ImageUtility;
+import javax.microedition.io.Connector;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class ViewChildrenScreen extends CustomScreen {
 	
 	private static final int ROW_HEIGHT = 100;
-	private ChildrenListField field;
+	private ChildrenListField childrenList;
 
 	public ViewChildrenScreen() {
 		super();
@@ -33,20 +31,12 @@ public class ViewChildrenScreen extends CustomScreen {
 	private void layoutScreen() {
 		add(new LabelField("All children"));
 		add(new SeparatorField());
-		field = new ChildrenListField() {
-			protected boolean navigationClick(int i, int i1) {
-				if (this.getSelectedIndex() > 0) {
-					Object[] selectedChildImagePair = (Object[]) this.get(this, this.getSelectedIndex());
-					Child child = (Child) selectedChildImagePair[0];
-					if (child instanceof Child) {
-						getController().viewChild((Child) child);
-						return super.navigationClick(i, i1);
-					}
-				}
-				return false;
-			}
-		};
-		add(field);
+		childrenList = new ChildrenListField(){
+            public ViewChildrenController getViewChildController() {
+                return getController();
+            }
+        };
+		add(childrenList);
 	}
 
 	public void setChildren(Children children) {
@@ -61,9 +51,8 @@ public class ViewChildrenScreen extends CustomScreen {
 			childrenAndImages[i] = childImagePair;
 			
 		}
-		field.set(childrenAndImages);
-		field.setRowHeight(ROW_HEIGHT);
-
+		childrenList.set(childrenAndImages);
+		childrenList.setRowHeight(ROW_HEIGHT);
 	}
 
 	private ViewChildrenController getController() {
@@ -71,11 +60,10 @@ public class ViewChildrenScreen extends CustomScreen {
 	}
 
 	protected void makeMenu(Menu menu, int instance) {
-		if (!field.isEmpty()) {
+		if (!childrenList.isEmpty()) {
 			MenuItem editChildMenu = new MenuItem("Open Record", 1, 1) {
 				public void run() {
-					int selectedIndex = field.getSelectedIndex();
-					Child child = (Child) field.get(field, selectedIndex);
+					Child child = childrenList.getSelectedChild();
 					getController().viewChild(child);
 				}
 

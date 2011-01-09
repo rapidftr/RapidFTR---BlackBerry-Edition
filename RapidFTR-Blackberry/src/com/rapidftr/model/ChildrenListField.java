@@ -1,25 +1,23 @@
 package com.rapidftr.model;
 
+import com.rapidftr.controllers.ViewChildrenController;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.Display;
-import net.rim.device.api.ui.Color;
-import net.rim.device.api.ui.DrawStyle;
-import net.rim.device.api.ui.Font;
-import net.rim.device.api.ui.Graphics;
-import net.rim.device.api.ui.Ui;
+import net.rim.device.api.ui.*;
 import net.rim.device.api.ui.component.ListField;
 import net.rim.device.api.ui.component.ObjectListField;
 
-public class ChildrenListField extends ObjectListField {
+public abstract class ChildrenListField extends ObjectListField {
 
 	private int screenWidth;
 	private int firstrowPostion;
 	private int secondRowPosition;
 	private Font titleFont;
 	private Font rowFont;
-	
-	public ChildrenListField() {
-		Font defaultFont = Font.getDefault();
+
+    public ChildrenListField() {
+        super();
+        Font defaultFont = Font.getDefault();
 		titleFont = defaultFont.derive(Font.PLAIN, 3, Ui.UNITS_mm);
 		rowFont = defaultFont.derive(Font.PLAIN, 3, Ui.UNITS_mm);
 
@@ -28,6 +26,16 @@ public class ChildrenListField extends ObjectListField {
 		secondRowPosition = firstrowPostion + 20;
 	
 	}
+
+    protected boolean navigationClick(int i, int i1) {
+        if (this.getSelectedIndex() > -1) {
+            Child child = getSelectedChild();
+            if (child != null) {
+                getViewChildController().viewChild(child);
+            }
+        }
+        return false;
+    }
 
 	public void drawListRow(ListField listField, Graphics graphics, int index,
 			int y, int width) {
@@ -96,5 +104,11 @@ public class ChildrenListField extends ObjectListField {
 		graphics.drawText(childStatusString, boxX, boxY + 2, 
 				(DrawStyle.HCENTER | DrawStyle.ELLIPSIS | DrawStyle.TOP), boxWidth);
 	}
-	
+
+    public Child getSelectedChild() {
+        Object[] selectedChildImagePair = (Object[]) this.get(this, this.getSelectedIndex());
+        return (Child) selectedChildImagePair[0];
+    }
+
+    public abstract ViewChildrenController getViewChildController();
 }
