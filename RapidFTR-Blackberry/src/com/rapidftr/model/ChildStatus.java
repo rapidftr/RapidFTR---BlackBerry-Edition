@@ -4,31 +4,29 @@ import net.rim.device.api.ui.Color;
 import net.rim.device.api.util.Persistable;
 
 public class ChildStatus implements Persistable {
+	
+	private static final String STATUS_STRING_NEW = "New";
+	private static final String STATUS_STRING_UPDATED = "Updated";
+	private static final String STATUS_STRING_SYNCED = "Synced";
+	private static final String STATUS_STRING_SYNC_FAILED = "Failed";
 
-	public static final ChildStatus NEW = new ChildStatus(Color.BLUE);
-	public static final ChildStatus UPDATED = new ChildStatus(Color.CYAN);
-	public static final ChildStatus SYNCED = new ChildStatus(Color.GREEN);
-	public static final ChildStatus SYNC_FAILED = new ChildStatus(Color.DARKRED);
+	public static final ChildStatus NEW = new ChildStatus(Color.BLUE, STATUS_STRING_NEW);
+	public static final ChildStatus UPDATED = new ChildStatus(Color.CYAN, STATUS_STRING_UPDATED);
+	public static final ChildStatus SYNCED = new ChildStatus(Color.GREEN, STATUS_STRING_SYNCED);
+	public static final ChildStatus SYNC_FAILED = new ChildStatus(Color.DARKRED, STATUS_STRING_SYNC_FAILED);
+
 
 	private String syncError;
 
 	private int colorCode;
+	private String statusString;
 
-	private ChildStatus(int colorCode) {
+	private ChildStatus(int colorCode, String statusString) {
 		this.colorCode = colorCode;
+		this.statusString = statusString;
 	}
 	
 	public String getStatusString(){
-		String statusString = "";
-		if(this == ChildStatus.NEW){
-			statusString = "New";
-		}else if(this == ChildStatus.SYNC_FAILED){
-			statusString = "Sync Failed";
-		}else if(this == ChildStatus.SYNCED){
-			statusString = "Synced";
-		}else if(this == ChildStatus.UPDATED){
-			statusString = "Updated";
-		}
 		return statusString;
 	}
 
@@ -59,7 +57,7 @@ public class ChildStatus implements Persistable {
 		if (getClass() != obj.getClass())
 			return false;
 		ChildStatus other = (ChildStatus) obj;
-		if (colorCode != other.colorCode)
+		if (colorCode != other.getStatusColor())
 			return false;
 		return true;
 	}
