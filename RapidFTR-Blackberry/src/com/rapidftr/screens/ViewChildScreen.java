@@ -200,12 +200,6 @@ public class ViewChildScreen extends CustomScreen {
             }
         };
 
-		MenuItem CloseMenu = new MenuItem("Close", 2, 1) {
-			public void run() {
-				controller.popScreen();
-			}
-		};
-
 		menu.add(editChildMenu);
 		menu.add(photoMenu);
 		menu.add(syncChildMenu);
@@ -226,7 +220,6 @@ public class ViewChildScreen extends CustomScreen {
 			menu.add(syncMenu);
 		}
 		menu.add(historyMenu);
-		menu.add(CloseMenu);
 
 		super.makeMenu(menu, instance);
 	}

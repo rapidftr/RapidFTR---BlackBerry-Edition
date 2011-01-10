@@ -216,14 +216,7 @@ public class ManageChildScreen extends CustomScreen {
             menu.add(saveChildMenu);
         }
 
-        MenuItem CloseMenu = new MenuItem("Close", 3, 1) {
-            public void run() {
-                onClose();
-            }
-        };
-
         addSyncFailedErrorMenuItem(menu);
-        menu.add(CloseMenu);
 
         super.makeMenu(menu, instance);
     }
