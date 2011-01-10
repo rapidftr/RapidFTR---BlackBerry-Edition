@@ -71,7 +71,7 @@
     <target name="compile" depends="init">
 
         <rapc srcdir="${src.dir}" output="${output.file}" destdir="${output.dir}/temp" exepath="${verify.path}">
-            <jdp title="${app.title}" vendor="${app.vendor}" version="${app.version}" type="cldc"/>
+            <jdp title="${app.title}" vendor="${app.vendor}" version="${app.version}" type="cldc" icon="../RapidFTR-Blackberry/src/res/cf68.png" ribbonposition="99"/>
         </rapc>
 
         <jar destfile="${output.dir}/temp/${output.file}.jar" update="true">
@@ -88,7 +88,7 @@
         </delete>
 
         <rapc srcdir="${output.dir}" output="${output.file}" destdir="${output.dir}" exepath="${verify.path}">
-            <jdp title="${app.title}" vendor="${app.vendor}" version="${app.version}" type="cldc"/>
+            <jdp title="${app.title}" vendor="${app.vendor}" version="${app.version}" type="cldc" icon="../RapidFTR-Blackberry/src/res/cf68.png" ribbonposition="99"/>
         </rapc>
     </target>
 
@@ -143,38 +143,6 @@
             <report todir="${report.dir}"/>
         </junitreport>
         <fail if="unit.tests.failed" message="Unit tests failed"/>
-    </target>
-
-
-    <target name="build_final">
-        <echo message="rapc build, dir=${output.dir}"></echo>
-        <mkdir dir="${output.dir}"/>
-        <rapc srcdir="${src.dir}" verbose="true" output="${output.file}" destdir="${output.dir}" jdehome="${jde.home}"
-              noconvert="true" exepath="${verify.path}">
-            <src>
-                <fileset file="${output.dir}/${output.file}.jar"/>
-            </src>
-            <jdp title="${app.title}" vendor="${app.vendor}" version="${app.version}" type="cldc">
-            </jdp>
-        </rapc>
-
-        <java jar="${signatureTool-jar}" fork="true" dir="${output.dir}" failonerror="true">
-            <arg line=" -a -p ${signing.code} -c -C  *.cod"/>
-        </java>
-        <!-- sigtool jdehome="C:Program FilesResearch In MotionBlackBerry JDE 4.7.0" codfile="${dist.dir}/bbant/${name}.cod" password="" / -->
-        <alx destdir="${output.dir}" filename="${app.title}.alx">
-            <application id="${app.title}">
-                <codset>
-                    <fileset dir="${output.dir}" includes="*.cod">
-                    </fileset>
-                </codset>
-            </application>
-        </alx>
-        <mkdir dir="${output.dir}/bbant-final"/>
-        <jadtool input="${output.dir}/${output.file}.jad" destdir="${output.dir}/bbant-final">
-            <fileset dir="${output.dir}" includes="*.cod">
-            </fileset>
-        </jadtool>
     </target>
 
 </project>
