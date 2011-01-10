@@ -31,7 +31,8 @@ public class Main extends UiApplication {
         int [] requiredPermissions = new int[] {
                 ApplicationPermissions.PERMISSION_INPUT_SIMULATION,
                 ApplicationPermissions.PERMISSION_FILE_API,
-                ApplicationPermissions.PERMISSION_RECORDING
+                ApplicationPermissions.PERMISSION_RECORDING,
+                ApplicationPermissions.PERMISSION_PHONE
         };
 
         this.permissionsGranted = makePermissionsRequest(requiredPermissions);
