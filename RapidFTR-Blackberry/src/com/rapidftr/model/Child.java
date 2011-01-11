@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import javax.microedition.io.Connector;
 
+import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.util.Persistable;
@@ -303,8 +304,21 @@ public class Child implements Persistable {
 	}
 
 	public Bitmap getImage() {
-		EncodedImage image = ImageUtility
-				.getBitmapImageForPath(((String) getField("current_photo_key")));
-		return image.getBitmap();
+		String imageLocation = (String) getField("current_photo_key");
+		EncodedImage fullSizeImage = ImageUtility.getBitmapImageForPath(imageLocation);
+		
+		Bitmap bitmap;
+		if(fullSizeImage != null)
+		{
+			int requiredWidth = Fixed32.toFP(Bitmap.getBitmapResource("res/head.png").getWidth());
+			int requiredHeight = Fixed32.toFP(Bitmap.getBitmapResource("res/head.png").getHeight());
+			bitmap =ImageUtility.scaleImage(fullSizeImage, requiredWidth, requiredHeight);
+		}
+		else
+		{
+			bitmap = Bitmap.getBitmapResource("res/head.png");
+		}
+
+		return bitmap;
 	}
 }

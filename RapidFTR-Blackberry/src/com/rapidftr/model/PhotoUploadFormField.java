@@ -38,20 +38,7 @@ public class PhotoUploadFormField extends FormField implements
 		}
 		else
 		{
-			String imageLocation = (String) child.getField("current_photo_key");
-			EncodedImage fullSizeImage = ImageUtility.getBitmapImageForPath(imageLocation);
-			
-			if(fullSizeImage != null)
-			{
-				int requiredWidth = Fixed32.toFP(Bitmap.getBitmapResource("res/head.png").getWidth());
-				int requiredHeight = Fixed32.toFP(Bitmap.getBitmapResource("res/head.png").getHeight());
-				bitmap =ImageUtility.scaleImage(fullSizeImage, requiredWidth, requiredHeight);
-			}
-			else
-			{
-				bitmap = Bitmap.getBitmapResource("res/head.png");
-			}
-			
+			bitmap = child.getImage();
 		}
 		capturePhoto = new Button(bitmap);
 
