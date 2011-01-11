@@ -2,6 +2,7 @@ package com.rapidftr.screens;
 
 import java.util.Vector;
 
+import com.rapidftr.Main;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.MenuItem;
@@ -179,6 +180,10 @@ public class HomeScreen extends CustomScreen {
 		clearFields();
 		layoutScreen();
 		super.onExposed();
+        if (!((Main)this.getApplication()).permissionsGranted) {
+            onClose();
+            System.exit(-1);
+        }
 	}
 	
 	public boolean keyChar( char key, int status, int time ) 

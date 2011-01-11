@@ -35,8 +35,6 @@ public class LoginService extends RequestAwareService {
         Hashtable context = new Hashtable();
         context.put(USER_NAME, user);
         context.put(PASSWORD, password);
-        context.put(IMEI, imei);
-        context.put(MOBILE_NUMBER, mobile);
 
         requestHandler.startNewProcess();
         requestHandler.post("sessions", postArgs, HttpUtility.makeJSONHeader(),

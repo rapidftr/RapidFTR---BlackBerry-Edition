@@ -1,0 +1,76 @@
+#!/usr/bin/env ruby -wKU
+require 'optparse'
+require 'ostruct'
+require 'tmpdir'
+
+module CopyRelease
+
+  DEFAULT_ORIGIN = 'jorge@97.107.135.7'
+
+  class << self
+    def run args
+      options = parse_options args
+      copy options.origin, options.destination, options.build
+    end
+
+    def copy origin, destination, build
+      tmpdir = Dir.mktmpdir
+      sh %(scp -r #{origin}:bb-builds/#{build} #{tmpdir}/#{build})
+      sh %(echo '#{build}' > #{tmpdir}/#{build}/build.txt)
+      sh %(scp -r #{tmpdir}/#{build} #{destination}:/srv/rapid_ftr/shared/system/bb-builds)
+      sh %(ssh #{destination} "ln -s /srv/rapid_ftr/shared/system/bb-builds/#{build} /srv/rapid_ftr/shared/system/bb-builds/latest")
+    end
+
+    def parse_options args
+      options = OpenStruct.new(:origin => DEFAULT_ORIGIN)
+      option_parser = build_option_parser_to_populate options
+      option_parser.parse! args
+
+      unless options.destination && options.build
+        puts option_parser
+        exit 1
+      end
+      options
+    end
+    
+    def build_option_parser_to_populate options
+      OptionParser.new do |opts|
+        opts.banner = "Usage: #{__FILE__} [options]"
+        opts.separator ""
+        opts.separator "Options:"
+
+        opts.on("-o", "--origin USER@HOST",
+                "User and host from which release should be copied.",
+                "Default #{DEFAULT_ORIGIN}") do |o|
+          options.origin = o
+        end
+
+        opts.on("-d", "--destination USER@HOST",
+                "Required. User and host to which release should be copied.") do |d|
+          options.destination = d
+        end
+
+        opts.on("-b", "--build BUILD_DIRECTORY",
+                "Required. Directory containing the build to deploy.",
+                "Something like 'bb-build-Uganda4'.") do |b|
+          options.build = b
+        end
+
+        opts.on_tail("-h", "--help", "Show this message") do
+          puts opts
+          exit
+        end
+      end
+    end
+    
+    def sh command
+      puts command
+      success = system command
+      unless success
+        raise "Failed with status #{$?}."
+      end
+    end
+  end
+end
+
+CopyRelease.run ARGV
