@@ -39,15 +39,13 @@ public abstract class ChildrenListField extends ObjectListField {
 
 	public void drawListRow(ListField listField, Graphics graphics, int index,
 			int y, int width) {
-		
-		Object[] childImagePair = (Object[]) this.get(listField, index);
+        Object[] childImagePair = (Object[]) this.get(listField, index);
 		Child child = (Child) childImagePair[0];
 		Bitmap image = (Bitmap) childImagePair[1];
 		
 		drawStatusBox(listField, graphics, index, child);
 		
 		drawChildImage(graphics, listField, index, image);
-		
 		
 		graphics.setColor(Color.BLACK);
 		
