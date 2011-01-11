@@ -310,8 +310,8 @@ public class Child implements Persistable {
 		Bitmap bitmap;
 		if(fullSizeImage != null)
 		{
-			int requiredWidth = Fixed32.toFP(Bitmap.getBitmapResource("res/head.png").getWidth());
-			int requiredHeight = Fixed32.toFP(Bitmap.getBitmapResource("res/head.png").getHeight());
+			int requiredWidth = Fixed32.toFP(300);
+			int requiredHeight = Fixed32.toFP(300);
 			bitmap =ImageUtility.scaleImage(fullSizeImage, requiredWidth, requiredHeight);
 		}
 		else
