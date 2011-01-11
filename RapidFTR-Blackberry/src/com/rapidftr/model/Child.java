@@ -1,10 +1,17 @@
 package com.rapidftr.model;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import javax.microedition.io.Connector;
+
+import net.rim.device.api.system.Bitmap;
+import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.util.Persistable;
 
 import org.json.me.JSONArray;
@@ -13,6 +20,7 @@ import org.json.me.JSONObject;
 
 import com.rapidftr.utilities.FileUtility;
 import com.rapidftr.utilities.HttpUtility;
+import com.rapidftr.utilities.ImageUtility;
 import com.rapidftr.utilities.RandomStringGenerator;
 import com.rapidftr.utilities.StringUtility;
 import com.sun.me.web.request.Arg;
@@ -294,4 +302,9 @@ public class Child implements Persistable {
 				queryString) != -1));
 	}
 
+	public Bitmap getImage() {
+		EncodedImage image = ImageUtility
+				.getBitmapImageForPath(((String) getField("current_photo_key")));
+		return image.getBitmap();
+	}
 }
