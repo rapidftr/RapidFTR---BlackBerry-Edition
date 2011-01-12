@@ -139,30 +139,33 @@ public class ManageChildScreen extends CustomScreen {
         getController().takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
     }
 
-    public boolean onClose() {
-        if (!formsEmpty()) {
-    	    String menuMessage = "The current record has been changed. What do you want to do with these changes?";
-            String[] menuChoices = {"Save", "Discard", "Cancel"};
-            int defaultChoice = 0;
-            int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
+	public boolean onClose() {
+		if (!formsEmpty()) {
+			String menuMessage = "The current record has been changed. What do you want to do with these changes?";
+			String[] menuChoices = { "Save", "Discard", "Cancel" };
+			int defaultChoice = 0;
+			int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
 
-            switch (result) {
-            case 0: {
-                if (!validateOnSave())
-                    return false;
-                break;
-            }
-            case 1: {
-                break;
-            }
-            case 2: {
-                return false;
-            }
-		    }
-        }
-        controller.popScreen();
+			switch (result) {
+			case 0: {
+				if (validateOnSave()) {
+					controller.popScreen();
+					return true;
+				}
+				break;
+			}
+			case 1: {
+				controller.popScreen();
+				break;
+			}
+			case 3: {
+				break;
+			}
+
+			}
+		}
 		return true;
-    }
+	}
 
 	private boolean validateOnSave() {
         String invalidDataField = onSaveChildClicked();
