@@ -5,18 +5,11 @@ import com.rapidftr.datastore.Children;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildrenListField;
 import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.ImageUtility;
 import net.rim.device.api.system.Bitmap;
-import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
-
-import javax.microedition.io.Connector;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class ViewChildrenScreen extends CustomScreen {
 	
@@ -45,7 +38,7 @@ public class ViewChildrenScreen extends CustomScreen {
 		for (int i = 0; i < childArray.length; i++) {
 			Object[] childImagePair = new Object[2];
 			Child child = childArray[i];
-			Bitmap image = getChildImage((String) child.getField("current_photo_key"));
+			Bitmap image = child.getThumbnail();
 			childImagePair[0] = child;
 			childImagePair[1] = image;
 			childrenAndImages[i] = childImagePair;
@@ -97,28 +90,5 @@ public class ViewChildrenScreen extends CustomScreen {
 		super.makeMenu(menu, instance);
 	}
 
-	
-	private Bitmap getChildImage(String ImagePath) {
-		try {
-			InputStream inputStream = Connector.openInputStream(ImagePath);
-	
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			int i = 0;
-			while ((i = inputStream.read()) != -1) {
-	            outputStream.write(i);
-	        }
-	
-			byte[] data = outputStream.toByteArray();
-			EncodedImage eimg = EncodedImage.createEncodedImage(data, 0,
-					data.length);
-			Bitmap image = eimg.getBitmap();
-			inputStream.close();
-			
-			return ImageUtility.resizeBitmap(image, ROW_HEIGHT - 4, ROW_HEIGHT - 4);
-		} catch (IOException e) {
-			return null;
-		} catch (IllegalArgumentException ex) {
-			return null;
-		}
-	}
+
 }

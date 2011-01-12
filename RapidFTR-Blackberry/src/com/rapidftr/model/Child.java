@@ -1,14 +1,9 @@
 package com.rapidftr.model;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import javax.microedition.io.Connector;
 
 import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
@@ -304,21 +299,29 @@ public class Child implements Persistable {
 	}
 
 	public Bitmap getImage() {
-		String imageLocation = (String) getField("current_photo_key");
-		EncodedImage fullSizeImage = ImageUtility.getBitmapImageForPath(imageLocation);
-		
-		Bitmap bitmap;
-		if(fullSizeImage != null)
-		{
-			int requiredWidth = Fixed32.toFP(Bitmap.getBitmapResource("res/head.png").getWidth());
-			int requiredHeight = Fixed32.toFP(Bitmap.getBitmapResource("res/head.png").getHeight());
-			bitmap =ImageUtility.scaleImage(fullSizeImage, requiredWidth, requiredHeight);
-		}
-		else
-		{
-			bitmap = Bitmap.getBitmapResource("res/head.png");
-		}
-
-		return bitmap;
+        return getScaledImage(300, 300, "res/head.png");
 	}
+
+    private Bitmap getScaledImage(int width, int height, String defaultImage) {
+        String imageLocation = (String) getField("current_photo_key");
+        EncodedImage fullSizeImage = ImageUtility.getBitmapImageForPath(imageLocation);
+
+        Bitmap bitmap;
+        if(fullSizeImage != null)
+        {
+            int requiredWidth = Fixed32.toFP(width);
+            int requiredHeight = Fixed32.toFP(height);
+            bitmap =ImageUtility.scaleImage(fullSizeImage, requiredWidth, requiredHeight);
+        }
+        else
+        {
+            bitmap = Bitmap.getBitmapResource(defaultImage);
+        }
+
+        return bitmap;
+    }
+
+    public Bitmap getThumbnail(){
+        return getScaledImage(60,60,"res/thumb.png");
+    }
 }
