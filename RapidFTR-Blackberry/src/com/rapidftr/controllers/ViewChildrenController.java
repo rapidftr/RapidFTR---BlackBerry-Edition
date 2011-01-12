@@ -21,7 +21,7 @@ public class ViewChildrenController extends Controller {
 	}
 
 	public void viewChildren(Children children) {
-		getViewChildrenScreen().setChildren(children);
+		getViewChildrenScreen().setChildren(children.getChildrenAndImages());
 		show();
 	}
 

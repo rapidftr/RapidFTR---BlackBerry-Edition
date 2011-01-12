@@ -3,6 +3,8 @@ package com.rapidftr.datastore;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import net.rim.device.api.system.Bitmap;
+
 import com.rapidftr.model.Child;
 
 public class Children {
@@ -64,4 +66,15 @@ public class Children {
 		return sort(new String[]{"name"}, true);
 	}
 
+	public Object[] getChildrenAndImages() {
+		Object[] childrenAndImages = new Object[count()];
+		for (int i = 0; i < count(); i++) {
+			Object[] childImagePair = new Object[2];
+			Child child = (Child) vector.elementAt(i);
+			childImagePair[0] = child;
+			childImagePair[1] = child.getThumbnail();
+			childrenAndImages[i] = childImagePair;
+		}
+		return childrenAndImages;
+	}
 }
