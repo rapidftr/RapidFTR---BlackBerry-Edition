@@ -1,15 +1,15 @@
 package com.rapidftr.screens;
 
+import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
+import net.rim.device.api.ui.component.SeparatorField;
+
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildrenListField;
 import com.rapidftr.screens.internal.CustomScreen;
-import net.rim.device.api.system.Bitmap;
-import net.rim.device.api.ui.MenuItem;
-import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.component.SeparatorField;
 
 public class ViewChildrenScreen extends CustomScreen {
 	
@@ -32,18 +32,7 @@ public class ViewChildrenScreen extends CustomScreen {
 		add(childrenList);
 	}
 
-	public void setChildren(Children children) {
-		Child[] childArray = children.toArray(); 
-		Object[] childrenAndImages = new Object[children.count()];
-		for (int i = 0; i < childArray.length; i++) {
-			Object[] childImagePair = new Object[2];
-			Child child = childArray[i];
-			Bitmap image = child.getThumbnail();
-			childImagePair[0] = child;
-			childImagePair[1] = image;
-			childrenAndImages[i] = childImagePair;
-			
-		}
+	public void setChildren(Object[] childrenAndImages) {
 		childrenList.set(childrenAndImages);
 		childrenList.setRowHeight(ROW_HEIGHT);
 	}
