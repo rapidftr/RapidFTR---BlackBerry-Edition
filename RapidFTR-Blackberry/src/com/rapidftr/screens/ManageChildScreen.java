@@ -163,7 +163,9 @@ public class ManageChildScreen extends CustomScreen {
 			}
 
 			}
-		}
+		} else {
+            controller.popScreen();
+        }
 		return true;
 	}
 

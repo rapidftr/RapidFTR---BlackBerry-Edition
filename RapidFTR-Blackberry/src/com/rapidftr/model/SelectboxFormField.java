@@ -24,6 +24,8 @@ public class SelectboxFormField extends FormField {
 		manager = new VerticalFieldManager(Field.FIELD_LEFT);
 		Object[] optionArray = new Object[optionStrings.size()];
 		optionStrings.copyInto(optionArray);
+        if (optionArray[0] == "")
+            optionArray[0] = "...";
 		field = new ObjectChoiceField(displayLabel() + ":", optionArray);
 		manager.add(field);
 	}
