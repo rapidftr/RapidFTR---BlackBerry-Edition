@@ -82,6 +82,7 @@ public class Result {
 		}
 
 		if (JS_CONTENT_TYPE.equals(contentType) || JSON_CONTENT_TYPE.equals(contentType) ||
+		// some sites return JSON with the plain text content type
 		    PLAIN_TEXT_CONTENT_TYPE.equals(contentType)) {
 			try {
 				return content.startsWith("[") ? new Result(new JSONArray(content)) : new Result(new JSONObject(content));
@@ -89,8 +90,20 @@ public class Result {
 				throw new ResultException(ex);
 			}
 		}
+		// #if WithXML
+		// # else if (TEXT_XML_CONTENT_TYPE.equals(contentType) ||
+		// # APPLICATION_XML_CONTENT_TYPE.equals(contentType) ||
+		// # // default to XML if content type is not specified
+		// # contentType == null) {
+		// # try {
+		// # return new Result(XML.toJSONObject(content));
+		// # } catch (Exception ex) {
+		// # throw new ResultException(ex);
+		// # }
+		// # }
+		// #endif
 
-		throw new ResultException("unsupported URL");
+		throw new ResultException("Unsupported content-type: " + contentType);
 	}
 
 	private Result(final byte[] data) {
