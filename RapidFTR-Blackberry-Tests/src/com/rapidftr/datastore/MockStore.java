@@ -9,7 +9,7 @@ public class MockStore implements Store {
 
 	private Hashtable table = new Hashtable();
 	
-	public MockStore(String key) {
+	public MockStore() {
 	}
 
 	public void clear() {

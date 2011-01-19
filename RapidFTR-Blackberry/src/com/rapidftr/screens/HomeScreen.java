@@ -173,6 +173,14 @@ public class HomeScreen extends CustomScreen {
 			}
 		};
 		menu.add(contactHelpItem);
+
+        MenuItem updateApplicationMenuItem = new MenuItem("Update application",1,1) {
+            public void run() {
+                ((HomeController) controller).updateApplication();
+            }
+        };
+
+        menu.add(updateApplicationMenuItem);
     }
 
 

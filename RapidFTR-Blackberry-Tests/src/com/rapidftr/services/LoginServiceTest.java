@@ -18,7 +18,7 @@ public class LoginServiceTest {
     @Before
     public void setUpStore(){
         service = mock(HttpService.class);
-        store = new MockStore("test");
+        store = new MockStore();
         settings = new LoginSettings(new Settings(store));
         settings.setLastUsedUserName("test");
         settings.setLastUsedPassword("pass");
