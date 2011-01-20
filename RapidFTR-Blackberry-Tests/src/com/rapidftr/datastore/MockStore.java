@@ -21,7 +21,7 @@ public class MockStore implements Store {
 	}
 
 	public String getString(String key, String defaultValue) {
-		if(table.contains(key))
+		if(table.containsKey(key))
 			return (String)table.get(key);
 		
 		return defaultValue;

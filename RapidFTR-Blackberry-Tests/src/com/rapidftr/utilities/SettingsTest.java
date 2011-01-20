@@ -11,9 +11,9 @@ public class SettingsTest {
     @Test
     public void shouldGenerateUpdateUrlWithJadFileAttachedToLoginUrl(){
         fakeStore = new MockStore();
-        fakeStore.setString(Settings.LAST_USED_HOST_KEY, "https://dev.rapidftr.com");
+        fakeStore.setString(Settings.LAST_USED_HOST_KEY, "https://dev-test.rapidftr.com");
         Settings setting = new Settings(fakeStore);
-        String expectedUpdateUrl = "https://dev.rapidftr.com/blackberry/RapidFTR.jad";
+        String expectedUpdateUrl = "https://dev-test.rapidftr.com/blackberry/RapidFTR.jad";
         assertEquals(expectedUpdateUrl, setting.getApplicationUpdateUrl());
 
     }
