@@ -5,7 +5,7 @@ require 'tmpdir'
 
 module CopyRelease
 
-  DEFAULT_ORIGIN = 'jorge@97.107.135.7'
+  DEFAULT_ORIGIN = 'http://dev.rapidftr.com:8000'
 
   class << self
     def run args
@@ -15,10 +15,9 @@ module CopyRelease
 
     def copy origin, destination, build
       tmpdir = Dir.mktmpdir
-      sh %(scp -r #{origin}:bb-builds/#{build} #{tmpdir}/#{build})
-      sh %(echo '#{build}' > #{tmpdir}/#{build}/build.txt)
+      sh %(wget -r --no-verbose --no-host-directories --no-parent --directory-prefix=#{tmpdir} #{origin}/#{build}/)
       sh %(scp -r #{tmpdir}/#{build} #{destination}:/srv/rapid_ftr/shared/system/bb-builds)
-      sh %(ssh #{destination} "ln -s /srv/rapid_ftr/shared/system/bb-builds/#{build} /srv/rapid_ftr/shared/system/bb-builds/latest")
+      sh %(ssh #{destination} "rm /srv/rapid_ftr/shared/system/bb-builds/latest && ln -s /srv/rapid_ftr/shared/system/bb-builds/#{build} /srv/rapid_ftr/shared/system/bb-builds/latest")
     end
 
     def parse_options args
@@ -32,15 +31,15 @@ module CopyRelease
       end
       options
     end
-    
+
     def build_option_parser_to_populate options
       OptionParser.new do |opts|
         opts.banner = "Usage: #{__FILE__} [options]"
         opts.separator ""
         opts.separator "Options:"
 
-        opts.on("-o", "--origin USER@HOST",
-                "User and host from which release should be copied.",
+        opts.on("-o", "--origin http://build.server",
+                "Server from which release should be copied.",
                 "Default #{DEFAULT_ORIGIN}") do |o|
           options.origin = o
         end
@@ -62,7 +61,7 @@ module CopyRelease
         end
       end
     end
-    
+
     def sh command
       puts command
       success = system command
