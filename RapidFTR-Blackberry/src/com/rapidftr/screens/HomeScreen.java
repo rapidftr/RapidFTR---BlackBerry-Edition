@@ -153,26 +153,36 @@ public class HomeScreen extends CustomScreen {
     }
 
     protected void makeMenu(Menu menu, int instance) {
-        MenuItem cleanDeviceMenuItem = new MenuItem("Clean Device", 1, 1) {
-			public void run() {
-				onCleanDeviceClicked();
-			}
-		};
-		menu.add(cleanDeviceMenuItem);
-		
-        MenuItem syncInfoItem = new MenuItem("Last Sync Info", 1, 1) {
-			public void run() {
+        int userOptions = 1;
+        int firstSeparator = 2;
+        int advancedOptions = 3;
+        MenuItem cleanDeviceMenuItem = new MenuItem("Clean Device", advancedOptions, 2) {
+            public void run() {
+                onCleanDeviceClicked();
+            }
+        };
+        MenuItem syncInfoItem = new MenuItem("Last Sync Info", userOptions, 2) {
+            public void run() {
                 Dialog.alert(settings.getLastSyncInfo());
-			}
-		};
-		menu.add(syncInfoItem);
-		
-		MenuItem contactHelpItem = new MenuItem("Contact & Help", 1, 1) {
-			public void run() {
-				((HomeController) controller).showcontact();             
-			}
-		};
-		menu.add(contactHelpItem);
+            }
+        };
+        MenuItem contactHelpItem = new MenuItem("Contact & Help", userOptions, 1) {
+            public void run() {
+                ((HomeController) controller).showcontact();
+            }
+        };
+        MenuItem updateApplicationMenuItem = new MenuItem("Update RapidFTR", advancedOptions, 1) {
+            public void run() {
+                ((HomeController) controller).updateApplication();
+            }
+        };
+
+
+        menu.add(contactHelpItem);
+        menu.add(updateApplicationMenuItem);
+        menu.add(MenuItem.separator(firstSeparator));
+        menu.add(cleanDeviceMenuItem);
+        menu.add(syncInfoItem);
     }
 
 

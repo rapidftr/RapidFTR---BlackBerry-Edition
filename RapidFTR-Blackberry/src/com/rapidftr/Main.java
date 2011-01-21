@@ -85,7 +85,7 @@ public class Main extends UiApplication {
 				formService, childSyncService, loginService);
 
 		HomeController homeScreenController = new HomeController(
-				homeScreen, uiStack);
+				homeScreen, uiStack, settings);
 
 		ContactInformationController contactScreenController = new ContactInformationController(
 				contactScreen, uiStack, new ContactInformationSyncService(

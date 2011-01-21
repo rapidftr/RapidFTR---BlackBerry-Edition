@@ -7,7 +7,7 @@ import java.util.Calendar;
 
 public class Settings {
 
-	private static final String LAST_USED_HOST_KEY = "last.used.host";
+	public static final String LAST_USED_HOST_KEY = "last.used.host";
 	
 	private static final String DEFAULT_URL = "https://dev.rapidftr.com";
 
@@ -111,5 +111,9 @@ public class Settings {
     public String getLastSyncInfo() {
         String lastSync = store.getString("last.sync");
         return StringUtility.isBlank(lastSync) ? "Records yet to be synchronized" : lastSync ; 
+    }
+
+    public String getApplicationUpdateUrl() {
+        return getLastUsedLoginHost() + "/blackberry/RapidFTR.jad";
     }
 }
