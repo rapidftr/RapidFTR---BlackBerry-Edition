@@ -1,11 +1,16 @@
 package com.rapidftr.model;
 
-import com.rapidftr.controllers.ViewChildrenController;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.Display;
-import net.rim.device.api.ui.*;
+import net.rim.device.api.ui.Color;
+import net.rim.device.api.ui.DrawStyle;
+import net.rim.device.api.ui.Font;
+import net.rim.device.api.ui.Graphics;
+import net.rim.device.api.ui.Ui;
 import net.rim.device.api.ui.component.ListField;
 import net.rim.device.api.ui.component.ObjectListField;
+
+import com.rapidftr.controllers.ViewChildrenController;
 
 public abstract class ChildrenListField extends ObjectListField {
 
@@ -27,6 +32,7 @@ public abstract class ChildrenListField extends ObjectListField {
 	
 	}
 
+   
     protected boolean navigationClick(int i, int i1) {
         if (this.getSelectedIndex() > -1) {
             Child child = getSelectedChild();
@@ -109,4 +115,21 @@ public abstract class ChildrenListField extends ObjectListField {
     }
 
     public abstract ViewChildrenController getViewChildController();
+
+
+	public void addChild() {
+		try {
+			insert(insertPosition(), getViewChildController().getChildAt(
+					childIndexToBeFetched()).toImagepair());
+		} catch (IndexOutOfBoundsException ignore) {
+		}
+	}
+
+	private int childIndexToBeFetched() {
+		return getSelectedIndex() - 1;
+	}
+
+	private int insertPosition() {
+		return getSelectedIndex() + 1;
+	}
 }

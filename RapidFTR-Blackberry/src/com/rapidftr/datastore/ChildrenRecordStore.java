@@ -68,4 +68,9 @@ public class ChildrenRecordStore {
 		return getChildren().sortByName();
 	}
 
+	public Child getChildAt(int index) {
+		Vector vector = store.getVector(GET_ALL_CHILDREN_KEY);
+		return (Child) vector.elementAt(index);
+	}
+	
 }

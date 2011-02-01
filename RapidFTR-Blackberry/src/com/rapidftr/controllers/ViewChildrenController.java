@@ -21,8 +21,13 @@ public class ViewChildrenController extends Controller {
 	}
 
 	public void viewChildren(Children children) {
-		getViewChildrenScreen().setChildren(children.getChildrenAndImages());
+		getViewChildrenScreen().setChildren(
+				children.getChildrenAndImages(initialPageSize()));
 		show();
+	}
+
+	private int initialPageSize() {
+		return 4;
 	}
 
 	private ViewChildrenScreen getViewChildrenScreen(){
@@ -48,4 +53,9 @@ public class ViewChildrenController extends Controller {
 	public void popScreen() {
 		homeScreen();
 	}
+
+	public Child getChildAt(int selectedIndex) {
+		return store.getChildAt(selectedIndex);
+	}
+
 }

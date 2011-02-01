@@ -1,12 +1,13 @@
 package com.rapidftr.screens;
 
+import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.ScrollChangeListener;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
 
 import com.rapidftr.controllers.ViewChildrenController;
-import com.rapidftr.datastore.Children;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildrenListField;
 import com.rapidftr.screens.internal.CustomScreen;
@@ -24,11 +25,18 @@ public class ViewChildrenScreen extends CustomScreen {
 	private void layoutScreen() {
 		add(new LabelField("All children"));
 		add(new SeparatorField());
-		childrenList = new ChildrenListField(){
-            public ViewChildrenController getViewChildController() {
-                return getController();
-            }
-        };
+		childrenList = new ChildrenListField() {
+			public ViewChildrenController getViewChildController() {
+				return getController();
+			}
+		};
+		getMainManager().setScrollListener(new ScrollChangeListener() {
+
+			public void scrollChanged(Manager manager, int newHorizontalScroll,
+					int newVerticalScroll) {
+				childrenList.addChild();
+			}
+		});
 		add(childrenList);
 	}
 

@@ -324,4 +324,11 @@ public class Child implements Persistable {
     public Bitmap getThumbnail(){
         return getScaledImage(60,60,"res/thumb.png");
     }
+
+	public Object toImagepair() {
+		Object[] childImagePair = new Object[2];
+		childImagePair[0] = this;
+		childImagePair[1] = getThumbnail();
+		return childImagePair;
+	}
 }
