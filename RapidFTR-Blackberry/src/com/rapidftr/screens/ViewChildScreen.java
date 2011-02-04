@@ -86,7 +86,9 @@ public class ViewChildScreen extends CustomScreen {
 		uniqueIdentifier = (null == uniqueIdentifier) ? "" : uniqueIdentifier;
 		VerticalFieldManager verticalFieldManager = new VerticalFieldManager();
 		verticalFieldManager.add(BoldRichTextField.getSemiBoldRichTextField(" ",uniqueIdentifier));
-		verticalFieldManager.add(getRegisteredByControl());
+		if (child.getCreatedBy() != null) {
+            verticalFieldManager.add(getRegisteredByControl());
+        }
 		horizontalFieldManager.add(verticalFieldManager);
 		add(horizontalFieldManager);
 
