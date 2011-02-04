@@ -3,6 +3,8 @@ package com.rapidftr.datastore;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import net.rim.device.api.collection.List;
+
 import com.rapidftr.model.Child;
 
 public class Children {
@@ -12,10 +14,10 @@ public class Children {
 	public Children(Vector vector) {
 		this.vector = vector;
 	}
-	
+
 	public Children(Child[] array) {
 		vector = new Vector();
-		for(int i=0;i<array.length;i++) {
+		for (int i = 0; i < array.length; i++) {
 			vector.addElement(array[i]);
 		}
 	}
@@ -26,8 +28,8 @@ public class Children {
 
 	public void forEachChild(ChildAction action) {
 		Enumeration elements = vector.elements();
-		while(elements.hasMoreElements()){
-			Child child = (Child)elements.nextElement();
+		while (elements.hasMoreElements()) {
+			Child child = (Child) elements.nextElement();
 			action.execute(child);
 		}
 	}
@@ -38,30 +40,18 @@ public class Children {
 		return array;
 	}
 
-	protected Children sort(final String[] attributes, final boolean isAscending) {
+
+	protected Children sortBy(final Field field, final boolean isAscending) {
 		Child[] children = toArray();
 		net.rim.device.api.util.Arrays.sort(children,
 				new net.rim.device.api.util.Comparator() {
 					public int compare(Object o1, Object o2) {
-						ChildComparator childComparator = new ChildComparator(attributes);
-						return isAscending ? childComparator.compare(
-								(Child) o1, (Child) o2) : childComparator
-								.compare((Child) o2, (Child) o1);
+						return !isAscending ? field.compare((Child) o2,
+								(Child) o1) : field.compare((Child) o1,
+								(Child) o2);
 					}
 				});
 		return new Children(children);
-	}
-
-	public Children sortByRecentlyAdded() {
-		return sort(new String[]{"created_at"}, false);
-	}
-
-	public Children sortByRecentlyUpdated() {
-		return sort(new String[]{"last_updated_at"}, false);
-	}
-
-	public Children sortByName() {
-		return sort(new String[]{"name"}, true);
 	}
 
 	public Object[] getChildrenAndImages(int size) {

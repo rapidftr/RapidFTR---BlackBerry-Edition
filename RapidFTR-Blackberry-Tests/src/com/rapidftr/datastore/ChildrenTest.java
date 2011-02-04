@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -16,6 +18,22 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class ChildrenTest {
+	private final class MockDateField extends DateField {
+		private MockDateField(String attribute) {
+			super(attribute);
+		}
+
+		@Override
+		protected long parse(String date) {
+			try {
+				return formatter.parse(date).getTime();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			return 0;
+		}
+	}
+
 	private Child child1;
 	private Child child2;
 	private Child child3;
@@ -31,21 +49,19 @@ public class ChildrenTest {
 		child3 = new Child();
 		childArray = new Child[] { child1, child2, child3 };
 		children = new Children(childArray) {
-			@SuppressWarnings("unchecked")
 			@Override
-			protected Children sort(final String[] attributes,
+			protected Children sortBy(final Field field,
 					final boolean isAscending) {
 				Child[] children = toArray();
 				Arrays.sort(children, new Comparator() {
 					public int compare(Object o1, Object o2) {
-						ChildComparator childComparator = new ChildComparator(
-								attributes);
-						return isAscending ? childComparator.compare(
-								(Child) o1, (Child) o2) : childComparator
-								.compare((Child) o2, (Child) o1);
+						return !isAscending ? field.compare((Child) o2,
+								(Child) o1) : field.compare((Child) o1,
+								(Child) o2);
 					}
 				});
 				return new Children(children);
+
 			}
 		};
 
@@ -55,20 +71,22 @@ public class ChildrenTest {
 	@Test
 	public void shouldSort3RecordsByAlphabeticalOrder() {
 
-		child1.setField("name", "kiddo2");
-		child2.setField("name", "kiddo1");
-		child3.setField("name", "kiddo3");
+		child1.setField("name", "bcef");
+		child2.setField("name", "aexe");
+		child3.setField("name", "zeid");
 
 		assertThat(compareChildArraysOnAttribute(new Child[] { child2, child1,
-				child3 }, children.sortByName().toArray(), "name"), is(true));
+				child3 }, children.sortBy(new StringField("name"), true)
+				.toArray(), "name"), is(true));
 	}
 
 	@Test
 	public void shouldSort3RecordsByDateCreated() {
 
 		Calendar calendar = Calendar.getInstance();
+		calendar.set(2011, 2, 2);
 
-		String today = formatter.format(new Date());
+		String today = formatter.format(calendar.getTime());
 
 		calendar.add(Calendar.DAY_OF_YEAR, -1);
 		String yesterday = formatter.format(calendar.getTime());
@@ -81,7 +99,8 @@ public class ChildrenTest {
 		child3.setField("created_at", dayBeforeYesterday);
 
 		assertThat(compareChildArraysOnAttribute(new Child[] { child2, child1,
-				child3 }, children.sortByRecentlyAdded().toArray(), "created_at"), is(true));
+				child3 }, children.sortBy(new MockDateField("created_at"), false)
+				.toArray(), "created_at"), is(true));
 	}
 
 	@Test
@@ -89,7 +108,9 @@ public class ChildrenTest {
 
 		Calendar calendar = Calendar.getInstance();
 
-		String today = formatter.format(new Date());
+		calendar.set(2011, 2, 2);
+
+		String today = formatter.format(calendar.getTime());
 
 		calendar.add(Calendar.DAY_OF_YEAR, -1);
 		String yesterday = formatter.format(calendar.getTime());
@@ -97,14 +118,13 @@ public class ChildrenTest {
 		calendar.add(Calendar.DAY_OF_YEAR, -1);
 		String dayBeforeYesterday = formatter.format(calendar.getTime());
 
-		child1.setField("last_updated_at", yesterday);
 		child2.setField("last_updated_at", today);
+		child1.setField("last_updated_at", yesterday);
 		child3.setField("last_updated_at", dayBeforeYesterday);
 
-		
-
 		assertThat(compareChildArraysOnAttribute(new Child[] { child2, child1,
-				child3 }, children.sortByRecentlyUpdated().toArray(), "last_updated_at"), is(true));
+				child3 }, children.sortBy(new MockDateField("last_updated_at"),
+				false).toArray(), "last_updated_at"), is(true));
 	}
 
 	private boolean compareChildArraysOnAttribute(Child[] Expected,

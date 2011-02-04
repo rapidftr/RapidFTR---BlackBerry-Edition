@@ -57,15 +57,15 @@ public class ChildrenRecordStore {
 	}
 
 	public Children getAllSortedByRecentlyAdded() {
-		return getChildren().sortByRecentlyAdded();
+		return getChildren().sortBy(new DateField("created_at"), false);
 	}
 
 	public Children getAllSortedByRecentlyUpdated() {
-		return getChildren().sortByRecentlyUpdated();
+		return getChildren().sortBy(new DateField("last_update_at"), false);
 	}
 
 	public Children getAllSortedByName() {
-		return getChildren().sortByName();
+		return getChildren().sortBy(new StringField("name"), true);
 	}
 
 	public Child getChildAt(int index) {
