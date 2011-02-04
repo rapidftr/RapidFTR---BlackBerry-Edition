@@ -102,11 +102,11 @@ public class ViewChildScreen extends CustomScreen {
 	}
 
     private Field getRegisteredByControl() {
-        LabelField label = new LabelField("Registered By:" + child.getCreatedBy());
+        LabelField label = new LabelField("Registered by " + child.getCreatedBy());
         if (child.hasChangesByOtherThan(child.getCreatedBy())) {
             HorizontalFieldManager manager = new HorizontalFieldManager();
             manager.add(label);
-            Button othersButton = new Button("Others");
+            Button othersButton = new Button("and others");
             othersButton.setChangeListener(new FieldChangeListener() {
 
                 public void fieldChanged(Field field, int i) {
