@@ -69,12 +69,16 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 	protected void makeMenu(Menu menu, int instance) {
 		menu.add(new MenuItem("Main Menu", 0, 1) {
 			public void run() {
-				controller.homeScreen();
+				onMainMenuClick();
 			}
 		});
 		super.makeMenu(menu, instance);
 	}
 
+	protected void onMainMenuClick() {
+		controller.homeScreen();
+	}
+	
 	public boolean keyChar(char key, int status, int time) {
 		if (key == Characters.ESCAPE) {
 			if (controller != null)
