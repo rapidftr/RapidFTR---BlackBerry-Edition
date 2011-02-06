@@ -231,18 +231,20 @@ public class Child implements Persistable {
 						String changeDateTime = history.getString("datetime");
 						String oldValue = changedFieldObject.getString("from");
 						String newalue = changedFieldObject.getString("to");
+                        String description = "";
 						if (oldValue.equals("")) {
-							historyLogs.addElement(changeDateTime + " "
+							description = changeDateTime + " "
 									+ changedFieldName + " intialized to "
 									+ newalue + " By "
-									+ history.getString("user_name"));
+									+ history.getString("user_name");
 						} else {
-							historyLogs.addElement(changeDateTime + " "
+							description = changeDateTime + " "
 									+ changedFieldName + " changed from "
 									+ oldValue + " to " + newalue + " By "
-									+ history.getString("user_name"));
+									+ history.getString("user_name");
 
 						}
+                        historyLogs.addElement(new ChildHistoryItem(history.getString("user_name"), description));
 					}
 
 				}
@@ -254,6 +256,16 @@ public class Child implements Persistable {
 
 		return historyLogs;
 	}
+
+    public boolean hasChangesByOtherThan(String username) {
+        Enumeration logs = getHistory().elements();
+        while (logs.hasMoreElements()) {
+            if (!username.equals(((ChildHistoryItem)logs.nextElement()).getUsername())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	public boolean isNewChild() {
 		return getField("unique_identifier") == null;
@@ -323,5 +335,9 @@ public class Child implements Persistable {
 
     public Bitmap getThumbnail(){
         return getScaledImage(60,60,"res/thumb.png");
+    }
+
+    public String getCreatedBy() {
+        return (String) getField("created_by");
     }
 }

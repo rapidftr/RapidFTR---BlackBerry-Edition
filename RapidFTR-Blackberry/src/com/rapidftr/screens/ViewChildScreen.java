@@ -8,21 +8,11 @@ import java.util.Vector;
 
 import javax.microedition.io.Connector;
 
+import com.rapidftr.controls.Button;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
-import net.rim.device.api.ui.Color;
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.FocusChangeListener;
-import net.rim.device.api.ui.Graphics;
-import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.MenuItem;
-import net.rim.device.api.ui.UiApplication;
-import net.rim.device.api.ui.XYEdges;
-import net.rim.device.api.ui.component.BitmapField;
-import net.rim.device.api.ui.component.Dialog;
-import net.rim.device.api.ui.component.LabelField;
-import net.rim.device.api.ui.component.Menu;
-import net.rim.device.api.ui.component.SeparatorField;
+import net.rim.device.api.ui.*;
+import net.rim.device.api.ui.component.*;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.BackgroundFactory;
@@ -94,8 +84,12 @@ public class ViewChildScreen extends CustomScreen {
 		
 		String uniqueIdentifier = (String) child.getField("unique_identifier");
 		uniqueIdentifier = (null == uniqueIdentifier) ? "" : uniqueIdentifier;
-		horizontalFieldManager.add(BoldRichTextField.getSemiBoldRichTextField(" ",uniqueIdentifier));
-		
+		VerticalFieldManager verticalFieldManager = new VerticalFieldManager();
+		verticalFieldManager.add(BoldRichTextField.getSemiBoldRichTextField(" ",uniqueIdentifier));
+		if (child.getCreatedBy() != null) {
+            verticalFieldManager.add(getRegisteredByControl());
+        }
+		horizontalFieldManager.add(verticalFieldManager);
 		add(horizontalFieldManager);
 
 
@@ -103,8 +97,27 @@ public class ViewChildScreen extends CustomScreen {
 		emptyLineAfterUID.select(false);
 		add(emptyLineAfterUID);
 
+
 		renderFormFields(child);
 	}
+
+    private Field getRegisteredByControl() {
+        LabelField label = new LabelField("Registered by " + child.getCreatedBy());
+        if (child.hasChangesByOtherThan(child.getCreatedBy())) {
+            HorizontalFieldManager manager = new HorizontalFieldManager();
+            manager.add(label);
+            Button othersButton = new Button("and others");
+            othersButton.setChangeListener(new FieldChangeListener() {
+
+                public void fieldChanged(Field field, int i) {
+                    getViewChildController().showHistory(child);
+                }
+            });
+            manager.add(othersButton);
+            return manager;
+        }
+        return label;
+    }
 
 	private void renderFormFields(Child child) {
 		
