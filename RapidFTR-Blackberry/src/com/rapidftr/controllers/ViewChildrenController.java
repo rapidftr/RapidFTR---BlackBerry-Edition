@@ -17,12 +17,11 @@ public class ViewChildrenController extends Controller {
 
 	public void viewAllChildren() {
 		uiStack.clear();
-		viewChildren(store.getAll());
+		sortByName();
 	}
 
 	public void viewChildren(Children children) {
-		getViewChildrenScreen().setChildren(
-				children.getChildrenAndImages(initialPageSize()));
+		getViewChildrenScreen().setChildren(children);
 		show();
 	}
 

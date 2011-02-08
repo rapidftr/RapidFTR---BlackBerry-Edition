@@ -8,6 +8,7 @@ import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
 
 import com.rapidftr.controllers.ViewChildrenController;
+import com.rapidftr.datastore.Children;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildrenListField;
 import com.rapidftr.screens.internal.CustomScreen;
@@ -40,8 +41,8 @@ public class ViewChildrenScreen extends CustomScreen {
 		add(childrenList);
 	}
 
-	public void setChildren(Object[] childrenAndImages) {
-		childrenList.set(childrenAndImages);
+	public void setChildren(Children children) {
+		childrenList.displayChildren(children);
 		childrenList.setRowHeight(ROW_HEIGHT);
 	}
 

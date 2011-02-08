@@ -50,7 +50,7 @@ public class ChildrenTest {
 		childArray = new Child[] { child1, child2, child3 };
 		children = new Children(childArray) {
 			@Override
-			protected Children sortBy(final Field field,
+			public Children sortBy(final Field field,
 					final boolean isAscending) {
 				Child[] children = toArray();
 				Arrays.sort(children, new Comparator() {

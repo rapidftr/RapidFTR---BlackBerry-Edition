@@ -3,8 +3,6 @@ package com.rapidftr.datastore;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import net.rim.device.api.collection.List;
-
 import com.rapidftr.model.Child;
 
 public class Children {
@@ -41,7 +39,7 @@ public class Children {
 	}
 
 
-	protected Children sortBy(final Field field, final boolean isAscending) {
+	public Children sortBy(final Field field, final boolean isAscending) {
 		Child[] children = toArray();
 		net.rim.device.api.util.Arrays.sort(children,
 				new net.rim.device.api.util.Comparator() {
@@ -63,4 +61,14 @@ public class Children {
 		}
 		return childrenAndImages;
 	}
+
+	public Object getImagePairFor(int selectedIndex) {
+		Child child = (Child)vector.elementAt(selectedIndex);
+		return child.toImagepair();
+	}
+
+	public Children sortBy(StringField stringField) {
+		return sortBy(stringField,true);
+	}
+	
 }
