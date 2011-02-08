@@ -1,6 +1,8 @@
 package com.rapidftr.datastore;
 
 import static org.junit.Assert.assertEquals;
+
+import com.rapidftr.model.ChildFactory;
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -21,20 +23,20 @@ public class ChildRecordStoreTest {
 	@Test
 	public void saveShouldAppendNewChildAndSaveInStore() {
 		int count = childrenStore.getAll().count();
-		childrenStore.addOrUpdate(new Child());
-		childrenStore.addOrUpdate(new Child());
+		childrenStore.addOrUpdate(ChildFactory.newChild());
+		childrenStore.addOrUpdate(ChildFactory.newChild());
 		Assert.assertEquals(count + 2, childrenStore.getAll().count());
 	}
 
 	@Test
 	public void saveShouldUpdateTheChildIfItExists() {
-		Child childOne = new Child();
+		Child childOne = ChildFactory.newChild();
 		childOne.setField("name", "NewChild");
 		childOne.setField("_id", "1");
 		childrenStore.addOrUpdate(childOne);
 		int initial = childrenStore.getAll().count();
 
-		Child updatedChildOne = new Child();
+		Child updatedChildOne = ChildFactory.newChild();
 		updatedChildOne.setField("name", "UpdatedChild");
 		updatedChildOne.setField("_id", "1");
 		childrenStore.addOrUpdate(updatedChildOne);
@@ -54,7 +56,7 @@ public class ChildRecordStoreTest {
 	
 	@Test
 	public void ifChildWithNamePresentInPersistentStoreSearchShouldReturnTheChild() {
-		Child Tom = new Child();
+		Child Tom = ChildFactory.newChild();
 		String childName = "Tom";
 		Tom.setField("name", childName);
 		childrenStore.addOrUpdate(Tom);
@@ -68,11 +70,11 @@ public class ChildRecordStoreTest {
 	@Test
 	public void searchShouldReturnAllTheChildrenWithSearchedName() {
 		String childName = "Tom";
-		Child child = new Child();
+		Child child = ChildFactory.newChild();
 		child.setField("name", childName);
 		childrenStore.addOrUpdate(child);
 		
-		Child child2 = new Child();
+		Child child2 = ChildFactory.newChild();
 		child2.setField("name", childName);
 		childrenStore.addOrUpdate(child2);
 		
@@ -85,7 +87,7 @@ public class ChildRecordStoreTest {
 	
 	@Test
 	public void ifChildWithIdPresentInPersistentStoreSearchShouldReturnTheChild() {
-		Child child = new Child();
+		Child child = ChildFactory.newChild();
 		child.setField("name", "Tom");
 		String childUID = "1";
 		child.setField("unique_identifier", childUID);
@@ -101,11 +103,11 @@ public class ChildRecordStoreTest {
 	public void ifNameofOneChildAndIdOfOtherAreEqualSearchShouldReturnBothTheChildren() {
 		String childNameAndUID = "1";
 		
-		Child child = new Child();
+		Child child = ChildFactory.newChild();
 		child.setField("name", childNameAndUID);
 		childrenStore.addOrUpdate(child);
 
-		Child child2 = new Child();
+		Child child2 = ChildFactory.newChild();
 		child2.setField("unique_identifier", childNameAndUID);
 		childrenStore.addOrUpdate(child2);
 
@@ -119,11 +121,11 @@ public class ChildRecordStoreTest {
 	@Ignore
 	@Test
 	public void shouldReturnChildrenArraySortedByNameIfSorterAttached() throws Exception {
-		Child firstChild = new Child();
+		Child firstChild = ChildFactory.newChild();
 		firstChild.setField("name", "Tom");
 		childrenStore.addOrUpdate(firstChild);
 		
-		Child secondChild = new Child();
+		Child secondChild = ChildFactory.newChild();
 		secondChild.setField("name", "Harry");
 		childrenStore.addOrUpdate(secondChild);
 		

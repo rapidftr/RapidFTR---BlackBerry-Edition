@@ -1,10 +1,10 @@
 package com.rapidftr.model;
 
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.*;
 
+import com.rapidftr.utilities.*;
+import net.rim.device.api.i18n.SimpleDateFormat;
+import net.rim.device.api.io.http.HttpDateParser;
 import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
@@ -14,17 +14,13 @@ import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
-import com.rapidftr.utilities.FileUtility;
-import com.rapidftr.utilities.HttpUtility;
-import com.rapidftr.utilities.ImageUtility;
-import com.rapidftr.utilities.RandomStringGenerator;
-import com.rapidftr.utilities.StringUtility;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Part;
 import com.sun.me.web.request.PostData;
 
 public class Child implements Persistable {
 
+    public static final String CREATED_AT_KEY = "created_at";
 	private final Hashtable data;
 	private final Hashtable changedFields;
 
@@ -34,9 +30,19 @@ public class Child implements Persistable {
 		changedFields = new Hashtable();
 		data = new Hashtable();
 		put("_id", RandomStringGenerator.generate(32));
-		put("created_at", new Date().toString());
+		put(CREATED_AT_KEY, getCurrentFormattedDateTime());
 		childStatus = ChildStatus.NEW;
 	}
+
+    public void setHistories(String histories) {
+        setField("histories", histories);
+    }
+
+    protected String getCurrentFormattedDateTime() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeZone(TimeZone.getTimeZone("UTC"));
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ssz").format(cal);
+    }
 
 	public String toFormatedString() {
 		StringBuffer buffer = new StringBuffer();
@@ -62,6 +68,10 @@ public class Child implements Persistable {
 		while (keyList.hasMoreElements()) {
 			Object key = keyList.nextElement();
 			Object value = data.get(key);
+
+            if (key.equals("histories")) {
+                continue;
+            }
 
 			if (key.equals("current_photo_key")) {
 				if (!StringUtility.isBlank(String.valueOf(value))) {
@@ -179,10 +189,12 @@ public class Child implements Persistable {
 	}
 
 	public static Child create(Vector forms) {
-		return updateChildDetails(new Child(), forms);
+        Child child = new Child();
+		child.updateChildDetails(forms);
+        return child;
 	}
 
-	private static Child updateChildDetails(Child child, Vector forms) {
+	public void updateChildDetails(Vector forms) {
 		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
 
 			Object nextElement = list.nextElement();
@@ -196,23 +208,26 @@ public class Child implements Persistable {
 
 						FormField field = (FormField) nextFormfieldElement;
 
-						child.setField(field.getName(), field.getValue());
+						setField(field.getName(), field.getValue());
 					}
 				}
 			}
 		}
-		child.setField("last_updated_at", new Date().toString());
-		return child;
+		setField("last_updated_at", getCurrentFormattedDateTime());
 	}
 
 	public void update(String userName, Vector forms) {
-		updateChildDetails(this, forms);
+		this.updateChildDetails(forms);
 		if (isUpdated()) {
 			childStatus = ChildStatus.UPDATED;
 		}
 	}
 
-	public Vector getHistory() {
+    public Vector getHistory() {
+        return getHistory(TimeZone.getDefault());
+    }
+
+	public Vector getHistory(TimeZone timeZone) {
 		Vector historyLogs = new Vector();
 		try {
 			Object JsonHistories = getField("histories");
@@ -228,7 +243,7 @@ public class Child implements Persistable {
 								.nextElement();
 						JSONObject changedFieldObject = changes
 								.getJSONObject(changedFieldName);
-						String changeDateTime = history.getString("datetime");
+						String changeDateTime = toLocalTime(history.getString("datetime"), timeZone);
 						String oldValue = changedFieldObject.getString("from");
 						String newalue = changedFieldObject.getString("to");
                         String description = "";
@@ -256,6 +271,19 @@ public class Child implements Persistable {
 
 		return historyLogs;
 	}
+
+    protected String toLocalTime(String dateTime, TimeZone timeZone) {
+        long dateTimeValue = HttpDateParser.parse(dateTime);
+        // HttpDateParser.parse returns 0 when it can't parse correctly
+        // This is Jan 1 1970 - which is not a valid date in this change history context
+        if (dateTimeValue == 0) {
+            return dateTime;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date(dateTimeValue));
+        cal.setTimeZone(timeZone);
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cal);
+    }
 
     public boolean hasChangesByOtherThan(String username) {
         Enumeration logs = getHistory().elements();

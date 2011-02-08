@@ -9,6 +9,9 @@ import static org.mockito.Mockito.when;
 
 import java.util.Vector;
 
+import com.sun.me.web.request.Arg;
+import com.sun.me.web.request.Part;
+import com.sun.me.web.request.PostData;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,11 +34,11 @@ public class ChildTest {
 
 	@Test
 	public void twoChildrenShouldBeSameIfHaveSameUniqueIdentifier() {
-		Child alice = new Child();
+		Child alice = ChildFactory.newChild();
 		alice.setField("name", "Alice");
 		alice.setField("unique_identifier", "unique_identifier");
 
-		Child joy = new Child();
+		Child joy = ChildFactory.newChild();
 		joy.setField("name", "joy");
 		joy.setField("unique_identifier", "unique_identifier");
 		assertTrue(joy.equals(alice));
@@ -43,12 +46,12 @@ public class ChildTest {
 
 	@Test
 	public void twoChildrenShouldBeSameIfHaveSameCouchId() {
-		Child alice = new Child();
+		Child alice = ChildFactory.newChild();
 		String couchId = "someRandomCouchId";
 		alice.setField("name", "Alice");
 		alice.setField("_id", couchId);
 
-		Child joy = new Child();
+		Child joy = ChildFactory.newChild();
 		joy.setField("name", "joy");
 		joy.setField("_id", couchId);
 		assertTrue(joy.equals(alice));
@@ -56,13 +59,14 @@ public class ChildTest {
 
 	@Test
 	public void shouldCreateNewChildWithSupliedFormData() {
-		Child alice = Child.create(forms);
-		assertNotNull(alice);		
+		Child alice = ChildFactory.newChild();
+        alice.updateChildDetails(forms);
+		assertEquals("someName", alice.getField("name"));		
 	}
 	
 	@Test
 	public void shouldUpdateChildWithSupliedFormData() {
-		Child alice = new Child();
+		Child alice = ChildFactory.newChild();
 		String couchId = "someRandomCouchId";
 		alice.setField("name", "Alice");
 		alice.setField("_id", couchId);		
@@ -72,14 +76,14 @@ public class ChildTest {
 	
 	@Test
 	public void isNewChildShouldReturnTrueIfChildHaveNullUniqueIdentifier() {
-		Child joy = new Child();
+		Child joy = ChildFactory.newChild();
 		joy.setField("name", "joy");
 		assertTrue(joy.isNewChild());
 	}
 	
 	@Test
 	public void isNewChildShouldReturnFalseIfChildHaveSomeUniqueIdentifier() {
-		Child joy = new Child();
+		Child joy = ChildFactory.newChild();
 		joy.setField("name", "joy");
 		joy.setField("unique_identifier", "unique_identifier");
 		assertFalse(joy.isNewChild());
@@ -87,14 +91,40 @@ public class ChildTest {
 
     @Test
     public void isNewChildShouldReturnFalseEvenIfThereIsASynchFailure(){
-        Child child = new Child();
+        Child child = ChildFactory.newChild();
         child.syncFailed("Some synch failure");
         assertTrue(child.isNewChild());
     }
 
 	@Test
 	public void shouldNotPutNullValuesInHashTable() {
-		Child child = new Child();
+		Child child = ChildFactory.newChild();
 		child.setField("name", null);
 	}
+
+    @Test
+    public void shouldSetCreatedAt() {
+       Child child = ChildFactory.newChild();
+       assertNotNull(child.getField(Child.CREATED_AT_KEY));
+    }
+
+    @Test
+    public void shouldGetPostData() {
+        Child child = ChildFactory.newChild();
+        PostData data = child.getPostData();
+        Part[] parts = data.getParts();
+        // includes created_at, _id
+        assertEquals(2, parts.length);
+        assertEquals("form-data; name=\"child[_id]\"", parts[0].getHeaders()[0].getValue());
+        assertEquals("form-data; name=\"child[created_at]\"", parts[1].getHeaders()[0].getValue());
+    }
+    
+    @Test
+    public void shouldGetPostDataWithoutHistories() {
+        Child child = ChildFactory.newChild();
+        child.setHistories("[histories]");
+        PostData data = child.getPostData();
+        Part[] parts = data.getParts();
+        assertEquals(2, parts.length);
+    }
 }

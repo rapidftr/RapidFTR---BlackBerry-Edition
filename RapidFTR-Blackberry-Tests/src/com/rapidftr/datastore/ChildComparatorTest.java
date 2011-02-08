@@ -2,6 +2,7 @@ package com.rapidftr.datastore;
 
 import static org.junit.Assert.*;
 
+import com.rapidftr.model.ChildFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -20,8 +21,8 @@ public class ChildComparatorTest {
 	@Before
 	public void setup() {
 		childComparator = new ChildComparator();
-		firstChild = new Child();
-		secondChild = new Child();
+		firstChild = ChildFactory.newChild();
+		secondChild = ChildFactory.newChild();
 	}
 	
 	@Test

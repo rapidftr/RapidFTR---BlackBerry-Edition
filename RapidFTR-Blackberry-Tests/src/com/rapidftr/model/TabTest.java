@@ -59,7 +59,7 @@ public class TabTest {
         Form form = new Form("Test", "id", fieldList);
 
         String value="abd";
-        Child child = new Child();
+        Child child = ChildFactory.newChild();
         child.setField("histories", value);
 
 
