@@ -1,5 +1,6 @@
 package com.rapidftr.model;
 
+import com.rapidftr.utilities.ImageHelper;
 import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
@@ -38,7 +39,7 @@ public class PhotoUploadFormField extends FormField implements
 		}
 		else
 		{
-			bitmap = child.getImage();
+			bitmap = new ImageHelper().getImage(child.getImageLocation());
 		}
 		capturePhoto = new Button(bitmap);
 

@@ -22,6 +22,11 @@ public class ChildHistoryTest {
     public void shouldParseHistories() {
         final Vector historyItems = child.getHistory();
         assertEquals(1, historyItems.size());
+        ChildHistoryItem historyItem = (ChildHistoryItem) historyItems.get(0);
+        assertEquals("01/02/2011 22:01", historyItem.getChangeDateTime());
+        assertEquals("date_of_separation", historyItem.getChangedFieldName());
+        assertEquals("1-2 weeks ago", historyItem.getNewValue());
+        assertEquals("rapidftr", historyItem.getUsername());
         assertEquals("01/02/2011 22:01 date_of_separation intialized to 1-2 weeks ago By rapidftr", historyItems.get(0).toString());
     }
 

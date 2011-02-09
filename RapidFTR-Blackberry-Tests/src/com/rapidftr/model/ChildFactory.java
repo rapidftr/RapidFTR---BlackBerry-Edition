@@ -1,8 +1,9 @@
 package com.rapidftr.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.TimeZone;
+import com.rapidftr.utilities.DateFormatter;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ChildFactory {
 
@@ -10,12 +11,8 @@ public class ChildFactory {
     }
 
     public static Child newChild() {
-        return new Child() {
-            protected String getCurrentFormattedDateTime() {
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-                return new SimpleDateFormat("yyyy-MM-dd HH:mm:ssz").format(cal.getTime());
-            }
-        };
+        DateFormatter dateFormatterMock = mock(DateFormatter.class);
+        when(dateFormatterMock.getCurrentFormattedDateTime()).thenReturn("2010-11-2 01:00:00GMT");
+        return new Child(dateFormatterMock);
     }
 }
