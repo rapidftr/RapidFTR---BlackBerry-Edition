@@ -3,9 +3,7 @@ package com.rapidftr.model;
 import java.util.*;
 
 import com.rapidftr.utilities.*;
-import net.rim.device.api.i18n.DateFormat;
 import net.rim.device.api.i18n.SimpleDateFormat;
-import net.rim.device.api.io.http.HttpDateParser;
 import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
@@ -224,11 +222,7 @@ public class Child implements Persistable {
 		}
 	}
 
-    public Vector getHistory() {
-        return getHistory(TimeZone.getDefault());
-    }
-
-	public Vector getHistory(TimeZone timeZone) {
+	public Vector getHistory() {
 		Vector historyLogs = new Vector();
 		try {
 			Object JsonHistories = getField("histories");
