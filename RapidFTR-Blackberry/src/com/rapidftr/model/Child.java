@@ -3,6 +3,7 @@ package com.rapidftr.model;
 import java.util.*;
 
 import com.rapidftr.utilities.*;
+import net.rim.device.api.i18n.DateFormat;
 import net.rim.device.api.i18n.SimpleDateFormat;
 import net.rim.device.api.io.http.HttpDateParser;
 import net.rim.device.api.math.Fixed32;
@@ -243,7 +244,7 @@ public class Child implements Persistable {
 								.nextElement();
 						JSONObject changedFieldObject = changes
 								.getJSONObject(changedFieldName);
-						String changeDateTime = toLocalTime(history.getString("datetime"), timeZone);
+						String changeDateTime = history.getString("datetime");
 						String oldValue = changedFieldObject.getString("from");
 						String newalue = changedFieldObject.getString("to");
                         String description = "";
@@ -271,19 +272,6 @@ public class Child implements Persistable {
 
 		return historyLogs;
 	}
-
-    protected String toLocalTime(String dateTime, TimeZone timeZone) {
-        long dateTimeValue = HttpDateParser.parse(dateTime);
-        // HttpDateParser.parse returns 0 when it can't parse correctly
-        // This is Jan 1 1970 - which is not a valid date in this change history context
-        if (dateTimeValue == 0) {
-            return dateTime;
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date(dateTimeValue));
-        cal.setTimeZone(timeZone);
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cal);
-    }
 
     public boolean hasChangesByOtherThan(String username) {
         Enumeration logs = getHistory().elements();

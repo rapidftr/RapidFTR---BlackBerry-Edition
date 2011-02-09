@@ -35,21 +35,4 @@ public class ChildHistoryTest {
         assertTrue(child.hasChangesByOtherThan("foobar"));
     }
 
-    @Test
-    public void shouldDisplayTimeInLocalTimeZone() {
-        String histories = "[{\"changes\":{\"date_of_separation\":{\"from\":\"\",\"to\":\"1-2 weeks ago\"}},\"datetime\":\"2011-02-08 14:00:00UTC\",\"user_name\":\"rapidftr\"}]";
-        child.setHistories(histories);
-        final Vector historyItems = child.getHistory(TimeZone.getTimeZone("EST"));
-        assertEquals(1, historyItems.size());
-        assertEquals("2011-02-08 09:00:00 date_of_separation intialized to 1-2 weeks ago By rapidftr", historyItems.get(0).toString());
-    }
-
-    @Test
-    public void shouldReturnDateTimeAsIsWhenItIsNotParseable() {
-        String histories = "[{\"changes\":{\"date_of_separation\":{\"from\":\"\",\"to\":\"1-2 weeks ago\"}},\"datetime\":\"unparseable\",\"user_name\":\"rapidftr\"}]";
-        child.setHistories(histories);
-        final Vector historyItems = child.getHistory(TimeZone.getTimeZone("EST"));
-        assertEquals(1, historyItems.size());
-        assertEquals("unparseable date_of_separation intialized to 1-2 weeks ago By rapidftr", historyItems.get(0).toString());
-    }
 }
