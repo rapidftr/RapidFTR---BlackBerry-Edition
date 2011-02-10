@@ -10,17 +10,24 @@ import com.rapidftr.services.LoginService;
 public class LoginController extends RequestAwareController {
 
 	Process callingProcess;
+    private ConnectionFactory connectionFactory;
     private final String OFFLINE_LOGIN_ERROR_MESSAGE = "You are working offline. You must authenticate with your credentials from the last successful online log in.";
 
     public LoginController(LoginScreen screen, UiStack uiStack,
 			LoginService loginService) {
+        this(screen, uiStack, loginService, new ConnectionFactory());
+    }
+
+    public LoginController(LoginScreen screen, UiStack uiStack,
+			LoginService loginService, ConnectionFactory connectionFactory) {
 		super(screen, uiStack, loginService);
+        this.connectionFactory = connectionFactory;
 	}
 
     public void login(String userName, String password) {
         getScreenCallBack().setProgressMessage("Signing In ...");
         LoginService loginService = (LoginService) service;
-        if (ConnectionFactory.isNotConnected()) {
+        if (connectionFactory.isNotConnected()) {
             if (loginService.offlineLogin(userName, password)) {
                 homeScreen();
                 clearLoginScreen();

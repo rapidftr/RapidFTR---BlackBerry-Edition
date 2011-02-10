@@ -58,6 +58,7 @@ public final class Request implements Runnable {
 	private RequestListener listener = null;
 	//private RequestPool pool = RequestPool.getInstance();
 	private boolean interrupted = false;
+    private ConnectionFactory connectionFactory = new ConnectionFactory();
 
 	private int totalToSend = 0;
 	private int totalToReceive = 0;
@@ -227,7 +228,7 @@ public final class Request implements Runnable {
 
 		HttpConnection conn = null;
 		try {
-			conn = ConnectionFactory.openConnection(location.toString());
+			conn = connectionFactory.openConnection(location.toString());
 			conn.setRequestMethod(method);
 
 			if (httpArgs != null) {

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class ConnectionFactory {
 
-    public static HttpConnection openConnection(String url) throws IOException {
+    public HttpConnection openConnection(String url) throws IOException {
         if (isNotConnected()) {
             throw new IOException("Could not establish connection with host because all connectors are offline");
         }
@@ -19,15 +19,15 @@ public class ConnectionFactory {
         return (HttpConnection) Connector.open(url, Connector.READ_WRITE, true);
     }
 
-    public static boolean isNotConnected() {
+    public boolean isNotConnected() {
         return !(isWIFIAvailable() || isDataServicesAvailable());
     }
 
-    private static boolean isDataServicesAvailable() {
+    private boolean isDataServicesAvailable() {
         return !CoverageInfo.isOutOfCoverage();
     }
 
-    private static boolean isWIFIAvailable() {
+    private boolean isWIFIAvailable() {
         return WLANInfo.getWLANState() == WLANInfo.WLAN_STATE_CONNECTED;
     }
 }

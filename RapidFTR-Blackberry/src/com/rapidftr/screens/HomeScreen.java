@@ -22,9 +22,12 @@ public class HomeScreen extends CustomScreen {
 	private static final XYEdges PADDING = new XYEdges(10, 10, 10, 10);
 	private Button searchButton;
 	private Settings settings;
+    private ConnectionFactory connectionFactory;
+
 	public HomeScreen(Settings settings) {
 		this.settings = settings;
 		layoutScreen();
+        this.connectionFactory = new ConnectionFactory();
 	}
 
 	private void layoutScreen() {
@@ -114,7 +117,7 @@ public class HomeScreen extends CustomScreen {
 	}
 
     protected void onSynchronizeClicked() {
-        if (ConnectionFactory.isNotConnected()) {
+        if (connectionFactory.isNotConnected()) {
             Dialog.ask(Dialog.D_OK,
                     "Could not establish connection with host because all connectors are offline");
         } else if (!settings.isUserLoggedIn()) {
