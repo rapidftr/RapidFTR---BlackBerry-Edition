@@ -42,6 +42,10 @@ public class ChildStatus implements Persistable {
 		this.syncError = syncError;
 	}
 
+    public String toString() {
+        return statusString;
+    }
+
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

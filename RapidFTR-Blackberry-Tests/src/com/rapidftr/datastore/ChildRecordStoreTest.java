@@ -117,21 +117,5 @@ public class ChildRecordStoreTest {
 		Assert.assertEquals(searchResults.toArray()[0], child);
 		Assert.assertEquals(searchResults.toArray()[1], child2);
 	}
-	
-	@Ignore
-	@Test
-	public void shouldReturnChildrenArraySortedByNameIfSorterAttached() throws Exception {
-		Child firstChild = ChildFactory.newChild();
-		firstChild.setField("name", "Tom");
-		childrenStore.addOrUpdate(firstChild);
-		
-		Child secondChild = ChildFactory.newChild();
-		secondChild.setField("name", "Harry");
-		childrenStore.addOrUpdate(secondChild);
-		
-		Children children = childrenStore.getAll();
-		assertEquals(secondChild, children.toArray()[0]);
-	}
 
-	
 }

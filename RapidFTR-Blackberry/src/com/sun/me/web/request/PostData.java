@@ -32,6 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sun.me.web.request;
 
+import com.rapidftr.utilities.Arrays;
+
 public class PostData {
     
     private final Part[] parts;
@@ -75,5 +77,22 @@ public class PostData {
     	
     	return buffer.toString();
     }
-    
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PostData postData = (PostData) o;
+
+        if (boundary != null ? !boundary.equals(postData.boundary) : postData.boundary != null) return false;
+        if (!Arrays.equals(parts, postData.parts)) return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        int result = parts != null ? Arrays.hashCode(parts) : 0;
+        result = 31 * result + (boundary != null ? boundary.hashCode() : 0);
+        return result;
+    }
 }

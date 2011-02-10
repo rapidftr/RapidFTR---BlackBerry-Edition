@@ -308,4 +308,12 @@ public class Child implements Persistable {
     public String getImageLocation() {
         return (String) getField("current_photo_key");
     }
+
+    public void setUniqueIdentifier(String uniqueId) {
+        setField("unique_identifier", uniqueId);
+    }
+
+    public void setId(String id) {
+        setField("_id", id);
+    }
 }

@@ -15,4 +15,13 @@ public class ChildFactory {
         when(dateFormatterMock.getCurrentFormattedDateTime()).thenReturn("2010-11-2 01:00:00GMT");
         return new Child(dateFormatterMock);
     }
+
+    public static Child existingChild(String id) {
+        DateFormatter dateFormatterMock = mock(DateFormatter.class);
+        when(dateFormatterMock.getCurrentFormattedDateTime()).thenReturn("2010-11-2 01:00:00GMT");
+        Child child = new Child(dateFormatterMock);
+        child.setUniqueIdentifier("uniqueid");
+        child.setId(id);
+        return child;
+    }
 }
