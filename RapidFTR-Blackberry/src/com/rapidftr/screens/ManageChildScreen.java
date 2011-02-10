@@ -36,7 +36,7 @@ public class ManageChildScreen extends CustomScreen {
     public ManageChildScreen(Settings settings) {
         this.settings = settings;
     }
-
+   
     public void setUp() {
         createScreenLayout();
     }
@@ -139,36 +139,6 @@ public class ManageChildScreen extends CustomScreen {
         getController().takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
     }
 
-	public boolean onClose() {
-		if (!formsEmpty()) {
-			String menuMessage = "The current record has been changed. What do you want to do with these changes?";
-			String[] menuChoices = { "Save", "Discard", "Cancel" };
-			int defaultChoice = 0;
-			int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
-
-			switch (result) {
-			case 0: {
-				if (validateOnSave()) {
-					controller.popScreen();
-					return true;
-				}
-				break;
-			}
-			case 1: {
-				controller.popScreen();
-				break;
-			}
-			case 3: {
-				break;
-			}
-
-			}
-		} else {
-            controller.popScreen();
-        }
-		return true;
-	}
-
 	private boolean validateOnSave() {
         String invalidDataField = onSaveChildClicked();
         if (invalidDataField != null) {
@@ -193,6 +163,58 @@ public class ManageChildScreen extends CustomScreen {
         return null;
     }
 
+	public boolean onClose() {
+		return displayConfirmation(new ControllerAction() {
+			void execute() {
+				controller.popScreen();
+			}
+		});
+	}
+    
+	protected void onMainMenuClick() {
+		displayConfirmation(new ControllerAction() {
+
+			void execute() {
+				controller.homeScreen();
+
+			}
+		});
+	}
+
+	private boolean displayConfirmation(ControllerAction action) {
+		if (!formsEmpty()) {
+			String menuMessage = "The current record has been changed. What do you want to do with these changes?";
+			String[] menuChoices = { "Save", "Discard", "Cancel" };
+			int defaultChoice = 0;
+			int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
+
+			switch (result) {
+			case 0: {
+				if (validateOnSave()) {
+					action.execute();
+					return true;
+				}
+				break;
+			}
+			case 1: {
+				action.execute();
+				break;
+			}
+			case 3: {
+				break;
+			}
+
+			}
+		} else {
+			action.execute();
+		}
+		return true;
+	}
+
+	abstract class ControllerAction {
+		abstract void execute();
+	}
+	
 	private ManageChildController getController() {
 		return ((ManageChildController) controller);
 	}

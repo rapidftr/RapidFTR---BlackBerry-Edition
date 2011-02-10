@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.microedition.io.HttpConnection;
 
+import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;
@@ -75,7 +76,13 @@ public class HttpBatchRequestHandler implements RequestListener {
 			requestCallBack.onAuthenticationFailure();
             terminateProcessWhenHttpCodeIsNotExpected();
 		} else if (response.getException() != null) {
-			requestCallBack.onRequestFailure(context, response.getException());
+			if (response.getException() instanceof ResultException) {
+				requestCallBack.onProcessFail("Please check the URL");
+			} else {
+				requestCallBack.onRequestFailure(context, response
+						.getException());
+			}
+
 		} else if (response.getCode() == HttpConnection.HTTP_NOT_ACCEPTABLE){
             requestCallBack.onProcessFail("The format of data is not acceptable. Please check the record.");
             terminateProcessWhenHttpCodeIsNotExpected();

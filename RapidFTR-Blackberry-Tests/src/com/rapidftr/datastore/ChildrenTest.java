@@ -1,6 +1,7 @@
 package com.rapidftr.datastore;
 
 import com.rapidftr.model.Child;
+import com.rapidftr.model.ChildFactory;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -44,9 +45,9 @@ public class ChildrenTest {
 
 	@Before
 	public void SetUp() {
-		child1 = new Child();
-		child2 = new Child();
-		child3 = new Child();
+		child1 = ChildFactory.newChild();
+		child2 = ChildFactory.newChild();
+		child3 = ChildFactory.newChild();
 		childArray = new Child[] { child1, child2, child3 };
 		children = new Children(childArray) {
 			@Override
