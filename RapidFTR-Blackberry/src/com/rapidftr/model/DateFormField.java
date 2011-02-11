@@ -44,11 +44,12 @@ public class DateFormField extends FormField
 	}
 
 	public void setValue(String value) {
-
-        String formattedDateStr = value + " 00:00:00 GMT";
-        long httpDate = HttpDateParser.parse(formattedDateStr);
-        if (httpDate == -1) {
-            dateField.setDate(null);
+        dateField.setDate(Long.MIN_VALUE);
+        if (value == null || value.length() == 0) {
+            return;
+        }
+        long httpDate = HttpDateParser.parse(value);
+        if (httpDate == 0) {
             return;
         }
         dateField.setDate(httpDate);
