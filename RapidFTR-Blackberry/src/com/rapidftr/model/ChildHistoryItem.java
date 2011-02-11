@@ -38,22 +38,25 @@ public class ChildHistoryItem {
     }
 
     private String description() {
-        String description = "";
-        if (oldValue.equals("")) {
-            description = changeDateTime + " "
-                    + changedFieldName + " intialized to "
-                    + newValue + " By "
-                    + username;
-        } else {
-            description = changeDateTime + " "
-                    + changedFieldName + " changed from "
-                    + oldValue + " to " + newValue + " By "
-                    + username;
-        }
-        return description;
+
+        return changeDateTime + " " + getFieldChangeDescription();
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public String getFieldChangeDescription() {
+       String description = "";
+        if (oldValue.equals("")) {
+            description = changedFieldName + " intialized to "
+                    + newValue + " By "
+                    + username;
+        } else {
+            description = changedFieldName + " changed from "
+                    + oldValue + " to " + newValue + " By "
+                    + username;
+        }
+        return description;
     }
 }

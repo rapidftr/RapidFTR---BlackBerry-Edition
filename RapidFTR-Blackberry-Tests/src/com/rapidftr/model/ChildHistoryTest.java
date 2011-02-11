@@ -3,7 +3,6 @@ package com.rapidftr.model;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.TimeZone;
 import java.util.Vector;
 
 import static junit.framework.Assert.*;
@@ -27,7 +26,15 @@ public class ChildHistoryTest {
         assertEquals("date_of_separation", historyItem.getChangedFieldName());
         assertEquals("1-2 weeks ago", historyItem.getNewValue());
         assertEquals("rapidftr", historyItem.getUsername());
-        assertEquals("01/02/2011 22:01 date_of_separation intialized to 1-2 weeks ago By rapidftr", historyItems.get(0).toString());
+    }
+
+    @Test
+    public void shouldReturnFieldChangeDescription() {
+        final Vector historyItems = child.getHistory();
+        assertEquals("date_of_separation intialized to 1-2 weeks ago By rapidftr", 
+                ((ChildHistoryItem)historyItems.get(0)).getFieldChangeDescription());
+        assertEquals("01/02/2011 22:01 date_of_separation intialized to 1-2 weeks ago By rapidftr",
+                ((ChildHistoryItem)historyItems.get(0)).toString());
     }
 
     @Test
