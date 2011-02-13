@@ -7,6 +7,7 @@ import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
+import com.rapidftr.utilities.StringUtility;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
@@ -209,7 +210,9 @@ public class ChildSyncService extends RequestAwareService {
 				String fieldValue = jsonChild.getString(fieldName);
 				child.setField(fieldName, fieldValue);
 			}
-			childPhotoUpdater.updateChildPhoto(child, requestHandler);
+            if (!StringUtility.isBlank((String) child.getField("current_photo_key"))) {
+			    childPhotoUpdater.updateChildPhoto(child, requestHandler);
+            }
 			child.syncSuccess();
 
 		} catch (Exception e) {
