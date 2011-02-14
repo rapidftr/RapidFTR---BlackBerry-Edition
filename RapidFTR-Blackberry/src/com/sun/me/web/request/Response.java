@@ -36,6 +36,8 @@ import javax.microedition.io.HttpConnection;
 
 import com.sun.me.web.path.Result;
 
+import java.util.Vector;
+
 public class Response {
 
     Result result = null;
@@ -66,5 +68,37 @@ public class Response {
     
     public Exception getException() {
         return ex;
+    }
+
+    public int getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setCharset(String charset) {
+        this.charset = charset;
+    }
+
+    public String getCharset() {
+        return charset;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
+    public void setHeaders(Arg[] headers) {
+        this.headers = headers;
     }
 }

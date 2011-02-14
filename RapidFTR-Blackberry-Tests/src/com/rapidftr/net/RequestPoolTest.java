@@ -1,12 +1,12 @@
 package com.rapidftr.net;
 
+import com.sun.me.web.request.PostData;
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
-import com.rapidftr.net.RequestPool;
 import com.sun.me.web.request.Request;
 
 public class RequestPoolTest {
@@ -17,7 +17,7 @@ public class RequestPoolTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		requestPool = RequestPool.getInstance();
-		request = Request.post(Request.DEMO_URL, null, null, null, null, null);
+		request = Request.post(Request.DEMO_URL, null, null, null, null, (PostData) null, null);
 	}
 
 	@Test
