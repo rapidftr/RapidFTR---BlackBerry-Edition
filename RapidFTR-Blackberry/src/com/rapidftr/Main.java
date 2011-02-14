@@ -11,6 +11,7 @@ import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.*;
 import com.rapidftr.utilities.DefaultStore;
 import com.rapidftr.utilities.HttpSettings;
+import com.rapidftr.utilities.Logger;
 import com.rapidftr.utilities.Settings;
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
@@ -22,6 +23,7 @@ public class Main extends UiApplication {
 
     public static void main(String[] args) {
 		Main application = new Main();
+        Logger.register();
         application.enterEventDispatcher();
 	}
 
