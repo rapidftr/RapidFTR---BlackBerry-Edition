@@ -1,5 +1,6 @@
 package com.rapidftr.screens;
 
+import com.rapidftr.utilities.ImageHelper;
 import net.rim.device.api.ui.component.BitmapField;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
@@ -16,7 +17,7 @@ public class ChildPhotoScreen extends CustomScreen {
 		childName = new LabelField(child.getField("name"));
 		add(childName);
 		add(new SeparatorField());
-		add(new BitmapField(child.getImage()));
+		add(new BitmapField(new ImageHelper().getImage(child.getImageLocation())));
 	}
 
 }

@@ -120,23 +120,17 @@ public abstract class ChildrenListField extends ObjectListField {
 	}
 
 	private Child getChildAtIndex(int index) {
-		try {
 			Object[] selectedChildImagePair = (Object[]) this.get(this, index);
 			return (Child) selectedChildImagePair[0];
-		} catch (IndexOutOfBoundsException e){
-			return null;
-		}
 	}
 
 	public abstract ViewChildrenController getViewChildController();
 
 	public void addChild() {
-		try {
-			if (getChildAtIndex(insertPosition()) == null) {
-				insert(insertPosition(), children
-						.getImagePairFor(childIndexToBeFetched()));
-			}
-		} catch (IndexOutOfBoundsException ignore) {
+		if (insertPosition() >= this.getSize()
+				&& getSelectedIndex() <= children.count()) {
+			insert(insertPosition(), children
+					.getImagePairAt(childIndexToBeFetched()));
 		}
 	}
 
@@ -150,7 +144,7 @@ public abstract class ChildrenListField extends ObjectListField {
 
 	public void displayChildren(Children children) {
 		this.children = children;
-		set(children.getChildrenAndImages(10));
+		set(children.getChildrenAndImages());
 	}
 
 }

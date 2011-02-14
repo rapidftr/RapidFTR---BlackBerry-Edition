@@ -45,8 +45,13 @@ public class Response {
     String charset = null;
     Arg[] headers = null;
 
-    Response() {}
-    
+    public Response() {}
+
+    public Response(Result result, int code) {
+        this.result = result;
+        this.responseCode = code;
+    }
+
     public Result getResult() {
         return result;
     }

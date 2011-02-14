@@ -7,6 +7,7 @@ import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
+import com.rapidftr.utilities.StringUtility;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
@@ -16,28 +17,30 @@ import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
-import javax.microedition.io.Connector;
-import javax.microedition.io.file.FileConnection;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
 public class ChildSyncService extends RequestAwareService {
 
-	private static final String FILE_STORE_HOME_USER = "file:///store/home/user";
-
 	static final String PROCESS_STATE = "process_state";
 
 	static final String CHILD_TO_SYNC = "childToSync";
 
 	private final ChildrenRecordStore childRecordStore;
+    private ChildPhotoUpdater childPhotoUpdater;
+
+    public ChildSyncService(HttpService httpService,
+			ChildrenRecordStore childRecordStore) {
+        this(httpService, childRecordStore, new ChildPhotoUpdater());
+    }
 
 	public ChildSyncService(HttpService httpService,
-			ChildrenRecordStore childRecordStore) {
+			ChildrenRecordStore childRecordStore, ChildPhotoUpdater photoUpdater) {
 		super(httpService);
 		this.childRecordStore = childRecordStore;
+        this.childPhotoUpdater = photoUpdater;
 	}
 
 	private void uploadChildRecords() {
@@ -207,54 +210,18 @@ public class ChildSyncService extends RequestAwareService {
 				String fieldValue = jsonChild.getString(fieldName);
 				child.setField(fieldName, fieldValue);
 			}
-			updateChildPhoto(child);
+            if (!StringUtility.isBlank((String) child.getField("current_photo_key"))) {
+			    childPhotoUpdater.updateChildPhoto(child, requestHandler);
+            }
 			child.syncSuccess();
 
 		} catch (Exception e) {
+            e.printStackTrace();
 			child.syncFailed(e.getMessage());
 		} finally {
 			childRecordStore.addOrUpdate(child);
 		}
 
-	}
-
-	private void updateChildPhoto(Child child) {
-		try {
-			Arg[] httpArgs = new Arg[1];
-			httpArgs[0] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
-			Response response = requestHandler.get("children/"
-					+ child.getField("_id") + "/resized_photo/400", null,
-					httpArgs);
-			byte[] data = response.getResult().getData();
-
-			String storePath = "";
-			try {
-				String sdCardPath = "file:///SDCard/Blackberry";
-				FileConnection fc = (FileConnection) Connector.open(sdCardPath);
-				if (fc.exists())
-					storePath = sdCardPath;
-				else
-					storePath = FILE_STORE_HOME_USER;
-			} catch (IOException ex) {
-				storePath = FILE_STORE_HOME_USER;
-			}
-
-			String imagePath = storePath + "/pictures/"
-					+ (String) child.getField("current_photo_key") + ".jpg";
-			FileConnection fc = (FileConnection) Connector.open(imagePath);
-			if (!fc.exists()) {
-				fc.create(); // create the file if it doesn't exist
-			}
-			fc.setWritable(true);
-			OutputStream outStream = fc.openOutputStream();
-			outStream.write(data);
-			outStream.close();
-			fc.close();
-
-			child.setField("current_photo_key", imagePath);
-		} catch (IOException e) {
-			child.syncFailed(e.getMessage());
-		}
 	}
 
 	public void onRequestFailure(Object context, Exception exception) {

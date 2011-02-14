@@ -25,10 +25,6 @@ public class ViewChildrenController extends Controller {
 		show();
 	}
 
-	private int initialPageSize() {
-		return 4;
-	}
-
 	private ViewChildrenScreen getViewChildrenScreen(){
 		return (ViewChildrenScreen)currentScreen;
 	}

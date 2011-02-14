@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import com.rapidftr.model.Child;
+import com.rapidftr.utilities.ImageHelper;
 
 public class Children {
 
@@ -52,23 +53,27 @@ public class Children {
 		return new Children(children);
 	}
 
-	public Object[] getChildrenAndImages(int size) {
-		int initialSize = size <= count() ? size : count();
-		Object[] childrenAndImages = new Object[initialSize];
-		for (int i = 0; i < initialSize; i++) {
-			Child child = (Child) vector.elementAt(i);
-			childrenAndImages[i] = child.toImagepair();
+	public Children sortBy(StringField stringField) {
+		return sortBy(stringField,true);
+   }
+	public Object[] getChildrenAndImages() {
+		int size = pageSize() <= count() ? pageSize() : count();
+		Object[] childrenAndImages = new Object[size];
+		for (int i = 0; i < size; i++) {
+			childrenAndImages[i] = getImagePairAt(i);
 		}
 		return childrenAndImages;
 	}
 
-	public Object getImagePairFor(int selectedIndex) {
-		Child child = (Child)vector.elementAt(selectedIndex);
-		return child.toImagepair();
+	public Object[] getImagePairAt(int i) {
+		Object[] childImagePair = new Object[2];
+		Child child = (Child) vector.elementAt(i);
+		childImagePair[0] = child;
+		childImagePair[1] = new ImageHelper().getThumbnail(child.getImageLocation());
+		return childImagePair;
 	}
 
-	public Children sortBy(StringField stringField) {
-		return sortBy(stringField,true);
+	private int pageSize(){
+		return 10;
 	}
-	
 }

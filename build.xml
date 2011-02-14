@@ -2,7 +2,16 @@
     <property environment="env"/>
     <property file="${env.BUILD_PROPERTIES_OVERRIDE}"/>
     <property file="build.properties"/>
+    
+    <mkdir dir="${out.instr.dir}" />
+    <property name="emma.dir" value="RapidFTR-Blackberry-Tests/lib" />
+    <path id="emma.lib" >
+     <pathelement location="${emma.dir}/emma.jar" />
+     <pathelement location="${emma.dir}/emma_ant.jar" />
+    </path>
 
+    <taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+    
     <taskdef resource="bb-ant-defs.xml" classpath="${bb-ant-tools-jar}"/>
 
 
@@ -56,6 +65,8 @@
             <fileset dir="${report.dir}" includes="**/*"/>
             <fileset dir="${tests.build.dir}" includes="**/*"/>
             <fileset dir="${release.dir}" includes="**/*"/>
+            <fileset dir="${out.instr.dir}" includes="**/*"/>
+            <fileset dir="${coverage.dir}" includes="**/*"/>
         </delete>
     </target>
 
@@ -126,22 +137,50 @@
         <javac srcdir="${tests.src.dir}" destdir="${tests.build.dir}" classpathref="test.classpath"/>
     </target>
 
-    <target name="test" depends="compile-tests">
+    <target name="instrument">
+        <path id="srcjar">
+            <pathelement location="${output.dir}/${output.file}.jar"/>
+        </path>
+        <emma enabled="${emma.enabled}" >
+          <instr instrpathref="srcjar"
+                 destdir="${out.instr.dir}"
+                 metadatafile="${coverage.dir}/metadata.emma"
+                 merge="true"
+          />
+        </emma>
+    </target>
+
+    <target name="test" depends="compile-tests, instrument">
         <junit printsummary="yes" haltonfailure="no" failureproperty="unit.tests.failed"
                fork="yes" forkmode="once">
-            <classpath refid="test.classpath">
+            <classpath>
+                <pathelement location="${out.instr.dir}" />
+                <path refid="test.classpath"/>
+                <path refid="emma.lib" />
             </classpath>
             <formatter type="xml"/>
             <batchtest todir="${report.dir}">
                 <fileset dir="${tests.src.dir}">
-		 <include name="**/*Test*"/>	
-		</fileset>
+		            <include name="**/*Test*"/>	
+		        </fileset>
             </batchtest>
+            <jvmarg value="-Demma.coverage.out.file=${coverage.dir}/coverage.emma" />
+            <jvmarg value="-Demma.coverage.out.merge=true" />
         </junit>
         <junitreport todir="${report.dir}">
             <fileset dir="${report.dir}" includes="TEST-*.xml"/>
             <report todir="${report.dir}"/>
         </junitreport>
+        <emma enabled="${emma.enabled}" >
+            <report sourcepath="${src.dir}" >
+              <fileset dir="${coverage.dir}" >
+               <include name="*.emma" />
+              </fileset>
+
+              <txt outfile="${coverage.dir}/coverage.txt" />
+              <html outfile="${coverage.dir}/coverage.html" />
+            </report>
+        </emma>
         <fail if="unit.tests.failed" message="Unit tests failed"/>
     </target>
 

@@ -1,8 +1,13 @@
 package com.rapidftr.screens;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import com.rapidftr.model.ChildHistoryItem;
+import net.rim.device.api.i18n.DateFormat;
+import net.rim.device.api.i18n.SimpleDateFormat;
+import net.rim.device.api.io.http.HttpDateParser;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.RichTextField;
@@ -36,7 +41,7 @@ public class ChildHistoryScreen extends CustomScreen {
 		try {
 			Enumeration logs = history.elements();
 			while (logs.hasMoreElements()) {
-				add(new RichTextField(logs.nextElement().toString()));
+				add(new RichTextField(getDescription((ChildHistoryItem)logs.nextElement())));
 
 				add(new SeparatorField());
 			}
@@ -52,5 +57,13 @@ public class ChildHistoryScreen extends CustomScreen {
 			});
 		}
 	}
+
+    private String getDescription(ChildHistoryItem childHistoryItem) {
+        String description = childHistoryItem.getFieldChangeDescription();
+        String changeDateTime = childHistoryItem.getChangeDateTime();
+        final long dateTime = HttpDateParser.parse(changeDateTime);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+        return dateFormat.format(new Date(dateTime)) + " " + description;
+    }
 
 }

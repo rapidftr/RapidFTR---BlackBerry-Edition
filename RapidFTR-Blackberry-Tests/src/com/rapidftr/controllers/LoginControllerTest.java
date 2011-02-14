@@ -1,6 +1,7 @@
 package com.rapidftr.controllers;
 
 
+import com.rapidftr.net.ConnectionFactory;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.LoginService;
@@ -13,6 +14,7 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class LoginControllerTest {
 	private LoginService loginService;
@@ -20,24 +22,25 @@ public class LoginControllerTest {
 	private UiStack uiStack;
 	private LoginController loginController;
 	private ScreenCallBack screenCallBack;
+    
 	@Before
 	public void setup() {
 		this.loginService = mock(LoginService.class);
 		loginScreen = mock(LoginScreen.class);
 		uiStack = mock(UiStack.class);
+        ConnectionFactory connectionFactory = mock(ConnectionFactory.class);
+        when(connectionFactory.isNotConnected()).thenReturn(false);
 		loginController = new LoginController(loginScreen, uiStack,
-				loginService);
+				loginService, connectionFactory);
 		screenCallBack = loginController.getScreenCallBack();
 	}
 
-    @Ignore
 	@Test
 	public void shouldLoginFromFormService() throws IOException {
 		loginController.login("rapidftr", "rapidftr");
 		verify(loginService).login("rapidftr", "rapidftr");
 	}
 
-    @Ignore
 	@Test
 	public void shouldAttemptLoginOverHttpProviderWithGivenCredentials()
 			throws Exception {
@@ -47,7 +50,6 @@ public class LoginControllerTest {
 		verify(loginService).login(userName, password);
 	}
 
-    @Ignore
 	@Test
 	public void shouldUpdateTheScreenWithConnectionProblemErrorMessage() {
 		loginController.login("abcd", "abcd"); 
@@ -55,7 +57,6 @@ public class LoginControllerTest {
 		verify(loginScreen).onConnectionProblem();
 	}
 
-	@Ignore
     @Test
 	public void shouldUpdateTheScreenWithLoginFailedErrorMessage() {
 		loginController.login("abcd", "abcd"); 

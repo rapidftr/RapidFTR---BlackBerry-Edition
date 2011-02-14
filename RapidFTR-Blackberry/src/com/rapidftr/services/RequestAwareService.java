@@ -4,7 +4,7 @@ import com.rapidftr.net.HttpBatchRequestHandler;
 import com.rapidftr.net.HttpService;
 
 public abstract class RequestAwareService implements ServiceCallback {
-	HttpBatchRequestHandler requestHandler;
+	protected HttpBatchRequestHandler requestHandler;
 
 	RequestAwareService(HttpService httpService) {
 		RequestCallBackImpl requestCallBack = new RequestCallBackImpl();
