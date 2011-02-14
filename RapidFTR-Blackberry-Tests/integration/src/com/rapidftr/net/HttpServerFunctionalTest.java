@@ -22,7 +22,7 @@ public class HttpServerFunctionalTest {
         HttpSettings httpSettings = new HttpSettings(settings);
         httpSettings.setHost("http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=hello%20world");
 
-        HttpServer server = new HttpServer(httpSettings, getConnectionFactory());
+        HttpServer server = new HttpServer(httpSettings, new HttpGateway(getConnectionFactory()));
 
         final Response response = server.getFromServer("", null, null);
         assertEquals(200, response.getCode());

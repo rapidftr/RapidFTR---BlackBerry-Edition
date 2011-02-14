@@ -17,7 +17,7 @@ public class RequestPoolTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		requestPool = RequestPool.getInstance();
-		request = Request.post(Request.DEMO_URL, null, null, null, null, (PostData) null, null);
+		request = Request.post("", null, null, null, null, (PostData) null, null);
 	}
 
 	@Test

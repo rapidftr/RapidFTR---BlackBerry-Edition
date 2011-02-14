@@ -36,6 +36,7 @@ import com.rapidftr.net.HttpGateway;
 
 import javax.microedition.io.HttpConnection;
 import java.io.*;
+import com.rapidftr.utilities.Arrays;
 
 public final class Request implements Runnable {
 
@@ -98,8 +99,28 @@ public final class Request implements Runnable {
 		return request;
 	}
 
-	private Request() {
+    private Request() {
+
+    }
+
+	public static Request createGetRequest(String url, HttpGateway httpGateway, RequestListener listener) {
+        Request request = new Request();
+        request.url = url;
+        request.method = HttpConnection.GET;
+        request.httpGateway = httpGateway;
+        request.listener = listener;
+        return request;
 	}
+
+    public static Request createPostRequest(String url, HttpGateway httpGateway, RequestListener listener, PostData postData) {
+        Request request = new Request();
+        request.url = url;
+        request.method = HttpConnection.POST;
+        request.httpGateway = httpGateway;
+        request.listener = listener;
+        request.multiPart = postData;
+        return request;
+    }
 
 	public void run() {
         Response response = new Response();
@@ -148,4 +169,35 @@ public final class Request implements Runnable {
     public Object getContext() {
         return context;
     }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Request request = (Request) o;
+
+        if (context != null ? !context.equals(request.context) : request.context != null) return false;
+        if (!Arrays.equals(httpArgs, request.httpArgs)) return false;
+        if (httpGateway != null ? !httpGateway.equals(request.httpGateway) : request.httpGateway != null) return false;
+        if (!Arrays.equals(inputArgs, request.inputArgs)) return false;
+        if (listener != null ? !listener.equals(request.listener) : request.listener != null) return false;
+        if (method != null ? !method.equals(request.method) : request.method != null) return false;
+        if (multiPart != null ? !multiPart.equals(request.multiPart) : request.multiPart != null) return false;
+        if (url != null ? !url.equals(request.url) : request.url != null) return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        int result = context != null ? context.hashCode() : 0;
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (method != null ? method.hashCode() : 0);
+        result = 31 * result + (httpArgs != null ? Arrays.hashCode(httpArgs) : 0);
+        result = 31 * result + (inputArgs != null ? Arrays.hashCode(inputArgs) : 0);
+        result = 31 * result + (multiPart != null ? multiPart.hashCode() : 0);
+        result = 31 * result + (listener != null ? listener.hashCode() : 0);
+        result = 31 * result + (httpGateway != null ? httpGateway.hashCode() : 0);
+        return result;
+    }
+
 }
