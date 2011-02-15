@@ -62,10 +62,9 @@ public class AudioField extends FormField implements AudioRecordListener{
 			rcontrol.startRecord();
 			player.start();
 		} catch (final Exception e) {
-			throw new RuntimeException(e.getMessage());
-		} finally {
             closeAudioStore();
-        }
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
     private void closeAudioStore() {

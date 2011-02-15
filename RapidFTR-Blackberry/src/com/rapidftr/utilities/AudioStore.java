@@ -27,6 +27,7 @@ public class AudioStore {
 
     public void close() throws IOException {
         if (outputStream != null) {
+            outputStream.flush();
             outputStream.close();
         }
         if (fileConnection != null) {
