@@ -2,6 +2,7 @@ package com.rapidftr.screens;
 
 import java.io.IOException;
 
+import com.rapidftr.utilities.Logger;
 import net.rim.blackberry.api.invoke.CameraArguments;
 import net.rim.blackberry.api.invoke.Invoke;
 import net.rim.device.api.ui.UiApplication;
@@ -25,6 +26,7 @@ public class SnapshotScreen extends CustomScreen {
 							new ImageEncoder().getEncodedImage(path));
 				} catch (IOException e) {
 					e.printStackTrace();
+                    Logger.log("Photo:" + e.getMessage());
 				}
 			}
 		};
