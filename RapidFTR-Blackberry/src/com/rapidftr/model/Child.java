@@ -108,8 +108,7 @@ public class Child implements Persistable {
         headers[0] = new Arg("Content-Disposition", "form-data; name=\"child["
                 + paramName + "]\"");
         headers[1] = headerContentType;
-        byte[] imageData;
-        imageData = FileUtility.getByteArray(value.toString());
+        byte[] imageData = FileUtility.getByteArray(value.toString());
 
         return new Part(imageData, headers);
     }

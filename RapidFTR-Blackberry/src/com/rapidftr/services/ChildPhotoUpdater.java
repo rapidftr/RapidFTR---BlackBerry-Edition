@@ -2,6 +2,7 @@ package com.rapidftr.services;
 
 import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpBatchRequestHandler;
+import com.rapidftr.utilities.FileStoreUtility;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Response;
@@ -13,8 +14,6 @@ import java.io.OutputStream;
 
 public class ChildPhotoUpdater {
 
-    private static final String FILE_STORE_HOME_USER = "file:///store/home/user";
-
     public void updateChildPhoto(Child child, HttpBatchRequestHandler requestHandler) {
         try {
             Arg[] httpArgs = new Arg[1];
@@ -24,7 +23,7 @@ public class ChildPhotoUpdater {
                     httpArgs);
             byte[] data = response.getResult().getData();
 
-            String imagePath = getStorePath() + "/pictures/"
+            String imagePath = FileStoreUtility.getStorePath() + "/pictures/"
                     + child.getField("current_photo_key") + ".jpg";
             FileConnection fc = (FileConnection) Connector.open(imagePath);
             if (!fc.exists()) {
@@ -42,18 +41,4 @@ public class ChildPhotoUpdater {
         }
     }
 
-    private String getStorePath() {
-        String storePath = "";
-        try {
-            String sdCardPath = "file:///SDCard/Blackberry";
-            FileConnection fc = (FileConnection) Connector.open(sdCardPath);
-            if (fc.exists())
-                storePath = sdCardPath;
-            else
-                storePath = FILE_STORE_HOME_USER;
-        } catch (IOException ex) {
-            storePath = FILE_STORE_HOME_USER;
-        }
-        return storePath;
-    }
 }
