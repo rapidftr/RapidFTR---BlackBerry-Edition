@@ -12,7 +12,7 @@ import com.sun.me.web.request.Response;
 
 public class HttpBatchRequestHandler implements RequestListener {
 
-	RequestCallBack requestCallBack;
+	private RequestCallBack requestCallBack;
 	private int unprocessedRequests = 0;
 	private int totalRequests = 0;
 	private boolean failedRequest = false;
@@ -50,9 +50,8 @@ public class HttpBatchRequestHandler implements RequestListener {
 
 	// sync request
 	public Response get(String url, Arg[] inputArgs, Arg[] httpArgs) throws IOException {
-		Response response = null;
 
-			response = service.get(url, inputArgs, httpArgs);
+			Response response = service.get(url, inputArgs, httpArgs);
 			if (!isValidResponse(response)) {
 				handleResponseErrors(null, response);
 				return null;

@@ -1,72 +1,97 @@
 package com.rapidftr.net;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import javax.microedition.io.HttpConnection;
-
+import com.rapidftr.datastore.MockStore;
+import com.rapidftr.utilities.HttpSettings;
+import com.rapidftr.utilities.Settings;
+import com.rapidftr.utilities.Store;
+import com.sun.me.web.request.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import com.sun.me.web.request.Response;
+import javax.microedition.io.HttpConnection;
+import java.io.IOException;
+
+import static org.mockito.Mockito.*;
 
 public class HttpRequestHandlerTest {
 
-	
+    private HttpGateway httpGateway;
 	private HttpBatchRequestHandler requestHandler;
-	@Mock
 	private RequestCallBack requestCallBack;
-	@Mock
-	private HttpService httpService;
-	@Mock
 	private Object context;
+    private Settings settings;
+
 	@Before
 	public void setUp() {
-		MockitoAnnotations.initMocks(this);
+        context = mock(Object.class);
+        requestCallBack = mock(RequestCallBack.class);
+        final Store settingsStore = new MockStore();
+        settings = new Settings(settingsStore);
+        HttpSettings httpSettings = new HttpSettings(settings);
+        httpSettings.setHost("http://www.rapidftr.com");
+        httpGateway = mock(HttpGateway.class);
+        HttpServer httpServer = new HttpServer(httpSettings, httpGateway);
+        HttpService httpService = new HttpService(httpServer, settings);
 		requestHandler = new HttpBatchRequestHandler(httpService);
 		requestHandler.setRequestCallBack(requestCallBack);
 	}
 
-//
-//	@Test
-//	public void shouldSendProgressStatusToRequestCallback() {
-//		int received = 10;
-//		int total = 100;
-//		requestHandler.setRequestInProgress();
-//		requestHandler.readProgress(context, received, total);
-//		verify(requestCallBack).updateRequestProgress(10);
-//	}
+    @Test
+    public void shouldInvokeUpdateProcessedRequestsWithSuccessfulPostRequest() throws IOException {
+        requestHandler.startNewProcess();
+        Part apart = new Part("hello".getBytes(), null);
+        Part[] parts = new Part[]{apart};
+        PostData postData = new PostData(parts, "");
+        Request request = Request.createPostRequest("http://www.rapidftr.com/relativeurl;deviceside=true;ConnectionTimeout=10000",
+                null, getAuthToken(), requestHandler, postData, context);
+        Response response = new Response();
+        response.setResponseCode(HttpConnection.HTTP_OK);
+        when(httpGateway.perform(request)).thenReturn(response);
 
+        requestHandler.post("relativeurl", null, new Arg[] {}, postData, context);
+
+        verify(requestCallBack).onRequestSuccess(context, response);
+    }
 
 	@Test
-	public void shouldSendAuthenticationFailureMesssageToRequestCallback()
+	public void shouldInvokeAuthenticationFailureOnRequestCallback()
 			throws Exception {
-		Response response = mock(Response.class);
-		when(response.getCode()).thenReturn(HttpConnection.HTTP_UNAUTHORIZED);
+		Response response = new Response();
+        response.setResponseCode(HttpConnection.HTTP_UNAUTHORIZED);
+
 		requestHandler.done(context, response);
+        
 		verify(requestCallBack).onAuthenticationFailure();
 	}
 
 	@Test
-	public void shoudlSendProcessFailedErrorMessageToRequestCallbackOnFailure()
+	public void shouldInvokeConnectionProblemOnRequestCallback()
 			throws Exception {
-		Response response = mock(Response.class);
-		when(response.getCode()).thenReturn(HttpConnection.HTTP_CLIENT_TIMEOUT);
+		Response response = new Response();
+        response.setResponseCode(HttpConnection.HTTP_CLIENT_TIMEOUT);
+
     	requestHandler.done(context, response);
+
 		verify(requestCallBack).onConnectionProblem();
 	}
 
 	@Test
-	public void shouldSendProcessFailedErrorMessageToRequestCallbackOnAnyException()
+	public void shouldInvokeRequestFailureOnRequestCallbackOnAnyException()
 			throws Exception {
-		Response response = mock(Response.class);
-		when(response.getException()).thenReturn(new Exception());
+		Response response = new Response();
+        response.setException(new Exception());
+
 		requestHandler.done(context, response);
+        
 		verify(requestCallBack).onRequestFailure(context,response.getException());
 
+	}
+
+    private Arg[] getAuthToken() {
+		Arg[] newArgs = new Arg[1];
+		newArgs[0] = new Arg(Arg.AUTHORIZATION,
+				"RFTR_Token " + settings.getAuthorizationToken());
+		return newArgs;
 	}
 
 
