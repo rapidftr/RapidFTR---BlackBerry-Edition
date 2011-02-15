@@ -9,15 +9,23 @@ import org.mockito.MockitoAnnotations;
 
 import com.sun.me.web.request.Request;
 
+import java.io.IOException;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.asm.util.CheckClassAdapter.verify;
+
 public class RequestPoolTest {
 	private RequestPool requestPool;
-	Request request;
+	private Request request;
+    private HttpGateway httpGateway;
 
 	@Before
 	public void setUp() {
-		MockitoAnnotations.initMocks(this);
-		requestPool = RequestPool.getInstance();
-		request = Request.post("", null, null, null, null, (PostData) null, null);
+
+        httpGateway = mock(HttpGateway.class);
+        requestPool = RequestPool.getInstance(httpGateway);
+        requestPool.cancelAllRequests(); 
+		request = Request.createPostRequest("", null, null, null, null, null);
 	}
 
 	@Test

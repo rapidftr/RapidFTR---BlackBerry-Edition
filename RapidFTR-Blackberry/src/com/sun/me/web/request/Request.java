@@ -35,13 +35,11 @@ package com.sun.me.web.request;
 import com.rapidftr.net.HttpGateway;
 
 import javax.microedition.io.HttpConnection;
-import java.io.*;
+
 import com.rapidftr.utilities.Arrays;
 
-public final class Request implements Runnable {
+public final class Request {
 
-    private static final boolean DEBUG = true;
-    
 	private Object context = null;
 	private String url = null;
 	private String method = null;
@@ -49,38 +47,30 @@ public final class Request implements Runnable {
 	private Arg[] inputArgs = null;
 	private PostData multiPart = null;
 	private RequestListener listener = null;
-    private HttpGateway httpGateway;
 
-	public static Response get(final String url, final Arg[] inputArgs, final Arg[] httpArgs, final RequestListener listener, HttpGateway httpGateway) throws IOException {
+	public static Request createGetRequest(final String url, final Arg[] inputArgs, final Arg[] httpArgs, final RequestListener listener, final Object context) {
 
-		return sync(HttpConnection.GET, url, inputArgs, httpArgs, listener, null, httpGateway);
+		return createRequest(HttpConnection.GET, url, inputArgs, httpArgs, listener, null, context);
 	}
 
-	private static Response sync(final String method, final String url, final Arg[] inputArgs, final Arg[] httpArgs, final RequestListener listener, final PostData multiPart, HttpGateway httpGateway) throws IOException {
+	public static Request createPostRequest(final String url, final Arg[] inputArgs, final Arg[] httpArgs, final RequestListener listener, final PostData multiPart, final Object context) {
 
-		final Request request = new Request();
-		request.method = method;
-		request.url = url;
-		request.httpArgs = httpArgs;
-		request.inputArgs = inputArgs;
-		request.multiPart = multiPart;
-		request.listener = listener;
-        request.httpGateway = httpGateway;
-
-		return httpGateway.perform(request);
+		return createRequest(HttpConnection.POST, url, inputArgs, httpArgs, listener, multiPart, context);
 	}
 
-	public static Request get(final String url, final Arg[] inputArgs, final Arg[] httpArgs, final RequestListener listener, final Object context, HttpGateway httpGateway) {
+    public static Request createPostRequest(String url, RequestListener listener, PostData postData) {
+        return createRequest(HttpConnection.POST, url, null, null, listener, postData, null);
+    }
 
-		return async(HttpConnection.GET, url, inputArgs, httpArgs, listener, null, context, httpGateway);
+    public static Request createGetRequest(String url, Arg[] inputParams, Arg[] httpArgs) {
+        return createRequest(HttpConnection.GET, url, inputParams, httpArgs, null, null, null);
+    }
+
+	public static Request createGetRequest(String url) {
+        return createRequest(HttpConnection.GET, url, null, null, null, null, null);
 	}
 
-	public static Request post(final String url, final Arg[] inputArgs, final Arg[] httpArgs, final RequestListener listener, final PostData multiPart, final Object context, HttpGateway httpGateway) {
-
-		return async(HttpConnection.POST, url, inputArgs, httpArgs, listener, multiPart, context, httpGateway);
-	}
-
-	private static Request async(final String method, final String url, final Arg[] inputArgs, final Arg[] httpArgs, final RequestListener listener, final PostData multiPart, final Object context, HttpGateway httpGateway) {
+	private static Request createRequest(final String method, final String url, final Arg[] inputArgs, final Arg[] httpArgs, final RequestListener listener, final PostData multiPart, final Object context) {
 
 		final Request request = new Request();
 		request.method = method;
@@ -90,57 +80,13 @@ public final class Request implements Runnable {
 		request.httpArgs = httpArgs;
 		request.inputArgs = inputArgs;
 		request.multiPart = multiPart;
-        request.httpGateway = httpGateway;
 
-		// TODO: implement more sophisticated pooling, queuing and scheduling strategies
-		// request.thread = new Thread(request);
-		// request.thread.start();
-		//request.pool.execute(request);
 		return request;
 	}
 
     private Request() {
 
     }
-
-	public static Request createGetRequest(String url, HttpGateway httpGateway, RequestListener listener) {
-        Request request = new Request();
-        request.url = url;
-        request.method = HttpConnection.GET;
-        request.httpGateway = httpGateway;
-        request.listener = listener;
-        return request;
-	}
-
-    public static Request createPostRequest(String url, HttpGateway httpGateway, RequestListener listener, PostData postData) {
-        Request request = new Request();
-        request.url = url;
-        request.method = HttpConnection.POST;
-        request.httpGateway = httpGateway;
-        request.listener = listener;
-        request.multiPart = postData;
-        return request;
-    }
-
-	public void run() {
-        Response response = new Response();
-		try {
-		    response = httpGateway.perform(this);
-		} catch (Exception ex) {
-			response.ex = ex;
-		} finally {
-			if (listener != null) {
-				try {
-					listener.done(context, response);
-				} catch (Throwable th) {
-					if (DEBUG) {
-						System.err.println("Uncaught throwable in listener: ");
-						th.printStackTrace();
-					}
-				}
-			}
-		}
-	}
 
     public Arg[] getInputArgs() {
         return inputArgs;
@@ -178,7 +124,6 @@ public final class Request implements Runnable {
 
         if (context != null ? !context.equals(request.context) : request.context != null) return false;
         if (!Arrays.equals(httpArgs, request.httpArgs)) return false;
-        if (httpGateway != null ? !httpGateway.equals(request.httpGateway) : request.httpGateway != null) return false;
         if (!Arrays.equals(inputArgs, request.inputArgs)) return false;
         if (listener != null ? !listener.equals(request.listener) : request.listener != null) return false;
         if (method != null ? !method.equals(request.method) : request.method != null) return false;
@@ -196,7 +141,6 @@ public final class Request implements Runnable {
         result = 31 * result + (inputArgs != null ? Arrays.hashCode(inputArgs) : 0);
         result = 31 * result + (multiPart != null ? multiPart.hashCode() : 0);
         result = 31 * result + (listener != null ? listener.hashCode() : 0);
-        result = 31 * result + (httpGateway != null ? httpGateway.hashCode() : 0);
         return result;
     }
 

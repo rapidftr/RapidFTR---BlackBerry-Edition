@@ -101,4 +101,8 @@ public class Response {
     public void setHeaders(Arg[] headers) {
         this.headers = headers;
     }
+
+    public void setException(Exception exception) {
+        this.ex = exception;
+    }
 }
