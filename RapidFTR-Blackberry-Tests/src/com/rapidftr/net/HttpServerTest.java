@@ -84,7 +84,7 @@ public class HttpServerTest {
 
     private void waitForResponse(long timeout, TstRequestListener listener) throws InterruptedException {
         long waitedFor = 0;
-        long waitFor = 1000;
+        long waitFor = 500;
         if (listener.getResponse() == null && waitedFor < timeout) {
             Thread.sleep(waitFor);
             waitedFor += waitFor;

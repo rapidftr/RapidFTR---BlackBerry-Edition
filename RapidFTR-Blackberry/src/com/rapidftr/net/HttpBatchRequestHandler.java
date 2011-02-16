@@ -1,10 +1,9 @@
 package com.rapidftr.net;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.microedition.io.HttpConnection;
-
-import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;
@@ -18,17 +17,17 @@ public class HttpBatchRequestHandler implements RequestListener {
 	private boolean failedRequest = false;
 	private boolean processCompleted = false;
 	private HttpService service;
+    private Vector errors;
 
-	public HttpBatchRequestHandler(HttpService httpService) {
+    public HttpBatchRequestHandler(HttpService httpService) {
 		service = httpService;
 	}
 
-	public void startNewProcess() {
-		// terminateProcess();
-		// TODO create new thread pool for every process
+	public synchronized void startNewProcess() {
 		unprocessedRequests = totalRequests = 0;
 		failedRequest = false;
 		processCompleted = false;
+        errors = new Vector();
 	}
 
 	public void get(String url, Arg[] inputArgs, Arg[] httpArgs, Object context) {
@@ -67,29 +66,9 @@ public class HttpBatchRequestHandler implements RequestListener {
 						.getCode() == HttpConnection.HTTP_CREATED);
 	}
 
-	private void handleResponseErrors(Object context, Response response) {
+	private synchronized void handleResponseErrors(Object context, Response response) {
 		failedRequest = true;
-
-		if (response.getCode() == HttpConnection.HTTP_UNAUTHORIZED
-				|| response.getCode() == HttpConnection.HTTP_FORBIDDEN) {
-			requestCallBack.onAuthenticationFailure();
-            terminateProcessWhenHttpCodeIsNotExpected();
-		} else if (response.getException() != null) {
-			if (response.getException() instanceof ResultException) {
-				requestCallBack.onProcessFail("Please check the URL");
-			} else {
-				requestCallBack.onRequestFailure(context, response
-						.getException());
-			}
-
-		} else if (response.getCode() == HttpConnection.HTTP_NOT_ACCEPTABLE){
-            requestCallBack.onProcessFail("The format of data is not acceptable. Please check the record.");
-            terminateProcessWhenHttpCodeIsNotExpected();
-        } else if (response.getCode() != HttpConnection.HTTP_OK
-				&& response.getCode() != HttpConnection.HTTP_CREATED) {
-			requestCallBack.onConnectionProblem();
-            terminateProcessWhenHttpCodeIsNotExpected();
-		}
+        errors.addElement(new ResponseWithContext(response, context));
 	}
 
     private void terminateProcessWhenHttpCodeIsNotExpected() {
@@ -111,10 +90,14 @@ public class HttpBatchRequestHandler implements RequestListener {
 	}
 
 	public void markProcessFailed() {
-		requestCallBack.onProcessFail(null);
+		requestCallBack.onProcessFail(getErrorMessage());
 	}
 
-	public void markProcessFailed(String failureMessage) {
+    private String getErrorMessage() {
+        return "Errors have occurred";
+    }
+
+    public void markProcessFailed(String failureMessage) {
 		terminateProcess();
 		requestCallBack.onProcessFail(failureMessage);
 	}
@@ -133,11 +116,15 @@ public class HttpBatchRequestHandler implements RequestListener {
 			requestCallBack.onProcessStart();
 			failedRequest = false;
 		}
-		unprocessedRequests += 1;
-		totalRequests += 1;
+        incrementRequestCounts();
 	}
 
-	public void setRequestCallBack(RequestCallBack requestCallBack) {
+    private synchronized void incrementRequestCounts() {
+        unprocessedRequests += 1;
+        totalRequests += 1;
+    }
+
+    public void setRequestCallBack(RequestCallBack requestCallBack) {
 		this.requestCallBack = requestCallBack;
 	}
 
@@ -173,4 +160,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 		}
 	}
 
+    public Vector getErrors() {
+        return errors;
+    }
 }

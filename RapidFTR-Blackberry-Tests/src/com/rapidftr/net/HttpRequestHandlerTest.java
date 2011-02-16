@@ -4,25 +4,28 @@ import com.rapidftr.datastore.MockStore;
 import com.rapidftr.utilities.HttpSettings;
 import com.rapidftr.utilities.Settings;
 import com.rapidftr.utilities.Store;
-import com.sun.me.web.request.*;
+import com.sun.me.web.request.Arg;
+import com.sun.me.web.request.PostData;
+import com.sun.me.web.request.Request;
+import com.sun.me.web.request.Response;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.microedition.io.HttpConnection;
-import java.io.IOException;
 
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class HttpRequestHandlerTest {
 
     private HttpGateway httpGateway;
-	private HttpBatchRequestHandler requestHandler;
-	private RequestCallBack requestCallBack;
-	private Object context;
+    private HttpBatchRequestHandler requestHandler;
+    private RequestCallBack requestCallBack;
+    private Object context;
     private Settings settings;
 
-	@Before
-	public void setUp() {
+    @Before
+    public void setUp() {
         context = mock(Object.class);
         requestCallBack = mock(RequestCallBack.class);
         final Store settingsStore = new MockStore();
@@ -32,67 +35,53 @@ public class HttpRequestHandlerTest {
         httpGateway = mock(HttpGateway.class);
         HttpServer httpServer = new HttpServer(httpSettings, httpGateway);
         HttpService httpService = new HttpService(httpServer, settings);
-		requestHandler = new HttpBatchRequestHandler(httpService);
-		requestHandler.setRequestCallBack(requestCallBack);
-	}
+        requestHandler = new HttpBatchRequestHandler(httpService);
+        requestHandler.setRequestCallBack(requestCallBack);
+    }
 
     @Test
-    public void shouldInvokeUpdateProcessedRequestsWithSuccessfulPostRequest() throws IOException {
-        requestHandler.startNewProcess();
-        Part apart = new Part("hello".getBytes(), null);
-        Part[] parts = new Part[]{apart};
-        PostData postData = new PostData(parts, "");
-        Request request = Request.createPostRequest("http://www.rapidftr.com/relativeurl;deviceside=true;ConnectionTimeout=10000",
-                null, getAuthToken(), requestHandler, postData, context);
+    public void shouldInvokeRequestSuccessCallbackWithSuccessfulPostRequest() throws Exception {
+
+        PostData postData = RequestFactory.createPostData();
+        Request request = RequestFactory.createPostRequest("http://www.rapidftr.com/relativeurl", settings.getAuthorizationToken(),
+                postData, requestHandler, context);
         Response response = new Response();
         response.setResponseCode(HttpConnection.HTTP_OK);
         when(httpGateway.perform(request)).thenReturn(response);
 
-        requestHandler.post("relativeurl", null, new Arg[] {}, postData, context);
+        requestHandler.startNewProcess();
+        requestHandler.post("relativeurl", null, new Arg[]{}, postData, context);
 
+        waitForRequestToComplete();
         verify(requestCallBack).onRequestSuccess(context, response);
     }
 
-	@Test
-	public void shouldInvokeAuthenticationFailureOnRequestCallback()
-			throws Exception {
-		Response response = new Response();
-        response.setResponseCode(HttpConnection.HTTP_UNAUTHORIZED);
+    @Test
+    public void shouldAccumulateErrorsFromMultipleRequests() throws Exception {
 
-		requestHandler.done(context, response);
-        
-		verify(requestCallBack).onAuthenticationFailure();
-	}
+        requestHandler.startNewProcess();
+        Request firstRequest = RequestFactory.createGetRequest("http://www.rapidftr.com/firsturl", settings.getAuthorizationToken(),
+                requestHandler, context);
+        Request secondRequest = RequestFactory.createGetRequest("http://www.rapidftr.com/secondurl", settings.getAuthorizationToken(),
+                requestHandler, context);
 
-	@Test
-	public void shouldInvokeConnectionProblemOnRequestCallback()
-			throws Exception {
-		Response response = new Response();
+        Response response = new Response();
         response.setResponseCode(HttpConnection.HTTP_CLIENT_TIMEOUT);
+        when(httpGateway.perform(firstRequest)).thenReturn(response);
+        when(httpGateway.perform(secondRequest)).thenReturn(response);
 
-    	requestHandler.done(context, response);
+        requestHandler.startNewProcess();
+        requestHandler.get("firsturl", null, new Arg[] {}, context);
+        requestHandler.get("secondurl", null, new Arg[] {}, context);
 
-		verify(requestCallBack).onConnectionProblem();
-	}
+        waitForRequestToComplete();
+        assertEquals(2, requestHandler.getErrors().size());
+        verify(requestCallBack).onProcessFail(anyString());
+    }
 
-	@Test
-	public void shouldInvokeRequestFailureOnRequestCallbackOnAnyException()
-			throws Exception {
-		Response response = new Response();
-        response.setException(new Exception());
-
-		requestHandler.done(context, response);
-        
-		verify(requestCallBack).onRequestFailure(context,response.getException());
-
-	}
-
-    private Arg[] getAuthToken() {
-		Arg[] newArgs = new Arg[1];
-		newArgs[0] = new Arg(Arg.AUTHORIZATION,
-				"RFTR_Token " + settings.getAuthorizationToken());
-		return newArgs;
-	}
+    private void waitForRequestToComplete() throws InterruptedException {
+        Thread.sleep(500);
+    }
 
 
 }
