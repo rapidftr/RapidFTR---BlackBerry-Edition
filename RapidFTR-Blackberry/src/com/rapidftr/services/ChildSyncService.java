@@ -43,10 +43,6 @@ public class ChildSyncService extends RequestAwareService {
         this.childPhotoUpdater = photoUpdater;
 	}
 
-	private void uploadChildRecords() {
-		uploadChildren(childRecordStore.getAll());
-	}
-
 	private void uploadChildren(final Children children) {
 
 		children.forEachChild(new ChildAction() {
@@ -89,24 +85,28 @@ public class ChildSyncService extends RequestAwareService {
 			public void run() {
 				requestHandler.getRequestCallBack().updateProgressMessage(
 						"Syncing");
-				requestHandler.startNewProcess();
-				uploadChildRecords();
-				downloadNewChildRecords();
-				requestHandler.checkForProcessCompletion();
+                Children childrenToUpload = childrenToBeUploaded();
+                final Vector childrenToBeDownloaded = childRecordsNeedToBeDownload();
+                requestHandler.startNewProcess(childrenToUpload.count() + childrenToBeDownloaded.size());
+				uploadChildren(childrenToUpload);
+				downloadNewChildRecords(childrenToBeDownloaded);
 			};
 		}.start();
 
 	}
 
-	private void downloadNewChildRecords() {
-		Vector childNeedToDownload = childRecordsNeedToBeDownload();
-		Enumeration items = childNeedToDownload.elements();
+    private Children childrenToBeUploaded() {
+        return childRecordStore.getAll().getChildrenToUpload();
+    }
+
+    private void downloadNewChildRecords(Vector childrenToBeDownloaded) {
+		Enumeration items = childrenToBeDownloaded.elements();
 		int index = 0;
 		while (items.hasMoreElements()) {
 			index++;
 			Hashtable context = new Hashtable();
 			context.put(PROCESS_STATE, "Downloading [" + index + "/"
-					+ childNeedToDownload.size() + "]");
+					+ childrenToBeDownloaded.size() + "]");
 			Child child = new Child();
 			String childId = items.nextElement().toString();
 			child.setField("_id", childId);
@@ -160,19 +160,13 @@ public class ChildSyncService extends RequestAwareService {
 							.getString("rev"));
 				}
 			}
-		} catch (ResultException e) {
-            sendMsgToHandlerWhenProcessFailed("There was an exception in the result.");
-        } catch (JSONException e) {
-            sendMsgToHandlerWhenProcessFailed("The data format is not correct.");
-		} catch (IOException ignore) {
-		}
+		} catch (Exception e) {
+            e.printStackTrace();
+            requestHandler.markProcessFailed("Error downloading children");
+        }
 
 		return mapping;
 	}
-
-    private void sendMsgToHandlerWhenProcessFailed(String msg) {
-        requestHandler.markProcessFailed(msg);
-    }
 
     private Hashtable getOfflineStoredChildrenIdRevMapping() {
 		final Hashtable mapping = new Hashtable();

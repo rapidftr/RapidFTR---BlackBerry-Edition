@@ -4,7 +4,6 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import com.rapidftr.utilities.ImageHelper;
-import net.rim.device.api.system.Bitmap;
 
 import com.rapidftr.model.Child;
 
@@ -78,4 +77,16 @@ public class Children {
 		}
 		return childrenAndImages;
 	}
+
+    public Children getChildrenToUpload() {
+        Vector result = new Vector();
+        Enumeration elements = vector.elements();
+	    while(elements.hasMoreElements()){
+            Child child = (Child)elements.nextElement();
+            if (child.isNewChild() || child.isUpdated()) {
+                result.addElement(child);
+            }
+        }
+        return new Children(result);
+    }
 }

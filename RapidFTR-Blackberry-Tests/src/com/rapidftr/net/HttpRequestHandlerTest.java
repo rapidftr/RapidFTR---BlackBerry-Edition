@@ -59,7 +59,6 @@ public class HttpRequestHandlerTest {
     @Test
     public void shouldAccumulateErrorsFromMultipleRequests() throws Exception {
 
-        requestHandler.startNewProcess();
         Request firstRequest = RequestFactory.createGetRequest("http://www.rapidftr.com/firsturl", settings.getAuthorizationToken(),
                 requestHandler, context);
         Request secondRequest = RequestFactory.createGetRequest("http://www.rapidftr.com/secondurl", settings.getAuthorizationToken(),
@@ -70,7 +69,7 @@ public class HttpRequestHandlerTest {
         when(httpGateway.perform(firstRequest)).thenReturn(response);
         when(httpGateway.perform(secondRequest)).thenReturn(response);
 
-        requestHandler.startNewProcess();
+        requestHandler.startNewProcess(2);
         requestHandler.get("firsturl", null, new Arg[] {}, context);
         requestHandler.get("secondurl", null, new Arg[] {}, context);
 

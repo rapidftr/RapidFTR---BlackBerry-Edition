@@ -1,7 +1,6 @@
 package com.rapidftr.net;
 
 import java.io.IOException;
-import java.util.Vector;
 
 import javax.microedition.io.HttpConnection;
 import com.sun.me.web.request.Arg;
@@ -17,17 +16,21 @@ public class HttpBatchRequestHandler implements RequestListener {
 	private boolean failedRequest = false;
 	private boolean processCompleted = false;
 	private HttpService service;
-    private Vector errors;
+    private ResponseErrors errors;
 
     public HttpBatchRequestHandler(HttpService httpService) {
 		service = httpService;
 	}
 
-	public synchronized void startNewProcess() {
-		unprocessedRequests = totalRequests = 0;
+    public synchronized void startNewProcess(int total) {
+        unprocessedRequests = totalRequests = total;
 		failedRequest = false;
 		processCompleted = false;
-        errors = new Vector();
+        errors = new ResponseErrors();  
+    }
+    
+	public synchronized void startNewProcess() {
+        startNewProcess(1);
 	}
 
 	public void get(String url, Arg[] inputArgs, Arg[] httpArgs, Object context) {
@@ -57,7 +60,6 @@ public class HttpBatchRequestHandler implements RequestListener {
 			}
 		
 		return response;
-
 	}
 
 	private boolean isValidResponse(Response response) {
@@ -68,7 +70,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 
 	private synchronized void handleResponseErrors(Object context, Response response) {
 		failedRequest = true;
-        errors.addElement(new ResponseWithContext(response, context));
+        errors.add(response);
 	}
 
     private void terminateProcessWhenHttpCodeIsNotExpected() {
@@ -94,7 +96,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 	}
 
     private String getErrorMessage() {
-        return "Errors have occurred";
+        return errors.getMessage();
     }
 
     public void markProcessFailed(String failureMessage) {
@@ -116,13 +118,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 			requestCallBack.onProcessStart();
 			failedRequest = false;
 		}
-        incrementRequestCounts();
 	}
-
-    private synchronized void incrementRequestCounts() {
-        unprocessedRequests += 1;
-        totalRequests += 1;
-    }
 
     public void setRequestCallBack(RequestCallBack requestCallBack) {
 		this.requestCallBack = requestCallBack;
@@ -160,7 +156,11 @@ public class HttpBatchRequestHandler implements RequestListener {
 		}
 	}
 
-    public Vector getErrors() {
+    public ResponseErrors getErrors() {
         return errors;
+    }
+
+    public synchronized void addError(Response response) {
+        errors.add(response);
     }
 }
