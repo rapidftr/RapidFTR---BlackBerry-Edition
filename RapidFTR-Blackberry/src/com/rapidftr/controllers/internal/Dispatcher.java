@@ -101,8 +101,8 @@ public class Dispatcher {
 		contactScreenController.show();
 	}
 
-	public void editChild(Child child) {
-		manageChildController.editChild(child);
+	public void editChild(Child child, String selectedTab) {
+		manageChildController.editChild(child, selectedTab);
 
 	}
 

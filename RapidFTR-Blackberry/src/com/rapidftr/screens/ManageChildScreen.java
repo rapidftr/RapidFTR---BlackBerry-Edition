@@ -32,6 +32,7 @@ public class ManageChildScreen extends CustomScreen {
     private Child childToEdit;
 
     private static String[] REQUIRED_FIELDS = { };
+	private String selectedTab;
 
     public ManageChildScreen(Settings settings) {
         this.settings = settings;
@@ -49,11 +50,12 @@ public class ManageChildScreen extends CustomScreen {
         }
     }
 
-    public void setEditForms(Vector forms, Child childToEdit) {
+    public void setEditForms(Vector forms, Child childToEdit, String selectedTab) {
         this.childToEdit = childToEdit;
         this.forms = forms;
-        for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-            ((Form) list.nextElement()).initializeLayoutWithChild(this, childToEdit);
+		this.selectedTab = selectedTab;
+        for (Enumeration form = forms.elements(); form.hasMoreElements();) {
+            ((Form) form.nextElement()).initializeLayoutWithChild(this, childToEdit);
         }
     }
 
@@ -97,10 +99,20 @@ public class ManageChildScreen extends CustomScreen {
                 formManager.add(((Form) formArray[availableForms.getSelectedIndex()]).getLayout());
             }
         });
-
+        
+		selectDefaultForm(formArray, availableForms);
         screenManager.add(new BlankSeparatorField(15));
 
     }
+
+	private void selectDefaultForm(final Object[] formArray, final ObjectChoiceField availableForms) {
+		for (int i = 0; i < formArray.length; i++) {
+			if (((Form) formArray[i]).toString().equals(selectedTab)) {
+				availableForms.setSelectedIndex(i);
+				break;
+			}
+		}
+	}
 
     private Object[] formsInArray() {
 		final Object[] formArray = new Object[forms.size()];

@@ -93,7 +93,7 @@ public class TabControl extends VerticalFieldManager implements
 	}
 	
 	private void switchToTab(final LabelField tabLabelField){
-	    this.deSelectTab(this.listOfLabels[this.currentTab]);
+	    this.deSelectTab(getCurrentTabField());
 		this.selectTab(tabLabelField);
 	}
 
@@ -107,5 +107,13 @@ public class TabControl extends VerticalFieldManager implements
 	
 	private int getTabIndex(final LabelField tabLabel){
 		return Arrays.getIndex((Object[])this.listOfLabels,(Object) tabLabel);
+	}
+
+	public String getSelectedTab() {
+		return getCurrentTabField().getText().trim();
+	}
+
+	private LabelField getCurrentTabField() {
+		return this.listOfLabels[this.currentTab];
 	}
 }

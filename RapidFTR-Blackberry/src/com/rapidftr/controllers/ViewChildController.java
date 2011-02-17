@@ -26,8 +26,8 @@ public class ViewChildController extends Controller {
 		show();
 	}
 
-	public void editChild(Child child) {
-		dispatcher.editChild(child);
+	public void editChild(Child child, String selectedTab) {
+		dispatcher.editChild(child, selectedTab);
 
 	}
 

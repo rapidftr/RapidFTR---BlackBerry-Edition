@@ -35,6 +35,7 @@ public class ViewChildScreen extends CustomScreen {
 	Child child;
 	BitmapField bitmapField;
 	boolean isBitmapFieldFocused = false;
+	private TabControl tabView;
 
 	public ViewChildScreen() {
 	}
@@ -70,10 +71,6 @@ public class ViewChildScreen extends CustomScreen {
 		renderChildFields(child);
 	}
 
-	protected void onExposed() {
-		setUp();
-	}
-	
 	private void renderChildFields(final Child child) {
 		
 		final HorizontalFieldManager horizontalFieldManager = new HorizontalFieldManager(
@@ -132,7 +129,7 @@ public class ViewChildScreen extends CustomScreen {
 			tabList[i++] = new Tab(form.toString(), form, child);
 		}
 		
-		TabControl tabView = new TabControl(tabList);
+		tabView = new TabControl(tabList);
 		
 		this.add(tabView);
 	}
@@ -191,7 +188,7 @@ public class ViewChildScreen extends CustomScreen {
 		MenuItem editChildMenu = new MenuItem("Edit Child Detail", 1, 1) {
 			public void run() {
 				controller.popScreen();
-				getViewChildController().editChild(child);
+				getViewChildController().editChild(child, tabView.getSelectedTab());
 			}
 		};
 
