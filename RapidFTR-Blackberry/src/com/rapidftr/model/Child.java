@@ -316,4 +316,16 @@ public class Child implements Persistable {
     public void setId(String id) {
         setField("_id", id);
     }
+
+    public boolean hasPhoto() {
+        return !StringUtility.isBlank((String) getField("current_photo_key"));
+    }
+
+    public void setPhotoKey(String value) {
+        setField("current_photo_key", value);
+    }
+
+    public String getPhotoKey() {
+        return (String) getField("current_photo_key");
+    }
 }

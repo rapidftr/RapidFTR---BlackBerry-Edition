@@ -32,11 +32,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sun.me.web.request;
 
-import javax.microedition.io.HttpConnection;
-
 import com.sun.me.web.path.Result;
 
-import java.util.Vector;
+import javax.microedition.io.HttpConnection;
+import java.io.IOException;
 
 public class Response {
 
@@ -47,7 +46,8 @@ public class Response {
     String charset = null;
     Arg[] headers = null;
 
-    public Response() {}
+    public Response() {
+    }
 
     public Response(Result result, int code) {
         this.result = result;
@@ -57,15 +57,15 @@ public class Response {
     public Result getResult() {
         return result;
     }
-           
+
     public int getCode() {
         return responseCode;
     }
-    
+
     public Arg[] getHeaders() {
         return headers;
     }
-    
+
     public Exception getException() {
         return ex;
     }
@@ -104,5 +104,18 @@ public class Response {
 
     public void setException(Exception exception) {
         this.ex = exception;
+    }
+
+    public String getErrorMessage() {
+        final int responseCode = getResponseCode();
+        if (responseCode == HttpConnection.HTTP_FORBIDDEN ||
+                getResponseCode() == HttpConnection.HTTP_UNAUTHORIZED) {
+            return "Authentication Failure";
+        }
+        final Exception exception = getException();
+        if (exception != null && exception instanceof IOException) {
+            return "Could not connect";
+        }
+        return "Error occurred";
     }
 }

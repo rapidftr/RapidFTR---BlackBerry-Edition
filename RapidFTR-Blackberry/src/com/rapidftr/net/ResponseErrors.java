@@ -9,8 +9,7 @@ import java.util.Vector;
 
 public class ResponseErrors {
     private Vector errors;
-    private static final String COULD_NOT_CONNECT = "Could not connect";
-
+    
     public ResponseErrors() {
         errors = new Vector();
     }
@@ -26,18 +25,10 @@ public class ResponseErrors {
 
     public String getMessage() {
         Enumeration errorResponses = errors.elements();
-        while(errorResponses.hasMoreElements()) {
+        if (errorResponses.hasMoreElements()) {
             Response response = (Response) errorResponses.nextElement();
-            final int responseCode = response.getResponseCode();
-            if (responseCode == HttpConnection.HTTP_FORBIDDEN ||
-                    response.getResponseCode() == HttpConnection.HTTP_UNAUTHORIZED) {
-                return "Authentication Failure";
-            }
-            final Exception exception = response.getException();
-            if (exception != null && exception instanceof IOException) {
-                return COULD_NOT_CONNECT;
-            }
+            return response.getErrorMessage();
         }
-        return "Errors have occurred";
+        return "";
     }
 }

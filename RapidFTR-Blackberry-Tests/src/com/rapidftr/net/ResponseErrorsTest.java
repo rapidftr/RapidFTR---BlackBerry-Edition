@@ -35,7 +35,7 @@ public class ResponseErrorsTest {
         response.setResponseCode(HttpConnection.HTTP_BAD_REQUEST);
         final ResponseErrors responseErrors = new ResponseErrors();
         responseErrors.add(response);
-        assertEquals("Errors have occurred", responseErrors.getMessage());
+        assertEquals("Error occurred", responseErrors.getMessage());
     }
 
     @Test

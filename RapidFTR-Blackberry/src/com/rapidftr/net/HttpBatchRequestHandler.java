@@ -160,7 +160,4 @@ public class HttpBatchRequestHandler implements RequestListener {
         return errors;
     }
 
-    public synchronized void addError(Response response) {
-        errors.add(response);
-    }
 }
