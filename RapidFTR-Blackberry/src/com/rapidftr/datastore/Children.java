@@ -3,8 +3,8 @@ package com.rapidftr.datastore;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.rapidftr.model.Child;
 import com.rapidftr.utilities.ImageHelper;
+import com.rapidftr.model.Child;
 
 public class Children {
 
@@ -76,4 +76,16 @@ public class Children {
 	private int pageSize(){
 		return 10;
 	}
+
+    public Children getChildrenToUpload() {
+        Vector result = new Vector();
+        Enumeration elements = vector.elements();
+	    while(elements.hasMoreElements()){
+            Child child = (Child)elements.nextElement();
+            if (child.isNewChild() || child.isUpdated()) {
+                result.addElement(child);
+            }
+        }
+        return new Children(result);
+    }
 }

@@ -13,7 +13,7 @@ public class ChildrenRecordStore {
 		this.store = store;
 	}
 
-	public void addOrUpdate(Child child) {
+	public synchronized void addOrUpdate(Child child) {
 		if (child == null) {
 			return;
 		}

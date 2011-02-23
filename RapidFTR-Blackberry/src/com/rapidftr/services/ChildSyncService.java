@@ -7,47 +7,42 @@ import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
-import com.rapidftr.utilities.StringUtility;
 import com.sun.me.web.path.Result;
-import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.Response;
 import org.json.me.JSONArray;
-import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
 public class ChildSyncService extends RequestAwareService {
 
-	static final String PROCESS_STATE = "process_state";
+	public static final String PROCESS_STATE = "process_state";
 
-	static final String CHILD_TO_SYNC = "childToSync";
+	public static final String CHILD_TO_SYNC = "childToSync";
 
 	private final ChildrenRecordStore childRecordStore;
     private ChildPhotoUpdater childPhotoUpdater;
+    private HttpService httpService;
 
     public ChildSyncService(HttpService httpService,
 			ChildrenRecordStore childRecordStore) {
-        this(httpService, childRecordStore, new ChildPhotoUpdater());
+        this(httpService, childRecordStore, new ChildPhotoUpdater(httpService, childRecordStore));
     }
 
 	public ChildSyncService(HttpService httpService,
 			ChildrenRecordStore childRecordStore, ChildPhotoUpdater photoUpdater) {
-		super(httpService);
-		this.childRecordStore = childRecordStore;
+		// TODO get rid of dependency on RequestAwareService/requesthandler
+        super(httpService);
+        this.childRecordStore = childRecordStore;
         this.childPhotoUpdater = photoUpdater;
+        this.httpService = httpService;
 	}
 
-	private void uploadChildRecords() {
-		uploadChildren(childRecordStore.getAll());
-	}
-
-	private void uploadChildren(final Children children) {
+	private void uploadChildren(final Children children, final ChildSyncListener listener) {
 
 		children.forEachChild(new ChildAction() {
 			int index = 0;
@@ -64,11 +59,11 @@ public class ChildSyncService extends RequestAwareService {
 				Arg json = HttpUtility.HEADER_ACCEPT_JSON;
 				Arg[] httpArgs = { multiPart, json };
 				if (child.isNewChild()) {
-					requestHandler.post("children", null, httpArgs, postData,
+					httpService.post("children", null, httpArgs, listener, postData,
 							context);
 				} else if (child.isUpdated()) {
-					requestHandler.put("children/" + child.getField("_id"),
-							null, httpArgs, postData, context);
+					httpService.put("children/" + child.getField("_id"),
+							null, httpArgs, listener, postData, context);
 				}
 
 			}
@@ -79,9 +74,9 @@ public class ChildSyncService extends RequestAwareService {
 	public void syncChildRecord(Child child) {
 		Vector childrenList = new Vector();
 		childrenList.addElement(child);
-		requestHandler.startNewProcess();
-		uploadChildren(new Children(childrenList));
-        requestHandler.checkForProcessCompletion();
+        ChildSyncListener listener =
+                new ChildSyncListener(requestHandler.getRequestCallBack(), 1, childRecordStore, childPhotoUpdater);
+		uploadChildren(new Children(childrenList), listener);
 	}
 
 	public void syncAllChildRecords() throws ServiceException {
@@ -89,37 +84,49 @@ public class ChildSyncService extends RequestAwareService {
 			public void run() {
 				requestHandler.getRequestCallBack().updateProgressMessage(
 						"Syncing");
-				requestHandler.startNewProcess();
-				uploadChildRecords();
-				downloadNewChildRecords();
-				requestHandler.checkForProcessCompletion();
+                Children childrenToUpload = childrenToBeUploaded();
+                try {
+                    final Vector childrenToBeDownloaded = childRecordsNeedToBeDownload();
+                    ChildSyncListener listener =
+                                    new ChildSyncListener(requestHandler.getRequestCallBack(),
+                                            childrenToUpload.count() + childrenToBeDownloaded.size(),
+                                            childRecordStore, childPhotoUpdater);
+                    uploadChildren(childrenToUpload, listener);
+                    downloadNewChildRecords(childrenToBeDownloaded, listener);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    requestHandler.markProcessFailed("Error syncing children");
+                }
 			};
 		}.start();
 
 	}
 
-	private void downloadNewChildRecords() {
-		Vector childNeedToDownload = childRecordsNeedToBeDownload();
-		Enumeration items = childNeedToDownload.elements();
+    private Children childrenToBeUploaded() {
+        return childRecordStore.getAll().getChildrenToUpload();
+    }
+
+    private void downloadNewChildRecords(Vector childrenToBeDownloaded, final ChildSyncListener listener) {
+		Enumeration items = childrenToBeDownloaded.elements();
 		int index = 0;
 		while (items.hasMoreElements()) {
 			index++;
 			Hashtable context = new Hashtable();
 			context.put(PROCESS_STATE, "Downloading [" + index + "/"
-					+ childNeedToDownload.size() + "]");
+					+ childrenToBeDownloaded.size() + "]");
 			Child child = new Child();
 			String childId = items.nextElement().toString();
 			child.setField("_id", childId);
 			child.setField("name", childId);
 			child.setField("last_known_location", "NA");
 			context.put(CHILD_TO_SYNC, child);
-			requestHandler.get("children/" + childId, null, HttpUtility
-					.makeJSONHeader(), context);
+			httpService.get("children/" + childId, null, HttpUtility
+					.makeJSONHeader(), listener, context);
 		}
 
 	}
 
-	private Vector childRecordsNeedToBeDownload() {
+	private Vector childRecordsNeedToBeDownload() throws Exception {
 		Vector childNeedToDownload = new Vector();
 		Hashtable offlineIdRevXREF = getOfflineStoredChildrenIdRevMapping();
 		Hashtable onlineIdRevXREF = getOnlineStoredChildrenIdRevMapping();
@@ -137,42 +144,31 @@ public class ChildSyncService extends RequestAwareService {
 		return childNeedToDownload;
 	}
 
-	private Hashtable getOnlineStoredChildrenIdRevMapping() {
+	private Hashtable getOnlineStoredChildrenIdRevMapping() throws Exception {
 
 		Hashtable mapping = new Hashtable();
 
 		Response response;
-		try {
-			response = requestHandler.get("children-ids", null, HttpUtility
-					.makeJSONHeader());
+        response = requestHandler.get("children-ids", null, HttpUtility
+                .makeJSONHeader());
 
-			if (response != null) {
-				Result result = response.getResult();
-				HttpServer.printResponse(response);
-				JSONArray jsonChildren;
+        if (response != null) {
+            Result result = response.getResult();
+            HttpServer.printResponse(response);
+            JSONArray jsonChildren;
 
-				jsonChildren = result.getAsArray("");
+            jsonChildren = result.getAsArray("");
 
-				for (int i = 0; i < jsonChildren.length(); i++) {
-					JSONObject jsonChild = (JSONObject) jsonChildren.get(i);
+            for (int i = 0; i < jsonChildren.length(); i++) {
+                JSONObject jsonChild = (JSONObject) jsonChildren.get(i);
 
-					mapping.put(jsonChild.getString("id"), jsonChild
-							.getString("rev"));
-				}
-			}
-		} catch (ResultException e) {
-            sendMsgToHandlerWhenProcessFailed("There was an exception in the result.");
-        } catch (JSONException e) {
-            sendMsgToHandlerWhenProcessFailed("The data format is not correct.");
-		} catch (IOException ignore) {
-		}
+                mapping.put(jsonChild.getString("id"), jsonChild
+                        .getString("rev"));
+            }
+        }
 
 		return mapping;
 	}
-
-    private void sendMsgToHandlerWhenProcessFailed(String msg) {
-        requestHandler.markProcessFailed(msg);
-    }
 
     private Hashtable getOfflineStoredChildrenIdRevMapping() {
 		final Hashtable mapping = new Hashtable();
@@ -193,44 +189,12 @@ public class ChildSyncService extends RequestAwareService {
 
 	public void clearState() {
 		childRecordStore.deleteAll();
-
 	}
 
-	public void onRequestSuccess(Object context, Response result) {
-		requestHandler.getRequestCallBack().updateProgressMessage(
-				((Hashtable) context).get(PROCESS_STATE).toString());
-		// sync child with local store
-		Child child = (Child) (((Hashtable) context).get(CHILD_TO_SYNC));
-		try {
-			JSONObject jsonChild = new JSONObject(result.getResult().toString());
-			// HttpServer.printResponse(result);
-			JSONArray fieldNames = jsonChild.names();
-			for (int j = 0; j < fieldNames.length(); j++) {
-				String fieldName = fieldNames.get(j).toString();
-				String fieldValue = jsonChild.getString(fieldName);
-				child.setField(fieldName, fieldValue);
-			}
-            if (!StringUtility.isBlank((String) child.getField("current_photo_key"))) {
-			    childPhotoUpdater.updateChildPhoto(child, requestHandler);
-            }
-			child.syncSuccess();
+    // TODO this is not used anymore - to remove this need to get rid of dependency on RequestAwareService
+    public void onRequestFailure(Object context, Exception exception) {
+    }
 
-		} catch (Exception e) {
-            e.printStackTrace();
-			child.syncFailed(e.getMessage());
-		} finally {
-			childRecordStore.addOrUpdate(child);
-		}
-
-	}
-
-	public void onRequestFailure(Object context, Exception exception) {
-		requestHandler.getRequestCallBack().updateProgressMessage(
-				((Hashtable) context).get(PROCESS_STATE).toString()
-						+ " Failed. ");
-		Child child = (Child) (((Hashtable) context).get(CHILD_TO_SYNC));
-		child.syncFailed(exception.getMessage());
-		childRecordStore.addOrUpdate(child);
-	}
-
+    public void onRequestSuccess(Object context, Response response) {
+    }
 }

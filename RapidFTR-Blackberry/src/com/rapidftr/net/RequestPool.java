@@ -10,15 +10,18 @@ public class RequestPool implements Runnable {
 
 	int activeThreads = 0;
 
-	WorkQueue requestQueue;
+	private WorkQueue requestQueue;
+    private RequestExecutor requestExecutor;
 
 	public RequestPool() {
 		requestQueue = new WorkQueue();
 		new Thread(this).start();
 	}
 
-	public static RequestPool getInstance() {
+	public static RequestPool getInstance(HttpGateway httpGateway) {
+        _instance.requestExecutor = new RequestExecutor(httpGateway);
 		return _instance;
+
 	}
 
 	public void execute(Request request) {
@@ -69,7 +72,7 @@ public class RequestPool implements Runnable {
 
 		public void run() {
 			try {
-				request.run();
+				requestExecutor.execute(request);
 			} finally {
 				decrementActiveThreadCount();
 			}

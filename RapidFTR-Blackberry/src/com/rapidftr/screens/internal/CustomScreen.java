@@ -3,6 +3,7 @@ package com.rapidftr.screens.internal;
 import net.rim.device.api.system.Characters;
 import net.rim.device.api.system.KeyListener;
 import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.Screen;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.Menu;
@@ -33,7 +34,7 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 
 	public boolean isActive() {
 
-		MainScreen activeScreen = (MainScreen) UiApplication.getUiApplication()
+	    Screen activeScreen = UiApplication.getUiApplication()
 				.getActiveScreen();
 
 		if (activeScreen == null)
