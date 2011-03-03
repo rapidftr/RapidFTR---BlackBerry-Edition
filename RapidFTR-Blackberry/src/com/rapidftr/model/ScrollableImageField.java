@@ -39,10 +39,12 @@ public class ScrollableImageField extends BitmapField
     private static final int TRIANGLE_OFFSET = 1;   //The scroll arrow offset from the edge of the focus bar.
     
     private MenuItem _helpMenu;         //The help MenuItem for this field.
+	private int imageYCord;
     
-    public ScrollableImageField(Bitmap theImage) 
-    {    
+    public ScrollableImageField(Bitmap theImage, int imageYCord)
+    {
         super(theImage, BitmapField.FOCUSABLE);
+        this.imageYCord =imageYCord; 
         _theImage = theImage;
         calculateSize();
         
@@ -58,16 +60,19 @@ public class ScrollableImageField extends BitmapField
     
     public ScrollableImageField(EncodedImage theImage)
     {
-        this(theImage.getBitmap());
+        this(theImage.getBitmap(), 0);
     }
     
     //Calculates the preferred width and height of the field and determines if the image should scroll. 
     private void calculateSize()
     {
+    	
         //Set the preferred height to the image size or screen height if the image is larger than the screen height.
-        if (_theImage.getHeight() > Display.getHeight())
+    	int viewPortHeight = Display.getHeight() - imageYCord;
+    	int viewPortWidth = Display.getWidth();
+        if (_theImage.getHeight() > viewPortHeight)
         {
-            _preferredHeight = Display.getHeight();
+            _preferredHeight = viewPortHeight;
         }
         else
         {
@@ -75,9 +80,9 @@ public class ScrollableImageField extends BitmapField
         }
         
         //Set the preferred width to the image size or screen width if the image is larger than the screen width.
-        if (_theImage.getWidth() > Display.getWidth())
+        if (_theImage.getWidth() > viewPortWidth)
         {
-            _preferredWidth = Display.getWidth();
+            _preferredWidth = viewPortWidth;
         }
         else
         {
@@ -246,20 +251,20 @@ public class ScrollableImageField extends BitmapField
             
             //If the user has scrolled to the end of the image, use the default
             //navigationMovement to allow focus to scroll off the field.
-            if (_xCoord < 0  || _yCoord < 0  || 
-                    ((_theImage.getWidth() - _xCoord) < rect.width) ||  
+            if (_xCoord < 0)
+            {
+                _xCoord = 0;
+            }
+            
+            if (_yCoord < 0)
+            {
+                _yCoord = 0;
+            }
+            
+            if (((_theImage.getWidth() - _xCoord) < rect.width) ||  
                     ((_theImage.getHeight() - _yCoord) < rect.height))
             {
                 //Ensure the coordinates do not go lower than 0.
-                if (_xCoord < 0)
-                {
-                    _xCoord = 0;
-                }
-                
-                if (_yCoord < 0)
-                {
-                    _yCoord = 0;
-                }
                 
                 //Ensure that we don't scroll beyond the image size (causing white space to be drawn).
                 if ((_theImage.getWidth() - _xCoord) < rect.width)
@@ -270,6 +275,16 @@ public class ScrollableImageField extends BitmapField
                 if ((_theImage.getHeight() - _yCoord) < rect.height)
                 {
                     _yCoord = _theImage.getHeight() - rect.height;
+                }
+                
+                if (_xCoord < 0)
+                {
+                    _xCoord = 0;
+                }
+                
+                if (_yCoord < 0)
+                {
+                    _yCoord = 0;
                 }
                 //Scrolling is not required.
                 return false;
