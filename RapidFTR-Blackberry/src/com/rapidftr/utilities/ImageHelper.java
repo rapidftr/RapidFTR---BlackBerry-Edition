@@ -32,5 +32,9 @@ public class ImageHelper implements Persistable {
         return bitmap;
     }
 
+	public Bitmap getImage(String imageLocation) {
+		return getScaledImage(300, 300, "res/head.png", imageLocation);
+	}
+
 
 }
