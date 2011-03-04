@@ -9,7 +9,6 @@ import com.rapidftr.screens.internal.UiStack;
 
 public class ViewChildrenController extends Controller {
 	private final ChildrenRecordStore store;
-	private Children sortedChildrenRecords = null;
 	private int sortState;
 	private final int SORT_NAME = 0;
 	private final int SORT_ADDED = 1;
@@ -48,6 +47,7 @@ public class ViewChildrenController extends Controller {
 	public void viewChild(Child child) {
 		dispatcher.viewChild(child);
 	}
+	
 
 	public void sortByName() {
 		this.sortState = this.SORT_NAME;
@@ -65,6 +65,8 @@ public class ViewChildrenController extends Controller {
 	}
 	
 	public void popScreen() {
+		this.sortState = SORT_NAME;
+		((ViewChildrenScreen)currentScreen).refresh();
 		homeScreen();
 	}
 
