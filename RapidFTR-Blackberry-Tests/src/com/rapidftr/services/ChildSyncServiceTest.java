@@ -1,31 +1,21 @@
 package com.rapidftr.services;
 
-import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.MockStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildFactory;
-import com.rapidftr.model.ChildStatus;
-import com.rapidftr.net.HttpBatchRequestHandler;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
-import com.sun.me.web.path.Result;
-import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
-import com.sun.me.web.request.RequestListener;
-import com.sun.me.web.request.Response;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.Hashtable;
 
-import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class ChildSyncServiceTest {
@@ -62,7 +52,7 @@ public class ChildSyncServiceTest {
 
         childService.syncChildRecord(child);
 
-        verify(httpService).post(eq("children"), eq((Arg[]) null), eq(httpArgs), (RequestListener) any(),
+        verify(httpService).post(eq("children"), eq((Arg[]) null), eq(httpArgs), (ChildSyncListener) any(),
                 eq(postData), eq(requestContext));
     }
 
@@ -87,54 +77,8 @@ public class ChildSyncServiceTest {
 
         childService.syncChildRecord(child);
         verify(httpService).put(eq("children/id"), eq((Arg[]) null), eq(httpArgs),
-                (RequestListener) any(),
+                (ChildSyncListener) any(),
                 eq(postData), eq(requestContext));
-    }
-
-    @Test
-    public void shouldUpdateChildFieldsOnRequestSuccess() throws IOException {
-        Child child = ChildFactory.existingChild("id");
-        child.setField("somefield", "original value");
-        Hashtable requestContext = getRequestContext(child);
-        Result result = Result.fromContent("{\"somefield\":\"updatedvalue\"}", "application/json");
-        Response response = new Response(result, 200);
-
-        childService.onRequestSuccess(requestContext, response);
-
-        final Children children = store.getAll();
-        final Child childFromStore = children.toArray()[0];
-        assertEquals("updatedvalue", childFromStore.getField("somefield"));
-        assertEquals(ChildStatus.SYNCED, childFromStore.childStatus());
-    }
-
-    @Test
-    public void shouldSetSyncFailedOnFailure() {
-        Child child = ChildFactory.existingChild("id");
-        childService.onRequestFailure(getRequestContext(child), new Exception());
-
-        final Children children = store.getAll();
-        final Child childFromStore = children.toArray()[0];
-        assertEquals(ChildStatus.SYNC_FAILED, childFromStore.childStatus());
-    }
-
-    @Test
-    public void shouldNotUpdatePhotoIfNotSetOnRequestSuccess() throws ResultException {
-        Child child = ChildFactory.existingChild("id");
-        child.setField("current_photo_key", "");
-        Hashtable requestContext = getRequestContext(child);
-        Result result = Result.fromContent("{\"somefield\":\"updatedvalue\"}", "application/json");
-        Response response = new Response(result, 200);
-
-        childService.onRequestSuccess(requestContext, response);
-
-        verify(photoUpdater, never()).updateChildPhoto(eq(child), (HttpBatchRequestHandler)any());
-    }
-
-    private Hashtable getRequestContext(Child child) {
-        Hashtable requestContext = new Hashtable();
-        requestContext.put(childService.CHILD_TO_SYNC, child);
-        requestContext.put(childService.PROCESS_STATE, "some state");
-        return requestContext;
     }
 
 }
