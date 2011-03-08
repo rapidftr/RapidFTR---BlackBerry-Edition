@@ -36,8 +36,8 @@ public class ChildPhotoScreen extends CustomScreen {
 		add(new ScrollableImageField(
 				new ImageHelper().getScaledImage(
 						curChild.getImageLocation(), 
-						Display.getWidth()+50,
-						Display.getHeight()+50),
+						Display.getWidth(),
+						Display.getHeight()-headerHeight),
 				this.headerHeight)
 		);
 	}
