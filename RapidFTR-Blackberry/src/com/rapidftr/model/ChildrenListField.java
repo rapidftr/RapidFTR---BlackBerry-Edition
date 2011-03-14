@@ -16,7 +16,7 @@ import com.rapidftr.datastore.Children;
 public abstract class ChildrenListField extends ObjectListField {
 
 	private int screenWidth;
-	private int firstrowPostion;
+	private int firstRowPosition;
 	private int secondRowPosition;
 	private Font titleFont;
 	private Font rowFont;
@@ -29,9 +29,9 @@ public abstract class ChildrenListField extends ObjectListField {
 		rowFont = defaultFont.derive(Font.PLAIN, 3, Ui.UNITS_mm);
 
 		screenWidth = Display.getWidth();
-		firstrowPostion = (screenWidth)
+		firstRowPosition = (screenWidth)
 				- (screenWidth - 4 - ((titleFont.getHeight() * 4) - 4));
-		secondRowPosition = firstrowPostion + 20;
+		secondRowPosition = firstRowPosition + 20;
 
 	}
 
@@ -58,14 +58,18 @@ public abstract class ChildrenListField extends ObjectListField {
 		graphics.setColor(Color.BLACK);
 
 		graphics.setFont(titleFont);
-		graphics.drawText((String) child.getField("name"), firstrowPostion, y,
-				(DrawStyle.LEFT | DrawStyle.ELLIPSIS | DrawStyle.TOP), 250);
+		
+        // Takes 5 params 1:display text, 2:horizontal position, 
+		// 3: vertical position, 4: flags, 5: text display width
+        graphics.drawText((String) child.getField("name"), firstRowPosition, y,
+				(DrawStyle.LEFT | DrawStyle.ELLIPSIS | DrawStyle.TOP),
+				screenWidth - firstRowPosition - 4);
 
 		int yStartForText = y + (this.getFont()).getHeight() + 1;
 		drawFieldRow(graphics, width, child, yStartForText, "age");
 
 		yStartForText = yStartForText + (this.getFont()).getHeight() + 1;
-		drawFieldRow(graphics, width, child, yStartForText,
+		drawFieldRow(graphics, width - secondRowPosition - 4, child, yStartForText,
 				"last_known_location");
 
 		yStartForText = yStartForText + (this.getFont()).getHeight() + 1;
@@ -103,7 +107,7 @@ public abstract class ChildrenListField extends ObjectListField {
 		int boxHeight = getFont().getHeight() + 4;
 		int boxWidth = getFont().getAdvance(childStatusString) + 4;
 		int boxX = screenWidth - 10 - boxWidth;
-		int boxY = ((index) * listField.getRowHeight()) + 4;
+		int boxY = ((index) * listField.getRowHeight()) + getFont().getHeight() + 2;
 
 		graphics.setColor(child.childStatus().getStatusColor());
 		graphics.drawRoundRect(boxX, boxY, boxWidth, boxHeight, 10, 10);
