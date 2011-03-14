@@ -24,8 +24,8 @@ public class PhotoUploadFormField extends FormField implements
 	private Button capturePhoto;
 	private Child child;
 	
-	public PhotoUploadFormField(String name, String displayName, String type) {
-		super(name, displayName, type);
+	public PhotoUploadFormField(String name, String displayName, String type, String helpText) {
+		super(name, displayName, type, helpText);
 	}
 
 	public void initializeLayout(final ManageChildScreen newChildScreen) {

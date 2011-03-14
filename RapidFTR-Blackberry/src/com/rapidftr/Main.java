@@ -3,6 +3,7 @@ package com.rapidftr;
 import com.rapidftr.controllers.*;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
+import com.rapidftr.datastore.FormJsonParser;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
@@ -46,7 +47,7 @@ public class Main extends UiApplication {
 				new DefaultStore(
 						new Key("com.rapidftr.utilities.childrenstore")));
 
-        FormStore formStore = new FormStore();
+        FormStore formStore = new FormStore(new FormJsonParser());
 
         Settings settings = new Settings(defaultStore);
 

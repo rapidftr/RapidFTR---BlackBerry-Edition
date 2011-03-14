@@ -17,9 +17,9 @@ public class DateFormField extends FormField
 	  String label;
 	  DateField dateField;
 	
-	protected DateFormField(String name, String displayName, String type) 
+	protected DateFormField(String name, String displayName, String type, String helpText)
 	{
-		super(name, displayName, type);
+		super(name, displayName, type, helpText);
 		label= displayName;
 	}
 

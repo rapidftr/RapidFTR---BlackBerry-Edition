@@ -1,17 +1,12 @@
 package com.rapidftr.model;
 
 import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.BoldRichTextField;
-import com.rapidftr.utilities.ChildFieldIgnoreList;
-import net.rim.device.api.ui.Font;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Vector;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -53,7 +48,7 @@ public class TabTest {
 
      @Test
     public void ShouldNotRenderFiledsWhichAReInIgnoreList() {
-        FormField field = new FormFieldFactory().createFormField("histories", "displayname", FormFieldFactory.TEXT_FIELD, null);
+        FormField field = new FormFieldFactory().createFormField("histories", "displayname", FormFieldFactory.TEXT_FIELD, null, "");
         Vector fieldList = new Vector();
         fieldList.add(field);
         Form form = new Form("Test", "id", fieldList);
