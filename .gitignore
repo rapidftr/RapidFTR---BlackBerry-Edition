@@ -17,3 +17,7 @@ build.properties
 /*.zip
 .metadata/**
 build/*
+.classpath
+.settings/*
+.project
+BlackBerry_App_Descriptor.xml
