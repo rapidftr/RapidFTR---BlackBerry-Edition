@@ -124,25 +124,25 @@ public abstract class ChildrenListField extends ObjectListField {
 	}
 
 	private Child getChildAtIndex(int index) {
-			Object[] selectedChildImagePair = (Object[]) this.get(this, index);
-			return (Child) selectedChildImagePair[0];
+		Object[] selectedChildImagePair = (Object[]) this.get(this, index);
+		return (Child) selectedChildImagePair[0];
 	}
 
 	public abstract ViewChildrenController getViewChildController();
 
 	public void addChild() {
-		if (insertPosition() >= this.getSize()
-				&& getSelectedIndex() <= children.count()) {
-			insert(insertPosition(), children
-					.getImagePairAt(childIndexToBeFetched()));
+		int childIndex = childIndexToBeFetched();
+		if (shouldFetch(childIndex)) {
+			insert(childIndex, children.getImagePairAt(childIndex));
 		}
 	}
 
-	private int childIndexToBeFetched() {
-		return getSelectedIndex() - 1;
+	private boolean shouldFetch(int childIndex) {
+		return childIndex >= this.getSize()
+				&& childIndex < children.count();
 	}
 
-	private int insertPosition() {
+	private int childIndexToBeFetched() {
 		return getSelectedIndex() + 1;
 	}
 
