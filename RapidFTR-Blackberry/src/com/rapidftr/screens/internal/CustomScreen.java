@@ -29,7 +29,6 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 
 	public void setController(Controller controller) {
 		this.controller = controller;
-
 	}
 
 	public boolean isActive() {
@@ -64,7 +63,8 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 		int fieldCount = this.getFieldCount();
 		if (fieldCount > 0)
 			this.deleteRange(0, fieldCount);
-		add(new TitleField());
+		this.titleField = new TitleField();
+		add(this.titleField);
 	}
 
 	protected void makeMenu(Menu menu, int instance) {
@@ -109,6 +109,10 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 
 	public boolean keyUp(int keycode, int time) {
 		return super.keyUp(keycode, time);
+	}
+	
+	public void setUserName(String userName){
+		this.titleField.setUserName(userName);
 	}
 
 }

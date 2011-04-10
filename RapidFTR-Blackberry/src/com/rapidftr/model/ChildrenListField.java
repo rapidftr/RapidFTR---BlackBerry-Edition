@@ -13,7 +13,7 @@ import net.rim.device.api.ui.component.ObjectListField;
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.datastore.Children;
 
-public abstract class ChildrenListField extends ObjectListField {
+public abstract class ChildrenListField extends ObjectListField{
 
 	private int screenWidth;
 	private int firstRowPosition;
@@ -21,6 +21,7 @@ public abstract class ChildrenListField extends ObjectListField {
 	private Font titleFont;
 	private Font rowFont;
 	private Children children;
+	private int selectedIndex = -1;
 
 	public ChildrenListField() {
 		super();
@@ -32,13 +33,13 @@ public abstract class ChildrenListField extends ObjectListField {
 		firstRowPosition = (screenWidth)
 				- (screenWidth - 4 - ((titleFont.getHeight() * 4) - 4));
 		secondRowPosition = firstRowPosition + 20;
-
 	}
 
 	protected boolean navigationClick(int i, int i1) {
 		if (this.getSelectedIndex() > -1) {
 			Child child = getSelectedChild();
 			if (child != null) {
+				setSelectedChild();
 				getViewChildController().viewChild(child);
 			}
 		}
@@ -120,7 +121,8 @@ public abstract class ChildrenListField extends ObjectListField {
 	}
 
 	public Child getSelectedChild() {
-		return getChildAtIndex(this.getSelectedIndex());
+		setSelectedChild();
+		return getChildAtIndex(this.selectedIndex);
 	}
 
 	private Child getChildAtIndex(int index) {
@@ -149,6 +151,22 @@ public abstract class ChildrenListField extends ObjectListField {
 	public void displayChildren(Children children) {
 		this.children = children;
 		set(children.getChildrenAndImages());
+		selectChild();
+	}
+	
+	public void setSelectedChild(){
+		this.selectedIndex = this.getSelectedIndex();
+	}
+	
+	private void selectChild() {
+		if(this.selectedIndex != -1){
+			this.setSelectedIndex(this.selectedIndex);
+		}	
+	}
+
+	
+	public void refresh(){
+		this.selectedIndex = -1;
 	}
 
 }

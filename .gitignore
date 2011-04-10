@@ -17,3 +17,8 @@ build.properties
 /*.zip
 .metadata/**
 build/*
+.classpath
+RapidFTR-Blackberry/.classpath
+.settings/*
+.project
+BlackBerry_App_Descriptor.xml

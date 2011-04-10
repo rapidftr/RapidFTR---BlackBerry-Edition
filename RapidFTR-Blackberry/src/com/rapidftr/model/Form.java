@@ -50,60 +50,56 @@ public class Form {
 	public Vector getFieldList() {
 		return fieldList;
 	}
-
 	public void initializeLayout(ManageChildScreen newChildScreen) {
-		FormField formField =null;
-		Enumeration list=null;
-		Object nextElement=null;
-		try{
-		layoutManager = new VerticalFieldManager();
-		if(fieldList!=null){
-		for ( list = fieldList.elements(); list.hasMoreElements();) {
-			nextElement=list.nextElement();
-			if(nextElement!=null){
-				formField = (FormField) nextElement;
-			formField.initializeLayout(newChildScreen);
-			layoutManager.add(formField.getLayout());
-			layoutManager.add(new BlankSeparatorField(10));
+		FormField formField = null;
+		Enumeration list = null;
+		Object nextElement = null;
+		try {
+			layoutManager = new VerticalFieldManager();
+			if (fieldList != null) {
+				for (list = fieldList.elements(); list.hasMoreElements();) {
+					nextElement = list.nextElement();
+					if (nextElement != null) {
+						formField = (FormField) nextElement;
+						formField.initializeLayout(newChildScreen);
+						layoutManager.add(formField.getLayout());
+						layoutManager.add(new BlankSeparatorField(10));
+					}
+				}
 			}
-		}
-		}
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void initializeLayoutWithChild(
-			ManageChildScreen newChildScreen, Child child) {
+	public void initializeLayoutWithChild(ManageChildScreen newChildScreen,
+			Child child) {
 		layoutManager = new VerticalFieldManager();
-		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) 
-		{
+		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
 			Object nextElement = list.nextElement();
-			if(nextElement!=null)
-			{
-					FormField formField = (FormField) nextElement;
-					formField.initializeLayout(newChildScreen);
-					Object fieldValue = child.getField(formField.getName());
-					formField.setValue((fieldValue != null) ? fieldValue.toString()
-							: "");
-					layoutManager.add(formField.getLayout());
-					layoutManager.add(new BlankSeparatorField(10));
+			if (nextElement != null) {
+				FormField formField = (FormField) nextElement;
+				formField.initializeLayout(newChildScreen);
+				Object fieldValue = child.getField(formField.getName());
+				formField.setValue((fieldValue != null) ? fieldValue.toString()
+						: "");
+				layoutManager.add(formField.getLayout());
+				layoutManager.add(new BlankSeparatorField(10));
 			}
 		}
 	}
 
-    public boolean isEmpty() {
-        for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
-            Object nextElement = list.nextElement();
-            if (nextElement != null) {
-                FormField formField = (FormField) nextElement;
-                if (!formField.isEmpty()) {
-                    return false;
-                }
-            }
-        }
-        return true;
+	public boolean isEmpty() {
+		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
+			Object nextElement = list.nextElement();
+			if (nextElement != null) {
+				FormField formField = (FormField) nextElement;
+				if (!formField.isEmpty()) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	public Manager getLayout() {
@@ -113,7 +109,5 @@ public class Form {
 	public String getId() {
 		return id;
 	}
-
-	
 
 }
