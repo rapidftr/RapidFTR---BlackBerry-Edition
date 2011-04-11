@@ -2,7 +2,6 @@ package com.rapidftr.screens;
 
 import java.util.Vector;
 
-import com.rapidftr.Main;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.MenuItem;
@@ -11,6 +10,7 @@ import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
+import com.rapidftr.Main;
 import com.rapidftr.controllers.HomeController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.net.ConnectionFactory;
@@ -31,7 +31,9 @@ public class HomeScreen extends CustomScreen {
 	}
 
 	private void layoutScreen() {
-
+		
+		setUserName(this.settings.getCurrentlyLoggedIn());
+		
 		Button loginButton;
 		if (settings.isUserLoggedIn()) {
 			loginButton = new Button("Log Out");
@@ -187,7 +189,6 @@ public class HomeScreen extends CustomScreen {
         menu.add(cleanDeviceMenuItem);
         menu.add(syncInfoItem);
     }
-
 
 	protected void onExposed() {
 		clearFields();
