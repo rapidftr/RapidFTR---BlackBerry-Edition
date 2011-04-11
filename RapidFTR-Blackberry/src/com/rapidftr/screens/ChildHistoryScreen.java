@@ -1,28 +1,31 @@
 package com.rapidftr.screens;
 
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Vector;
-
+import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildHistoryItem;
-import net.rim.device.api.i18n.DateFormat;
-import net.rim.device.api.i18n.SimpleDateFormat;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.DateFormatter;
 import net.rim.device.api.io.http.HttpDateParser;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.component.SeparatorField;
 
-import com.rapidftr.model.Child;
-import com.rapidftr.screens.internal.CustomScreen;
+import java.util.Enumeration;
+import java.util.Vector;
 
 public class ChildHistoryScreen extends CustomScreen {
 	
 	private Child child;
-	
-	public ChildHistoryScreen(){
+    private DateFormatter dateFormatter;
+
+    public ChildHistoryScreen(){
 		super();
 	}
+
+    public ChildHistoryScreen(DateFormatter dateFormatter){
+        this();
+        this.dateFormatter = dateFormatter;
+    }
 	
 	public void setChild(Child child){
 		clearFields();
@@ -60,10 +63,8 @@ public class ChildHistoryScreen extends CustomScreen {
 
     private String getDescription(ChildHistoryItem childHistoryItem) {
         String description = childHistoryItem.getFieldChangeDescription();
-        String changeDateTime = childHistoryItem.getChangeDateTime();
-        final long dateTime = HttpDateParser.parse(changeDateTime);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
-        return dateFormat.format(new Date(dateTime)) + " " + description;
+        long changeTime = HttpDateParser.parse(childHistoryItem.getChangeDateTime());
+        return dateFormatter.format(changeTime) + " " + description;
     }
 
 }
