@@ -324,6 +324,10 @@ public class Child implements Persistable {
         setField("current_photo_key", value);
     }
 
+    public void setPhotoKeyWithoutUpdate(String value) {
+        put("current_photo_key", value);
+    }
+
     public String getPhotoKey() {
         return (String) getField("current_photo_key");
     }
