@@ -32,7 +32,7 @@ public class ChildPhotoUpdateListener implements RequestListener {
                             ((Hashtable) context).get(ChildSyncService.PROCESS_STATE).toString());
         try {
             byte[] data = response.getResult().getData();
-            child.setPhotoKey(savePhoto(child, data));
+            child.setPhotoKeyWithoutUpdate(savePhoto(child, data));
         } catch (Exception e) {
             hasError = true;
             child.syncFailed(e.getMessage());
@@ -44,16 +44,17 @@ public class ChildPhotoUpdateListener implements RequestListener {
     protected String savePhoto(Child child, byte[] data) throws IOException {
         String imagePath = getStorePath() + "/pictures/"
                 + child.getField("current_photo_key") + ".jpg";
-        FileConnection fc = (FileConnection) Connector.open(imagePath);
-        if (!fc.exists()) {
-            fc.create(); // create the file if it doesn't exist
+        synchronized(Connector.class) {
+	        FileConnection fc = (FileConnection) Connector.open(imagePath);
+	        if (!fc.exists()) {
+	            fc.create(); // create the file if it doesn't exist
+	        }
+	        fc.setWritable(true);
+	        OutputStream outStream = fc.openOutputStream();
+	        outStream.write(data);
+	        outStream.close();
+	        fc.close();
         }
-        fc.setWritable(true);
-        OutputStream outStream = fc.openOutputStream();
-        outStream.write(data);
-        outStream.close();
-        fc.close();
-
         return imagePath;
     }
 
