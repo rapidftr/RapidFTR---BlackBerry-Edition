@@ -10,7 +10,7 @@ public class FormFieldFactoryTest {
 	public void shouldReturnTextboxFormField()
 	{
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "text_field", null);
+		FormField field = formFieldFactory.createFormField("name", "Name", "text_field", null, "");
 		assertNotNull(field);
 		assertTrue(field instanceof TextboxFormField);
 	}
@@ -19,7 +19,7 @@ public class FormFieldFactoryTest {
 	public void shouldReturnSelecttboxFormField()
 	{
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "select_box", null);
+		FormField field = formFieldFactory.createFormField("name", "Name", "select_box", null, "");
 		assertNotNull(field);
 		assertTrue(field instanceof SelectboxFormField);
 	}
@@ -28,7 +28,7 @@ public class FormFieldFactoryTest {
 	public void shouldReturnRadiobuttonFormField()
 	{
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "radio_button", null);
+		FormField field = formFieldFactory.createFormField("name", "Name", "radio_button", null, "");
 		assertNotNull(field);
 		assertTrue(field instanceof RadioButtonFormField);
 	}
@@ -38,7 +38,7 @@ public class FormFieldFactoryTest {
 	public void shouldReturnCheckboxFormField()
 	{
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "check_box", null);
+		FormField field = formFieldFactory.createFormField("name", "Name", "check_box", null, "");
 		assertNotNull(field);
 		assertTrue(field instanceof CheckboxFormField);
 	}
@@ -47,7 +47,7 @@ public class FormFieldFactoryTest {
 	public void shouldReturnPhotoUploadFormField()
 	{
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "photo_upload_box", null);
+		FormField field = formFieldFactory.createFormField("name", "Name", "photo_upload_box", null, "");
 		assertNotNull(field);
 		assertTrue(field instanceof PhotoUploadFormField);
 	}
@@ -56,7 +56,7 @@ public class FormFieldFactoryTest {
 	public void shouldReturnNumericTextboxFormField()
 	{
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "numeric_field", null);
+		FormField field = formFieldFactory.createFormField("name", "Name", "numeric_field", null, "");
 		assertNotNull(field);
 		assertTrue(field instanceof NumericTextboxFormField);
 	}
@@ -65,7 +65,7 @@ public class FormFieldFactoryTest {
 	public void shouldReturnNullWhenInvalidInputTypeIsGiven()
 	{
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "xxxxx", null);
+		FormField field = formFieldFactory.createFormField("name", "Name", "xxxxx", null, "");
 		assertNull(field);
 	}
 	
