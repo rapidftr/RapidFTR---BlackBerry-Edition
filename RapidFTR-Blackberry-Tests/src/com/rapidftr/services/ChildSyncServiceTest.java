@@ -5,6 +5,7 @@ import com.rapidftr.datastore.MockStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildFactory;
 import com.rapidftr.net.HttpService;
+import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
@@ -28,8 +29,9 @@ public class ChildSyncServiceTest {
     public void setUp() {
         httpService = mock(HttpService.class);
         photoUpdater = mock(ChildPhotoUpdater.class);
+        DateFormatter dateFormatter = mock(DateFormatter.class);
         store = new ChildrenRecordStore(new MockStore());
-        childService = new ChildSyncService(httpService, store, photoUpdater);
+        childService = new ChildSyncService(httpService, store, photoUpdater, dateFormatter);
     }
 
     @Test
