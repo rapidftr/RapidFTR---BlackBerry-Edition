@@ -4,7 +4,7 @@ import net.rim.device.api.i18n.SimpleDateFormat;
 
 public class DefaultBlackBerryDateFormat implements IFormatDates {
 
-    private static final String TIME_FORMAT = "yyyy-MM-dd HH:mm:ssz";
+    private static final String TIME_FORMAT = "yyyy-MM-dd HH:mm z";
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(TIME_FORMAT);
 
     public DefaultBlackBerryDateFormat() {
