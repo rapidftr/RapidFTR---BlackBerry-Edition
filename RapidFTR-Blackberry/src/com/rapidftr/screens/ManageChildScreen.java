@@ -3,6 +3,7 @@ package com.rapidftr.screens;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import com.rapidftr.utilities.DateFormatter;
 import net.rim.device.api.system.Characters;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
@@ -29,15 +30,17 @@ public class ManageChildScreen extends CustomScreen {
     private Vector forms;
     private Manager screenManager;
     Settings settings;
+    private final DateFormatter dateFormatter;
     private Child childToEdit;
 
     private static String[] REQUIRED_FIELDS = { };
 	private String selectedTab;
 
-    public ManageChildScreen(Settings settings) {
+    public ManageChildScreen(Settings settings, DateFormatter dateFormatter) {
         this.settings = settings;
+        this.dateFormatter = dateFormatter;
     }
-   
+
     public void setUp() {
         createScreenLayout();
     }
@@ -162,9 +165,10 @@ public class ManageChildScreen extends CustomScreen {
 
     private String onSaveChildClicked() {
         if (childToEdit == null) {
-            childToEdit = Child.create(forms);
+            childToEdit = Child.create(forms, dateFormatter.getCurrentFormattedDateTime());
         } else {
             childToEdit.update(settings.getCurrentlyLoggedIn(), forms);
+            childToEdit.setField(Child.LAST_UPDATED_KEY, dateFormatter.getCurrentFormattedDateTime());
         }
 
         String invalidDataField;

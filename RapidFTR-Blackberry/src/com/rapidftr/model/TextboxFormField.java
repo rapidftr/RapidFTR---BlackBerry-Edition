@@ -17,8 +17,8 @@ public class TextboxFormField extends FormField {
 	protected VerticalFieldManager manager;
 	protected BasicEditField field;
 
-	public TextboxFormField(String name, String displayName, String type) {
-		super(name, displayName, type);
+	public TextboxFormField(String name, String displayName, String type, String helpText) {
+		super(name, displayName, type, helpText);
 	}
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {

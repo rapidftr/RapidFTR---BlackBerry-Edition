@@ -1,44 +1,43 @@
 package com.rapidftr.services;
 
+import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
-import com.rapidftr.net.HttpBatchRequestHandler;
-import com.rapidftr.utilities.FileStoreUtility;
+import com.rapidftr.net.HttpService;
+import com.rapidftr.net.RequestCallBack;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.request.Arg;
-import com.sun.me.web.request.Response;
 
-import javax.microedition.io.Connector;
-import javax.microedition.io.file.FileConnection;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class ChildPhotoUpdater {
 
-    public void updateChildPhoto(Child child, HttpBatchRequestHandler requestHandler) {
-        try {
-            Arg[] httpArgs = new Arg[1];
-            httpArgs[0] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
-            Response response = requestHandler.get("children/"
-                    + child.getField("_id") + "/resized_photo/400", null,
-                    httpArgs);
-            byte[] data = response.getResult().getData();
+    private HttpService service;
+    private ChildrenRecordStore recordStore;
 
-            String imagePath = FileStoreUtility.getStorePath() + "/pictures/"
-                    + child.getField("current_photo_key") + ".jpg";
-            FileConnection fc = (FileConnection) Connector.open(imagePath);
-            if (!fc.exists()) {
-                fc.create(); // create the file if it doesn't exist
-            }
-            fc.setWritable(true);
-            OutputStream outStream = fc.openOutputStream();
-            outStream.write(data);
-            outStream.close();
-            fc.close();
-
-            child.setField("current_photo_key", imagePath);
-        } catch (IOException e) {
-            child.syncFailed(e.getMessage());
-        }
+    public ChildPhotoUpdater(HttpService service, ChildrenRecordStore recordStore) {
+        this.service = service;
+        this.recordStore = recordStore;
     }
 
+    public void doUpdates(Vector childrenRequiringPhotoUpdate, RequestCallBack requestCallBack, boolean currentSyncStatus) {
+        int total = childrenRequiringPhotoUpdate.size();
+        Enumeration items = childrenRequiringPhotoUpdate.elements();
+		int index = 0;
+        ChildPhotoUpdateListener listener = new ChildPhotoUpdateListener(requestCallBack, total, currentSyncStatus, recordStore);
+		while (items.hasMoreElements()) {
+            Child child = (Child) items.nextElement();
+			index++;
+			Hashtable context = new Hashtable();
+			context.put(ChildSyncService.PROCESS_STATE, "Updating photo [" + index + "/"
+					+ total + "]");
+            context.put(ChildSyncService.CHILD_TO_SYNC, child);
+            Arg[] httpArgs = new Arg[1];
+            httpArgs[0] = HttpUtility.HEADER_CONTENT_TYPE_IMAGE;
+            service.get("children/"
+                    + child.getField("_id") + "/resized_photo/400", null,
+                    httpArgs, listener, context);
+        }
+    }
 }

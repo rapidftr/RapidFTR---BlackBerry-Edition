@@ -8,31 +8,37 @@ import java.io.IOException;
 
 public class HttpServer {
 
-	// private Request request = null;
-	private RequestPool requestPool = RequestPool.getInstance();
+	private RequestPool requestPool;
 	private HttpSettings settings;
+    private HttpGateway httpGateway;
 
-	public HttpServer(HttpSettings settings) {
+    public HttpServer(HttpSettings settings) {
+		this(settings, new HttpGateway(new ConnectionFactory()));
+	}
+
+    public HttpServer(HttpSettings settings, HttpGateway httpGateway) {
 		this.settings = settings;
+        this.httpGateway = httpGateway;
+        requestPool = RequestPool.getInstance(httpGateway);
 	}
 
 	public void postToServer(String url, Arg[] postParams, Arg[] httpArgs,
 			RequestListener listener, PostData multiPart, Object context) {
-		requestPool.execute(Request.post(buildFullyQualifiedUrl(url),
+		requestPool.execute(Request.createPostRequest(buildFullyQualifiedUrl(url),
 				postParams, httpArgs, listener, multiPart, context));
 	}
 
 	public void getFromServer(String url, Arg[] inputParams, Arg[] httpArgs,
 			RequestListener listener, Object context) {
-		requestPool.execute(Request.get(buildFullyQualifiedUrl(url),
+		requestPool.execute(Request.createGetRequest(buildFullyQualifiedUrl(url),
 				inputParams, httpArgs, listener, context));
 
 	}
 
 	public Response getFromServer(String url, Arg[] inputParams, Arg[] httpArgs)
 			throws IOException {
-		return Request.get(buildFullyQualifiedUrl(url), inputParams, httpArgs,
-				null);
+		Request request = Request.createGetRequest(buildFullyQualifiedUrl(url), inputParams, httpArgs);
+        return httpGateway.perform(request);
 	}
 
 	public void cancelRequest() {

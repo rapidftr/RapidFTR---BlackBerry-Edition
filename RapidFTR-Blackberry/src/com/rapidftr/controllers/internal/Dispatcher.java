@@ -113,7 +113,7 @@ public class Dispatcher {
 
 	public void viewChildren(Children children) {
 		viewChildrenController.viewChildren(children);
-		
+	
 	}
 
 	public void viewChildPhoto(Child child) {

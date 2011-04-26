@@ -18,7 +18,7 @@ public class FormStoreTest {
 	@Test
 	public void shouldReturnVectorOfForms() throws ResultException {
 
-		FormStore formStore = new FormStore() {
+		FormStore formStore = new FormStore(new FormJsonParser()) {
 			
 			void initializePersistentStore() {
 				persistentStore = mock(PersistentStore.class);
@@ -31,14 +31,14 @@ public class FormStoreTest {
 		final FormFieldFactory formFieldFactory = new FormFieldFactory();
 
 		final Vector<FormField> fields = new Vector<FormField>(){{
-			add(formFieldFactory.createFormField("age", "Age", "text_box", null));
+			add(formFieldFactory.createFormField("age", "Age", "text_box", null, ""));
 			add(formFieldFactory.createFormField("age_is", "Age is", "select_box", new Vector<String>() {
 				{
 					add("Approximate");
 					add("Exact");
 
 				}
-			}));
+			}, ""));
 			
 		}};
 

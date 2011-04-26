@@ -3,6 +3,7 @@ package com.rapidftr.screens.internal;
 import net.rim.device.api.system.Characters;
 import net.rim.device.api.system.KeyListener;
 import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.Screen;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.Menu;
@@ -28,12 +29,11 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 
 	public void setController(Controller controller) {
 		this.controller = controller;
-
 	}
 
 	public boolean isActive() {
 
-		MainScreen activeScreen = (MainScreen) UiApplication.getUiApplication()
+	    Screen activeScreen = UiApplication.getUiApplication()
 				.getActiveScreen();
 
 		if (activeScreen == null)
@@ -63,11 +63,12 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 		int fieldCount = this.getFieldCount();
 		if (fieldCount > 0)
 			this.deleteRange(0, fieldCount);
-		add(new TitleField());
+		this.titleField = new TitleField();
+		add(this.titleField);
 	}
 
 	protected void makeMenu(Menu menu, int instance) {
-		menu.add(new MenuItem("Main Menu", 0, 1) {
+		menu.add(new MenuItem("Go Home", 0, 1) {
 			public void run() {
 				onMainMenuClick();
 			}
@@ -108,6 +109,10 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 
 	public boolean keyUp(int keycode, int time) {
 		return super.keyUp(keycode, time);
+	}
+	
+	public void setUserName(String userName){
+		this.titleField.setUserName(userName);
 	}
 
 }

@@ -12,8 +12,8 @@ public class CheckboxFormField extends FormField {
 	private VerticalFieldManager manager;
 	private CheckboxField field;
 
-	public CheckboxFormField(String name, String displayName, String type) {
-		super(name, displayName, type);
+	public CheckboxFormField(String name, String displayName, String type, String helpText) {
+		super(name, displayName, type, helpText);
 	}
 
 	public Manager getLayout() {

@@ -6,8 +6,8 @@ import com.rapidftr.screens.ManageChildScreen;
 
 public class NumericTextboxFormField extends TextboxFormField {
 
-	public NumericTextboxFormField(String name, String displayName, String type) {
-		super(name, displayName, type);
+	public NumericTextboxFormField(String name, String displayName, String type, String helpText) {
+		super(name, displayName, type, helpText);
 	}
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {

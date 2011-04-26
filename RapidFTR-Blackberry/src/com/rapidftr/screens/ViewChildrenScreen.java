@@ -3,6 +3,7 @@ package com.rapidftr.screens;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.ScrollChangeListener;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
@@ -14,7 +15,7 @@ import com.rapidftr.model.ChildrenListField;
 import com.rapidftr.screens.internal.CustomScreen;
 
 public class ViewChildrenScreen extends CustomScreen {
-	
+
 	private static final int ROW_HEIGHT = 100;
 	private ChildrenListField childrenList;
 
@@ -61,8 +62,7 @@ public class ViewChildrenScreen extends CustomScreen {
 			};
 			menu.add(editChildMenu);
 
-			MenuItem sortByName = new MenuItem(
-					"Sort by Name", 1, 1) {
+			MenuItem sortByName = new MenuItem("Sort by Name", 1, 1) {
 				public void run() {
 					getController().sortByName();
 				}
@@ -88,5 +88,8 @@ public class ViewChildrenScreen extends CustomScreen {
 		super.makeMenu(menu, instance);
 	}
 
+	public void refresh() {
+		childrenList.refresh();
+	}
 
 }

@@ -13,7 +13,7 @@ public class ChildrenRecordStore {
 		this.store = store;
 	}
 
-	public void addOrUpdate(Child child) {
+	public synchronized void addOrUpdate(Child child) {
 		if (child == null) {
 			return;
 		}
@@ -72,5 +72,4 @@ public class ChildrenRecordStore {
 		Vector vector = store.getVector(GET_ALL_CHILDREN_KEY);
 		return (Child) vector.elementAt(index);
 	}
-	
 }

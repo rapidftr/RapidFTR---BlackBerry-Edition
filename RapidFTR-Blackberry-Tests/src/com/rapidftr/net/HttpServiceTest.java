@@ -28,17 +28,17 @@ public class HttpServiceTest {
 	Settings settings;
 	private Arg[] httpArgs;
 	private Arg[] httpArgsWithAuthToken;
+    private static final String TOKEN = "token";
 
-	@Before
+    @Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		httpService = new HttpService(httpServer, settings);
 		url = "url";
-		String token = "token";
 		httpArgs = new Arg[0];
 		httpArgsWithAuthToken = new Arg[] { new Arg(Arg.AUTHORIZATION,
-				"RFTR_Token " + token) };
-		when(settings.getAuthorizationToken()).thenReturn(token);
+				"RFTR_Token " + TOKEN) };
+		when(settings.getAuthorizationToken()).thenReturn(TOKEN);
 		when(httpServer.buildFullyQualifiedUrl(url)).thenReturn(url);
 	}
 
@@ -52,6 +52,20 @@ public class HttpServiceTest {
 		verify(httpServer).postToServer(url, postParams, httpArgsWithAuthToken,
 				listener, postData, context);
 	}
+
+    @Test
+    public void shouldSendPutRequestToHttpServer() {
+        Arg[] postParams = new Arg[0];
+		Arg[] postArgs = new Arg[0];
+		PostData postData = mock(PostData.class);
+		httpService
+				.put(url, postParams, postArgs, listener, postData, context);
+        Arg[] httpArgs =  new Arg[] { new Arg("X-HTTP-Method-Override",
+				"PUT"), new Arg(Arg.AUTHORIZATION,
+				"RFTR_Token " + TOKEN) };
+		verify(httpServer).postToServer(url, postParams, httpArgs,
+				listener, postData, context);
+    }
 
 	@Test
 	public void shouldSendGetRequestToHttpServer() {

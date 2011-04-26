@@ -27,7 +27,7 @@ public class ConnectionFactory {
         return !CoverageInfo.isOutOfCoverage();
     }
 
-    private boolean isWIFIAvailable() {
+    protected boolean isWIFIAvailable() {
         return WLANInfo.getWLANState() == WLANInfo.WLAN_STATE_CONNECTED;
     }
 }

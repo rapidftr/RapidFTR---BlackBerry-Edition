@@ -18,8 +18,8 @@ public class TextAreaFormField extends FormField {
 	private VerticalFieldManager manager;
 	private TextField field;
 
-	public TextAreaFormField(String name, String displayName, String type) {
-		super(name, displayName, type);
+	public TextAreaFormField(String name, String displayName, String type, String helpText) {
+		super(name, displayName, type, helpText);
 	}
 
 	public void initializeLayout(ManageChildScreen newChildScreen) {
