@@ -26,8 +26,8 @@ public class AudioField extends FormField implements AudioRecordListener{
 	private VerticalFieldManager manager;
 	private ManageChildScreen manageChildScreen;
 
-	protected AudioField(String name) {
-		super(name, "Audio", TYPE);
+	protected AudioField(String name, String helpText) {
+		super(name, "Audio", TYPE, helpText);
 	}
 	
 	public String getValue() {
@@ -94,9 +94,9 @@ public class AudioField extends FormField implements AudioRecordListener{
 		return manager;
 	}
 	
-	public static AudioField createdFormField(String name, String type) {
+	public static AudioField createdFormField(String name, String type, String helpText) {
 		if (type.equals(TYPE)) {
-			return new AudioField(name);
+			return new AudioField(name, helpText);
 		}
 		return null;
 	}

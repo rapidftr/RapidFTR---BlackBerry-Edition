@@ -16,22 +16,17 @@ import java.util.Vector;
 public class Child implements Persistable {
 
     public static final String CREATED_AT_KEY = "created_at";
+    public static final String LAST_UPDATED_KEY = "last_updated_at";
     private final Hashtable data;
     private final Hashtable changedFields;
-    private DateFormatter dateFormatter;
 
     private ChildStatus childStatus;
 
-    public Child() {
-        this(new DateFormatter());
-    }
-
-    public Child(DateFormatter dateFormatter) {
-        this.dateFormatter = dateFormatter;
+    public Child(String creationDate) {
         changedFields = new Hashtable();
         data = new Hashtable();
         put("_id", RandomStringGenerator.generate(32));
-        put(CREATED_AT_KEY, dateFormatter.getCurrentFormattedDateTime());
+        put(CREATED_AT_KEY, creationDate);
         childStatus = ChildStatus.NEW;
     }
 
@@ -182,8 +177,8 @@ public class Child implements Persistable {
 
     }
 
-    public static Child create(Vector forms) {
-        Child child = new Child();
+    public static Child create(Vector forms, String currentFormattedDateTime) {
+        Child child = new Child(currentFormattedDateTime);
         child.updateChildDetails(forms);
         return child;
     }
@@ -207,7 +202,6 @@ public class Child implements Persistable {
                 }
             }
         }
-        setField("last_updated_at", dateFormatter.getCurrentFormattedDateTime());
     }
 
     public void update(String userName, Vector forms) {
@@ -324,7 +318,13 @@ public class Child implements Persistable {
         setField("current_photo_key", value);
     }
 
+    public void setPhotoKeyWithoutUpdate(String value) {
+        put("current_photo_key", value);
+    }
+
     public String getPhotoKey() {
         return (String) getField("current_photo_key");
     }
+
+
 }

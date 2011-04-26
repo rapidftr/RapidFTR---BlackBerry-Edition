@@ -11,15 +11,11 @@ public class ChildFactory {
     }
 
     public static Child newChild() {
-        DateFormatter dateFormatterMock = mock(DateFormatter.class);
-        when(dateFormatterMock.getCurrentFormattedDateTime()).thenReturn("2010-11-2 01:00:00GMT");
-        return new Child(dateFormatterMock);
+        return new Child("2010-11-2 01:00:00GMT");
     }
 
     public static Child existingChild(String id) {
-        DateFormatter dateFormatterMock = mock(DateFormatter.class);
-        when(dateFormatterMock.getCurrentFormattedDateTime()).thenReturn("2010-11-2 01:00:00GMT");
-        Child child = new Child(dateFormatterMock);
+        Child child = new Child("2010-11-2 01:00:00GMT");
         child.setUniqueIdentifier("uniqueid");
         child.setId(id);
         return child;

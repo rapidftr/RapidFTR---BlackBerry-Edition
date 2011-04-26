@@ -9,11 +9,13 @@ abstract public class FormField {
 	protected String name;
     protected String displayName;
 	protected String type;
+    protected String helpText;
 
-	protected FormField(String name, String displayName, String type) {
+    protected FormField(String name, String displayName, String type, String helpText) {
 		this.name = name;
 		this.displayName = displayName;
 		this.type = type;
+        this.helpText = helpText;
 	}
 
 	abstract public void initializeLayout(ManageChildScreen newChildScreen);
@@ -37,5 +39,9 @@ abstract public class FormField {
 
     public boolean isEmpty() {
         return true;
+    }
+
+    public String getHelpText() {
+        return helpText;
     }
 }

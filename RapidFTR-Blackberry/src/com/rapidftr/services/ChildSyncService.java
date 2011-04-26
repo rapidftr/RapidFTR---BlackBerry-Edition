@@ -6,6 +6,7 @@ import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
+import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.request.Arg;
@@ -27,22 +28,23 @@ public class ChildSyncService extends RequestAwareService {
 	private final ChildrenRecordStore childRecordStore;
     private ChildPhotoUpdater childPhotoUpdater;
     private HttpService httpService;
-
-    public ChildSyncService(HttpService httpService,
-			ChildrenRecordStore childRecordStore) {
-        this(httpService, childRecordStore, new ChildPhotoUpdater(httpService, childRecordStore));
-    }
+    private final DateFormatter dateFormatter;
 
 	public ChildSyncService(HttpService httpService,
-			ChildrenRecordStore childRecordStore, ChildPhotoUpdater photoUpdater) {
+			ChildrenRecordStore childRecordStore, ChildPhotoUpdater photoUpdater, DateFormatter dateFormatter) {
 		// TODO get rid of dependency on RequestAwareService/requesthandler
         super(httpService);
         this.childRecordStore = childRecordStore;
         this.childPhotoUpdater = photoUpdater;
         this.httpService = httpService;
-	}
+        this.dateFormatter = dateFormatter;
+    }
 
-	private void uploadChildren(final Children children, final ChildSyncListener listener) {
+    public ChildSyncService(HttpService httpService, ChildrenRecordStore childRecordStore, DateFormatter dateFormatter) {
+        this(httpService, childRecordStore, new ChildPhotoUpdater(httpService, childRecordStore), dateFormatter);
+    }
+
+    private void uploadChildren(final Children children, final ChildSyncListener listener) {
 
 		children.forEachChild(new ChildAction() {
 			int index = 0;
@@ -114,7 +116,7 @@ public class ChildSyncService extends RequestAwareService {
 			Hashtable context = new Hashtable();
 			context.put(PROCESS_STATE, "Downloading [" + index + "/"
 					+ childrenToBeDownloaded.size() + "]");
-			Child child = new Child();
+			Child child = new Child(dateFormatter.getCurrentFormattedDateTime());
 			String childId = items.nextElement().toString();
 			child.setField("_id", childId);
 			child.setField("name", childId);
