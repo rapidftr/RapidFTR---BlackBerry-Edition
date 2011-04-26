@@ -21,8 +21,8 @@ public class ManageChildController extends Controller {
 		this.childRecordStore = childRecordStore;
 	}
 
-	public void editChild(Child child) {
-		getManageChildScreen().setEditForms(store.getForms(), child);
+	public void editChild(Child child, String selectedTab) {
+		getManageChildScreen().setEditForms(store.getForms(), child, selectedTab);
 		show();
 	}
 
