@@ -9,6 +9,7 @@ import java.util.Vector;
 import javax.microedition.io.Connector;
 
 import com.rapidftr.controls.Button;
+import com.rapidftr.datastore.FormJsonParser;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.*;
@@ -118,7 +119,7 @@ public class ViewChildScreen extends CustomScreen {
 
 	private void renderFormFields(Child child) {
 		
-		Vector forms = new FormStore().getForms();
+		Vector forms = new FormStore(new FormJsonParser()).getForms();
 		
 		Tab[] tabList = new Tab[forms.size()];
 		

@@ -15,8 +15,8 @@ public class SelectboxFormField extends FormField {
 	private VerticalFieldManager manager;
 	private ObjectChoiceField field;
 
-	public SelectboxFormField(String name, String displayName, String type, Vector optionStrings) {
-		super(name, displayName, type);
+	public SelectboxFormField(String name, String displayName, String type, Vector optionStrings, String helpText) {
+		super(name, displayName, type, helpText);
 		this.optionStrings = optionStrings;
 	}
 

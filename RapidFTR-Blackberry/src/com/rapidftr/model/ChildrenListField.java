@@ -13,14 +13,15 @@ import net.rim.device.api.ui.component.ObjectListField;
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.datastore.Children;
 
-public abstract class ChildrenListField extends ObjectListField {
+public abstract class ChildrenListField extends ObjectListField{
 
 	private int screenWidth;
-	private int firstrowPostion;
+	private int firstRowPosition;
 	private int secondRowPosition;
 	private Font titleFont;
 	private Font rowFont;
 	private Children children;
+	private int selectedIndex = -1;
 
 	public ChildrenListField() {
 		super();
@@ -29,16 +30,16 @@ public abstract class ChildrenListField extends ObjectListField {
 		rowFont = defaultFont.derive(Font.PLAIN, 3, Ui.UNITS_mm);
 
 		screenWidth = Display.getWidth();
-		firstrowPostion = (screenWidth)
+		firstRowPosition = (screenWidth)
 				- (screenWidth - 4 - ((titleFont.getHeight() * 4) - 4));
-		secondRowPosition = firstrowPostion + 20;
-
+		secondRowPosition = firstRowPosition + 20;
 	}
 
 	protected boolean navigationClick(int i, int i1) {
 		if (this.getSelectedIndex() > -1) {
 			Child child = getSelectedChild();
 			if (child != null) {
+				setSelectedChild();
 				getViewChildController().viewChild(child);
 			}
 		}
@@ -58,14 +59,18 @@ public abstract class ChildrenListField extends ObjectListField {
 		graphics.setColor(Color.BLACK);
 
 		graphics.setFont(titleFont);
-		graphics.drawText((String) child.getField("name"), firstrowPostion, y,
-				(DrawStyle.LEFT | DrawStyle.ELLIPSIS | DrawStyle.TOP), 250);
+		
+        // Takes 5 params 1:display text, 2:horizontal position, 
+		// 3: vertical position, 4: flags, 5: text display width
+        graphics.drawText((String) child.getField("name"), firstRowPosition, y,
+				(DrawStyle.LEFT | DrawStyle.ELLIPSIS | DrawStyle.TOP),
+				screenWidth - firstRowPosition - 4);
 
 		int yStartForText = y + (this.getFont()).getHeight() + 1;
 		drawFieldRow(graphics, width, child, yStartForText, "age");
 
 		yStartForText = yStartForText + (this.getFont()).getHeight() + 1;
-		drawFieldRow(graphics, width, child, yStartForText,
+		drawFieldRow(graphics, width - secondRowPosition - 4, child, yStartForText,
 				"last_known_location");
 
 		yStartForText = yStartForText + (this.getFont()).getHeight() + 1;
@@ -103,7 +108,7 @@ public abstract class ChildrenListField extends ObjectListField {
 		int boxHeight = getFont().getHeight() + 4;
 		int boxWidth = getFont().getAdvance(childStatusString) + 4;
 		int boxX = screenWidth - 10 - boxWidth;
-		int boxY = ((index) * listField.getRowHeight()) + 4;
+		int boxY = ((index) * listField.getRowHeight()) + getFont().getHeight() + 2;
 
 		graphics.setColor(child.childStatus().getStatusColor());
 		graphics.drawRoundRect(boxX, boxY, boxWidth, boxHeight, 10, 10);
@@ -116,35 +121,52 @@ public abstract class ChildrenListField extends ObjectListField {
 	}
 
 	public Child getSelectedChild() {
-		return getChildAtIndex(this.getSelectedIndex());
+		setSelectedChild();
+		return getChildAtIndex(this.selectedIndex);
 	}
 
 	private Child getChildAtIndex(int index) {
-			Object[] selectedChildImagePair = (Object[]) this.get(this, index);
-			return (Child) selectedChildImagePair[0];
+		Object[] selectedChildImagePair = (Object[]) this.get(this, index);
+		return (Child) selectedChildImagePair[0];
 	}
 
 	public abstract ViewChildrenController getViewChildController();
 
 	public void addChild() {
-		if (insertPosition() >= this.getSize()
-				&& getSelectedIndex() <= children.count()) {
-			insert(insertPosition(), children
-					.getImagePairAt(childIndexToBeFetched()));
+		int childIndex = childIndexToBeFetched();
+		if (shouldFetch(childIndex)) {
+			insert(childIndex, children.getImagePairAt(childIndex));
 		}
 	}
 
-	private int childIndexToBeFetched() {
-		return getSelectedIndex() - 1;
+	private boolean shouldFetch(int childIndex) {
+		return childIndex >= this.getSize()
+				&& childIndex < children.count();
 	}
 
-	private int insertPosition() {
+	private int childIndexToBeFetched() {
 		return getSelectedIndex() + 1;
 	}
 
 	public void displayChildren(Children children) {
 		this.children = children;
 		set(children.getChildrenAndImages());
+		selectChild();
+	}
+	
+	public void setSelectedChild(){
+		this.selectedIndex = this.getSelectedIndex();
+	}
+	
+	private void selectChild() {
+		if(this.selectedIndex != -1){
+			this.setSelectedIndex(this.selectedIndex);
+		}	
+	}
+
+	
+	public void refresh(){
+		this.selectedIndex = -1;
 	}
 
 }

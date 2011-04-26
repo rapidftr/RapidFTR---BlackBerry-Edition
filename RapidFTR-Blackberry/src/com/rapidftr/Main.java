@@ -3,20 +3,20 @@ package com.rapidftr;
 import com.rapidftr.controllers.*;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
+import com.rapidftr.datastore.FormJsonParser;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.*;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.*;
-import com.rapidftr.utilities.DefaultStore;
-import com.rapidftr.utilities.HttpSettings;
-import com.rapidftr.utilities.Logger;
-import com.rapidftr.utilities.Settings;
+import com.rapidftr.utilities.*;
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
-import net.rim.device.api.system.Application;
+import net.rim.device.api.i18n.SimpleDateFormat;
 import net.rim.device.api.ui.UiApplication;
+
+import java.util.Calendar;
 
 public class Main extends UiApplication {
     public boolean permissionsGranted = false;
@@ -46,7 +46,7 @@ public class Main extends UiApplication {
 				new DefaultStore(
 						new Key("com.rapidftr.utilities.childrenstore")));
 
-        FormStore formStore = new FormStore();
+        FormStore formStore = new FormStore(new FormJsonParser());
 
         Settings settings = new Settings(defaultStore);
 
@@ -59,9 +59,13 @@ public class Main extends UiApplication {
 
         FormService formService = new FormService(httpService, formStore);
 
-        ChildSyncService childSyncService = new ChildSyncService(httpService,
-				childrenStore);
+        DefaultBlackBerryDateFormat defaultDateFormat = new DefaultBlackBerryDateFormat();
+        DateFormatter dateFormatter = new DateFormatter(Calendar.getInstance().getTimeZone(), defaultDateFormat);
 
+        ChildSyncService childSyncService = new ChildSyncService(
+                httpService,
+				childrenStore,
+                dateFormatter);
 
 		HomeScreen homeScreen = new HomeScreen(settings);
 
@@ -76,7 +80,7 @@ public class Main extends UiApplication {
 
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
 
-		ManageChildScreen newChildScreen = new ManageChildScreen(settings);
+		ManageChildScreen newChildScreen = new ManageChildScreen(settings, dateFormatter);
 
 		SyncScreen syncScreen = new SyncScreen(settings);
 
@@ -95,7 +99,7 @@ public class Main extends UiApplication {
 
 		ChildPhotoScreen childPhotoScreen = new ChildPhotoScreen();
 
-		ChildHistoryScreen childHistoryScreen = new ChildHistoryScreen();
+        ChildHistoryScreen childHistoryScreen = new ChildHistoryScreen(dateFormatter);
 
 		ViewChildController childController = new ViewChildController(viewChildScreen,
 				uiStack, formStore);

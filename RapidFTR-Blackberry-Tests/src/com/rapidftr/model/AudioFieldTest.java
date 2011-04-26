@@ -7,8 +7,8 @@ import org.junit.Test;
 public class AudioFieldTest {
 	@Test
 	public void shouldReturnAudioFieldIfTheTypeIsSame(){
-		assertNotNull(AudioField.createdFormField("someName", AudioField.TYPE));
-		assertNull(AudioField.createdFormField("someName", "someOtherType"));
+		assertNotNull(AudioField.createdFormField("someName", AudioField.TYPE, ""));
+		assertNull(AudioField.createdFormField("someName", "someOtherType", ""));
 	}
 	
 	@Test

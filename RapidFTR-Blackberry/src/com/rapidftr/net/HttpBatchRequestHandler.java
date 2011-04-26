@@ -3,8 +3,6 @@ package com.rapidftr.net;
 import java.io.IOException;
 
 import javax.microedition.io.HttpConnection;
-
-import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;
@@ -12,23 +10,27 @@ import com.sun.me.web.request.Response;
 
 public class HttpBatchRequestHandler implements RequestListener {
 
-	RequestCallBack requestCallBack;
+	private RequestCallBack requestCallBack;
 	private int unprocessedRequests = 0;
 	private int totalRequests = 0;
 	private boolean failedRequest = false;
 	private boolean processCompleted = false;
 	private HttpService service;
+    private ResponseErrors errors;
 
-	public HttpBatchRequestHandler(HttpService httpService) {
+    public HttpBatchRequestHandler(HttpService httpService) {
 		service = httpService;
 	}
 
-	public void startNewProcess() {
-		// terminateProcess();
-		// TODO create new thread pool for every process
-		unprocessedRequests = totalRequests = 0;
+    public synchronized void startNewProcess(int total) {
+        unprocessedRequests = totalRequests = total;
 		failedRequest = false;
 		processCompleted = false;
+        errors = new ResponseErrors();  
+    }
+    
+	public synchronized void startNewProcess() {
+        startNewProcess(1);
 	}
 
 	public void get(String url, Arg[] inputArgs, Arg[] httpArgs, Object context) {
@@ -50,16 +52,14 @@ public class HttpBatchRequestHandler implements RequestListener {
 
 	// sync request
 	public Response get(String url, Arg[] inputArgs, Arg[] httpArgs) throws IOException {
-		Response response = null;
 
-			response = service.get(url, inputArgs, httpArgs);
+			Response response = service.get(url, inputArgs, httpArgs);
 			if (!isValidResponse(response)) {
 				handleResponseErrors(null, response);
 				return null;
 			}
 		
 		return response;
-
 	}
 
 	private boolean isValidResponse(Response response) {
@@ -68,29 +68,9 @@ public class HttpBatchRequestHandler implements RequestListener {
 						.getCode() == HttpConnection.HTTP_CREATED);
 	}
 
-	private void handleResponseErrors(Object context, Response response) {
+	private synchronized void handleResponseErrors(Object context, Response response) {
 		failedRequest = true;
-
-		if (response.getCode() == HttpConnection.HTTP_UNAUTHORIZED
-				|| response.getCode() == HttpConnection.HTTP_FORBIDDEN) {
-			requestCallBack.onAuthenticationFailure();
-            terminateProcessWhenHttpCodeIsNotExpected();
-		} else if (response.getException() != null) {
-			if (response.getException() instanceof ResultException) {
-				requestCallBack.onProcessFail("Please check the URL");
-			} else {
-				requestCallBack.onRequestFailure(context, response
-						.getException());
-			}
-
-		} else if (response.getCode() == HttpConnection.HTTP_NOT_ACCEPTABLE){
-            requestCallBack.onProcessFail("The format of data is not acceptable. Please check the record.");
-            terminateProcessWhenHttpCodeIsNotExpected();
-        } else if (response.getCode() != HttpConnection.HTTP_OK
-				&& response.getCode() != HttpConnection.HTTP_CREATED) {
-			requestCallBack.onConnectionProblem();
-            terminateProcessWhenHttpCodeIsNotExpected();
-		}
+        errors.add(response);
 	}
 
     private void terminateProcessWhenHttpCodeIsNotExpected() {
@@ -112,10 +92,14 @@ public class HttpBatchRequestHandler implements RequestListener {
 	}
 
 	public void markProcessFailed() {
-		requestCallBack.onProcessFail(null);
+		requestCallBack.onProcessFail(getErrorMessage());
 	}
 
-	public void markProcessFailed(String failureMessage) {
+    private String getErrorMessage() {
+        return errors.getMessage();
+    }
+
+    public void markProcessFailed(String failureMessage) {
 		terminateProcess();
 		requestCallBack.onProcessFail(failureMessage);
 	}
@@ -134,11 +118,9 @@ public class HttpBatchRequestHandler implements RequestListener {
 			requestCallBack.onProcessStart();
 			failedRequest = false;
 		}
-		unprocessedRequests += 1;
-		totalRequests += 1;
 	}
 
-	public void setRequestCallBack(RequestCallBack requestCallBack) {
+    public void setRequestCallBack(RequestCallBack requestCallBack) {
 		this.requestCallBack = requestCallBack;
 	}
 
@@ -173,5 +155,9 @@ public class HttpBatchRequestHandler implements RequestListener {
 			}
 		}
 	}
+
+    public ResponseErrors getErrors() {
+        return errors;
+    }
 
 }

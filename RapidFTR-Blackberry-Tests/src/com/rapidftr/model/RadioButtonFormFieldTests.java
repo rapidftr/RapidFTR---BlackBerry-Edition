@@ -16,14 +16,14 @@ public class RadioButtonFormFieldTests {
 		optionStrings1.add("female");
 		
 		RadioButtonFormField field1 =  (RadioButtonFormField) formFieldFactory
-				.createFormField("name1", "Name 1", "radio_button",optionStrings1);
+				.createFormField("name1", "Name 1", "radio_button",optionStrings1, "");
 		
 		Vector optionStrings2 = new Vector();
 		optionStrings2.add("male");
 		optionStrings2.add("female");
 		
 		RadioButtonFormField field2 = (RadioButtonFormField) formFieldFactory.createFormField("name1", "Name 1", 
-				"radio_button",optionStrings2 );
+				"radio_button",optionStrings2, "");
 		assertEquals(field1,field2);
 	}
 
