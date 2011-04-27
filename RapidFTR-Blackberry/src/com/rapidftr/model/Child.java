@@ -1,17 +1,23 @@
 package com.rapidftr.model;
 
-import com.rapidftr.utilities.*;
-import com.sun.me.web.request.Arg;
-import com.sun.me.web.request.Part;
-import com.sun.me.web.request.PostData;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
 import net.rim.device.api.util.Persistable;
+
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import com.rapidftr.utilities.DateFormatter;
+import com.rapidftr.utilities.FileUtility;
+import com.rapidftr.utilities.HttpUtility;
+import com.rapidftr.utilities.RandomStringGenerator;
+import com.rapidftr.utilities.StringUtility;
+import com.sun.me.web.request.Arg;
+import com.sun.me.web.request.Part;
+import com.sun.me.web.request.PostData;
 
 public class Child implements Persistable {
 
@@ -224,6 +230,7 @@ public class Child implements Persistable {
             if (JsonHistories != null) {
                 JSONArray histories = new JSONArray(JsonHistories.toString());
                 for (int i = 0; i < histories.length(); i++) {
+                	Vector changedEntries = new Vector();
                     JSONObject history = histories.getJSONObject(i);
                     JSONObject changes = history.getJSONObject("changes");
                     Enumeration changedFields = changes.keys();
@@ -232,11 +239,9 @@ public class Child implements Persistable {
                                 .nextElement();
                         JSONObject changedFieldObject = changes
                                 .getJSONObject(changedFieldName);
-
-                        historyLogs.addElement(new ChildHistoryItem(history.getString("user_name"), history.getString("datetime"),
-                                changedFieldName, changedFieldObject.getString("from"),
-                                changedFieldObject.getString("to")));
+                        changedEntries.addElement(new ChildHistoryEntry(changedFieldObject.getString("from"), changedFieldObject.getString("to"), changedFieldName));
                     }
+                    historyLogs.addElement(new ChildHistoryItem(history.getString("user_name"), history.getString("datetime"),changedEntries));
                 }
             }
         } catch (JSONException e) {
@@ -315,7 +320,7 @@ public class Child implements Persistable {
     public void setId(String id) {
         setField("_id", id);
     }
-
+    
     public boolean hasPhoto() {
         return !StringUtility.isBlank((String) getField("current_photo_key"));
     }
