@@ -44,7 +44,7 @@ public class AudioField extends FormField implements AudioRecordListener{
 		manager.add(new LabelField("Record Audio: "));
 		HorizontalFieldManager recordControl = new HorizontalFieldManager();
 		recordControl.add(new AudioControl(this));
-		locationField = new LabelField(" " + this.location);
+		locationField = new LabelField(" " + getValue());
 		recordControl.add(locationField);
 		manager.add(recordControl);
 	}

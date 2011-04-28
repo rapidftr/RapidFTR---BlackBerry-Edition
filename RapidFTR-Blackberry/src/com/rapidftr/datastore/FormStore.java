@@ -1,13 +1,10 @@
 package com.rapidftr.datastore;
 
-import com.rapidftr.model.Form;
-import com.rapidftr.model.FormFieldFactory;
-import net.rim.device.api.ui.component.Dialog;
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
-
 import java.util.Vector;
+
+import org.json.me.JSONException;
+
+import com.rapidftr.model.Forms;
 
 public class FormStore {
 
@@ -36,7 +33,7 @@ public class FormStore {
             return new Vector();
         }
     }
-
+    
     public void storeForms(String forms) throws JSONException {
         parser.parse(forms);
         persistentStore.setContents(forms);
@@ -45,5 +42,9 @@ public class FormStore {
     public void clearState() {
         persistentStore.setContents("");
     }
+
+	public Forms getHigherForms() {
+		return new Forms(getForms());
+	}
 
 }

@@ -20,13 +20,14 @@ import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
+import com.rapidftr.model.Forms;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.ImageCaptureListener;
 
 public class ManageChildScreen extends CustomScreen {
 
-    private Vector forms;
+    private Forms forms;
     private Manager screenManager;
     private final DateFormatter dateFormatter;
     private Child childToEdit;
@@ -42,31 +43,16 @@ public class ManageChildScreen extends CustomScreen {
         createScreenLayout();
     }
 
-    public void setForms(Vector forms) {
+    public void setForms(Forms forms) {
     	setForms(forms, null, null);
     }
 
-    public void setForms(Vector forms, Child childToEdit, String selectedTab) {
+    public void setForms(Forms forms, Child childToEdit, String selectedTab) {
         this.childToEdit = childToEdit;
         this.forms = forms;
 		this.selectedTab = selectedTab;
-        for (Enumeration form = forms.elements(); form.hasMoreElements();) {
-            ((Form) form.nextElement()).initializeLayout(this, childToEdit);
-        }
-    }
-
-	private boolean formsEmpty() {
-        for (Enumeration e = forms.elements(); e.hasMoreElements();) {
-            Object nextElement = e.nextElement();
-            if (nextElement != null) {
-                Form form = (Form) nextElement;
-                if (!form.isEmpty()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+		forms.initializeLayout(this,childToEdit);
+     }
 
     private void createScreenLayout() {
         deleteScreenManager();
@@ -76,10 +62,10 @@ public class ManageChildScreen extends CustomScreen {
         screenManager.add(new SeparatorField());
         add(screenManager);
 
-        final Object[] formArray = formsInArray();
+        final Form[] formArray = forms.toArray();
 
         final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
-        formManager.add(((Form) formArray[0]).getLayout());
+        formManager.add((formArray[0]).getLayout());
 
 
         final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
@@ -92,7 +78,7 @@ public class ManageChildScreen extends CustomScreen {
         availableForms.setChangeListener(new FieldChangeListener() {
             public void fieldChanged(Field field, int context) {
                 formManager.deleteAll();
-                formManager.add(((Form) formArray[availableForms.getSelectedIndex()]).getLayout());
+                formManager.add((formArray[availableForms.getSelectedIndex()]).getLayout());
             }
         });
         
@@ -101,20 +87,15 @@ public class ManageChildScreen extends CustomScreen {
 
     }
 
-	private void selectDefaultForm(final Object[] formArray, final ObjectChoiceField availableForms) {
+	private void selectDefaultForm(final Form[] formArray, final ObjectChoiceField availableForms) {
 		for (int i = 0; i < formArray.length; i++) {
-			if (((Form) formArray[i]).toString().equals(selectedTab)) {
+			if ((formArray[i]).toString().equals(selectedTab)) {
 				availableForms.setSelectedIndex(i);
 				break;
 			}
 		}
 	}
 
-    private Object[] formsInArray() {
-		final Object[] formArray = new Object[forms.size()];
-        forms.copyInto(formArray);
-		return formArray;
-	}
 
 	private Manager prepareTitleManager() {
 		Manager titleManager = new HorizontalFieldManager(FIELD_HCENTER);
@@ -185,7 +166,7 @@ public class ManageChildScreen extends CustomScreen {
 	}
 
 	private boolean displayConfirmation(ControllerAction action) {
-		if (!formsEmpty()) {
+		if (forms.isNotEmpty()) {
 			String menuMessage = "The current record has been changed. What do you want to do with these changes?";
 			String[] menuChoices = { "Save", "Discard", "Cancel" };
 			int defaultChoice = 0;
@@ -233,7 +214,7 @@ public class ManageChildScreen extends CustomScreen {
     }
 
     protected void makeMenu(Menu menu, int instance) {
-        if (!formsEmpty()) {
+        if (forms.isNotEmpty()) {
             MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
                 public void run() {
                     if (!validateOnSave()) {

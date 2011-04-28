@@ -1,9 +1,12 @@
 package com.rapidftr.model;
 
+import com.rapidftr.datastore.Field;
 import com.rapidftr.utilities.*;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Part;
 import com.sun.me.web.request.PostData;
+
+import net.rim.device.api.ui.text.UppercaseTextFilter;
 import net.rim.device.api.util.Persistable;
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
@@ -177,35 +180,18 @@ public class Child implements Persistable {
 
     }
 
-    public static Child create(Vector forms, String currentFormattedDateTime) {
+    public static Child create(Forms forms, String currentFormattedDateTime) {
         Child child = new Child(currentFormattedDateTime);
-        child.updateChildDetails(forms);
+        child.update(forms);
         return child;
     }
 
-    public void updateChildDetails(Vector forms) {
-        for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-
-            Object nextElement = list.nextElement();
-            if (nextElement != null) {
-                Form form = (Form) nextElement;
-                for (Enumeration fields = form.getFieldList().elements(); fields
-                        .hasMoreElements();) {
-
-                    Object nextFormfieldElement = fields.nextElement();
-                    if (nextFormfieldElement != null) {
-
-                        FormField field = (FormField) nextFormfieldElement;
-
-                        setField(field.getName(), field.getValue());
-                    }
-                }
-            }
-        }
-    }
-
-    public void update(Vector forms) {
-        this.updateChildDetails(forms);
+    public void update(Forms forms) {
+        forms.forEachField(new FieldAction() {
+			public void execute(FormField field) {
+				setField(field.getName(), field.getValue());
+			}
+		});
         if (isUpdated()) {
             childStatus = ChildStatus.UPDATED;
         }

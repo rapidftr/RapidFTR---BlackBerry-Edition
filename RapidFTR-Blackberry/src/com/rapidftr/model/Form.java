@@ -43,7 +43,6 @@ public class Form {
 	}
 
 	public String toString() {
-
 		return name;
 	}
 
@@ -93,6 +92,15 @@ public class Form {
 
 	public String getId() {
 		return id;
+	}
+
+	public void forEachField(FieldAction action) {
+		for (int i = 0; i < fieldList.size(); i++) {
+
+			action.execute((FormField) fieldList.elementAt(i));
+
+		}
+
 	}
 
 }

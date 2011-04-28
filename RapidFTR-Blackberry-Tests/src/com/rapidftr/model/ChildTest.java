@@ -60,7 +60,7 @@ public class ChildTest {
 	@Test
 	public void shouldCreateNewChildWithSupliedFormData() {
 		Child alice = ChildFactory.newChild();
-        alice.updateChildDetails(forms);
+        alice.update(new Forms(forms));
 		assertEquals("someName", alice.getField("name"));		
 	}
 	
@@ -70,7 +70,7 @@ public class ChildTest {
 		String couchId = "someRandomCouchId";
 		alice.setField("name", "Alice");
 		alice.setField("_id", couchId);		
-		alice.update(forms);		
+		alice.update(new Forms(forms));		
 		assertEquals("someName", alice.getField("name"));
 	}
 	
