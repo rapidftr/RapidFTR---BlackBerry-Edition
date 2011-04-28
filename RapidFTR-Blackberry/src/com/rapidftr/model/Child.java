@@ -204,7 +204,7 @@ public class Child implements Persistable {
         }
     }
 
-    public void update(String userName, Vector forms) {
+    public void update(Vector forms) {
         this.updateChildDetails(forms);
         if (isUpdated()) {
             childStatus = ChildStatus.UPDATED;

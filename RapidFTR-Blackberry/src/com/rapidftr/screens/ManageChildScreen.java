@@ -3,7 +3,6 @@ package com.rapidftr.screens;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.rapidftr.utilities.DateFormatter;
 import net.rim.device.api.system.Characters;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
@@ -22,22 +21,20 @@ import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.Form;
 import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.ImageCaptureListener;
-import com.rapidftr.utilities.Settings;
 
 public class ManageChildScreen extends CustomScreen {
 
     private Vector forms;
     private Manager screenManager;
-    Settings settings;
     private final DateFormatter dateFormatter;
     private Child childToEdit;
 
     private static String[] REQUIRED_FIELDS = { };
 	private String selectedTab;
 
-    public ManageChildScreen(Settings settings, DateFormatter dateFormatter) {
-        this.settings = settings;
+    public ManageChildScreen(DateFormatter dateFormatter) {
         this.dateFormatter = dateFormatter;
     }
 
@@ -167,7 +164,7 @@ public class ManageChildScreen extends CustomScreen {
         if (childToEdit == null) {
             childToEdit = Child.create(forms, dateFormatter.getCurrentFormattedDateTime());
         } else {
-            childToEdit.update(settings.getCurrentlyLoggedIn(), forms);
+            childToEdit.update(forms);
             childToEdit.setField(Child.LAST_UPDATED_KEY, dateFormatter.getCurrentFormattedDateTime());
         }
 

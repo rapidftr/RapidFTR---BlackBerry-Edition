@@ -70,7 +70,7 @@ public class ChildTest {
 		String couchId = "someRandomCouchId";
 		alice.setField("name", "Alice");
 		alice.setField("_id", couchId);		
-		alice.update("rapidftr", forms);		
+		alice.update(forms);		
 		assertEquals("someName", alice.getField("name"));
 	}
 	

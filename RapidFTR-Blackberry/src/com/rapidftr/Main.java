@@ -80,7 +80,7 @@ public class Main extends UiApplication {
 
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
 
-		ManageChildScreen newChildScreen = new ManageChildScreen(settings, dateFormatter);
+		ManageChildScreen newChildScreen = new ManageChildScreen(dateFormatter);
 
 		SyncScreen syncScreen = new SyncScreen(settings);
 
