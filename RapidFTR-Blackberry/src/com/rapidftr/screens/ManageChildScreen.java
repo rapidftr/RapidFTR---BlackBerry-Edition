@@ -55,7 +55,7 @@ public class ManageChildScreen extends CustomScreen {
         this.forms = forms;
 		this.selectedTab = selectedTab;
         for (Enumeration form = forms.elements(); form.hasMoreElements();) {
-            ((Form) form.nextElement()).initializeLayoutWithChild(this, childToEdit);
+            ((Form) form.nextElement()).initializeLayout(this, childToEdit);
         }
     }
 
