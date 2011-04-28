@@ -139,13 +139,7 @@ public class ManageChildScreen extends CustomScreen {
         } catch (Exception ignored) {
 
         }
-	}
-
-    public boolean confirmOverWriteAudio() {
-            return Dialog.ask(Dialog.D_YES_NO,
-                    "This will overwrite previously recorded audio. Are you sure?") == Dialog.YES;
-        }
-
+    }
 
     public void takePhoto(ImageCaptureListener imageCaptureListener) {
         getController().takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
