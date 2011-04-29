@@ -1,6 +1,6 @@
 package com.rapidftr.model;
 
-import java.util.Vector;
+import java.util.Hashtable;
 
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
@@ -19,120 +19,104 @@ import net.rim.device.api.ui.decor.BorderFactory;
 import com.rapidftr.layouts.TabAction;
 import com.rapidftr.layouts.Tabs;
 
-public class TabControl extends VerticalFieldManager implements
-		FocusChangeListener {
+public class TabControlField extends VerticalFieldManager {
 
-	private final TabHandles tabHandles;
-	private final VerticalFieldManager tabArea;
-	private final VerticalFieldManager[] tabManagers;
-	private int currentTab = -1;
+	private final TabControl tabHandles;
+	private final TabBodyField tabArea;
 
-	public TabControl(Tabs tabs) {
-
+	public TabControlField(Tabs tabs) {
 		super(VerticalFieldManager.USE_ALL_WIDTH);
-
-		tabHandles = new TabHandles(this);
-		tabArea = new TabBody();
-
-		tabManagers = new VerticalFieldManager[tabs.count()];
-		for (int i = 0; i < this.tabManagers.length; i++) {
-			this.tabManagers[i] = new VerticalFieldManager();
-		}
-
+		
+		tabHandles = new TabControl(this);
+		tabArea = new TabBodyField();
+		
 		tabs.forEachTab(new TabAction() {
-			int i = 0;
 			public void execute(Tab tab) {
-				tabHandles.add(new TabHandle(tab.getLabel()));
-				tab.render(tabManagers[i++]);
+				tabHandles.add(tab);
 			}
 		});
-
 		add(new SeparatorField());
 		add(this.tabArea);
-
-		selectTab(tabHandles.getDefaultTab());
 	}
-
-	private void deSelectTab(final TabHandle tabLabel) {
-		tabLabel.deSelect();
-		this.tabArea.delete(this.tabManagers[this.currentTab]);
-		this.currentTab = -1;
-	}
-
-	private void selectTab(final TabHandle tabLabel) {
-		int tabIndex = this.getTabIndex(tabLabel);
-		Manager curTabManager = this.tabManagers[tabIndex];
-		this.tabArea.add(curTabManager);
-		tabLabel.select();
-		this.currentTab = tabIndex;
-	}
-
-	private void switchToTab(final TabHandle tabLabelField) {
-		this.deSelectTab(getCurrentTabField());
-		this.selectTab(tabLabelField);
-	}
-
-	public void focusChanged(Field field, int eventType) {
-		if (eventType == FOCUS_GAINED) {
-			if (field instanceof TabHandle) {
-				this.switchToTab((TabHandle) field);
-			}
-		}
-	}
-
-	private int getTabIndex(final TabHandle tabHandle) {
-		return tabHandles.getIndex(tabHandle);
-	}
-
+	
 	public String getSelectedTab() {
 		return getCurrentTabField().getText().trim();
 	}
 
-	private TabHandle getCurrentTabField() {
-		return tabHandles.getTabAt(currentTab);
+	private TabHandleField getCurrentTabField() {
+		return tabHandles.getCurrentTab();
+	}
+	
+	public void show(Manager tabManager){
+		tabArea.show(tabManager);
 	}
 }
 
-class TabHandles {
+class TabControl implements FocusChangeListener{
 
-	private final TabControl tabControl;
+	private final TabControlField tabControl;
 	private HorizontalFieldManager labelArea;
-	private Vector tabs = new Vector();
+	private Hashtable tabMap = new Hashtable();
+	private TabHandleField currentTab;
 
-	protected TabHandles(TabControl tabControl, HorizontalFieldManager labelArea) {
+	protected TabControl(TabControlField tabControl, HorizontalFieldManager labelArea) {
 		this.tabControl = tabControl;
 		this.labelArea = labelArea;
 		this.tabControl.add(labelArea);
 	}
 
-	public TabHandles(TabControl tabControl) {
+	public TabHandleField getCurrentTab() {
+		return currentTab;
+	}
+
+	public TabControl(TabControlField tabControl) {
 		this(tabControl, new HorizontalFieldManager(
 				HorizontalFieldManager.HORIZONTAL_SCROLL));
 	}
-	
-	public int getIndex(TabHandle tabHandle) {
-		return tabs.indexOf(tabHandle);
-	}
-	
-	public TabHandle getTabAt(int index){
-		return (TabHandle) tabs.elementAt(index);
-	}
 
-	public TabHandle getDefaultTab() {
-		return getTabAt(0);
-	}
-
-	public void add(TabHandle tabHandle) {
-		tabs.addElement(tabHandle);
-		tabHandle.setFocusListener(tabControl);
+	public void add(Tab tab) {
+		TabHandleField tabHandle = new TabHandleField(tab.getLabel());
+		VerticalFieldManager tabManager = prepareTab(tab);
+		if(tabMap.isEmpty()){
+			setDefaults(tabHandle, tabManager);
+		}
+		tabMap.put(tabHandle, tabManager);
+		tabHandle.setFocusListener(this);
 		labelArea.add(tabHandle);
 	}
 
+	public void focusChanged(Field field, int eventType) {
+		if (eventType == FOCUS_GAINED) {
+			if (field instanceof TabHandleField) {
+				switchToSelectedTab((TabHandleField)field);
+			}
+		}		
+	}
+
+	private void switchToSelectedTab(TabHandleField field) {
+		currentTab.deSelect();
+		tabControl.show((Manager)tabMap.get(field));
+		field.select();
+		currentTab = field;
+	}
+
+	private VerticalFieldManager prepareTab(Tab tab) {
+		VerticalFieldManager tabManager = new VerticalFieldManager();
+		tab.render(tabManager);
+		return tabManager;
+	}
+	
+	private void setDefaults(TabHandleField tabHandle, Manager tabManager){
+		currentTab = tabHandle;
+		currentTab.select();
+		tabControl.show(tabManager);
+	}
+	
 }
 
-class TabHandle extends LabelField {
+class TabHandleField extends LabelField {
 
-	public TabHandle(String labelText) {
+	public TabHandleField(String labelText) {
 		super("", LabelField.FOCUSABLE);
 		setText(prepareTabLabelForDisplay(labelText));
 		setBorder(getBorders());
@@ -163,12 +147,27 @@ class TabHandle extends LabelField {
 				.createSimpleBorder(labelBorderSizes);
 		return labelBorders;
 	}
+
 }
 
-class TabBody extends VerticalFieldManager {
+class TabBodyField extends VerticalFieldManager {
+	
+	private Manager currentTabManager;
 
 	protected void paint(Graphics graphics) {
 		setBackgroundColor(graphics);
+	}
+
+	public void show(Manager tabManager) {
+		clear();
+		add(tabManager);
+		currentTabManager = tabManager;
+	}
+
+	private void clear() {
+		if(null != currentTabManager){
+			delete(currentTabManager);
+		}
 	}
 
 	private void setBackgroundColor(Graphics graphics) {

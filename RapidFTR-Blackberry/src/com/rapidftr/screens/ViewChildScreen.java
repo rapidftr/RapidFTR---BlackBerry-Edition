@@ -36,7 +36,7 @@ import com.rapidftr.model.ChildStatus;
 import com.rapidftr.model.Form;
 import com.rapidftr.model.FormAction;
 import com.rapidftr.model.Forms;
-import com.rapidftr.model.TabControl;
+import com.rapidftr.model.TabControlField;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.BoldRichTextField;
 import com.rapidftr.utilities.ImageUtility;
@@ -46,7 +46,7 @@ public class ViewChildScreen extends CustomScreen {
 	Child child;
 	BitmapField bitmapField;
 	boolean isBitmapFieldFocused = false;
-	private TabControl tabView;
+	private TabControlField tabView;
 	private Forms forms;
 
 	public ViewChildScreen() {
@@ -137,7 +137,7 @@ public class ViewChildScreen extends CustomScreen {
 				tabs.addForm(form);
 			}
 		});
-		tabView = new TabControl(tabs);
+		tabView = new TabControlField(tabs);
 
 		this.add(tabView);
 	}
