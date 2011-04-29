@@ -1,41 +1,53 @@
 package com.rapidftr.model;
 
-import net.rim.device.api.ui.Manager;
-import net.rim.device.api.ui.component.SeparatorField;
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FocusChangeListener;
+import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.rapidftr.layouts.TabAction;
-import com.rapidftr.layouts.Tabs;
+public class TabControlField extends VerticalFieldManager implements FocusChangeListener{
 
-public class TabControlField extends VerticalFieldManager {
-
-	private final TabControl tabControl;
-	private final TabBody tabArea;
+	private Tab currentTab;
+	private HorizontalFieldManager labelArea = new HorizontalFieldManager(HORIZONTAL_SCROLL);
+	private VerticalFieldManager tabBody = new VerticalFieldManager();
 
 	public TabControlField(Tabs tabs) {
-		super(VerticalFieldManager.USE_ALL_WIDTH);
-		
-		tabControl = new TabControl(this);
-		tabArea = new TabBody();
-		
-		tabs.forEachTab(new TabAction() {
+		super(USE_ALL_WIDTH);
+		final TabControlField self = this;
+		tabs.forEachTab(new TabAction(){
 			public void execute(Tab tab) {
-				tabControl.add(tab);
+				tab.setCanvas(self);
 			}
 		});
-		add(new SeparatorField());
-		add(this.tabArea);
+		currentTab = tabs.getDefaultTab();
+		currentTab.open();
+		tabs.addFocusChangeObserver(this);
+		add(labelArea);
+		add(tabBody);
 	}
 	
 	public String getSelectedTab() {
-		return getCurrentTabField().getText().trim();
-	}
-
-	private TabHandleField getCurrentTabField() {
-		return tabControl.getCurrentTab();
+		return currentTab.getLabel().trim();
 	}
 	
-	public void show(Manager tabManager){
-		tabArea.show(tabManager);
+	public void addHandle(TabHandleField handle){
+		labelArea.add(handle);
+	}
+	
+	public void setBody(TabBodyField body){
+		tabBody.deleteAll();
+		tabBody.add(body);
+	}
+
+	public void focusChanged(Field field, int eventType) {
+		if(field instanceof Tab && eventType == FOCUS_GAINED){
+			currentTab.close();
+		    ((Tab)field).open();
+		    currentTab = (Tab)field;
+		}
+	}
+
+	public void clearBody() {
+		tabBody.deleteAll();
 	}
 }

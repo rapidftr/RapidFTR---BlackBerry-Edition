@@ -1,6 +1,4 @@
-package com.rapidftr.layouts;
-
-import com.rapidftr.model.Tab;
+package com.rapidftr.model;
 
 public abstract class TabAction {
 	public abstract void execute(Tab tab);
