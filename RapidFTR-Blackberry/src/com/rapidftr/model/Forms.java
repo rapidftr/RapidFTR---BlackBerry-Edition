@@ -12,11 +12,8 @@ public class Forms {
 		this.forms = forms;
 	}
 
-	public void initializeLayout(ManageChildScreen screen) {
-		for (int i = 0; i < forms.size(); i++) {
-			Form form = (Form) forms.elementAt(i);
-			form.initializeLayout(screen);
-		}
+	public Forms() {
+		forms = new Vector();
 	}
 
 	public void initializeLayout(ManageChildScreen screen, Child childToEdit) {
@@ -50,6 +47,19 @@ public class Forms {
 		for (int i = 0; i < forms.size(); i++) {
 			Form form = (Form) forms.elementAt(i);
 			form.forEachField(action);
+		}
+	}
+
+	public void forEachForm(FormAction formAction) {
+		for (int i = 0; i < forms.size(); i++) {
+			Form form = (Form) forms.elementAt(i);
+			formAction.execute(form);
+		}
+	}
+
+	public void addForm(Form form) {
+		if(!forms.contains(form)){
+			forms.addElement(form);
 		}
 	}
 	

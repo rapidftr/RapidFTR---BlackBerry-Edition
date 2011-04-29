@@ -23,8 +23,8 @@ public class FormsTest {
 			}
 		};
 		Forms forms = new Forms(formsVector);
-		forms.initializeLayout(screen);
-		verify(mockForm).initializeLayout(screen);
+		forms.initializeLayout(screen,null);
+		verify(mockForm).initializeLayout(screen,null);
 	}
 
 	@Test

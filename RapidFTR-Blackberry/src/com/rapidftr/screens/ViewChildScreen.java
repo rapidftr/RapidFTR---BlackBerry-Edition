@@ -3,17 +3,25 @@ package com.rapidftr.screens;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Vector;
 
 import javax.microedition.io.Connector;
 
-import com.rapidftr.controls.Button;
-import com.rapidftr.datastore.FormJsonParser;
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
-import net.rim.device.api.ui.*;
-import net.rim.device.api.ui.component.*;
+import net.rim.device.api.ui.Color;
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FieldChangeListener;
+import net.rim.device.api.ui.FocusChangeListener;
+import net.rim.device.api.ui.Graphics;
+import net.rim.device.api.ui.Manager;
+import net.rim.device.api.ui.MenuItem;
+import net.rim.device.api.ui.UiApplication;
+import net.rim.device.api.ui.XYEdges;
+import net.rim.device.api.ui.component.BitmapField;
+import net.rim.device.api.ui.component.Dialog;
+import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.Menu;
+import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.BackgroundFactory;
@@ -21,11 +29,13 @@ import net.rim.device.api.ui.decor.Border;
 import net.rim.device.api.ui.decor.BorderFactory;
 
 import com.rapidftr.controllers.ViewChildController;
-import com.rapidftr.datastore.FormStore;
+import com.rapidftr.controls.Button;
+import com.rapidftr.layouts.Tabs;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildStatus;
 import com.rapidftr.model.Form;
-import com.rapidftr.model.Tab;
+import com.rapidftr.model.FormAction;
+import com.rapidftr.model.Forms;
 import com.rapidftr.model.TabControl;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.BoldRichTextField;
@@ -37,12 +47,14 @@ public class ViewChildScreen extends CustomScreen {
 	BitmapField bitmapField;
 	boolean isBitmapFieldFocused = false;
 	private TabControl tabView;
+	private Forms forms;
 
 	public ViewChildScreen() {
 	}
 
-	public void setChild(Child child) {
+	public void setChild(Child child, Forms forms) {
 		this.child = child;
+		this.forms = forms;
 	}
 
 	public void setUp() {
@@ -118,20 +130,15 @@ public class ViewChildScreen extends CustomScreen {
     }
 
 	private void renderFormFields(Child child) {
-		
-		Vector forms = new FormStore(new FormJsonParser()).getForms();
-		
-		Tab[] tabList = new Tab[forms.size()];
-		
-		int i = 0;
 
-		for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-			Form form = (Form) list.nextElement();
-			tabList[i++] = new Tab(form.toString(), form, child);
-		}
-		
-		tabView = new TabControl(tabList);
-		
+		final Tabs tabs = new Tabs(child);
+		forms.forEachForm(new FormAction() {
+			public void execute(Form form) {
+				tabs.addForm(form);
+			}
+		});
+		tabView = new TabControl(tabs.getTabs());
+
 		this.add(tabView);
 	}
 

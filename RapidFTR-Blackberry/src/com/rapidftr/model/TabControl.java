@@ -1,5 +1,7 @@
 package com.rapidftr.model;
 
+import com.rapidftr.layouts.Tabs;
+
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FocusChangeListener;
