@@ -71,7 +71,7 @@ public class TabControl extends VerticalFieldManager implements
 				tabLabel.setFocusListener(control);
 				listOfLabels[i] = tabLabel;
 				labelArea.add(tabLabel);
-				tab.RenderOn(tabManagers[i]);
+				tab.render(tabManagers[i]);
 				i++;
 			}
 		});

@@ -54,8 +54,7 @@ public class Form {
 		initializeLayout(newChildScreen, null);
 	}
 
-	public void initializeLayout(ManageChildScreen newChildScreen,
-			Child child) {
+	public void initializeLayout(ManageChildScreen newChildScreen, Child child) {
 		layoutManager = new VerticalFieldManager();
 		for (Enumeration list = fieldList.elements(); list.hasMoreElements();) {
 			Object nextElement = list.nextElement();
@@ -63,9 +62,8 @@ public class Form {
 				FormField formField = (FormField) nextElement;
 				formField.initializeLayout(newChildScreen);
 				if (child != null) {
-					Object fieldValue = child.getField(formField.getName());
-					formField.setValue((fieldValue != null) ? fieldValue
-							.toString() : "");
+					String fieldValue = child.getField(formField.getName());
+					formField.setValue((fieldValue != null) ? fieldValue : "");
 				}
 				layoutManager.add(formField.getLayout());
 				layoutManager.add(new BlankSeparatorField(10));

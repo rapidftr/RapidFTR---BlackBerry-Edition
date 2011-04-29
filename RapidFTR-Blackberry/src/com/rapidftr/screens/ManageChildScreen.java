@@ -206,7 +206,7 @@ public class ManageChildScreen extends CustomScreen {
     private String validateRequiredFields() {
     	StringBuffer invalidFields= new StringBuffer("");
         for (int i = 0; i < REQUIRED_FIELDS.length; i++) {
-            if (childToEdit.getField(REQUIRED_FIELDS[i]) == null || childToEdit.getField(REQUIRED_FIELDS[i]).toString().equals("")) {
+            if (childToEdit.getField(REQUIRED_FIELDS[i]) == null || childToEdit.getField(REQUIRED_FIELDS[i]).equals("")) {
                 invalidFields.append(" ," + REQUIRED_FIELDS[i]);
             }
         }

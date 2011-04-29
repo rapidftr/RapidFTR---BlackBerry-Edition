@@ -89,10 +89,10 @@ public class ViewChildScreen extends CustomScreen {
 		final HorizontalFieldManager horizontalFieldManager = new HorizontalFieldManager(
 				Manager.HORIZONTAL_SCROLLBAR | Manager.USE_ALL_WIDTH);		
 		
-		renderBitmap(horizontalFieldManager, (String) child
+		renderBitmap(horizontalFieldManager, child
 				.getField("current_photo_key"));
 		
-		String uniqueIdentifier = (String) child.getField("unique_identifier");
+		String uniqueIdentifier = child.getField("unique_identifier");
 		uniqueIdentifier = (null == uniqueIdentifier) ? "" : uniqueIdentifier;
 		VerticalFieldManager verticalFieldManager = new VerticalFieldManager();
 		verticalFieldManager.add(BoldRichTextField.getSemiBoldRichTextField(" ",uniqueIdentifier));

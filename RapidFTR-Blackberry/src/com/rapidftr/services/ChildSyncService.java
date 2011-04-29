@@ -177,10 +177,10 @@ public class ChildSyncService extends RequestAwareService {
 		childRecordStore.getAll().forEachChild(new ChildAction() {
 
 			public void execute(Child child) {
-				Object id = child.getField("_id");
-				Object rev = child.getField("_rev");
+				String id = child.getField("_id");
+				String rev = child.getField("_rev");
 				if (id != null && rev != null) {
-					mapping.put(id.toString(), rev.toString());
+					mapping.put(id, rev);
 				}
 
 			}

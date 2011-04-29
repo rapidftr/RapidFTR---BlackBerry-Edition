@@ -1,20 +1,22 @@
 package com.rapidftr.model;
 
-import com.rapidftr.datastore.Field;
-import com.rapidftr.utilities.*;
-import com.sun.me.web.request.Arg;
-import com.sun.me.web.request.Part;
-import com.sun.me.web.request.PostData;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import net.rim.device.api.ui.text.UppercaseTextFilter;
 import net.rim.device.api.util.Persistable;
+
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import com.rapidftr.utilities.FileUtility;
+import com.rapidftr.utilities.HttpUtility;
+import com.rapidftr.utilities.RandomStringGenerator;
+import com.rapidftr.utilities.StringUtility;
+import com.sun.me.web.request.Arg;
+import com.sun.me.web.request.Part;
+import com.sun.me.web.request.PostData;
 
 public class Child implements Persistable {
 
@@ -113,7 +115,7 @@ public class Child implements Persistable {
 
     public void setField(String name, Object value) {
         if (!isNewChild()) {
-            Object oldValue = getField(name);
+            String oldValue = getField(name);
 
             if (oldValue != null && !oldValue.equals(value)
                     && !name.equals("_id")) {
@@ -130,8 +132,8 @@ public class Child implements Persistable {
         }
     }
 
-    public Object getField(String key) {
-        return data.get(key);
+    public String getField(String key) {
+        return (String)data.get(key);
     }
 
     public int hashCode() {
@@ -200,9 +202,9 @@ public class Child implements Persistable {
     public Vector getHistory() {
         Vector historyLogs = new Vector();
         try {
-            Object JsonHistories = getField("histories");
+            String JsonHistories = getField("histories");
             if (JsonHistories != null) {
-                JSONArray histories = new JSONArray(JsonHistories.toString());
+                JSONArray histories = new JSONArray(JsonHistories);
                 for (int i = 0; i < histories.length(); i++) {
                     JSONObject history = histories.getJSONObject(i);
                     JSONObject changes = history.getJSONObject("changes");
@@ -265,12 +267,12 @@ public class Child implements Persistable {
     }
 
     public boolean matches(String queryString) {
-        String id = (String) getField("unique_identifier");
+        String id = getField("unique_identifier");
         if (id == null) {
             id = "";
         }
 
-        String name = (String) getField("name");
+        String name = getField("name");
         if (name == null) {
             name = "";
         }
@@ -281,11 +283,11 @@ public class Child implements Persistable {
     }
 
     public String getCreatedBy() {
-        return (String) getField("created_by");
+        return getField("created_by");
     }
 
     public String getImageLocation() {
-        return (String) getField("current_photo_key");
+        return getField("current_photo_key");
     }
 
     public void setUniqueIdentifier(String uniqueId) {
@@ -297,7 +299,7 @@ public class Child implements Persistable {
     }
 
     public boolean hasPhoto() {
-        return !StringUtility.isBlank((String) getField("current_photo_key"));
+        return !StringUtility.isBlank(getField("current_photo_key"));
     }
 
     public void setPhotoKey(String value) {
@@ -309,7 +311,7 @@ public class Child implements Persistable {
     }
 
     public String getPhotoKey() {
-        return (String) getField("current_photo_key");
+        return getField("current_photo_key");
     }
 
 

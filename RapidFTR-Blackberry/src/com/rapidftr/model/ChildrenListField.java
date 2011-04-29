@@ -62,7 +62,7 @@ public abstract class ChildrenListField extends ObjectListField{
 		
         // Takes 5 params 1:display text, 2:horizontal position, 
 		// 3: vertical position, 4: flags, 5: text display width
-        graphics.drawText((String) child.getField("name"), firstRowPosition, y,
+        graphics.drawText(child.getField("name"), firstRowPosition, y,
 				(DrawStyle.LEFT | DrawStyle.ELLIPSIS | DrawStyle.TOP),
 				screenWidth - firstRowPosition - 4);
 
@@ -96,7 +96,7 @@ public abstract class ChildrenListField extends ObjectListField{
 	private void drawFieldRow(Graphics graphics, int width, Child child,
 			int yStartForText, String field) {
 		graphics.setFont(rowFont);
-		graphics.drawText((String) child.getField(field), secondRowPosition,
+		graphics.drawText(child.getField(field), secondRowPosition,
 				yStartForText,
 				(DrawStyle.LEFT | DrawStyle.ELLIPSIS | DrawStyle.TOP), width);
 	}
