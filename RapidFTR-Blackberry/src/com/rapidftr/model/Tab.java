@@ -31,12 +31,10 @@ public class Tab {
 		form.forEachField(new FieldAction() {
 			public void execute(FormField field) {
 				String key = field.getName();
-				if (toBeIgnored.contains(key)) {
-					return;
+				if (!toBeIgnored.contains(key)) {
+					child.updateField(key);
+					drawField(renderingArea, field, child.getField(key));
 				}
-				child.updateField(key);
-				String value = child.getField(key);
-				drawField(renderingArea, field, value);
 			}
 		});
 
