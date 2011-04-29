@@ -1,10 +1,5 @@
 package com.rapidftr.model;
 
-import com.rapidftr.utilities.DateFormatter;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 public class ChildFactory {
 
     private ChildFactory() {

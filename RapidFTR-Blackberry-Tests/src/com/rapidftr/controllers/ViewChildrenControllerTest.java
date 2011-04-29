@@ -1,5 +1,6 @@
 package com.rapidftr.controllers;
 
+import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
@@ -67,5 +68,17 @@ public class ViewChildrenControllerTest {
         controller.sortByRecentlyAdded();
         controller.viewAllChildren();
         verify(viewChildrenScreen, times(2)).setChildren(childrenSortedByRecentAddition);
+    }
+
+    @Test
+    public void shouldRefreshViewChildrenScreenAndGoToHomeScreen() {
+        Dispatcher dispatcher = mock(Dispatcher.class);
+
+        controller.setDispatcher(dispatcher);
+        controller.popScreen();
+
+        verify(viewChildrenScreen).refresh();
+        verify(uiStack).clear();
+        verify(dispatcher).homeScreen();
     }
 }
