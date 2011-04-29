@@ -56,11 +56,5 @@ public class Forms {
 			formAction.execute(form);
 		}
 	}
-
-	public void addForm(Form form) {
-		if(!forms.contains(form)){
-			forms.addElement(form);
-		}
-	}
 	
 }

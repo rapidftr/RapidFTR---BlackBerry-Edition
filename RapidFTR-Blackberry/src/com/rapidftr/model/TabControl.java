@@ -1,5 +1,6 @@
 package com.rapidftr.model;
 
+import com.rapidftr.layouts.TabAction;
 import com.rapidftr.layouts.Tabs;
 
 import net.rim.device.api.ui.Color;
@@ -20,57 +21,64 @@ import net.rim.device.api.util.Arrays;
 public class TabControl extends VerticalFieldManager implements
 		FocusChangeListener {
 
-	private final Tab[] listOfTabs;
 	private final LabelField[] listOfLabels;
 	private final HorizontalFieldManager labelArea;
 	private final VerticalFieldManager tabArea;
 	private final VerticalFieldManager[] tabManagers;
 	private int currentTab = -1;
 
-	public TabControl(Tab[] listOfTabsToControl) {
-		
+	public TabControl(Tabs tabs) {
+
 		super(VerticalFieldManager.USE_ALL_WIDTH);
-		
-		this.listOfTabs = listOfTabsToControl;
-		this.listOfLabels = new LabelField[this.listOfTabs.length];
+
+		this.listOfLabels = new LabelField[tabs.count()];
 		this.labelArea = new HorizontalFieldManager(HORIZONTAL_SCROLL);
-		this.tabArea = new VerticalFieldManager(){
+		this.tabArea = new VerticalFieldManager() {
 			protected void paint(Graphics graphics) {
 				int originalAlpha = graphics.getGlobalAlpha();
 				graphics.setGlobalAlpha(50);
-			    graphics.setBackgroundColor(Color.GRAY);
-			    graphics.clear();
-			    graphics.setGlobalAlpha(originalAlpha);
+				graphics.setBackgroundColor(Color.GRAY);
+				graphics.clear();
+				graphics.setGlobalAlpha(originalAlpha);
 				super.paint(graphics);
 			}
 		};
 
-		this.tabManagers = new VerticalFieldManager[this.listOfTabs.length];
+		this.tabManagers = new VerticalFieldManager[tabs.count()];
 		for (int i = 0; i < this.tabManagers.length; i++) {
 			this.tabManagers[i] = new VerticalFieldManager();
 		}
 
-		for (int i = 0; i < this.listOfTabs.length; i++) {
-			String labelText = this.prepareTabLabelForDisplay(this.listOfTabs[i].getLabel());
-			LabelField tabLabel = new LabelField(labelText,LabelField.FOCUSABLE){
-				protected void paint(Graphics graphics) {
-					graphics.setColor(Color.WHITE);
-					super.paint(graphics);
-				}
-			};
-			XYEdges labelBorderSizes = new XYEdges(1,1,0,1);
-			Border labelBorders = BorderFactory.createSimpleBorder(labelBorderSizes);
-			tabLabel.setBackground(BackgroundFactory.createSolidBackground(Color.GRAY));
-			tabLabel.setBorder(labelBorders);
-			tabLabel.setFocusListener(this);
-			this.listOfLabels[i] = tabLabel;
-			this.labelArea.add(tabLabel);
-			this.listOfTabs[i].RenderOn(this.tabManagers[i]);
-		}
+		final TabControl control = this;
+		tabs.forEachTab(new TabAction() {
+			int i = 0;
+
+			public void execute(Tab tab) {
+				String labelText = prepareTabLabelForDisplay(tab.getLabel());
+				LabelField tabLabel = new LabelField(labelText,
+						LabelField.FOCUSABLE) {
+					protected void paint(Graphics graphics) {
+						graphics.setColor(Color.WHITE);
+						super.paint(graphics);
+					}
+				};
+				XYEdges labelBorderSizes = new XYEdges(1, 1, 0, 1);
+				Border labelBorders = BorderFactory
+						.createSimpleBorder(labelBorderSizes);
+				tabLabel.setBackground(BackgroundFactory
+						.createSolidBackground(Color.GRAY));
+				tabLabel.setBorder(labelBorders);
+				tabLabel.setFocusListener(control);
+				listOfLabels[i] = tabLabel;
+				labelArea.add(tabLabel);
+				tab.RenderOn(tabManagers[i]);
+				i++;
+			}
+		});
 		this.add(this.labelArea);
 		this.add(new SeparatorField());
 		this.add(this.tabArea);
-		
+
 		this.selectTab(this.listOfLabels[0]);
 	}
 	

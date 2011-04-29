@@ -137,7 +137,7 @@ public class ViewChildScreen extends CustomScreen {
 				tabs.addForm(form);
 			}
 		});
-		tabView = new TabControl(tabs.getTabs());
+		tabView = new TabControl(tabs);
 
 		this.add(tabView);
 	}

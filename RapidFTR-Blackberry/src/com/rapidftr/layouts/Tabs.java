@@ -25,4 +25,15 @@ public class Tabs {
 		return tabsArray;
 	}
 
+	public int count() {
+		return tabs.size();
+	}
+
+	public void forEachTab(TabAction tabAction) {
+		for(int i = 0;i<tabs.size();i++){
+			tabAction.execute((Tab)tabs.elementAt(i));
+		}
+		
+	}
+
 }
