@@ -77,8 +77,6 @@ public class Main extends UiApplication {
 
         SearchChildScreen searchChildScreen = new SearchChildScreen();
 
-        ManageChildScreen newChildScreen = new ManageChildScreen(settings, dateFormatter);
-
         SyncScreen syncScreen = new SyncScreen(settings);
 
         LoginController loginController = new LoginController(loginScreen,
@@ -105,8 +103,6 @@ public class Main extends UiApplication {
                 childrenStore);
         ChildHistoryController showHistoryController = new ChildHistoryController(childHistoryScreen, uiStack);
         ViewChildPhotoController childPhotoController = new ViewChildPhotoController(childPhotoScreen, uiStack);
-        ManageChildController manageChildController = new ManageChildController(newChildScreen, uiStack, formStore,
-                childrenStore);
         ViewChildrenController viewChildrenController = new ViewChildrenController(
                 viewChildrenScreen, uiStack, childrenStore);
 
@@ -116,13 +112,15 @@ public class Main extends UiApplication {
                 syncController,
                 restController,
                 contactScreenController,
-                manageChildController,
                 viewChildrenController,
                 childPhotoController,
                 showHistoryController,
                 searchChildController,
                 settings,
-                uiStack);
+                uiStack,
+                dateFormatter,
+                formStore,
+                childrenStore);
 
         dispatcher.homeScreen();
 

@@ -2,10 +2,14 @@ package com.rapidftr.controllers.internal;
 
 import com.rapidftr.controllers.*;
 import com.rapidftr.datastore.Children;
+import com.rapidftr.datastore.ChildrenRecordStore;
+import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.process.Process;
 import com.rapidftr.screens.HomeScreen;
+import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.screens.internal.UiStack;
+import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.Settings;
 
 public class Dispatcher {
@@ -25,18 +29,22 @@ public class Dispatcher {
                       SyncController syncController,
                       ResetDeviceController restController,
                       ContactInformationController contactScreenController,
-                      ManageChildController manageChildController,
                       ViewChildrenController viewChildrenController,
                       ViewChildPhotoController childPhotoController,
                       ChildHistoryController showHistoryController,
                       SearchChildController searchChildController,
                       Settings settings,
-                      UiStack uiStack) {
+                      UiStack uiStack,
+                      DateFormatter dateFormatter,
+                      FormStore formStore,
+                      ChildrenRecordStore childrenRecordStore) {
 
         HomeScreen homeSreen = new HomeScreen(settings);
         this.homeScreenController = new HomeController(homeSreen, uiStack, settings, this);
 
-        this.manageChildController = manageChildController;
+        ManageChildScreen manageChildScreen = new ManageChildScreen(settings, dateFormatter);
+        this.manageChildController = new ManageChildController(manageChildScreen, uiStack, formStore, childrenRecordStore, this);
+
         this.manageChildController.setDispatcher(this);
         this.viewChildrenController = viewChildrenController;
         this.viewChildrenController.setDispatcher(this);
