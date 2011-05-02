@@ -25,8 +25,7 @@ public class HomeControllerTest {
         uiStack = mock(UiStack.class);
         settings = mock(Settings.class);
 
-        homeController = new HomeController(screen, uiStack, settings);
-        homeController.setDispatcher(dispatcher);
+        homeController = new HomeController(screen, uiStack, settings, dispatcher);
     }
 
     @Test

@@ -13,7 +13,6 @@ import com.rapidftr.services.*;
 import com.rapidftr.utilities.*;
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
-import net.rim.device.api.i18n.SimpleDateFormat;
 import net.rim.device.api.ui.UiApplication;
 
 import java.util.Calendar;
@@ -22,15 +21,15 @@ public class Main extends UiApplication {
     public boolean permissionsGranted = false;
 
     public static void main(String[] args) {
-		Main application = new Main();
+        Main application = new Main();
         Logger.register();
         application.enterEventDispatcher();
-	}
+    }
 
-	public Main() {
+    public Main() {
 
         UiStack uiStack = new UiStack(this);
-        int [] requiredPermissions = new int[] {
+        int[] requiredPermissions = new int[]{
                 ApplicationPermissions.PERMISSION_INPUT_SIMULATION,
                 ApplicationPermissions.PERMISSION_FILE_API,
                 ApplicationPermissions.PERMISSION_RECORDING,
@@ -40,11 +39,11 @@ public class Main extends UiApplication {
         this.permissionsGranted = makePermissionsRequest(requiredPermissions);
 
         DefaultStore defaultStore = new DefaultStore(new Key(
-				"com.rapidftr.utilities.ftrstore"));
+                "com.rapidftr.utilities.ftrstore"));
 
         ChildrenRecordStore childrenStore = new ChildrenRecordStore(
-				new DefaultStore(
-						new Key("com.rapidftr.utilities.childrenstore")));
+                new DefaultStore(
+                        new Key("com.rapidftr.utilities.childrenstore")));
 
         FormStore formStore = new FormStore(new FormJsonParser());
 
@@ -55,7 +54,7 @@ public class Main extends UiApplication {
         HttpService httpService = new HttpService(httpServer, settings);
 
         LoginService loginService = new LoginService(httpService,
-				new LoginSettings(settings));
+                new LoginSettings(settings));
 
         FormService formService = new FormService(httpService, formStore);
 
@@ -64,69 +63,76 @@ public class Main extends UiApplication {
 
         ChildSyncService childSyncService = new ChildSyncService(
                 httpService,
-				childrenStore,
+                childrenStore,
                 dateFormatter);
 
-		HomeScreen homeScreen = new HomeScreen(settings);
+        ContactInformationScreen contactScreen = new ContactInformationScreen(
+                new ContactInformation(defaultStore));
 
-		ContactInformationScreen contactScreen = new ContactInformationScreen(
-				new ContactInformation(defaultStore));
+        LoginScreen loginScreen = new LoginScreen(new HttpSettings(settings));
 
-		LoginScreen loginScreen = new LoginScreen(new HttpSettings(settings));
+        ViewChildScreen viewChildScreen = new ViewChildScreen();
 
-		ViewChildScreen viewChildScreen = new ViewChildScreen();
+        ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
 
-		ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
+        SearchChildScreen searchChildScreen = new SearchChildScreen();
 
-		SearchChildScreen searchChildScreen = new SearchChildScreen();
+        ManageChildScreen newChildScreen = new ManageChildScreen(settings, dateFormatter);
 
-		ManageChildScreen newChildScreen = new ManageChildScreen(settings, dateFormatter);
+        SyncScreen syncScreen = new SyncScreen(settings);
 
-		SyncScreen syncScreen = new SyncScreen(settings);
+        LoginController loginController = new LoginController(loginScreen,
+                uiStack, loginService);
 
-		LoginController loginController = new LoginController(loginScreen,
-				uiStack, loginService);
+        ResetDeviceController restController = new ResetDeviceController(
+                formService, childSyncService, loginService);
 
-		ResetDeviceController restController = new ResetDeviceController(
-				formService, childSyncService, loginService);
+        ContactInformationController contactScreenController = new ContactInformationController(
+                contactScreen, uiStack, new ContactInformationSyncService(
+                        httpService, new ContactInformation(defaultStore)));
 
-		HomeController homeScreenController = new HomeController(
-				homeScreen, uiStack, settings);
-
-		ContactInformationController contactScreenController = new ContactInformationController(
-				contactScreen, uiStack, new ContactInformationSyncService(
-						httpService, new ContactInformation(defaultStore)));
-
-		ChildPhotoScreen childPhotoScreen = new ChildPhotoScreen();
+        ChildPhotoScreen childPhotoScreen = new ChildPhotoScreen();
 
         ChildHistoryScreen childHistoryScreen = new ChildHistoryScreen(dateFormatter);
 
-		ViewChildController childController = new ViewChildController(viewChildScreen,
-				uiStack, formStore);
+        ViewChildController childController = new ViewChildController(viewChildScreen,
+                uiStack, formStore);
 
-		SyncController syncController = new SyncController(syncScreen, uiStack,
-				childSyncService, formService);
+        SyncController syncController = new SyncController(syncScreen, uiStack,
+                childSyncService, formService);
 
-		Dispatcher dispatcher = new Dispatcher(homeScreenController,
-				loginController, childController, syncController,
-				restController, contactScreenController,
-				new ManageChildController(newChildScreen, uiStack, formStore,
-						childrenStore), new ViewChildrenController(
-						viewChildrenScreen, uiStack, childrenStore),
-				new ViewChildPhotoController(childPhotoScreen, uiStack),
-				new ChildHistoryController(childHistoryScreen, uiStack),
-				new SearchChildController(searchChildScreen, uiStack,
-						childrenStore));
+        SearchChildController searchChildController = new SearchChildController(searchChildScreen, uiStack,
+                childrenStore);
+        ChildHistoryController showHistoryController = new ChildHistoryController(childHistoryScreen, uiStack);
+        ViewChildPhotoController childPhotoController = new ViewChildPhotoController(childPhotoScreen, uiStack);
+        ManageChildController manageChildController = new ManageChildController(newChildScreen, uiStack, formStore,
+                childrenStore);
+        ViewChildrenController viewChildrenController = new ViewChildrenController(
+                viewChildrenScreen, uiStack, childrenStore);
 
-		dispatcher.homeScreen();
+        Dispatcher dispatcher = new Dispatcher(
+                loginController,
+                childController,
+                syncController,
+                restController,
+                contactScreenController,
+                manageChildController,
+                viewChildrenController,
+                childPhotoController,
+                showHistoryController,
+                searchChildController,
+                settings,
+                uiStack);
 
-	}
+        dispatcher.homeScreen();
+
+    }
 
     private boolean makePermissionsRequest(int[] requiredPermissions) {
         ApplicationPermissionsManager applicationPermissionsManager = ApplicationPermissionsManager.getInstance();
         ApplicationPermissions currentPermissions = applicationPermissionsManager.getApplicationPermissions();
         ApplicationPermissions permissionsToRequest = new ApplicationPermissions();
-        for(int i = 0; i < requiredPermissions.length; i++) {
+        for (int i = 0; i < requiredPermissions.length; i++) {
             int permission = requiredPermissions[i];
             if (currentPermissions.getPermission(permission) != ApplicationPermissions.VALUE_ALLOW)
                 permissionsToRequest.addPermission(permission);
