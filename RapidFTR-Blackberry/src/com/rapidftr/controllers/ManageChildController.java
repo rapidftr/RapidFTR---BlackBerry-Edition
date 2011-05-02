@@ -1,6 +1,7 @@
 package com.rapidftr.controllers;
 
 import com.rapidftr.controllers.internal.Controller;
+import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
@@ -11,45 +12,49 @@ import com.rapidftr.utilities.ImageCaptureListener;
 
 public class ManageChildController extends Controller {
 
-	private final FormStore store;
-	private ChildrenRecordStore childRecordStore;
+    private final FormStore store;
+    private ChildrenRecordStore childRecordStore;
 
-	public ManageChildController(ManageChildScreen screen, UiStack uiStack,
-			FormStore store, ChildrenRecordStore childRecordStore) {
-		super(screen, uiStack);
-		this.store = store;
-		this.childRecordStore = childRecordStore;
-	}
+    public ManageChildController(ManageChildScreen screen,
+                                 UiStack uiStack,
+                                 FormStore store,
+                                 ChildrenRecordStore childRecordStore,
+                                 Dispatcher dispatcher) {
+        super(screen, uiStack);
+        this.store = store;
+        this.childRecordStore = childRecordStore;
+        this.dispatcher = dispatcher;
+    }
 
-	public void editChild(Child child) {
-		getManageChildScreen().setEditForms(store.getForms(), child);
-		show();
-	}
+    public void editChild(Child child) {
+        getManageChildScreen().setEditForms(store.getForms(), child);
+        show();
+    }
 
-	public void newChild() {
-		getManageChildScreen().setForms(store.getForms());
-		show();
-	}
+    public void newChild() {
+        getManageChildScreen().setForms(store.getForms());
+        show();
+    }
 
-	private ManageChildScreen getManageChildScreen() {
-		return ((ManageChildScreen) currentScreen);
-	}
+    private ManageChildScreen getManageChildScreen() {
+        return ((ManageChildScreen) currentScreen);
+    }
 
-	public void takeSnapshotAndUpdateWithNewImage(
-			ImageCaptureListener imageCaptureListener) {
+    public void takeSnapshotAndUpdateWithNewImage(
+            ImageCaptureListener imageCaptureListener) {
 
-		SnapshotController snapshotController = new SnapshotController(
-				new SnapshotScreen(), uiStack);
-		snapshotController.show();
-		snapshotController.setImageListener(imageCaptureListener);
-	}
+        SnapshotController snapshotController = new SnapshotController(
+                new SnapshotScreen(), uiStack);
+        snapshotController.show();
+        snapshotController.setImageListener(imageCaptureListener);
+    }
 
-	public void saveChild(Child child) {
-		childRecordStore.addOrUpdate(child);
-	}
+    public void saveChild(Child child) {
+        childRecordStore.addOrUpdate(child);
+    }
 
-	public void viewChild(Child child){
-		dispatcher.viewChild(child);
-	}
+    public void viewChild(Child child) {
+        dispatcher.viewChild(child);
+    }
 
 }
