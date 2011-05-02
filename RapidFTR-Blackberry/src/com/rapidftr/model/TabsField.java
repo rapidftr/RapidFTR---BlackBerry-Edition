@@ -7,21 +7,29 @@ import net.rim.device.api.ui.FocusChangeListener;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-public class TabsField extends VerticalFieldManager {
+public class TabsField {
 
-	private final Child child;
+	private VerticalFieldManager control;
+	private HorizontalFieldManager labelArea;
+	private VerticalFieldManager tabBody;
 
 	private Tab currentTab;
 	private Vector tabs = new Vector();
-	private HorizontalFieldManager labelArea = new HorizontalFieldManager(
-			HORIZONTAL_SCROLL);
-	private VerticalFieldManager tabBody = new VerticalFieldManager();
 
-	public TabsField(Child child) {
-		super(USE_ALL_WIDTH);
-		this.child = child;
-		add(labelArea);
-		add(tabBody);
+	public TabsField() {
+		this(new VerticalFieldManager(VerticalFieldManager.USE_ALL_WIDTH),
+			 new HorizontalFieldManager(HorizontalFieldManager.HORIZONTAL_SCROLL),
+			 new VerticalFieldManager());
+	}
+
+	protected TabsField(VerticalFieldManager control,
+						HorizontalFieldManager labelArea,
+						VerticalFieldManager tabBody) {
+		this.control = control;
+		this.labelArea = labelArea;
+		this.tabBody = tabBody;
+		control.add(labelArea);
+		control.add(tabBody);
 	}
 
 	private void selectDefaultTab() {
@@ -30,10 +38,10 @@ public class TabsField extends VerticalFieldManager {
 	}
 
 	public String getSelectedTab() {
-		return currentTab.getLabel().trim();
+		return currentTab.getLabel();
 	}
 
-	public void addHandle(TabHandleField handle) {
+	public void addHandle(TabLabelField handle) {
 		labelArea.add(handle);
 	}
 
@@ -46,16 +54,15 @@ public class TabsField extends VerticalFieldManager {
 		tabBody.deleteAll();
 	}
 
-	public void addTab(Form form) {
-		Tab tab = new Tab(form.toString(), form, child);
+	public void addTab(final Tab tab) {
 		tabs.addElement(tab);
 		tab.setCanvas(this);
 		tab.addTabChangeListener(new FocusChangeListener() {
 			public void focusChanged(Field field, int eventType) {
-				if (field instanceof Tab && eventType == FOCUS_GAINED) {
+				if (field instanceof TabLabelField && eventType == FOCUS_GAINED) {
 					currentTab.close();
-					((Tab) field).open();
-					currentTab = (Tab) field;
+					tab.open();
+					currentTab = tab;
 				}
 			}
 		});
@@ -65,8 +72,8 @@ public class TabsField extends VerticalFieldManager {
 		return (tabs.isEmpty()) ? null : (Tab) tabs.elementAt(0);
 	}
 
-	protected void onDisplay() {
+	public Field draw() {
 		selectDefaultTab();
-		super.onDisplay();
+		return control;
 	}
 }

@@ -8,18 +8,17 @@ import net.rim.device.api.ui.FocusChangeListener;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.component.LabelField;
+import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.component.SeparatorField;
-import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.utilities.BoldRichTextField;
 
-public class Tab extends VerticalFieldManager {
+public class Tab implements FocusChangeListener {
 
 	private Form form;
 	private Child child;
 
-	private final String label;
-	private TabHandleField handle;
+	private TabLabelField label;
 	private final TabBodyField body;
 
 	private Vector observers = new Vector();
@@ -34,75 +33,76 @@ public class Tab extends VerticalFieldManager {
 	};
 
 	public Tab(String label, Form form, Child child) {
+		this(form, child, new TabLabelField(label), new TabBodyField());
+	}
+
+	protected Tab(Form form, Child child, TabLabelField label,
+			TabBodyField bodyField) {
+
 		this.form = form;
 		this.child = child;
+
 		this.label = label;
-
-		handle = new TabHandleField(getLabel());
-		handle.setFocusListener(new FocusChangeListener() {
-			public void focusChanged(Field field, int eventType) {
-				if (field instanceof TabHandleField) {
-					notifyObservers(eventType);
-				}
-			}
-		});
-		body = new TabBodyField();
-
+		label.addFocusChangeListener(this);
+		this.body = bodyField;
 		render();
 	}
 
 	private void render() {
-		final Manager renderingArea = body;
 		form.forEachField(new FieldAction() {
 			public void execute(FormField field) {
 				String key = field.getName();
 				if (!toBeIgnored.contains(key)) {
 					child.updateField(key);
-					drawField(renderingArea, field, child.getField(key));
+					drawField(body, field, child.getField(key));
 				}
 			}
 		});
 	}
 
 	public void open() {
-		handle.select();
+		label.select();
 		canvas.setBody(body);
 	}
 
 	public void close() {
-		handle.deSelect();
+		label.deSelect();
 		canvas.clearBody();
 	}
 
 	public void setCanvas(TabsField canvas) {
 		this.canvas = canvas;
-		this.canvas.addHandle(handle);
+		this.canvas.addHandle(label);
 	}
 
 	public void addTabChangeListener(FocusChangeListener observer) {
 		observers.addElement(observer);
 	}
 
-	public String getLabel() {
-		return label;
-	}
-
 	private void drawField(final Manager renderingArea, FormField field,
 			String value) {
 		Field detail = null;
 		if (isNotEmpty(value)) {
-			detail = new LabelField(drawKey(field), LabelField.FOCUSABLE) {
-				protected void paint(Graphics graphics) {
-					graphics.setColor(Color.GRAY);
-					super.paint(graphics);
-				}
-			};
+			detail = createEmptyRecord(field);
 		} else {
-			detail = BoldRichTextField.getSemiBoldRichTextField(drawKey(field),
-					value);
+			detail = createRecordWithValue(field, value);
 		}
 		renderingArea.add(detail);
 		renderingArea.add(new SeparatorField());
+	}
+
+	private RichTextField createRecordWithValue(FormField field, String value) {
+		return BoldRichTextField
+				.getSemiBoldRichTextField(drawKey(field), value);
+	}
+
+	private LabelField createEmptyRecord(FormField field) {
+		return new LabelField(drawKey(field), LabelField.FOCUSABLE) {
+			protected void paint(Graphics graphics) {
+				graphics.setColor(Color.GRAY);
+				super.paint(graphics);
+			}
+		};
 	}
 
 	private boolean isNotEmpty(String value) {
@@ -113,10 +113,18 @@ public class Tab extends VerticalFieldManager {
 		return field.displayLabel() + " : ";
 	}
 
-	private void notifyObservers(int eventType) {
+	private void notifyObservers(Field field, int eventType) {
 		for (int i = 0; i < observers.size(); i++) {
-			((FocusChangeListener) observers.elementAt(i)).focusChanged(this,
+			((FocusChangeListener) observers.elementAt(i)).focusChanged(field,
 					eventType);
 		}
+	}
+
+	public void focusChanged(Field field, int eventType) {
+		notifyObservers(field, eventType);
+	}
+
+	public String getLabel() {
+		return label.getText().trim();
 	}
 }

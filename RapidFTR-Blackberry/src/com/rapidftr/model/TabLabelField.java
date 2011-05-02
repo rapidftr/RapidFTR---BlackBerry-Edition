@@ -1,6 +1,10 @@
 package com.rapidftr.model;
 
+import java.util.Vector;
+
 import net.rim.device.api.ui.Color;
+import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FocusChangeListener;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.LabelField;
@@ -8,13 +12,16 @@ import net.rim.device.api.ui.decor.BackgroundFactory;
 import net.rim.device.api.ui.decor.Border;
 import net.rim.device.api.ui.decor.BorderFactory;
 
-class TabHandleField extends LabelField {
+class TabLabelField extends LabelField implements FocusChangeListener{
 
-	public TabHandleField(String labelText) {
+	private Vector observers = new Vector();
+
+	public TabLabelField(String labelText) {
 		super("", LabelField.FOCUSABLE);
 		setText(prepareTabLabelForDisplay(labelText));
 		setBorder(getBorders());
 		setBackground(BackgroundFactory.createSolidBackground(Color.GRAY));
+		this.setFocusListener(this);
 	}
 
 	public void deSelect() {
@@ -40,6 +47,20 @@ class TabHandleField extends LabelField {
 		Border labelBorders = BorderFactory
 				.createSimpleBorder(labelBorderSizes);
 		return labelBorders;
+	}
+	
+	public void addFocusChangeListener(FocusChangeListener observer) {
+		observers.addElement(observer);
+	}
+	
+	private void notifyObservers(int eventType) {
+		for (int i = 0; i < observers.size(); i++) {
+			((FocusChangeListener) observers.elementAt(i)).focusChanged(this,eventType);
+		}
+	}
+
+	public void focusChanged(Field field, int eventType) {
+		notifyObservers(eventType);
 	}
 
 }

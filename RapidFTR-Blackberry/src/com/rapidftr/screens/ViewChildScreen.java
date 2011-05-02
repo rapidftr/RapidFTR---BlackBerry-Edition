@@ -35,6 +35,7 @@ import com.rapidftr.model.ChildStatus;
 import com.rapidftr.model.Form;
 import com.rapidftr.model.FormAction;
 import com.rapidftr.model.Forms;
+import com.rapidftr.model.Tab;
 import com.rapidftr.model.TabsField;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.BoldRichTextField;
@@ -128,16 +129,16 @@ public class ViewChildScreen extends CustomScreen {
 		return label;
 	}
 
-	private void renderFormFields(Child child) {
+	private void renderFormFields(final Child child) {
 
-		tabsField = new TabsField(child);
+		tabsField = new TabsField();
 		forms.forEachForm(new FormAction() {
 			public void execute(Form form) {
-				tabsField.addTab(form);
+				tabsField.addTab(new Tab(form.toString(), form, child));
 			}
 		});
 		
-		this.add(tabsField);
+		this.add(tabsField.draw());
 	}
 
 	private void renderBitmap(HorizontalFieldManager manager,
