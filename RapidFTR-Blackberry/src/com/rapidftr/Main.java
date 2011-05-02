@@ -87,8 +87,6 @@ public class Main extends UiApplication {
                 contactScreen, uiStack, new ContactInformationSyncService(
                         httpService, new ContactInformation(defaultStore)));
 
-        ChildHistoryScreen childHistoryScreen = new ChildHistoryScreen(dateFormatter);
-
         ViewChildController childController = new ViewChildController(viewChildScreen,
                 uiStack, formStore);
 
@@ -97,7 +95,6 @@ public class Main extends UiApplication {
 
         SearchChildController searchChildController = new SearchChildController(searchChildScreen, uiStack,
                 childrenStore);
-        ChildHistoryController showHistoryController = new ChildHistoryController(childHistoryScreen, uiStack);
 
         Dispatcher dispatcher = new Dispatcher(
                 loginController,
@@ -105,7 +102,6 @@ public class Main extends UiApplication {
                 syncController,
                 restController,
                 contactScreenController,
-                showHistoryController,
                 searchChildController,
                 settings,
                 uiStack,
