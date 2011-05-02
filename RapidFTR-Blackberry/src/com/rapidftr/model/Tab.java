@@ -13,17 +13,17 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.utilities.BoldRichTextField;
 
-public class Tab extends VerticalFieldManager implements FocusChangeListener, Observable {
+public class Tab extends VerticalFieldManager {
 
 	private Form form;
 	private Child child;
+
 	private final String label;
-	
 	private TabHandleField handle;
 	private final TabBodyField body;
-	
+
 	private Vector observers = new Vector();
-	private TabControlField canvas;
+	private TabsField canvas;
 
 	private Vector toBeIgnored = new Vector() {
 		{
@@ -39,7 +39,13 @@ public class Tab extends VerticalFieldManager implements FocusChangeListener, Ob
 		this.label = label;
 
 		handle = new TabHandleField(getLabel());
-		handle.setFocusListener(this);
+		handle.setFocusListener(new FocusChangeListener() {
+			public void focusChanged(Field field, int eventType) {
+				if (field instanceof TabHandleField) {
+					notifyObservers(eventType);
+				}
+			}
+		});
 		body = new TabBodyField();
 
 		render();
@@ -67,13 +73,13 @@ public class Tab extends VerticalFieldManager implements FocusChangeListener, Ob
 		handle.deSelect();
 		canvas.clearBody();
 	}
-	
-	public void setCanvas(TabControlField canvas){
+
+	public void setCanvas(TabsField canvas) {
 		this.canvas = canvas;
 		this.canvas.addHandle(handle);
 	}
 
-	public void addFocusChangeObserver(FocusChangeListener observer) {
+	public void addTabChangeListener(FocusChangeListener observer) {
 		observers.addElement(observer);
 	}
 
@@ -81,7 +87,8 @@ public class Tab extends VerticalFieldManager implements FocusChangeListener, Ob
 		return label;
 	}
 
-	private void drawField(final Manager renderingArea, FormField field,String value) {
+	private void drawField(final Manager renderingArea, FormField field,
+			String value) {
 		Field detail = null;
 		if (isNotEmpty(value)) {
 			detail = new LabelField(drawKey(field), LabelField.FOCUSABLE) {
@@ -91,7 +98,8 @@ public class Tab extends VerticalFieldManager implements FocusChangeListener, Ob
 				}
 			};
 		} else {
-			detail = BoldRichTextField.getSemiBoldRichTextField(drawKey(field),value);
+			detail = BoldRichTextField.getSemiBoldRichTextField(drawKey(field),
+					value);
 		}
 		renderingArea.add(detail);
 		renderingArea.add(new SeparatorField());
@@ -105,16 +113,10 @@ public class Tab extends VerticalFieldManager implements FocusChangeListener, Ob
 		return field.displayLabel() + " : ";
 	}
 
-	public void focusChanged(Field field, int eventType) {
-		if (field instanceof TabHandleField) {
-			notifyObservers(eventType);
-		}
-		
-	}
-
 	private void notifyObservers(int eventType) {
 		for (int i = 0; i < observers.size(); i++) {
-			((FocusChangeListener) observers.elementAt(i)).focusChanged(this, eventType);
+			((FocusChangeListener) observers.elementAt(i)).focusChanged(this,
+					eventType);
 		}
 	}
 }
