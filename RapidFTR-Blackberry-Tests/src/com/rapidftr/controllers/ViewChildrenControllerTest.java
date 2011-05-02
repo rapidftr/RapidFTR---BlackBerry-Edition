@@ -18,13 +18,15 @@ public class ViewChildrenControllerTest {
     private UiStack uiStack;
     private ChildrenRecordStore recordStore;
     private ViewChildrenController controller;
+    private Dispatcher dispatcher;
 
     @Before
     public void setup() {
         viewChildrenScreen = mock(ViewChildrenScreen.class);
         uiStack = mock(UiStack.class);
         recordStore = mock(ChildrenRecordStore.class);
-        controller = new ViewChildrenController(this.viewChildrenScreen, uiStack, recordStore);
+        dispatcher = mock(Dispatcher.class);
+        controller = new ViewChildrenController(this.viewChildrenScreen, uiStack, recordStore, dispatcher);
     }
 
     @Test
@@ -72,9 +74,6 @@ public class ViewChildrenControllerTest {
 
     @Test
     public void shouldRefreshViewChildrenScreenAndGoToHomeScreen() {
-        Dispatcher dispatcher = mock(Dispatcher.class);
-
-        controller.setDispatcher(dispatcher);
         controller.popScreen();
 
         verify(viewChildrenScreen).refresh();

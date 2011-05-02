@@ -73,8 +73,6 @@ public class Main extends UiApplication {
 
         ViewChildScreen viewChildScreen = new ViewChildScreen();
 
-        ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
-
         SearchChildScreen searchChildScreen = new SearchChildScreen();
 
         SyncScreen syncScreen = new SyncScreen(settings);
@@ -103,8 +101,6 @@ public class Main extends UiApplication {
                 childrenStore);
         ChildHistoryController showHistoryController = new ChildHistoryController(childHistoryScreen, uiStack);
         ViewChildPhotoController childPhotoController = new ViewChildPhotoController(childPhotoScreen, uiStack);
-        ViewChildrenController viewChildrenController = new ViewChildrenController(
-                viewChildrenScreen, uiStack, childrenStore);
 
         Dispatcher dispatcher = new Dispatcher(
                 loginController,
@@ -112,7 +108,6 @@ public class Main extends UiApplication {
                 syncController,
                 restController,
                 contactScreenController,
-                viewChildrenController,
                 childPhotoController,
                 showHistoryController,
                 searchChildController,
