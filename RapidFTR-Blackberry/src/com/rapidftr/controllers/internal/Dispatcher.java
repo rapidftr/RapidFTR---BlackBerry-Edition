@@ -8,6 +8,7 @@ import com.rapidftr.model.Child;
 import com.rapidftr.process.Process;
 import com.rapidftr.screens.HomeScreen;
 import com.rapidftr.screens.ManageChildScreen;
+import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.Settings;
@@ -29,7 +30,6 @@ public class Dispatcher {
                       SyncController syncController,
                       ResetDeviceController restController,
                       ContactInformationController contactScreenController,
-                      ViewChildrenController viewChildrenController,
                       ViewChildPhotoController childPhotoController,
                       ChildHistoryController showHistoryController,
                       SearchChildController searchChildController,
@@ -45,9 +45,9 @@ public class Dispatcher {
         ManageChildScreen manageChildScreen = new ManageChildScreen(settings, dateFormatter);
         this.manageChildController = new ManageChildController(manageChildScreen, uiStack, formStore, childrenRecordStore, this);
 
-        this.manageChildController.setDispatcher(this);
-        this.viewChildrenController = viewChildrenController;
-        this.viewChildrenController.setDispatcher(this);
+        ViewChildrenScreen viewChildrenScreen = new ViewChildrenScreen();
+        this.viewChildrenController = new ViewChildrenController(viewChildrenScreen, uiStack, childrenRecordStore, this);
+
         this.childPhotoController = childPhotoController;
         this.childPhotoController.setDispatcher(this);
         this.childHistoryController = showHistoryController;
