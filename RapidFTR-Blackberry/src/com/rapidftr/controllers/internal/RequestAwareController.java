@@ -13,9 +13,8 @@ public abstract class RequestAwareController extends Controller implements Contr
     protected RequestAwareService service;
     private ScreenCallBack screenCallBack;
 
-    //TODO ST : Refactoring in progress. This constructor will be merged with the one with dispatcher in it.
-    public RequestAwareController(CustomScreen screen, UiStack uiStack, RequestAwareService service) {
-        super(screen, uiStack);
+    public RequestAwareController(CustomScreen screen, UiStack uiStack, RequestAwareService service, Dispatcher dispatcher) {
+        super(screen, uiStack, dispatcher);
         this.service = service;
         requestHandler = service.getRequestHandler();
         if (requestHandler != null) {
@@ -24,11 +23,6 @@ public abstract class RequestAwareController extends Controller implements Contr
         }
         screen.setController(this);
         screenCallBack = (ScreenCallBack) screen;
-    }
-
-    public RequestAwareController(CustomScreen screen, UiStack uiStack, RequestAwareService service, Dispatcher dispatcher) {
-        this(screen, uiStack, service);
-        this.dispatcher = dispatcher;
     }
 
 

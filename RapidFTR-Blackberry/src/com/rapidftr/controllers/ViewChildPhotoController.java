@@ -10,8 +10,7 @@ import com.rapidftr.screens.internal.UiStack;
 public class ViewChildPhotoController extends Controller {
 
     public ViewChildPhotoController(CustomScreen screen, UiStack uiStack, Dispatcher dispatcher) {
-        super(screen, uiStack);
-        this.dispatcher = dispatcher;
+        super(screen, uiStack, dispatcher);
     }
 
     public void viewChildPhoto(Child child) {

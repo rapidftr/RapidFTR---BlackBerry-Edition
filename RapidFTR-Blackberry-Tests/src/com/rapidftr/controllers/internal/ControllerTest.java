@@ -12,12 +12,15 @@ public class ControllerTest {
     private CustomScreen screen;
     private UiStack uiStack;
     private Controller controller;
+    private Dispatcher dispatcher;
 
     @Before
     public void setup() {
         screen = mock(CustomScreen.class);
         uiStack = mock(UiStack.class);
-        controller = new TestController(screen, uiStack);
+        dispatcher = mock(Dispatcher.class);
+
+        controller = new TestController(screen, uiStack, dispatcher);
     }
 
     @Test
@@ -47,9 +50,6 @@ public class ControllerTest {
 
     @Test
     public void shouldClearUiStackAndShowHomeScreen() {
-        Dispatcher dispatcher = mock(Dispatcher.class);
-        controller.setDispatcher(dispatcher);
-
         controller.homeScreen();
 
         verify(uiStack).clear();
@@ -57,8 +57,8 @@ public class ControllerTest {
     }
 
     private class TestController extends Controller {
-        public TestController(CustomScreen screen, UiStack uiStack) {
-            super(screen, uiStack);
+        public TestController(CustomScreen screen, UiStack uiStack, Dispatcher dispatcher) {
+            super(screen, uiStack, dispatcher);
         }
     }
 }

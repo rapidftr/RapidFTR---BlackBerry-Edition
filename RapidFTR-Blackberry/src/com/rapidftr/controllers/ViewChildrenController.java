@@ -16,10 +16,9 @@ public class ViewChildrenController extends Controller {
     private final int SORT_UPDATED = 2;
 
     public ViewChildrenController(ViewChildrenScreen screen, UiStack uiStack, ChildrenRecordStore store, Dispatcher dispatcher) {
-        super(screen, uiStack);
+        super(screen, uiStack, dispatcher);
         this.store = store;
         this.sortState = SORT_NAME;
-        this.dispatcher = dispatcher;
     }
 
     public void viewAllChildren() {

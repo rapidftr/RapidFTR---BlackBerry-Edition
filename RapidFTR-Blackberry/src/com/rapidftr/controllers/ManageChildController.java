@@ -20,10 +20,9 @@ public class ManageChildController extends Controller {
                                  FormStore store,
                                  ChildrenRecordStore childRecordStore,
                                  Dispatcher dispatcher) {
-        super(screen, uiStack);
+        super(screen, uiStack, dispatcher);
         this.store = store;
         this.childRecordStore = childRecordStore;
-        this.dispatcher = dispatcher;
     }
 
     public void editChild(Child child) {
@@ -40,13 +39,13 @@ public class ManageChildController extends Controller {
         return ((ManageChildScreen) currentScreen);
     }
 
-    public void takeSnapshotAndUpdateWithNewImage(
-            ImageCaptureListener imageCaptureListener) {
+    public void takeSnapshotAndUpdateWithNewImage(ImageCaptureListener imageCaptureListener) {
+        SnapshotController snapshotController = new SnapshotController(new SnapshotScreen(),
+                uiStack,
+                dispatcher,
+                imageCaptureListener);
 
-        SnapshotController snapshotController = new SnapshotController(
-                new SnapshotScreen(), uiStack);
         snapshotController.show();
-        snapshotController.setImageListener(imageCaptureListener);
     }
 
     public void saveChild(Child child) {
