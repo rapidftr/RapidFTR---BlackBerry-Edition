@@ -1,7 +1,5 @@
 package com.rapidftr;
 
-import com.rapidftr.controllers.ContactInformationController;
-import com.rapidftr.controllers.ResetDeviceController;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormJsonParser;
@@ -9,7 +7,6 @@ import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.ContactInformation;
-import com.rapidftr.screens.ContactInformationScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.*;
 import com.rapidftr.utilities.*;
@@ -50,15 +47,11 @@ public class Main extends UiApplication {
         FormStore formStore = new FormStore(new FormJsonParser());
 
         Settings settings = new Settings(defaultStore);
-
         HttpSettings httpSettings = new HttpSettings(settings);
         HttpServer httpServer = new HttpServer(httpSettings);
-
         HttpService httpService = new HttpService(httpServer, settings);
 
-        LoginService loginService = new LoginService(httpService,
-                new LoginSettings(settings));
-
+        LoginService loginService = new LoginService(httpService, new LoginSettings(settings));
         FormService formService = new FormService(httpService, formStore);
 
         DefaultBlackBerryDateFormat defaultDateFormat = new DefaultBlackBerryDateFormat();
@@ -69,19 +62,10 @@ public class Main extends UiApplication {
                 childrenStore,
                 dateFormatter);
 
-        ContactInformationScreen contactScreen = new ContactInformationScreen(
+        ContactInformationSyncService contactInformationSyncService = new ContactInformationSyncService(httpService,
                 new ContactInformation(defaultStore));
 
-        ResetDeviceController restController = new ResetDeviceController(
-                formService, childSyncService, loginService);
-
-        ContactInformationController contactScreenController = new ContactInformationController(
-                contactScreen, uiStack, new ContactInformationSyncService(
-                        httpService, new ContactInformation(defaultStore)));
-
         Dispatcher dispatcher = new Dispatcher(
-                restController,
-                contactScreenController,
                 settings,
                 uiStack,
                 dateFormatter,
@@ -90,7 +74,9 @@ public class Main extends UiApplication {
                 httpSettings,
                 loginService,
                 childSyncService,
-                formService);
+                formService,
+                defaultStore,
+                contactInformationSyncService);
 
         dispatcher.homeScreen();
 
