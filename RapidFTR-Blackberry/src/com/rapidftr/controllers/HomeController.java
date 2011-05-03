@@ -11,9 +11,8 @@ public class HomeController extends Controller {
     private Settings settings;
 
     public HomeController(CustomScreen homeSreen, UiStack uiStack, Settings settings, Dispatcher dispatcher) {
-        super(homeSreen, uiStack);
+        super(homeSreen, uiStack, dispatcher);
         this.settings = settings;
-        this.dispatcher = dispatcher;
     }
 
     public void viewChildren() {

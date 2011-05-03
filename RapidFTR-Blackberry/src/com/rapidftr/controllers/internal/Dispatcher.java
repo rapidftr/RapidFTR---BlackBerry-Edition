@@ -28,7 +28,6 @@ public class Dispatcher {
                       SyncController syncController,
                       ResetDeviceController restController,
                       ContactInformationController contactScreenController,
-                      SearchChildController searchChildController,
                       Settings settings,
                       UiStack uiStack,
                       DateFormatter dateFormatter,
@@ -50,9 +49,8 @@ public class Dispatcher {
         ChildHistoryScreen childHistoryScreen = new ChildHistoryScreen(dateFormatter);
         this.childHistoryController = new ChildHistoryController(childHistoryScreen, uiStack, this);
 
-        this.searchChildController = searchChildController;
-        this.searchChildController.setDispatcher(this);
-        this.homeScreenController.setDispatcher(this);
+        this.searchChildController = new SearchChildController(new SearchChildScreen(), uiStack, childrenRecordStore, this);
+
         this.loginController = loginController;
         this.loginController.setDispatcher(this);
         this.childController = childController;
