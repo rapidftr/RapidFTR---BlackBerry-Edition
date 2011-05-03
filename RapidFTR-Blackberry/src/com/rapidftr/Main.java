@@ -1,20 +1,12 @@
 package com.rapidftr;
 
+import com.rapidftr.controllers.internal.ControllerFactory;
 import com.rapidftr.controllers.internal.Dispatcher;
-import com.rapidftr.datastore.ChildrenRecordStore;
-import com.rapidftr.datastore.FormJsonParser;
-import com.rapidftr.datastore.FormStore;
-import com.rapidftr.net.HttpServer;
-import com.rapidftr.net.HttpService;
-import com.rapidftr.screens.ContactInformation;
 import com.rapidftr.screens.internal.UiStack;
-import com.rapidftr.services.*;
-import com.rapidftr.utilities.*;
+import com.rapidftr.utilities.Logger;
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
 import net.rim.device.api.ui.UiApplication;
-
-import java.util.Calendar;
 
 public class Main extends UiApplication {
     public boolean permissionsGranted = false;
@@ -26,7 +18,6 @@ public class Main extends UiApplication {
     }
 
     public Main() {
-
         UiStack uiStack = new UiStack(this);
         int[] requiredPermissions = new int[]{
                 ApplicationPermissions.PERMISSION_INPUT_SIMULATION,
@@ -37,49 +28,9 @@ public class Main extends UiApplication {
 
         this.permissionsGranted = makePermissionsRequest(requiredPermissions);
 
-        DefaultStore defaultStore = new DefaultStore(new Key(
-                "com.rapidftr.utilities.ftrstore"));
-
-        ChildrenRecordStore childrenStore = new ChildrenRecordStore(
-                new DefaultStore(
-                        new Key("com.rapidftr.utilities.childrenstore")));
-
-        FormStore formStore = new FormStore(new FormJsonParser());
-
-        Settings settings = new Settings(defaultStore);
-        HttpSettings httpSettings = new HttpSettings(settings);
-        HttpServer httpServer = new HttpServer(httpSettings);
-        HttpService httpService = new HttpService(httpServer, settings);
-
-        LoginService loginService = new LoginService(httpService, new LoginSettings(settings));
-        FormService formService = new FormService(httpService, formStore);
-
-        DefaultBlackBerryDateFormat defaultDateFormat = new DefaultBlackBerryDateFormat();
-        DateFormatter dateFormatter = new DateFormatter(Calendar.getInstance().getTimeZone(), defaultDateFormat);
-
-        ChildSyncService childSyncService = new ChildSyncService(
-                httpService,
-                childrenStore,
-                dateFormatter);
-
-        ContactInformationSyncService contactInformationSyncService = new ContactInformationSyncService(httpService,
-                new ContactInformation(defaultStore));
-
-        Dispatcher dispatcher = new Dispatcher(
-                settings,
-                uiStack,
-                dateFormatter,
-                formStore,
-                childrenStore,
-                httpSettings,
-                loginService,
-                childSyncService,
-                formService,
-                defaultStore,
-                contactInformationSyncService);
-
+        ControllerFactory controllerFactory = new ControllerFactory(uiStack);
+        Dispatcher dispatcher = new Dispatcher(controllerFactory);
         dispatcher.homeScreen();
-
     }
 
     private boolean makePermissionsRequest(int[] requiredPermissions) {

@@ -17,10 +17,6 @@ public class SearchChildController extends Controller {
         this.store = store;
     }
 
-    public void showChildSearchScreen() {
-        show();
-    }
-
     public void searchAndDisplayChildren(String searchQuery) {
         Children children = store.search(searchQuery);
         if (children.count() != 0) {
