@@ -73,8 +73,6 @@ public class Main extends UiApplication {
 
         ViewChildScreen viewChildScreen = new ViewChildScreen();
 
-        SearchChildScreen searchChildScreen = new SearchChildScreen();
-
         SyncScreen syncScreen = new SyncScreen(settings);
 
         LoginController loginController = new LoginController(loginScreen,
@@ -93,16 +91,12 @@ public class Main extends UiApplication {
         SyncController syncController = new SyncController(syncScreen, uiStack,
                 childSyncService, formService);
 
-        SearchChildController searchChildController = new SearchChildController(searchChildScreen, uiStack,
-                childrenStore);
-
         Dispatcher dispatcher = new Dispatcher(
                 loginController,
                 childController,
                 syncController,
                 restController,
                 contactScreenController,
-                searchChildController,
                 settings,
                 uiStack,
                 dateFormatter,
