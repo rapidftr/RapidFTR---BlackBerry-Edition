@@ -17,9 +17,7 @@ abstract public class Controller {
     }
 
     public Controller(CustomScreen screen, UiStack uiStack, Dispatcher dispatcher) {
-        this.currentScreen = screen;
-        this.uiStack = uiStack;
-        this.currentScreen.setController(this);
+        this(screen, uiStack);
         this.dispatcher = dispatcher;
     }
 

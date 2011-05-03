@@ -5,10 +5,13 @@ import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
+import com.rapidftr.net.ConnectionFactory;
 import com.rapidftr.process.Process;
 import com.rapidftr.screens.*;
 import com.rapidftr.screens.internal.UiStack;
+import com.rapidftr.services.LoginService;
 import com.rapidftr.utilities.DateFormatter;
+import com.rapidftr.utilities.HttpSettings;
 import com.rapidftr.utilities.Settings;
 
 public class Dispatcher {
@@ -24,7 +27,7 @@ public class Dispatcher {
     private final ChildHistoryController childHistoryController;
     private final SearchChildController searchChildController;
 
-    public Dispatcher(LoginController loginController, ViewChildController childController,
+    public Dispatcher(ViewChildController childController,
                       SyncController syncController,
                       ResetDeviceController restController,
                       ContactInformationController contactScreenController,
@@ -32,7 +35,9 @@ public class Dispatcher {
                       UiStack uiStack,
                       DateFormatter dateFormatter,
                       FormStore formStore,
-                      ChildrenRecordStore childrenRecordStore) {
+                      ChildrenRecordStore childrenRecordStore,
+                      HttpSettings httpSettings,
+                      LoginService loginService) {
 
         HomeScreen homeSreen = new HomeScreen(settings);
         this.homeScreenController = new HomeController(homeSreen, uiStack, settings, this);
@@ -51,8 +56,8 @@ public class Dispatcher {
 
         this.searchChildController = new SearchChildController(new SearchChildScreen(), uiStack, childrenRecordStore, this);
 
-        this.loginController = loginController;
-        this.loginController.setDispatcher(this);
+        this.loginController = new LoginController(new LoginScreen(httpSettings), uiStack, loginService, new ConnectionFactory(), this);
+
         this.childController = childController;
         this.childController.setDispatcher(this);
         this.syncController = syncController;
