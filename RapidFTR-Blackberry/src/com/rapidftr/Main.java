@@ -1,13 +1,19 @@
 package com.rapidftr;
 
-import com.rapidftr.controllers.*;
+import com.rapidftr.controllers.ContactInformationController;
+import com.rapidftr.controllers.ResetDeviceController;
+import com.rapidftr.controllers.SyncController;
+import com.rapidftr.controllers.ViewChildController;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormJsonParser;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
-import com.rapidftr.screens.*;
+import com.rapidftr.screens.ContactInformation;
+import com.rapidftr.screens.ContactInformationScreen;
+import com.rapidftr.screens.SyncScreen;
+import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.*;
 import com.rapidftr.utilities.*;
@@ -49,7 +55,8 @@ public class Main extends UiApplication {
 
         Settings settings = new Settings(defaultStore);
 
-        HttpServer httpServer = new HttpServer(new HttpSettings(settings));
+        HttpSettings httpSettings = new HttpSettings(settings);
+        HttpServer httpServer = new HttpServer(httpSettings);
 
         HttpService httpService = new HttpService(httpServer, settings);
 
@@ -69,14 +76,9 @@ public class Main extends UiApplication {
         ContactInformationScreen contactScreen = new ContactInformationScreen(
                 new ContactInformation(defaultStore));
 
-        LoginScreen loginScreen = new LoginScreen(new HttpSettings(settings));
-
         ViewChildScreen viewChildScreen = new ViewChildScreen();
 
         SyncScreen syncScreen = new SyncScreen(settings);
-
-        LoginController loginController = new LoginController(loginScreen,
-                uiStack, loginService);
 
         ResetDeviceController restController = new ResetDeviceController(
                 formService, childSyncService, loginService);
@@ -92,7 +94,6 @@ public class Main extends UiApplication {
                 childSyncService, formService);
 
         Dispatcher dispatcher = new Dispatcher(
-                loginController,
                 childController,
                 syncController,
                 restController,
@@ -101,7 +102,9 @@ public class Main extends UiApplication {
                 uiStack,
                 dateFormatter,
                 formStore,
-                childrenStore);
+                childrenStore,
+                httpSettings,
+                loginService);
 
         dispatcher.homeScreen();
 

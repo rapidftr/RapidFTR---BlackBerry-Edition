@@ -19,6 +19,7 @@ public class LoginControllerTest {
     private LoginController loginController;
     private ScreenCallBack screenCallBack;
     private ConnectionFactory connectionFactory;
+    private Dispatcher dispatcher;
 
 
     @Before
@@ -27,8 +28,9 @@ public class LoginControllerTest {
         loginScreen = mock(LoginScreen.class);
         uiStack = mock(UiStack.class);
         connectionFactory = mock(ConnectionFactory.class);
+        dispatcher = mock(Dispatcher.class);
         loginController = new LoginController(loginScreen, uiStack,
-                loginService, connectionFactory);
+                loginService, connectionFactory, dispatcher);
         screenCallBack = loginController.getScreenCallBack();
     }
 
