@@ -16,10 +16,6 @@ abstract public class Controller {
         this.dispatcher = dispatcher;
     }
 
-    public void setDispatcher(Dispatcher dispatcher) {
-        this.dispatcher = dispatcher;
-    }
-
     public void show() {
         if (!currentScreen.isActive())
             uiStack.pushScreen(currentScreen);
