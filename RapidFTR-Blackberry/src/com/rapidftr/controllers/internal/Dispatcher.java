@@ -9,6 +9,8 @@ import com.rapidftr.net.ConnectionFactory;
 import com.rapidftr.process.Process;
 import com.rapidftr.screens.*;
 import com.rapidftr.screens.internal.UiStack;
+import com.rapidftr.services.ChildSyncService;
+import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
 import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.HttpSettings;
@@ -27,8 +29,7 @@ public class Dispatcher {
     private final ChildHistoryController childHistoryController;
     private final SearchChildController searchChildController;
 
-    public Dispatcher(SyncController syncController,
-                      ResetDeviceController restController,
+    public Dispatcher(ResetDeviceController restController,
                       ContactInformationController contactScreenController,
                       Settings settings,
                       UiStack uiStack,
@@ -36,7 +37,7 @@ public class Dispatcher {
                       FormStore formStore,
                       ChildrenRecordStore childrenRecordStore,
                       HttpSettings httpSettings,
-                      LoginService loginService) {
+                      LoginService loginService, ChildSyncService childSyncService, FormService formService) {
 
         HomeScreen homeSreen = new HomeScreen(settings);
         this.homeScreenController = new HomeController(homeSreen, uiStack, settings, this);
@@ -58,7 +59,9 @@ public class Dispatcher {
         this.loginController = new LoginController(new LoginScreen(httpSettings), uiStack, loginService, new ConnectionFactory(), this);
         this.childController = new ViewChildController(new ViewChildScreen(), uiStack, this);
 
-        this.syncController = syncController;
+        this.syncController = new SyncController(new SyncScreen(settings), uiStack,
+                childSyncService, formService, this);
+
         this.syncController.setDispatcher(this);
         this.resetDeviceController = restController;
         this.contactScreenController = contactScreenController;
