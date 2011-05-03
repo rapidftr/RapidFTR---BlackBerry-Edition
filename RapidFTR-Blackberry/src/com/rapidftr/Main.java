@@ -3,7 +3,6 @@ package com.rapidftr;
 import com.rapidftr.controllers.ContactInformationController;
 import com.rapidftr.controllers.ResetDeviceController;
 import com.rapidftr.controllers.SyncController;
-import com.rapidftr.controllers.ViewChildController;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormJsonParser;
@@ -13,7 +12,6 @@ import com.rapidftr.net.HttpService;
 import com.rapidftr.screens.ContactInformation;
 import com.rapidftr.screens.ContactInformationScreen;
 import com.rapidftr.screens.SyncScreen;
-import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.*;
 import com.rapidftr.utilities.*;
@@ -76,8 +74,6 @@ public class Main extends UiApplication {
         ContactInformationScreen contactScreen = new ContactInformationScreen(
                 new ContactInformation(defaultStore));
 
-        ViewChildScreen viewChildScreen = new ViewChildScreen();
-
         SyncScreen syncScreen = new SyncScreen(settings);
 
         ResetDeviceController restController = new ResetDeviceController(
@@ -87,14 +83,10 @@ public class Main extends UiApplication {
                 contactScreen, uiStack, new ContactInformationSyncService(
                         httpService, new ContactInformation(defaultStore)));
 
-        ViewChildController childController = new ViewChildController(viewChildScreen,
-                uiStack, formStore);
-
         SyncController syncController = new SyncController(syncScreen, uiStack,
                 childSyncService, formService);
 
         Dispatcher dispatcher = new Dispatcher(
-                childController,
                 syncController,
                 restController,
                 contactScreenController,

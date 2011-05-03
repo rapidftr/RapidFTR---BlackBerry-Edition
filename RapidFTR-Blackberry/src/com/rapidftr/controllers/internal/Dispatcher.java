@@ -27,8 +27,7 @@ public class Dispatcher {
     private final ChildHistoryController childHistoryController;
     private final SearchChildController searchChildController;
 
-    public Dispatcher(ViewChildController childController,
-                      SyncController syncController,
+    public Dispatcher(SyncController syncController,
                       ResetDeviceController restController,
                       ContactInformationController contactScreenController,
                       Settings settings,
@@ -57,9 +56,8 @@ public class Dispatcher {
         this.searchChildController = new SearchChildController(new SearchChildScreen(), uiStack, childrenRecordStore, this);
 
         this.loginController = new LoginController(new LoginScreen(httpSettings), uiStack, loginService, new ConnectionFactory(), this);
+        this.childController = new ViewChildController(new ViewChildScreen(), uiStack, this);
 
-        this.childController = childController;
-        this.childController.setDispatcher(this);
         this.syncController = syncController;
         this.syncController.setDispatcher(this);
         this.resetDeviceController = restController;
