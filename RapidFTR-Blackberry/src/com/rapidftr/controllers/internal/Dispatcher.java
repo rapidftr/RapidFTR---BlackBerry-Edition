@@ -10,11 +10,13 @@ import com.rapidftr.process.Process;
 import com.rapidftr.screens.*;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.ChildSyncService;
+import com.rapidftr.services.ContactInformationSyncService;
 import com.rapidftr.services.FormService;
 import com.rapidftr.services.LoginService;
 import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.HttpSettings;
 import com.rapidftr.utilities.Settings;
+import com.rapidftr.utilities.Store;
 
 public class Dispatcher {
     private final HomeController homeScreenController;
@@ -29,15 +31,17 @@ public class Dispatcher {
     private final ChildHistoryController childHistoryController;
     private final SearchChildController searchChildController;
 
-    public Dispatcher(ResetDeviceController restController,
-                      ContactInformationController contactScreenController,
-                      Settings settings,
+    public Dispatcher(Settings settings,
                       UiStack uiStack,
                       DateFormatter dateFormatter,
                       FormStore formStore,
                       ChildrenRecordStore childrenRecordStore,
                       HttpSettings httpSettings,
-                      LoginService loginService, ChildSyncService childSyncService, FormService formService) {
+                      LoginService loginService,
+                      ChildSyncService childSyncService,
+                      FormService formService,
+                      Store defaultStore,
+                      ContactInformationSyncService contactInformationSyncService) {
 
         HomeScreen homeSreen = new HomeScreen(settings);
         this.homeScreenController = new HomeController(homeSreen, uiStack, settings, this);
@@ -62,10 +66,10 @@ public class Dispatcher {
         this.syncController = new SyncController(new SyncScreen(settings), uiStack,
                 childSyncService, formService, this);
 
-        this.syncController.setDispatcher(this);
-        this.resetDeviceController = restController;
-        this.contactScreenController = contactScreenController;
-        this.contactScreenController.setDispatcher(this);
+        this.resetDeviceController = new ResetDeviceController(formService, childSyncService, loginService);
+
+        ContactInformationScreen contactScreen = new ContactInformationScreen(new ContactInformation(defaultStore));
+        this.contactScreenController = new ContactInformationController(contactScreen, uiStack, contactInformationSyncService, this);
     }
 
     public void homeScreen() {
