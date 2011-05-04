@@ -2,9 +2,12 @@ package com.rapidftr.model;
 
 import org.junit.Test;
 
+import com.rapidftr.form.FormField;
+
 import java.util.Vector;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class RadioButtonFormFieldTests {
 
@@ -16,14 +19,13 @@ public class RadioButtonFormFieldTests {
 		optionStrings1.add("female");
 		
 		RadioButtonFormField field1 =  (RadioButtonFormField) formFieldFactory
-				.createFormField("name1", "Name 1", "radio_button",optionStrings1, "");
+				.createFrom(mock(FormField.class));
 		
 		Vector optionStrings2 = new Vector();
 		optionStrings2.add("male");
 		optionStrings2.add("female");
 		
-		RadioButtonFormField field2 = (RadioButtonFormField) formFieldFactory.createFormField("name1", "Name 1", 
-				"radio_button",optionStrings2, "");
+		RadioButtonFormField field2 = (RadioButtonFormField) formFieldFactory.createFrom(mock(FormField.class));
 		assertEquals(field1,field2);
 	}
 

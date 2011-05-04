@@ -10,6 +10,8 @@ import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
+import com.rapidftr.form.FormFieldAction;
+import com.rapidftr.form.Forms;
 import com.rapidftr.utilities.FileUtility;
 import com.rapidftr.utilities.HttpUtility;
 import com.rapidftr.utilities.RandomStringGenerator;
@@ -189,8 +191,8 @@ public class Child implements Persistable {
     }
 
     public void update(Forms forms) {
-        forms.forEachField(new FieldAction() {
-			public void execute(FormField field) {
+        forms.forEachField(new FormFieldAction() {
+			public void execute(com.rapidftr.form.FormField field) {
 				setField(field.getName(), field.getValue());
 			}
 		});

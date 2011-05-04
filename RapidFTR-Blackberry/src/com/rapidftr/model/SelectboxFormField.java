@@ -1,70 +1,31 @@
 package com.rapidftr.model;
 
-import com.rapidftr.screens.ManageChildScreen;
 import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.component.ObjectChoiceField;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import com.rapidftr.form.FormField;
 
-public class SelectboxFormField extends FormField {
+public class SelectboxFormField extends VerticalFieldManager {
 
-	private Vector optionStrings;
-	private VerticalFieldManager manager;
-	private ObjectChoiceField field;
+	private ObjectChoiceField choiceField;
 
-	public SelectboxFormField(String name, String displayName, String type, Vector optionStrings, String helpText) {
-		super(name, displayName, type, helpText);
-		this.optionStrings = optionStrings;
+	public SelectboxFormField(FormField field) {
+		super(Field.FIELD_LEFT);
+		initializeChoiceField(field);
+		add(choiceField);
 	}
 
-	public void initializeLayout(ManageChildScreen newChildScreen) {
-		manager = new VerticalFieldManager(Field.FIELD_LEFT);
-		Object[] optionArray = new Object[optionStrings.size()];
-		optionStrings.copyInto(optionArray);
-        if (optionArray[0] == "")
-            optionArray[0] = "...";
-		field = new ObjectChoiceField(displayLabel() + ":", optionArray);
-		manager.add(field);
-	}
-
-	public Manager getLayout() {
-		return manager;
-	}
-
-	public String getValue() {
-        return field.getSelectedIndex() >= 0 ? (String) optionStrings.elementAt(field.getSelectedIndex()) : "";
-
-	}
-
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-
-		if (!(obj instanceof SelectboxFormField))
-			return false;
-
-		if (obj == this)
-			return true;
-
-		SelectboxFormField selectboxFormField = (SelectboxFormField) obj;
-		return name.equals(selectboxFormField.name)
-				&& optionStrings.equals(selectboxFormField.optionStrings);
-	}
-
-	public void setValue(String value) {
-		int selectedIndex = 0;
-		for (Enumeration list = optionStrings.elements(); list
-				.hasMoreElements();) {
-			if (((String) list.nextElement()).equals(value))
-				break;
-			selectedIndex++;
+	private void initializeChoiceField(FormField field) {
+		String[] optionArray = field.getOptionsArray();
+		if (optionArray[0] == "") {
+			optionArray[0] = "...";
 		}
-		if (selectedIndex < optionStrings.size()) {
-			field.setSelectedIndex(selectedIndex);
-		}
+		choiceField = createChoiceField(field.getDisplayName(), optionArray);
 	}
 
+	private ObjectChoiceField createChoiceField(String label,
+			String[] optionArray) {
+		return new ObjectChoiceField(label + ":", optionArray);
+	}
 }

@@ -1,7 +1,5 @@
 package com.rapidftr.model;
 
-import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BasicEditField;
 import net.rim.device.api.ui.component.LabelField;
@@ -9,65 +7,24 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.Border;
 import net.rim.device.api.ui.decor.BorderFactory;
 
-import com.rapidftr.screens.ManageChildScreen;
+import com.rapidftr.form.FormField;
 import com.rapidftr.utilities.Styles;
 
-public class TextboxFormField extends FormField {
+public class TextboxFormField extends VerticalFieldManager {
 
-	protected VerticalFieldManager manager;
-	protected BasicEditField field;
+	protected BasicEditField editField;
 
-	public TextboxFormField(String name, String displayName, String type, String helpText) {
-		super(name, displayName, type, helpText);
+	public TextboxFormField(FormField field) {
+		add(new LabelField(field.getDisplayName()));
+		editField = new BasicEditField();
+		setFieldBorders();
+		add(editField);
 	}
 
-	public void initializeLayout(ManageChildScreen newChildScreen) {
-		manager = new VerticalFieldManager(Field.FIELD_LEFT);
-		manager.add(new LabelField(displayLabel()));
-		field = new BasicEditField();
+	private void setFieldBorders() {
 		XYEdges edges = new XYEdges(10, 10, 10, 10);
 		Border rounBorder = BorderFactory.createRoundedBorder(edges,
 				Styles.COLOR_FIELD_BACKGROUND, Border.STYLE_SOLID);
-		field.setBorder(rounBorder);
-		manager.add(field);
+		editField.setBorder(rounBorder);
 	}
-
-	public Manager getLayout() {
-
-		return manager;
-	}
-
-	public boolean equals(Object obj) {
-
-		if (obj == null)
-			return false;
-
-		if (obj == this)
-			return true;
-
-		if (!(obj instanceof TextboxFormField))
-			return false;
-
-		TextboxFormField field = (TextboxFormField) obj;
-
-		return name.equals(field.name);
-	}
-	
-	
-
-	public String getValue() {
-		return field.getText();
-	}
-
-	public void setValue(String value) {
-		field.setText(value);		
-	}
-
-    public boolean isEmpty() {
-        if (field.getText().equals("")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

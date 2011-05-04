@@ -49,7 +49,7 @@ public class FormJsonParser {
             JSONObject jsonFormField = jsonFormFields.getJSONObject(j);
             try {
                 if (IsEnabled(jsonFormField)) {
-                    formFields.addElement(CreateFormField(jsonFormField));
+//                    formFields.addElement(CreateFormField(jsonFormField));
                 }
             }
             catch (JSONException e) {
@@ -59,14 +59,14 @@ public class FormJsonParser {
         return formFields;
     }
 
-    private FormField CreateFormField(JSONObject jsonFormField) throws JSONException {
-        String name = jsonFormField.getString("name");
-        String displayName = jsonFormField.getString("display_name");
-        String type = jsonFormField.getString("type");
-        String help_text = GetFormFieldHelpText(jsonFormField);
-        Vector optionStrings = CreateOptions(jsonFormField);
-        return formFieldFactory.createFormField(name, displayName, type, optionStrings, help_text);
-    }
+//    private FormField CreateFormField(JSONObject jsonFormField) throws JSONException {
+//        String name = jsonFormField.getString("name");
+//        String displayName = jsonFormField.getString("display_name");
+//        String type = jsonFormField.getString("type");
+//        String help_text = GetFormFieldHelpText(jsonFormField);
+//        Vector optionStrings = CreateOptions(jsonFormField);
+//        return formFieldFactory.createFormField(name, displayName, type, optionStrings, help_text);
+//    }
 
     private String GetFormFieldHelpText(JSONObject jsonFormField) throws JSONException {
         if(jsonFormField.has("help_text"))

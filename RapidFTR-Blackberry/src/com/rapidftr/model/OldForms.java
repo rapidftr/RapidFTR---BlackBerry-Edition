@@ -4,15 +4,15 @@ import java.util.Vector;
 
 import com.rapidftr.screens.ManageChildScreen;
 
-public class Forms {
+public class OldForms {
 
 	private Vector forms;
 
-	public Forms(Vector forms) {
+	public OldForms(Vector forms) {
 		this.forms = forms;
 	}
 
-	public Forms() {
+	public OldForms() {
 		forms = new Vector();
 	}
 

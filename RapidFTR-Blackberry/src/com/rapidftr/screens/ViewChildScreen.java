@@ -34,7 +34,7 @@ import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildStatus;
 import com.rapidftr.model.Form;
 import com.rapidftr.model.FormAction;
-import com.rapidftr.model.Forms;
+import com.rapidftr.model.OldForms;
 import com.rapidftr.model.Tab;
 import com.rapidftr.model.TabsField;
 import com.rapidftr.screens.internal.CustomScreen;
@@ -46,19 +46,26 @@ public class ViewChildScreen extends CustomScreen {
 	Child child;
 	BitmapField bitmapField;
 	boolean isBitmapFieldFocused = false;
-	private Forms forms;
+	private OldForms forms;
 	private TabsField tabsField;
 
 	public ViewChildScreen() {
 	}
 
-	public void setChild(Child child, Forms forms) {
+	public void setChild(Child child, OldForms forms) {
 		this.child = child;
 		this.forms = forms;
 	}
 
 	public void setUp() {
 		clearFields();
+		this.add(renderTitleField());
+		this.add(new SeparatorField());
+		renderChildFields(child);
+		renderFormFields(child);
+	}
+
+	private HorizontalFieldManager renderTitleField() {
 		HorizontalFieldManager titleManager = new HorizontalFieldManager(
 				USE_ALL_WIDTH);
 		titleManager.setPadding(new XYEdges(2, 2, 2, 0));
@@ -79,9 +86,7 @@ public class ViewChildScreen extends CustomScreen {
 				.createSolidBackground(childSyncStatus.getStatusColor()));
 		titleSyncStatusManager.add(syncStatus);
 		titleManager.add(titleSyncStatusManager);
-		this.add(titleManager);
-		this.add(new SeparatorField());
-		renderChildFields(child);
+		return titleManager;
 	}
 
 	private void renderChildFields(final Child child) {
@@ -106,8 +111,6 @@ public class ViewChildScreen extends CustomScreen {
 		LabelField emptyLineAfterUID = new LabelField("");
 		emptyLineAfterUID.select(false);
 		add(emptyLineAfterUID);
-
-		renderFormFields(child);
 	}
 
 	private Field getRegisteredByControl() {

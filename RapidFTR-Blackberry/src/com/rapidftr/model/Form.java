@@ -94,9 +94,7 @@ public class Form {
 
 	public void forEachField(FieldAction action) {
 		for (int i = 0; i < fieldList.size(); i++) {
-
 			action.execute((FormField) fieldList.elementAt(i));
-
 		}
 
 	}

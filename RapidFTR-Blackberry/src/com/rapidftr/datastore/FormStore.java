@@ -2,9 +2,11 @@ package com.rapidftr.datastore;
 
 import java.util.Vector;
 
+import org.json.me.JSONArray;
 import org.json.me.JSONException;
 
-import com.rapidftr.model.Forms;
+import com.rapidftr.form.Forms;
+import com.rapidftr.model.OldForms;
 
 public class FormStore {
 
@@ -22,7 +24,7 @@ public class FormStore {
         persistentStore = new PersistentStore(KEY);
     }
 
-    public Vector getForms() {
+    private Vector getForms() {
         String jsonString = (String) persistentStore.getContents();
         try {
             if (jsonString == null) {
@@ -44,7 +46,17 @@ public class FormStore {
     }
 
 	public Forms getHigherForms() {
-		return new Forms(getForms());
+		//TODO: remove this
+		//return new OldForms(getForms());
+		try{
+			return new Forms(new JSONArray((String) persistentStore.getContents()));
+		}catch(Exception e){
+			return null;
+		}
+	}
+
+	public OldForms getOldForms() {
+		return new OldForms(getForms());
 	}
 
 }

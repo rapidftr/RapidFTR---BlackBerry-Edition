@@ -18,9 +18,14 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controls.BlankSeparatorField;
+import com.rapidftr.form.Form;
+import com.rapidftr.form.Forms;
 import com.rapidftr.model.Child;
-import com.rapidftr.model.Form;
-import com.rapidftr.model.Forms;
+import com.rapidftr.model.FieldAction;
+import com.rapidftr.model.FormAction;
+import com.rapidftr.model.FormField;
+import com.rapidftr.model.FormFieldFactory;
+import com.rapidftr.model.OldForms;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.ImageCaptureListener;
@@ -51,7 +56,6 @@ public class ManageChildScreen extends CustomScreen {
         this.childToEdit = childToEdit;
         this.forms = forms;
 		this.selectedTab = selectedTab;
-		forms.initializeLayout(this,childToEdit);
      }
 
     private void createScreenLayout() {
@@ -64,8 +68,9 @@ public class ManageChildScreen extends CustomScreen {
 
         final Form[] formArray = forms.toArray();
 
+		
         final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
-        formManager.add((formArray[0]).getLayout());
+        formManager.add(createUIForm(formArray[0]));
 
 
         final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
@@ -78,13 +83,17 @@ public class ManageChildScreen extends CustomScreen {
         availableForms.setChangeListener(new FieldChangeListener() {
             public void fieldChanged(Field field, int context) {
                 formManager.deleteAll();
-                formManager.add((formArray[availableForms.getSelectedIndex()]).getLayout());
+                formManager.add(createUIForm(formArray[availableForms.getSelectedIndex()]));
             }
         });
         
 		selectDefaultForm(formArray, availableForms);
         screenManager.add(new BlankSeparatorField(15));
 
+    }
+    
+    private UIForm createUIForm(Form form){
+    	return new UIForm(form, new FormFieldFactory());
     }
 
 	private void selectDefaultForm(final Form[] formArray, final ObjectChoiceField availableForms) {

@@ -1,6 +1,9 @@
 package com.rapidftr.model;
 
-import java.util.Vector;
+import net.rim.device.api.ui.Field;
+
+import com.rapidftr.controls.BlankSeparatorField;
+import com.rapidftr.form.FormField;
 
 public class FormFieldFactory {
 
@@ -13,38 +16,30 @@ public class FormFieldFactory {
 	public static final String numeric_field = "numeric_field";
 	public static final String date_field = "date_field";
 	public static final String AUDIO_FIELD = "audio_upload_box";
-	
-	public FormField createFormField(String name, String displayName, String type, Vector optionStrings, String helpText) {
-		if(TEXT_FIELD.equals(type)) {
-			return new TextboxFormField(name, displayName, type, helpText);
+
+	public Field createFrom(FormField field) {
+		if (TEXT_FIELD.equals(field.getType())) {
+			return new TextboxFormField(field);
+		} else if (SELECT_FIELD.equals(field.getType())) {
+			return new SelectboxFormField(field);
+		} else if (RADIO_FIELD.equals(field.getType())) {
+			return new RadioButtonFormField(field);
+		} else if (CHECKBOX_FIELD.equals(field.getType())) {
+			return new CheckboxFormField(field);
+		} else if (PHOTO_FIELD.equals(field.getType())) {
+			return new PhotoUploadFormField(field);
+		} else if (TEXTAREA_FIELD.equals(field.getType())) {
+			return new TextAreaFormField(field);
+		}else if (numeric_field.equals(field.getType())) {
+			return new NumericTextboxFormField(field);
+		}else if (date_field.equals(field.getType())) {
+			return new DateFormField(field);
+		}else if (AUDIO_FIELD.equals(field.getType())) {
+			return new AudioField(field);
+		} else {
+			return new BlankSeparatorField(0);
 		}
-		else if (SELECT_FIELD.equals(type)){
-			return new SelectboxFormField(name, displayName, type, optionStrings, helpText);
-		}
-		else if (RADIO_FIELD.equals(type)) {
-			return new RadioButtonFormField(name, displayName, type, optionStrings, helpText);
-		}
-		else if (CHECKBOX_FIELD.equals(type)) {
-			return new CheckboxFormField(name, displayName, type, helpText);
-		}
-		else if (PHOTO_FIELD.equals(type)) {
-			return new PhotoUploadFormField(name, displayName, type, helpText);
-		}
-		else if (TEXTAREA_FIELD.equals(type)) {
-			return new TextAreaFormField(name, displayName, type, helpText);
-		}
-		else if (numeric_field.equals(type)) {
-			return new NumericTextboxFormField(name, displayName, type, helpText);
-		}
-		else if (date_field.equals(type)) {
-			return new DateFormField(name, displayName, type, helpText);
-		}
-        else if (AUDIO_FIELD.equals(type)) {
-            return AudioField.createdFormField(name, type, helpText);
-        }
-		else {
-			return null;
-		}
+
 	}
 
 }

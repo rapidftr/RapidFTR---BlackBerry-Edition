@@ -1,72 +1,67 @@
 package com.rapidftr.model;
 
+
 import org.junit.Test;
+import com.rapidftr.form.FormField;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class FormFieldFactoryTest {
 
 	@Test
-	public void shouldReturnTextboxFormField()
-	{
+	public void shouldReturnTextboxFormField() {
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "text_field", null, "");
+		net.rim.device.api.ui.Field field = formFieldFactory.createFrom(mock(FormField.class));
 		assertNotNull(field);
 		assertTrue(field instanceof TextboxFormField);
 	}
-	
+
 	@Test
-	public void shouldReturnSelecttboxFormField()
-	{
+	public void shouldReturnSelecttboxFormField() {
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "select_box", null, "");
+		net.rim.device.api.ui.Field field = formFieldFactory.createFrom(mock(FormField.class));
 		assertNotNull(field);
 		assertTrue(field instanceof SelectboxFormField);
 	}
-	
+
 	@Test
-	public void shouldReturnRadiobuttonFormField()
-	{
+	public void shouldReturnRadiobuttonFormField() {
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "radio_button", null, "");
+		net.rim.device.api.ui.Field field = formFieldFactory.createFrom(mock(FormField.class));
 		assertNotNull(field);
 		assertTrue(field instanceof RadioButtonFormField);
 	}
-	
-	
+
 	@Test
-	public void shouldReturnCheckboxFormField()
-	{
+	public void shouldReturnCheckboxFormField() {
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "check_box", null, "");
+		net.rim.device.api.ui.Field field = formFieldFactory.createFrom(mock(FormField.class));
 		assertNotNull(field);
 		assertTrue(field instanceof CheckboxFormField);
 	}
-	
+
 	@Test
-	public void shouldReturnPhotoUploadFormField()
-	{
+	public void shouldReturnPhotoUploadFormField() {
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "photo_upload_box", null, "");
+		net.rim.device.api.ui.Field field = formFieldFactory.createFrom(mock(FormField.class));
 		assertNotNull(field);
 		assertTrue(field instanceof PhotoUploadFormField);
 	}
-	
+
 	@Test
-	public void shouldReturnNumericTextboxFormField()
-	{
+	public void shouldReturnNumericTextboxFormField() {
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "numeric_field", null, "");
+		net.rim.device.api.ui.Field field = formFieldFactory.createFrom(mock(FormField.class));
 		assertNotNull(field);
 		assertTrue(field instanceof NumericTextboxFormField);
 	}
-	
+
 	@Test
-	public void shouldReturnNullWhenInvalidInputTypeIsGiven()
-	{
+	public void shouldReturnNullWhenInvalidInputTypeIsGiven() {
 		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		FormField field = formFieldFactory.createFormField("name", "Name", "xxxxx", null, "");
+		net.rim.device.api.ui.Field field = formFieldFactory.createFrom(mock(FormField.class));
 		assertNull(field);
 	}
-	
+
 }
