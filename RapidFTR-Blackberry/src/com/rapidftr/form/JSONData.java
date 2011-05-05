@@ -7,7 +7,7 @@ public class JSONData {
 
 	private final JSONObject jsonObject;
 
-	public JSONData(JSONObject jsonObject) {
+	protected JSONData(JSONObject jsonObject) {
 		this.jsonObject = jsonObject;
 	}
 

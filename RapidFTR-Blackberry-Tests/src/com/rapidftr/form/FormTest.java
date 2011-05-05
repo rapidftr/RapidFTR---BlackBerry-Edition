@@ -1,11 +1,14 @@
 package com.rapidftr.form;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.json.me.JSONException;
 import org.json.me.JSONObject;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class FormTest {
 	@Test
@@ -21,6 +24,35 @@ public class FormTest {
 			}
 		});
 		assertTrue(hasField[0]);
+		assertTrue(form.isNotEmpty());
+	}
+	
+	@Test
+	public void emptyWhenNoField() throws Exception {
+		Form form = new Form(new JSONObject("{'fields':[]}"));
+		assertFalse(form.isNotEmpty());
+	}
+	
+	@Test
+	public void toStringReturnsName() throws Exception {
+		JSONObject jsonObject = Mockito.mock(JSONObject.class);
+		new Form(jsonObject).toString();
+		Mockito.verify(jsonObject).getString("name");
+	}
+	
+	@Test
+	public void ignoreInvalidFields() throws Exception {
+		JSONObject jsonObject = Mockito.mock(JSONObject.class);
+		Mockito.when(jsonObject.getString("fields")).thenThrow(
+				new JSONException(""));
+		Form form = new Form(jsonObject);
+		form.forEachField(new FormFieldAction() {
+			@Override
+			public void execute(FormField field) {
+				fail("Should ignore invalid fields");
+			}
+		});
+		assertFalse(form.isNotEmpty());
 	}
 
 	@Test

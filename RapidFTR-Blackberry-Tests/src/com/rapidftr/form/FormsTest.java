@@ -1,5 +1,6 @@
 package com.rapidftr.form;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -7,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 public class FormsTest {
 	@Test
@@ -18,6 +21,7 @@ public class FormsTest {
 			public void execute(com.rapidftr.form.Form form) {
 				hasForm[0] = true;
 				assertNotNull(form);
+				assertFalse(form.isEnabled());
 			}
 		});
 		assertTrue(hasForm[0]);
@@ -38,6 +42,19 @@ public class FormsTest {
 	}
 
 	@Test
+	public void doNotAddInvalidForms() throws Exception {
+		JSONArray array = Mockito.mock(JSONArray.class);
+		Mockito.when(array.length()).thenReturn(1);
+		Mockito.when(array.getJSONObject(0)).thenThrow(new JSONException(""));
+		new Forms(array).forEachForm(new FormAction() {
+			@Override
+			public void execute(Form form) {
+				fail("Should not add invalid forms");
+			}
+		});
+	}
+
+	@Test
 	public void verifyFormProperties() throws Exception {
 		final JSONArray formsArray = new JSONArray(twoForms());
 		Forms forms = new Forms(formsArray);
@@ -53,11 +70,35 @@ public class FormsTest {
 							.toString(), form.getUniqueId());
 					assertTrue(form.isEnabled());
 					i++;
-				} catch (Exception e) {
-
+				} catch (JSONException e) {
+					fail();
 				}
 			}
 		});
+	}
+
+	@Test
+	public void forEachField() throws Exception {
+		Forms forms = new Forms(new JSONArray(
+				"[{'name':'Basic Details','unique_id':'basic_details', 'enabled':true , "
+						+ "fields: " + "[{'name':'name'," + "'enabled':true,"
+						+ "'type':'text_field'," + "'display_name':'Name'}]}]"));
+		final boolean[] hasField = { false };
+		forms.forEachField(new FormFieldAction() {
+			@Override
+			public void execute(FormField field) {
+				hasField[0] = true;
+			}
+		});
+		assertTrue(hasField[0]);
+	}
+
+	@Test
+	public void toArray() throws JSONException {
+		Forms forms = new Forms(new JSONArray(twoForms()));
+		Form[] formArray = forms.toArray();
+		assertEquals("Basic Details", formArray[0].getName());
+		assertEquals("Family Details", formArray[1].getName());
 	}
 
 	private String twoForms() {
@@ -65,6 +106,6 @@ public class FormsTest {
 	}
 
 	private String oneForm() {
-		return "[{'name':'Basic Details','unique_id':'basic_details', 'enabled':true}]";
+		return "[{'name':'Basic Details','unique_id':'basic_details', 'enabled':false}]";
 	}
 }

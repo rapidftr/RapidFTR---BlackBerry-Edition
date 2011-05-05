@@ -1,5 +1,7 @@
 package com.rapidftr.form;
 
+import java.util.Vector;
+
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
@@ -19,32 +21,28 @@ public class FormField extends JSONData {
 	}
 
 	public void forEachOption(OptionAction optionAction) {
-		JSONArray array = getOptionJSONArray();
-		for (int i = 0; i < array.length(); i++) {
-			try {
-				optionAction.execute(array.getString(i));
-			} catch (JSONException e) {
-			}
-		}
-	}
-
-	private JSONArray getOptionJSONArray() {
 		try {
-			return new JSONArray(getProperty("option_strings"));
+			JSONArray array = getOptionJSONArray();
+			for (int i = 0; i < array.length(); i++) {
+				optionAction.execute(array.getString(i));
+			}
 		} catch (JSONException e) {
-			return new JSONArray();
 		}
 	}
 
+	private JSONArray getOptionJSONArray() throws JSONException {
+		return new JSONArray(getProperty("option_strings"));
+	}
 
 	public String[] getOptionsArray() {
-		final String[] optionArray = new String[getOptionJSONArray().length()];
+		final Vector options = new Vector();
 		forEachOption(new OptionAction() {
-			int i = 0;
 			public void execute(String option) {
-				optionArray[i++] = option;
+				options.addElement(option);
 			}
 		});
-		return optionArray;
+		String[] optionsArray = new String[options.size()];
+		options.copyInto(optionsArray);
+		return optionsArray;
 	}
 }

@@ -26,7 +26,7 @@ public class FormStore {
 		try {
 			return new Forms(new JSONArray(store.getString("forms")));
 		} catch (Exception e) {
-			return new Forms();
+			return new Forms(new JSONArray());
 		}
 	}
 

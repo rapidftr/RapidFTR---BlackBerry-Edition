@@ -7,14 +7,6 @@ public class Forms {
 
 	private JSONArray jsonArray;
 
-	public Forms() {
-		try {
-			this.jsonArray = new JSONArray("[]");
-		} catch (JSONException e) {
-			this.jsonArray = new JSONArray();
-		}
-	}
-
 	public Forms(JSONArray jsonArray) {
 		this.jsonArray = jsonArray;
 	}
@@ -40,6 +32,7 @@ public class Forms {
 		final Form[] formArray = new Form[jsonArray.length()];
 		forEachForm(new FormAction() {
 			int i = 0;
+
 			public void execute(Form form) {
 				formArray[i++] = form;
 			}
@@ -47,14 +40,14 @@ public class Forms {
 		return formArray;
 	}
 
-	public boolean isEmpty() {
+	private boolean isEmpty() {
 		if (jsonArray.length() == 0) {
 			return true;
 		}
 		final boolean[] result = { true };
 		forEachForm(new FormAction() {
 			public void execute(com.rapidftr.form.Form form) {
-				if (!form.isEmpty()) {
+				if (form.isNotEmpty()) {
 					result[0] = false;
 				}
 			}

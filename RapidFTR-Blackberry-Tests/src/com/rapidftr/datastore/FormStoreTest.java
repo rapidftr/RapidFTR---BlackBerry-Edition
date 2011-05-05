@@ -1,6 +1,7 @@
 package com.rapidftr.datastore;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -40,7 +41,7 @@ public class FormStoreTest {
 	public void getEmptyFormsForMalFormedJSONString() throws Exception {
 		store.storeForms("{");
 		Forms forms = store.getForms();
-		assertTrue(forms.isEmpty());
+		assertFalse(forms.isNotEmpty());
 	}
 
 	@Test
