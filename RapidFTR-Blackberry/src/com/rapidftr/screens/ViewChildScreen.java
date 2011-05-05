@@ -30,13 +30,13 @@ import net.rim.device.api.ui.decor.BorderFactory;
 
 import com.rapidftr.controllers.ViewChildController;
 import com.rapidftr.controls.Button;
+import com.rapidftr.controls.Tab;
+import com.rapidftr.controls.TabsField;
 import com.rapidftr.form.Form;
 import com.rapidftr.form.FormAction;
 import com.rapidftr.form.Forms;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildStatus;
-import com.rapidftr.model.Tab;
-import com.rapidftr.model.TabsField;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.BoldRichTextField;
 import com.rapidftr.utilities.ImageUtility;

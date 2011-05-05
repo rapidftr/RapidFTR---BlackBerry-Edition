@@ -1,4 +1,4 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
 
 import net.rim.device.api.i18n.DateFormat;
 import net.rim.device.api.i18n.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
 
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.RadioButtonField;

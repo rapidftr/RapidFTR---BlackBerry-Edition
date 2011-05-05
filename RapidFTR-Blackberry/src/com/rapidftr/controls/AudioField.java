@@ -1,4 +1,4 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
 
 import java.io.IOException;
 
@@ -10,9 +10,8 @@ import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 
-import com.rapidftr.controls.AudioControl;
-import com.rapidftr.controls.AudioRecordListener;
 import com.rapidftr.form.FormField;
+import com.rapidftr.model.Child;
 import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.utilities.AudioStore;
 import com.rapidftr.utilities.Logger;

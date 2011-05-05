@@ -1,4 +1,4 @@
-package com.rapidftr.screens;
+package com.rapidftr.model;
 
 import com.rapidftr.utilities.Store;
 

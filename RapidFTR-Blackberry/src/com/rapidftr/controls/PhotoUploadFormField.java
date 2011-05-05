@@ -1,4 +1,4 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
 
 import net.rim.device.api.math.Fixed32;
 import net.rim.device.api.system.Bitmap;
@@ -7,8 +7,8 @@ import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.component.LabelField;
 
-import com.rapidftr.controls.Button;
 import com.rapidftr.form.FormField;
+import com.rapidftr.model.Child;
 import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.utilities.ImageCaptureListener;
 import com.rapidftr.utilities.ImageHelper;

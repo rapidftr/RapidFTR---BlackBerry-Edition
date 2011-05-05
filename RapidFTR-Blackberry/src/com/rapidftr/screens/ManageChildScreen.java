@@ -15,10 +15,11 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controls.BlankSeparatorField;
+import com.rapidftr.controls.FormFieldFactory;
+import com.rapidftr.controls.UIForm;
 import com.rapidftr.form.Form;
 import com.rapidftr.form.Forms;
 import com.rapidftr.model.Child;
-import com.rapidftr.model.FormFieldFactory;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.ImageCaptureListener;

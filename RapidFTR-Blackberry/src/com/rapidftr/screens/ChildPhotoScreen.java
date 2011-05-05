@@ -4,8 +4,8 @@ import net.rim.device.api.system.Display;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
 
+import com.rapidftr.controls.ScrollableImageField;
 import com.rapidftr.model.Child;
-import com.rapidftr.model.ScrollableImageField;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.ImageHelper;
 

@@ -1,15 +1,12 @@
-package com.rapidftr.screens;
+package com.rapidftr.controls;
 
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.form.Form;
 import com.rapidftr.form.FormField;
 import com.rapidftr.form.FormFieldAction;
 import com.rapidftr.model.Child;
-import com.rapidftr.model.CustomField;
-import com.rapidftr.model.FormFieldFactory;
 
 public class UIForm extends VerticalFieldManager {
 

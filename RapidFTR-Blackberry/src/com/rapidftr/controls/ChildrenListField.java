@@ -1,4 +1,4 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
 
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.Display;
@@ -12,6 +12,7 @@ import net.rim.device.api.ui.component.ObjectListField;
 
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.datastore.Children;
+import com.rapidftr.model.Child;
 
 public abstract class ChildrenListField extends ObjectListField{
 
