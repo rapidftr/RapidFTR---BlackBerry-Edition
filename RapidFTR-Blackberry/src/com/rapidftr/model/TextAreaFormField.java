@@ -4,14 +4,13 @@ import net.rim.device.api.ui.XYEdges;
 import net.rim.device.api.ui.component.BasicEditField;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.TextField;
-import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.Border;
 import net.rim.device.api.ui.decor.BorderFactory;
 
 import com.rapidftr.form.FormField;
 import com.rapidftr.utilities.Styles;
 
-public class TextAreaFormField extends VerticalFieldManager {
+public class TextAreaFormField extends CustomField {
 
 	private TextField textAreaField;
 
@@ -23,5 +22,9 @@ public class TextAreaFormField extends VerticalFieldManager {
 				Styles.COLOR_FIELD_BACKGROUND, Border.STYLE_SOLID);
 		textAreaField.setBorder(rounBorder);
 		add(textAreaField);
+	}
+
+	public void setValue(String value) {
+		textAreaField.setText(value);
 	}
 }

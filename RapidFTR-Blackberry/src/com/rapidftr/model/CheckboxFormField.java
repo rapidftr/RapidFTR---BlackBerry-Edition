@@ -1,13 +1,19 @@
 package com.rapidftr.model;
 
 import net.rim.device.api.ui.component.CheckboxField;
-import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.form.FormField;
 
-public class CheckboxFormField extends VerticalFieldManager {
+public class CheckboxFormField extends CustomField {
 	
+	private CheckboxField checkboxField;
+
 	public CheckboxFormField(FormField field) {
-		add(new CheckboxField(field.getDisplayName(), false));
+		checkboxField = new CheckboxField(field.getDisplayName(), false);
+		add(checkboxField);
+	}
+	
+	public void setValue(String value) {
+		checkboxField.setChecked("True".equalsIgnoreCase(value));		
 	}
 }

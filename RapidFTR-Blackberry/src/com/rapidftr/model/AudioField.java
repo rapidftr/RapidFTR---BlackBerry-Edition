@@ -9,15 +9,15 @@ import javax.microedition.media.control.RecordControl;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
-import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controls.AudioControl;
 import com.rapidftr.controls.AudioRecordListener;
 import com.rapidftr.form.FormField;
+import com.rapidftr.screens.ManageChildScreen;
 import com.rapidftr.utilities.AudioStore;
 import com.rapidftr.utilities.Logger;
 
-public class AudioField extends VerticalFieldManager implements AudioRecordListener{
+public class AudioField extends CustomField implements AudioRecordListener{
 	private Player player;
 	private RecordControl rcontrol;
     private AudioStore audioStore;
@@ -29,7 +29,7 @@ public class AudioField extends VerticalFieldManager implements AudioRecordListe
 		add(new LabelField("Record Audio: "));
 		HorizontalFieldManager recordControl = new HorizontalFieldManager();
 		recordControl.add(new AudioControl(this));
-		locationField = new LabelField(" " + field.getValue());
+		locationField = new LabelField("");
 		recordControl.add(locationField);
 		add(recordControl);
 	}
@@ -83,6 +83,17 @@ public class AudioField extends VerticalFieldManager implements AudioRecordListe
 		} finally {
            closeAudioStore(); 
         }
+	}
+    
+    protected void onDisplay() {
+    	String audioLocation = getChild().getField("recorded_audio");
+    	audioLocation = audioLocation == null ? "" : audioLocation; 
+    	locationField.setText(audioLocation);
+    	super.onDisplay();
+    }
+
+	private Child getChild() {
+		return ((ManageChildScreen)getScreen()).getChild();
 	}
 
 }

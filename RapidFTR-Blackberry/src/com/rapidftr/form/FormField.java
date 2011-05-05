@@ -36,10 +36,6 @@ public class FormField extends JSONData {
 		}
 	}
 
-	// TODO: fix this
-	public Object getValue() {
-		return null;
-	}
 
 	public String[] getOptionsArray() {
 		final String[] optionArray = new String[getOptionJSONArray().length()];

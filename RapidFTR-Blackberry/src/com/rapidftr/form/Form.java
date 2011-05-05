@@ -5,11 +5,12 @@ import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
 public class Form extends JSONData {
+	
 
 	public Form(JSONObject jsonObject) {
 		super(jsonObject);
 	}
-
+	
 	public String getUniqueId() {
 		return getProperty("unique_id");
 	}
