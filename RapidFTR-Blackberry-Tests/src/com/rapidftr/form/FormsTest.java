@@ -1,12 +1,14 @@
 package com.rapidftr.form;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.junit.Test;
 
-public class NewFormsTest {
+public class FormsTest {
 	@Test
 	public void addForm() throws Exception {
 		Forms forms = new Forms(new JSONArray(oneForm()));

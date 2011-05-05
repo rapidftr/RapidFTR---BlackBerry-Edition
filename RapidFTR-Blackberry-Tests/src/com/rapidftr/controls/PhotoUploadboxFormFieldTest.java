@@ -1,8 +1,6 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
 
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class PhotoUploadboxFormFieldTest {
 
@@ -10,8 +8,6 @@ public class PhotoUploadboxFormFieldTest {
 	@Test
 	public void shouldCheckForEquals()
 	{
-		FormFieldFactory formFieldFactory = new FormFieldFactory();
-		
 		// TODO : Fix this
 		//FormField field1 = formFieldFactory.createFormField("photo", "Child's photo", "photo_upload_box", null, "");
 		//FormField field2 = formFieldFactory.createFormField("photo", "Child's photo", "photo_upload_box", null, "");

@@ -1,6 +1,5 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class DateFormFieldTest {

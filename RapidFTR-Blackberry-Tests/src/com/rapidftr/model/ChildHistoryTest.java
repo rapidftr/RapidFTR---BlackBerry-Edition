@@ -1,11 +1,13 @@
 package com.rapidftr.model;
 
-import org.junit.Before;
-import org.junit.Test;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 import java.util.Vector;
 
-import static junit.framework.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ChildHistoryTest {
     private Child child;

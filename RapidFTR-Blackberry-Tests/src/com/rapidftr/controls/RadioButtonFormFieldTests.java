@@ -1,13 +1,13 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+
+import java.util.Vector;
 
 import org.junit.Test;
 
 import com.rapidftr.form.FormField;
-
-import java.util.Vector;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 public class RadioButtonFormFieldTests {
 

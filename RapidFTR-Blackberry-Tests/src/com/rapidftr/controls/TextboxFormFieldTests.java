@@ -1,8 +1,6 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
 
 import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
 
 public class TextboxFormFieldTests {
 

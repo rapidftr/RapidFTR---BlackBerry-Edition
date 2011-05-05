@@ -1,10 +1,8 @@
-package com.rapidftr.model;
-
-import org.junit.Test;
+package com.rapidftr.controls;
 
 import java.util.Vector;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class SelectboxFormFieldTest {
 

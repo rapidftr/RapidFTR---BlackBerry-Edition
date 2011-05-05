@@ -22,12 +22,12 @@ public class ManageChildController extends Controller {
 	}
 
 	public void editChild(Child child, String selectedTab) {
-		getManageChildScreen().setForms(store.getHigherForms(),child, selectedTab);
+		getManageChildScreen().setForms(store.getForms(),child, selectedTab);
 		show();
 	}
 
 	public void newChild() {
-		getManageChildScreen().setForms(store.getHigherForms());
+		getManageChildScreen().setForms(store.getForms());
 		show();
 	}
 

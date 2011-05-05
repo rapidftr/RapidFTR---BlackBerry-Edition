@@ -1,11 +1,14 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
 
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
-import com.rapidftr.form.FormField;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import com.rapidftr.form.FormField;
 
 public class FormFieldFactoryTest {
 

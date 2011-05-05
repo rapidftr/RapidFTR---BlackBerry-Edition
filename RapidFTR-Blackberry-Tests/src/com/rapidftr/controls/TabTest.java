@@ -1,16 +1,8 @@
-package com.rapidftr.model;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
-import java.util.Vector;
+package com.rapidftr.controls;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.mockito.MockitoAnnotations;
-
-import com.rapidftr.screens.internal.CustomScreen;
 
 public class TabTest {
 

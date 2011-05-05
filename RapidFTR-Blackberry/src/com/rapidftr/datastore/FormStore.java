@@ -1,36 +1,31 @@
 package com.rapidftr.datastore;
 
 import org.json.me.JSONArray;
-import org.json.me.JSONException;
 
 import com.rapidftr.form.Forms;
+import com.rapidftr.utilities.Store;
 
 public class FormStore {
 
-    static final long KEY = 0x6699d842f70a9c2cL; // com.rapidftr.datastore.FormStore
-    protected PersistentStore persistentStore;
+	private final Store store;
 
-    public FormStore() {
+	public FormStore(Store store) {
 
-        initializePersistentStore();
-    }
+		this.store = store;
+	}
 
-    void initializePersistentStore() {
-        persistentStore = new PersistentStore(KEY);
-    }
-    
-    public void storeForms(String forms) throws JSONException {
-        persistentStore.setContents(forms);
-    }
+	public void storeForms(String forms) {
+		store.setString("forms", forms);
+	}
 
-    public void clearState() {
-        persistentStore.setContents("");
-    }
+	public void clearState() {
+		store.setString("forms", "");
+	}
 
-	public Forms getHigherForms() {
-		try{
-			return new Forms(new JSONArray((String) persistentStore.getContents()));
-		}catch(Exception e){
+	public Forms getForms() {
+		try {
+			return new Forms(new JSONArray(store.getString("forms")));
+		} catch (Exception e) {
 			return new Forms();
 		}
 	}

@@ -24,7 +24,7 @@ public class ViewChildController extends Controller {
 	}
 
 	public void viewChild(Child child) {
-		viewChildScreen.setChild(child, formStore.getHigherForms());
+		viewChildScreen.setChild(child, formStore.getForms());
 		show();
 	}
 

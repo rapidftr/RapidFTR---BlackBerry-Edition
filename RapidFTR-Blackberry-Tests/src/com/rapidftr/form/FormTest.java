@@ -1,6 +1,8 @@
 package com.rapidftr.form;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.json.me.JSONObject;
 import org.junit.Test;

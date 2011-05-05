@@ -1,6 +1,6 @@
-package com.rapidftr.model;
+package com.rapidftr.controls;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -10,6 +10,8 @@ import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import org.junit.Test;
+
+import com.rapidftr.form.Form;
 
 public class TabsFieldTest {
 

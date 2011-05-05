@@ -1,12 +1,11 @@
-package com.rapidftr.model;
+package com.rapidftr.utilities;
 
-import com.rapidftr.utilities.TimeZoneConverter;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 import java.util.TimeZone;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class TimeZoneConverterTests
 {

@@ -74,7 +74,7 @@ public class Main extends UiApplication {
 				new DefaultStore(
 						new Key("com.rapidftr.utilities.childrenstore")));
 
-        FormStore formStore = new FormStore();
+        FormStore formStore = new FormStore(new DefaultStore(new Key("com.rapidftr.utilities.formstore")));
 
         Settings settings = new Settings(defaultStore);
 
