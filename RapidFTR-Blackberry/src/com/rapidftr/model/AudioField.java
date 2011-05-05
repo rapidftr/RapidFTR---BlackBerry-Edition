@@ -86,9 +86,13 @@ public class AudioField extends CustomField implements AudioRecordListener{
 	}
     
     protected void onDisplay() {
-    	String audioLocation = getChild().getField("recorded_audio");
-    	audioLocation = audioLocation == null ? "" : audioLocation; 
-    	locationField.setText(audioLocation);
+    	Child child = getChild();
+    	if(null != child){
+    		String field = child.getField("recorded_audio");
+    		String audioLocation = field;
+    		audioLocation = audioLocation == null ? "" : audioLocation;
+    		locationField.setText(audioLocation);
+    	}
     	super.onDisplay();
     }
 

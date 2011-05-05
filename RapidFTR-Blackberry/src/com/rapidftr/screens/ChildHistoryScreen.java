@@ -1,17 +1,18 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.model.Child;
-import com.rapidftr.model.ChildHistoryItem;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.DateFormatter;
+import java.util.Enumeration;
+import java.util.Vector;
+
 import net.rim.device.api.io.http.HttpDateParser;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.component.SeparatorField;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import com.rapidftr.model.Child;
+import com.rapidftr.model.ChildHistoryItem;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.DateFormatter;
 
 public class ChildHistoryScreen extends CustomScreen {
 	

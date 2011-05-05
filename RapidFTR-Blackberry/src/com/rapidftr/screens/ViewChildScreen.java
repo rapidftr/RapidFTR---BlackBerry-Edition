@@ -30,11 +30,11 @@ import net.rim.device.api.ui.decor.BorderFactory;
 
 import com.rapidftr.controllers.ViewChildController;
 import com.rapidftr.controls.Button;
+import com.rapidftr.form.Form;
+import com.rapidftr.form.FormAction;
+import com.rapidftr.form.Forms;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildStatus;
-import com.rapidftr.model.Form;
-import com.rapidftr.model.FormAction;
-import com.rapidftr.model.OldForms;
 import com.rapidftr.model.Tab;
 import com.rapidftr.model.TabsField;
 import com.rapidftr.screens.internal.CustomScreen;
@@ -46,13 +46,13 @@ public class ViewChildScreen extends CustomScreen {
 	Child child;
 	BitmapField bitmapField;
 	boolean isBitmapFieldFocused = false;
-	private OldForms forms;
+	private Forms forms;
 	private TabsField tabsField;
 
 	public ViewChildScreen() {
 	}
 
-	public void setChild(Child child, OldForms forms) {
+	public void setChild(Child child, Forms forms) {
 		this.child = child;
 		this.forms = forms;
 	}
@@ -140,7 +140,7 @@ public class ViewChildScreen extends CustomScreen {
 				tabsField.addTab(new Tab(form.toString(), form, child));
 			}
 		});
-		
+
 		this.add(tabsField.draw());
 	}
 

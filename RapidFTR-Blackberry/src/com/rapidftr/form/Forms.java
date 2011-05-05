@@ -5,7 +5,15 @@ import org.json.me.JSONException;
 
 public class Forms {
 
-	private final JSONArray jsonArray;
+	private JSONArray jsonArray;
+
+	public Forms() {
+		try {
+			this.jsonArray = new JSONArray("[]");
+		} catch (JSONException e) {
+			this.jsonArray = new JSONArray();
+		}
+	}
 
 	public Forms(JSONArray jsonArray) {
 		this.jsonArray = jsonArray;
@@ -32,7 +40,6 @@ public class Forms {
 		final Form[] formArray = new Form[jsonArray.length()];
 		forEachForm(new FormAction() {
 			int i = 0;
-
 			public void execute(Form form) {
 				formArray[i++] = form;
 			}

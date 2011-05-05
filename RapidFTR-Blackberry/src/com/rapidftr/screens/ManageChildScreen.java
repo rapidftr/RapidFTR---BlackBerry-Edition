@@ -60,7 +60,7 @@ public class ManageChildScreen extends CustomScreen {
 		add(screenManager);
 
 		final Form[] formArray = forms.toArray();
-
+		
 		final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
 		formManager.add(new UIForm(formArray[0], new FormFieldFactory(), childToEdit));
 

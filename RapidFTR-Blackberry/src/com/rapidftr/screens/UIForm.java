@@ -1,7 +1,6 @@
 package com.rapidftr.screens;
 
 import net.rim.device.api.ui.Field;
-import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controls.BlankSeparatorField;

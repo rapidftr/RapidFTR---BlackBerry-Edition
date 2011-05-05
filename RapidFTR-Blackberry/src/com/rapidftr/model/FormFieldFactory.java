@@ -7,7 +7,7 @@ public class FormFieldFactory {
 	public CustomField createFrom(FormField field) {
 		if ("text_field".equals(field.getType())) {
 			return new TextboxFormField(field);
-		} else if ("select_box".equals(field.getType())) {
+		}else if ("select_box".equals(field.getType())) {
 			return new SelectboxFormField(field);
 		} else if ("radio_button".equals(field.getType())) {
 			return new RadioButtonFormField(field);

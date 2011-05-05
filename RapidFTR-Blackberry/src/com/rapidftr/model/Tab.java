@@ -11,6 +11,9 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.RichTextField;
 import net.rim.device.api.ui.component.SeparatorField;
 
+import com.rapidftr.form.Form;
+import com.rapidftr.form.FormField;
+import com.rapidftr.form.FormFieldAction;
 import com.rapidftr.utilities.BoldRichTextField;
 
 public class Tab implements FocusChangeListener {
@@ -49,7 +52,7 @@ public class Tab implements FocusChangeListener {
 	}
 
 	private void render() {
-		form.forEachField(new FieldAction() {
+		form.forEachField(new FormFieldAction() {
 			public void execute(FormField field) {
 				String key = field.getName();
 				if (!toBeIgnored.contains(key)) {
@@ -110,7 +113,7 @@ public class Tab implements FocusChangeListener {
 	}
 
 	private String drawKey(FormField field) {
-		return field.displayLabel() + " : ";
+		return field.getDisplayName() + " : ";
 	}
 
 	private void notifyObservers(Field field, int eventType) {

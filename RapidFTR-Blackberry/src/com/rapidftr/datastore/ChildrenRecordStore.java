@@ -1,9 +1,9 @@
 package com.rapidftr.datastore;
 
+import java.util.Vector;
+
 import com.rapidftr.model.Child;
 import com.rapidftr.utilities.Store;
-
-import java.util.Vector;
 
 public class ChildrenRecordStore {
 
