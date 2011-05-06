@@ -1,13 +1,25 @@
 package com.rapidftr.form;
 
+import java.util.Vector;
+
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
 
 public class Form extends JSONData {
 
+	private Vector formFields = new Vector();
+
 	public Form(JSONObject jsonObject) {
 		super(jsonObject);
+		try {
+			JSONArray fields = new JSONArray(getProperty("fields"));
+			for (int i = 0; i < fields.length(); i++) {
+				formFields.addElement(new FormField(fields.getJSONObject(i)));
+			}
+		} catch (JSONException e) {
+		}
+
 	}
 
 	public String getUniqueId() {
@@ -15,25 +27,16 @@ public class Form extends JSONData {
 	}
 
 	public void forEachField(FormFieldAction fieldAction) {
-		try {
-			JSONArray fields = getFields();
-			for (int i = 0; i < fields.length(); i++) {
-				fieldAction.execute(new FormField(fields.getJSONObject(i)));
+		for (int i = 0; i < formFields.size(); i++) {
+			FormField field = (FormField) formFields.elementAt(i);
+			if (field.isEnabled()) {
+				fieldAction.execute(field);
 			}
-		} catch (JSONException e) {
 		}
-	}
-
-	private JSONArray getFields() throws JSONException {
-		return new JSONArray(getProperty("fields"));
 	}
 
 	private boolean isEmpty() {
-		try {
-			return getFields().length() == 0;
-		} catch (JSONException e) {
-			return true;
-		}
+		return formFields.isEmpty();
 	}
 
 	public String toString() {

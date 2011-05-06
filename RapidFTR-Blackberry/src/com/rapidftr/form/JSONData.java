@@ -16,10 +16,10 @@ public class JSONData {
 	}
 
 	public boolean isEnabled() {
-		if("true".equals(getProperty("enabled"))){
-			return true;
-		}else{
+		if("false".equals(getProperty("enabled"))){
 			return false;
+		}else{
+			return true;
 		}
 	}
 

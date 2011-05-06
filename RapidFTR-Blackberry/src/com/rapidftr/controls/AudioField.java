@@ -24,7 +24,8 @@ public class AudioField extends CustomField implements AudioRecordListener{
 	protected static final String TYPE = "audio_upload_box";
 	private LabelField locationField;
 	
-	public AudioField(FormField field) {
+	public AudioField(final FormField field) {
+		super(field);
 		add(new LabelField("Record Audio: "));
 		HorizontalFieldManager recordControl = new HorizontalFieldManager();
 		recordControl.add(new AudioControl(this));
@@ -75,6 +76,7 @@ public class AudioField extends CustomField implements AudioRecordListener{
 		try {
 			rcontrol.commit();
             location = audioStore.getFilePath();
+            setFieldValue(location);
 			player.close();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -16,8 +16,7 @@ import net.rim.device.api.ui.container.VerticalFieldManager;
 import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controls.BlankSeparatorField;
 import com.rapidftr.controls.FormFieldFactory;
-import com.rapidftr.controls.UIForm;
-import com.rapidftr.form.Form;
+import com.rapidftr.controls.UIForms;
 import com.rapidftr.form.Forms;
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.internal.CustomScreen;
@@ -60,14 +59,14 @@ public class ManageChildScreen extends CustomScreen {
 		screenManager.add(new SeparatorField());
 		add(screenManager);
 
-		final Form[] formArray = forms.toArray();
+		final UIForms uiForms = new UIForms(forms, new FormFieldFactory(), childToEdit);
 		
 		final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
-		formManager.add(new UIForm(formArray[0], new FormFieldFactory(), childToEdit));
+		formManager.add(uiForms.getDefaultForm());
 
 		final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
 		final ObjectChoiceField availableForms = new ObjectChoiceField(
-				"Choose form: ", formArray);
+				"Choose form: ", uiForms.getFormNames());
 		formsManager.add(availableForms);
 		screenManager.add(formsManager);
 		screenManager.add(new SeparatorField());
@@ -76,24 +75,13 @@ public class ManageChildScreen extends CustomScreen {
 		availableForms.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				formManager.deleteAll();
-				formManager.add(new UIForm(formArray[availableForms
-				.getSelectedIndex()], new FormFieldFactory(), childToEdit));
+				formManager.add(uiForms.formAt(availableForms.getSelectedIndex()));
 			}
 		});
 
-		selectDefaultForm(formArray, availableForms);
+		availableForms.setSelectedIndex(uiForms.getIndexByName(selectedTab));
 		screenManager.add(new BlankSeparatorField(15));
 
-	}
-
-	private void selectDefaultForm(final Form[] formArray,
-			final ObjectChoiceField availableForms) {
-		for (int i = 0; i < formArray.length; i++) {
-			if ((formArray[i]).toString().equals(selectedTab)) {
-				availableForms.setSelectedIndex(i);
-				break;
-			}
-		}
 	}
 
 	private Manager prepareTitleManager() {

@@ -11,6 +11,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import com.rapidftr.model.Child;
+import com.rapidftr.model.ChildFactory;
+
 public class FormsTest {
 	@Test
 	public void addForm() throws Exception {
@@ -21,7 +24,6 @@ public class FormsTest {
 			public void execute(com.rapidftr.form.Form form) {
 				hasForm[0] = true;
 				assertNotNull(form);
-				assertFalse(form.isEnabled());
 			}
 		});
 		assertTrue(hasForm[0]);
@@ -94,11 +96,15 @@ public class FormsTest {
 	}
 
 	@Test
-	public void toArray() throws JSONException {
-		Forms forms = new Forms(new JSONArray(twoForms()));
-		Form[] formArray = forms.toArray();
-		assertEquals("Basic Details", formArray[0].getName());
-		assertEquals("Family Details", formArray[1].getName());
+	public void doNotIncludeDisabledForms() throws Exception {
+		final JSONArray formsArray = new JSONArray(oneDisabledForm());
+		Forms forms = new Forms(formsArray);
+		forms.forEachForm(new FormAction() {
+			@Override
+			public void execute(com.rapidftr.form.Form form) {
+				fail("Should ignore disabled forms");
+			}
+		});
 	}
 
 	private String twoForms() {
@@ -106,6 +112,10 @@ public class FormsTest {
 	}
 
 	private String oneForm() {
+		return "[{'name':'Basic Details','unique_id':'basic_details', 'enabled':true}]";
+	}
+	
+	private String oneDisabledForm() {
 		return "[{'name':'Basic Details','unique_id':'basic_details', 'enabled':false}]";
 	}
 }

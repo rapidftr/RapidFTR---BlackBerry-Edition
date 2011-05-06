@@ -1,21 +1,28 @@
 package com.rapidftr.form;
 
+import java.util.Vector;
+
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 
 public class Forms {
 
-	private JSONArray jsonArray;
+	private Vector forms = new Vector();
 
 	public Forms(JSONArray jsonArray) {
-		this.jsonArray = jsonArray;
+		for (int i = 0; i < jsonArray.length(); i++) {
+			try {
+				forms.addElement(new Form(jsonArray.getJSONObject(i)));
+			} catch (JSONException e) {
+			}
+		}
 	}
 
 	public void forEachForm(FormAction newFormAction) {
-		for (int i = 0; i < jsonArray.length(); i++) {
-			try {
-				newFormAction.execute(new Form(jsonArray.getJSONObject(i)));
-			} catch (JSONException e) {
+		for (int i = 0; i < forms.size(); i++) {
+			Form form = (Form) forms.elementAt(i);
+			if (form.isEnabled()) {
+				newFormAction.execute(form);
 			}
 		}
 	}
@@ -28,20 +35,8 @@ public class Forms {
 		});
 	}
 
-	public Form[] toArray() {
-		final Form[] formArray = new Form[jsonArray.length()];
-		forEachForm(new FormAction() {
-			int i = 0;
-
-			public void execute(Form form) {
-				formArray[i++] = form;
-			}
-		});
-		return formArray;
-	}
-
 	private boolean isEmpty() {
-		if (jsonArray.length() == 0) {
+		if (forms.isEmpty()) {
 			return true;
 		}
 		final boolean[] result = { true };

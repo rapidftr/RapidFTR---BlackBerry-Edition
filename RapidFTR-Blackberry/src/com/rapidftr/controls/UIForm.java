@@ -13,6 +13,7 @@ public class UIForm extends VerticalFieldManager {
 	private final Form form;
 	private final FormFieldFactory factory;
 	private Child child;
+	private boolean rendered = false;
 
 	public UIForm(Form form, FormFieldFactory formFieldFactory, Child child) {
 		this.form = form;
@@ -21,14 +22,17 @@ public class UIForm extends VerticalFieldManager {
 	}
 
 	protected void onDisplay() {
-		form.forEachField(new FormFieldAction() {
-			public void execute(FormField field) {
-				Field createField = createField(field);
-				add(createField);
-				add(new BlankSeparatorField(10));
-			}
+		if(!rendered){
+			form.forEachField(new FormFieldAction() {
+				public void execute(FormField field) {
+					Field createField = createField(field);
+					add(createField);
+					add(new BlankSeparatorField(10));
+				}
 
-		});
+			});
+			rendered = true;
+		}
 	}
 
 	private Field createField(FormField field) {
@@ -36,5 +40,9 @@ public class UIForm extends VerticalFieldManager {
 		if (null != this.child)
 			formField.setValue(child.getField(field.getName()));
 		return formField;
+	}
+
+	public String getName() {
+		return form.getName();
 	}
 }

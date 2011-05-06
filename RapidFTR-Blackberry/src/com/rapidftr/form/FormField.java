@@ -8,6 +8,8 @@ import org.json.me.JSONObject;
 
 public class FormField extends JSONData {
 
+	private String value;
+	
 	public FormField(JSONObject jsonObject) {
 		super(jsonObject);
 	}
@@ -45,4 +47,18 @@ public class FormField extends JSONData {
 		options.copyInto(optionsArray);
 		return optionsArray;
 	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getValue() {
+		if(null != value){
+			return value;
+		}
+		else{
+			return "";
+		}
+	}
+
 }

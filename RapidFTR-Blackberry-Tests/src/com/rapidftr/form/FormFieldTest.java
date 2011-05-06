@@ -52,7 +52,6 @@ public class FormFieldTest {
 		});
 	}
 
-	
 	@Test
 	public void verifyOptions() throws Exception {
 		FormField field = new FormField(new JSONObject(

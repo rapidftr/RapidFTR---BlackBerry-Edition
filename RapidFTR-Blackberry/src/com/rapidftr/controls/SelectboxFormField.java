@@ -1,6 +1,7 @@
 package com.rapidftr.controls;
 
 import net.rim.device.api.ui.Field;
+import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.component.ObjectChoiceField;
 
 import com.rapidftr.form.FormField;
@@ -9,21 +10,24 @@ import com.rapidftr.form.OptionAction;
 public class SelectboxFormField extends CustomField {
 
 	private ObjectChoiceField choiceField;
-	private FormField field;
 
-	public SelectboxFormField(FormField field) {
-		super(Field.FIELD_LEFT);
+	public SelectboxFormField(final FormField field) {
+		super(field, Field.FIELD_LEFT);
 		initializeChoiceField(field);
 		add(choiceField);
 	}
 
-	private void initializeChoiceField(FormField field) {
-		this.field = field;
-		String[] optionArray = field.getOptionsArray();
+	private void initializeChoiceField(final FormField field) {
+		final String[] optionArray = field.getOptionsArray();
 		if (optionArray[0] == "") {
 			optionArray[0] = "...";
 		}
 		choiceField = createChoiceField(field.getDisplayName(), optionArray);
+		choiceField.setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field changedField, int context) {
+				setFieldValue(optionArray[choiceField.getSelectedIndex()]);
+			}
+		});
 	}
 
 	private ObjectChoiceField createChoiceField(String label,
@@ -41,5 +45,6 @@ public class SelectboxFormField extends CustomField {
 				i++;
 			}
 		});
+		setFieldValue(value);
 	}
 }

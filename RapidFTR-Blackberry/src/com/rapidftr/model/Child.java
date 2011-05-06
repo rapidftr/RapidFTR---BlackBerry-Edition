@@ -170,7 +170,6 @@ public class Child implements Persistable {
 		return child;
 	}
 
-	// TODO: move this method to the UI form
 	public void update(Forms forms) {
 		forms.forEachField(new FormFieldAction() {
 			public void execute(com.rapidftr.form.FormField field) {

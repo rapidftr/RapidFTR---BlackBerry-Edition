@@ -22,7 +22,7 @@ public class PhotoUploadFormField extends CustomField implements
 	private String imageLocation;
 
 	public PhotoUploadFormField(FormField field) {
-		super(Field.FIELD_LEFT);
+		super(field, Field.FIELD_LEFT);
 		final ImageCaptureListener imageChanageListener = this;
 		bitmap = createBitmap("res/head.png");
 		capturePhoto = new Button(bitmap);
@@ -44,6 +44,7 @@ public class PhotoUploadFormField extends CustomField implements
 		int requiredHeight = Fixed32.toFP(bitmap.getHeight());
 		bitmap = ImageUtility.scaleImage(encodedImage, requiredWidth, requiredHeight);
 		capturePhoto.setBitmap(bitmap);
+		setFieldValue(this.imageLocation);
 	}
 
 	protected void onDisplay() {
@@ -75,6 +76,7 @@ public class PhotoUploadFormField extends CustomField implements
 	}
 	
 	public void setValue(String value) {
-		imageLocation = value;		
+		imageLocation = value;	
+		setFieldValue(value);
 	}
 }
