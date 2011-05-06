@@ -111,7 +111,7 @@ public class ChildTest {
     @Test
     public void shouldGetPostDataWithoutHistories() {
         Child child = ChildFactory.newChild();
-        child.setHistories("[histories]");
+        child.setField("histories","[histories]");
         PostData data = child.getPostData();
         Part[] parts = data.getParts();
         assertEquals(2, parts.length);
