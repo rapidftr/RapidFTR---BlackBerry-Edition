@@ -14,7 +14,6 @@ public class SearchChildController extends Controller {
 
 	public SearchChildController(CustomScreen screen, UiStack uiStack, ChildrenRecordStore store) {
 		super(screen, uiStack);
-		// TODO Auto-generated constructor stub
 		this.store = store;
 	}
 

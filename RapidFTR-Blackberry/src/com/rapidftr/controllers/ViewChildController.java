@@ -9,12 +9,14 @@ import com.rapidftr.screens.internal.UiStack;
 public class ViewChildController extends Controller {
 
 	private final ViewChildScreen viewChildScreen;
+	private final FormStore formStore;
 	
 	public ViewChildController(ViewChildScreen viewChildScreen, UiStack uiStack,
 			FormStore formStore) {
 
 		super(viewChildScreen, uiStack);
 		this.viewChildScreen = viewChildScreen;
+		this.formStore = formStore;
 	}
 
 	public void syncChild(Child child) {
@@ -22,12 +24,12 @@ public class ViewChildController extends Controller {
 	}
 
 	public void viewChild(Child child) {
-		viewChildScreen.setChild(child);
+		viewChildScreen.setChild(child, formStore.getForms());
 		show();
 	}
 
-	public void editChild(Child child) {
-		dispatcher.editChild(child);
+	public void editChild(Child child, String selectedTab) {
+		dispatcher.editChild(child, selectedTab);
 
 	}
 

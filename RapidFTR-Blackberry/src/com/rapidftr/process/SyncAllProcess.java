@@ -7,18 +7,16 @@ public class SyncAllProcess implements Process {
 
 	ChildSyncService childSyncService;
     private FormService formService;
-    String name;
 	boolean canceled;
 
 	public SyncAllProcess(ChildSyncService childSyncService, FormService formService) {
 		super();
 		this.childSyncService = childSyncService;
         this.formService = formService;
-        this.name="Synchronize";
 	}
 
 	public String name() {
-		return name;
+		return "Synchronize";
 	}
 
 	public void startProcess() {

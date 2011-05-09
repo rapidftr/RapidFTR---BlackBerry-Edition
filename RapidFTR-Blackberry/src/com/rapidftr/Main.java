@@ -1,22 +1,50 @@
 package com.rapidftr;
 
-import com.rapidftr.controllers.*;
-import com.rapidftr.controllers.internal.Dispatcher;
-import com.rapidftr.datastore.ChildrenRecordStore;
-import com.rapidftr.datastore.FormJsonParser;
-import com.rapidftr.datastore.FormStore;
-import com.rapidftr.net.HttpServer;
-import com.rapidftr.net.HttpService;
-import com.rapidftr.screens.*;
-import com.rapidftr.screens.internal.UiStack;
-import com.rapidftr.services.*;
-import com.rapidftr.utilities.*;
+import java.util.Calendar;
+
 import net.rim.device.api.applicationcontrol.ApplicationPermissions;
 import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
-import net.rim.device.api.i18n.SimpleDateFormat;
 import net.rim.device.api.ui.UiApplication;
 
-import java.util.Calendar;
+import com.rapidftr.controllers.ChildHistoryController;
+import com.rapidftr.controllers.ContactInformationController;
+import com.rapidftr.controllers.HomeController;
+import com.rapidftr.controllers.LoginController;
+import com.rapidftr.controllers.ManageChildController;
+import com.rapidftr.controllers.ResetDeviceController;
+import com.rapidftr.controllers.SearchChildController;
+import com.rapidftr.controllers.SyncController;
+import com.rapidftr.controllers.ViewChildController;
+import com.rapidftr.controllers.ViewChildPhotoController;
+import com.rapidftr.controllers.ViewChildrenController;
+import com.rapidftr.controllers.internal.Dispatcher;
+import com.rapidftr.datastore.ChildrenRecordStore;
+import com.rapidftr.datastore.FormStore;
+import com.rapidftr.model.ContactInformation;
+import com.rapidftr.net.HttpServer;
+import com.rapidftr.net.HttpService;
+import com.rapidftr.screens.ChildHistoryScreen;
+import com.rapidftr.screens.ChildPhotoScreen;
+import com.rapidftr.screens.ContactInformationScreen;
+import com.rapidftr.screens.HomeScreen;
+import com.rapidftr.screens.LoginScreen;
+import com.rapidftr.screens.ManageChildScreen;
+import com.rapidftr.screens.SearchChildScreen;
+import com.rapidftr.screens.SyncScreen;
+import com.rapidftr.screens.ViewChildScreen;
+import com.rapidftr.screens.ViewChildrenScreen;
+import com.rapidftr.screens.internal.UiStack;
+import com.rapidftr.services.ChildSyncService;
+import com.rapidftr.services.ContactInformationSyncService;
+import com.rapidftr.services.FormService;
+import com.rapidftr.services.LoginService;
+import com.rapidftr.services.LoginSettings;
+import com.rapidftr.utilities.DateFormatter;
+import com.rapidftr.utilities.DefaultBlackBerryDateFormat;
+import com.rapidftr.utilities.DefaultStore;
+import com.rapidftr.utilities.HttpSettings;
+import com.rapidftr.utilities.Logger;
+import com.rapidftr.utilities.Settings;
 
 public class Main extends UiApplication {
     public boolean permissionsGranted = false;
@@ -46,7 +74,7 @@ public class Main extends UiApplication {
 				new DefaultStore(
 						new Key("com.rapidftr.utilities.childrenstore")));
 
-        FormStore formStore = new FormStore(new FormJsonParser());
+        FormStore formStore = new FormStore(new DefaultStore(new Key("com.rapidftr.utilities.formstore")));
 
         Settings settings = new Settings(defaultStore);
 
@@ -80,7 +108,7 @@ public class Main extends UiApplication {
 
 		SearchChildScreen searchChildScreen = new SearchChildScreen();
 
-		ManageChildScreen newChildScreen = new ManageChildScreen(settings, dateFormatter);
+		ManageChildScreen newChildScreen = new ManageChildScreen(dateFormatter);
 
 		SyncScreen syncScreen = new SyncScreen(settings);
 

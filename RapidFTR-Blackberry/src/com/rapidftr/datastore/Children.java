@@ -3,8 +3,8 @@ package com.rapidftr.datastore;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.rapidftr.utilities.ImageHelper;
 import com.rapidftr.model.Child;
+import com.rapidftr.utilities.ImageHelper;
 
 public class Children {
 

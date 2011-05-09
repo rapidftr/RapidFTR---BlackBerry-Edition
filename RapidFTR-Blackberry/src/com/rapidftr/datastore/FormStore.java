@@ -1,49 +1,33 @@
 package com.rapidftr.datastore;
 
-import com.rapidftr.model.Form;
-import com.rapidftr.model.FormFieldFactory;
-import net.rim.device.api.ui.component.Dialog;
 import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
 
-import java.util.Vector;
+import com.rapidftr.form.Forms;
+import com.rapidftr.utilities.Store;
 
 public class FormStore {
 
-    static final long KEY = 0x6699d842f70a9c2cL; // com.rapidftr.datastore.FormStore
-    protected PersistentStore persistentStore;
-    private FormJsonParser parser;
+	private final Store store;
 
-    public FormStore(FormJsonParser parser) {
+	public FormStore(Store store) {
 
-        this.parser = parser;
-        initializePersistentStore();
-    }
+		this.store = store;
+	}
 
-    void initializePersistentStore() {
-        persistentStore = new PersistentStore(KEY);
-    }
+	public void storeForms(String forms) {
+		store.setString("forms", forms);
+	}
 
-    public Vector getForms() {
-        String jsonString = (String) persistentStore.getContents();
-        try {
-            if (jsonString == null) {
-                jsonString = "";
-            }
-            return parser.parse(jsonString);
-        } catch (JSONException e) {
-            return new Vector();
-        }
-    }
+	public void clearState() {
+		store.setString("forms", "");
+	}
 
-    public void storeForms(String forms) throws JSONException {
-        parser.parse(forms);
-        persistentStore.setContents(forms);
-    }
-
-    public void clearState() {
-        persistentStore.setContents("");
-    }
+	public Forms getForms() {
+		try {
+			return new Forms(new JSONArray(store.getString("forms")));
+		} catch (Exception e) {
+			return new Forms(new JSONArray());
+		}
+	}
 
 }

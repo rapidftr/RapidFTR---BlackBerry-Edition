@@ -1,6 +1,5 @@
 package com.rapidftr.controllers.internal;
 
-import com.rapidftr.controllers.ViewChildController;
 import com.rapidftr.controllers.ChildHistoryController;
 import com.rapidftr.controllers.ContactInformationController;
 import com.rapidftr.controllers.HomeController;
@@ -9,6 +8,7 @@ import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controllers.ResetDeviceController;
 import com.rapidftr.controllers.SearchChildController;
 import com.rapidftr.controllers.SyncController;
+import com.rapidftr.controllers.ViewChildController;
 import com.rapidftr.controllers.ViewChildPhotoController;
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.datastore.Children;
@@ -101,8 +101,8 @@ public class Dispatcher {
 		contactScreenController.show();
 	}
 
-	public void editChild(Child child) {
-		manageChildController.editChild(child);
+	public void editChild(Child child, String selectedTab) {
+		manageChildController.editChild(child, selectedTab);
 
 	}
 

@@ -33,10 +33,10 @@ public class AudioControl extends ButtonField {
 		state.drawControl(graphics);
 	}
 
-	public static abstract class State {
-		public abstract void drawControl(Graphics graphics);
-		public abstract State nextState(AudioRecordListener listener);
-		public static final State PLAYING = new State() {
+	private static abstract class State {
+		abstract void drawControl(Graphics graphics);
+		abstract State nextState(AudioRecordListener listener);
+		static final State PLAYING = new State() {
 			public void drawControl(Graphics graphics) {
 				graphics.setColor(Color.RED);
 				graphics.fillRect(0, 0, WIDTH, HEIGHT);
@@ -48,7 +48,7 @@ public class AudioControl extends ButtonField {
 			}
 			
 		};
-		public static final State STOPPED = new State() {
+		static final State STOPPED = new State() {
 			public void drawControl(Graphics graphics) {
 				graphics.setColor(Color.GREEN);
 				graphics.fillRoundRect(0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);

@@ -1,11 +1,12 @@
 package com.rapidftr.controllers;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import net.rim.device.api.system.EncodedImage;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+
 import com.rapidftr.screens.SnapshotScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.utilities.ImageCaptureListener;

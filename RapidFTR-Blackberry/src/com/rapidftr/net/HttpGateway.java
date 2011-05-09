@@ -1,10 +1,20 @@
 package com.rapidftr.net;
 
-import com.sun.me.web.path.Result;
-import com.sun.me.web.request.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 
 import javax.microedition.io.HttpConnection;
-import java.io.*;
+
+import com.sun.me.web.path.Result;
+import com.sun.me.web.request.Arg;
+import com.sun.me.web.request.Part;
+import com.sun.me.web.request.PostData;
+import com.sun.me.web.request.Request;
+import com.sun.me.web.request.RequestListener;
+import com.sun.me.web.request.Response;
 
 public class HttpGateway {
 
