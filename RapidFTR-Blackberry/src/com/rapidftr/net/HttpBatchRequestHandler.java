@@ -3,7 +3,6 @@ package com.rapidftr.net;
 import java.io.IOException;
 
 import javax.microedition.io.HttpConnection;
-
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;

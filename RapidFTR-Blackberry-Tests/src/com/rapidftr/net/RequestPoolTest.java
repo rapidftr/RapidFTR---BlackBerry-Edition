@@ -1,12 +1,18 @@
 package com.rapidftr.net;
 
-import static org.mockito.Mockito.mock;
+import com.sun.me.web.request.PostData;
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockitoAnnotations;
 
 import com.sun.me.web.request.Request;
+
+import java.io.IOException;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.asm.util.CheckClassAdapter.verify;
 
 public class RequestPoolTest {
 	private RequestPool requestPool;

@@ -1,9 +1,11 @@
 package com.rapidftr.net;
 
+import com.sun.me.web.request.Response;
+
+import javax.microedition.io.HttpConnection;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import com.sun.me.web.request.Response;
 
 public class ResponseErrors {
     private Vector errors;

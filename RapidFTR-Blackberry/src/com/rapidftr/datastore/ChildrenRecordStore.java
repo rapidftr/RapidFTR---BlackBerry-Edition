@@ -1,9 +1,9 @@
 package com.rapidftr.datastore;
 
-import java.util.Vector;
-
 import com.rapidftr.model.Child;
 import com.rapidftr.utilities.Store;
+
+import java.util.Vector;
 
 public class ChildrenRecordStore {
 
@@ -30,9 +30,14 @@ public class ChildrenRecordStore {
 	}
 
 	public Children getAll() {
+		return getChildren();
+	}
+
+	private Children getChildren() {
 		return new Children(store.getVector(GET_ALL_CHILDREN_KEY));
 	}
 
+	
 	public void deleteAll() {
 		store.clear();
 	}
@@ -49,6 +54,18 @@ public class ChildrenRecordStore {
 		});
 
 		return new Children(results);
+	}
+
+	public Children getAllSortedByRecentlyAdded() {
+		return getChildren().sortBy(new DateField("created_at"), false);
+	}
+
+	public Children getAllSortedByRecentlyUpdated() {
+		return getChildren().sortBy(new DateField("last_update_at"), false);
+	}
+
+	public Children getAllSortedByName() {
+		return getChildren().sortBy(new StringField("name"), true);
 	}
 
 	public Child getChildAt(int index) {

@@ -1,15 +1,15 @@
 package com.rapidftr.services;
 
-import java.util.Hashtable;
-
-import net.rim.blackberry.api.phone.Phone;
-import net.rim.device.api.system.GPRSInfo;
-
 import com.rapidftr.net.HttpService;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.Response;
+
+import net.rim.blackberry.api.phone.Phone;
+import net.rim.device.api.system.GPRSInfo;
+
+import java.util.Hashtable;
 
 public class LoginService extends RequestAwareService {
     private LoginSettings settings;

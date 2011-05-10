@@ -1,6 +1,5 @@
 package com.rapidftr.model;
 
-
 public class ChildFactory {
 
     private ChildFactory() {

@@ -1,16 +1,15 @@
 package com.rapidftr.datastore;
 
-import java.util.Vector;
-
-import com.rapidftr.Key;
 import com.rapidftr.utilities.Store;
 import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
+
+import java.util.Vector;
 
 public class MockStore implements Store {
 
 	private Hashtable table = new Hashtable();
 	
-	public MockStore(Key key) {
+	public MockStore() {
 	}
 
 	public void clear() {

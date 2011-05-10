@@ -4,25 +4,32 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
+import java.util.Vector;
+
+import com.sun.me.web.request.Arg;
+import com.sun.me.web.request.Part;
+import com.sun.me.web.request.PostData;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.rapidftr.form.FormField;
-import com.rapidftr.form.FormFieldAction;
-import com.rapidftr.form.Forms;
-import com.sun.me.web.request.Part;
-import com.sun.me.web.request.PostData;
-
 public class ChildTest {
 
-	private Forms forms;
+	private Vector<Form> forms;
 
 	@Before
-	public void setUp() throws JSONException {
-		forms = new Forms(new JSONArray("[{'fields':[{'name':'name','enabled':true,'type':'text_field','display_name':'Name'}]}]"));
+	public void setUp() {
+		forms = new Vector<Form>();
+		Vector<FormField> fieldList = new Vector<FormField>();
+    	FormField nameTextField = mock(FormField.class);
+    	nameTextField.name="name";
+		when(nameTextField.getValue()).thenReturn("someName");
+		when(nameTextField.getName()).thenReturn("name");
+		fieldList.add(nameTextField);
+		Form form = new Form("Basic_details", "basic_details", fieldList);
+		forms.add(form);
 	}
 
 	@Test
@@ -52,40 +59,28 @@ public class ChildTest {
 
 	@Test
 	public void shouldCreateNewChildWithSupliedFormData() {
-		forms.forEachField(new FormFieldAction() {
-			@Override
-			public void execute(FormField field) {
-				field.setValue("someName");
-			}
-		});
 		Child alice = ChildFactory.newChild();
-		alice.update(forms);
-		assertEquals("someName", alice.getField("name"));
+        alice.updateChildDetails(forms);
+		assertEquals("someName", alice.getField("name"));		
 	}
-
+	
 	@Test
 	public void shouldUpdateChildWithSupliedFormData() {
-		forms.forEachField(new FormFieldAction() {
-			@Override
-			public void execute(FormField field) {
-				field.setValue("someName");
-			}
-		});
 		Child alice = ChildFactory.newChild();
 		String couchId = "someRandomCouchId";
 		alice.setField("name", "Alice");
-		alice.setField("_id", couchId);
-		alice.update(forms);
+		alice.setField("_id", couchId);		
+		alice.update("rapidftr", forms);		
 		assertEquals("someName", alice.getField("name"));
 	}
-
+	
 	@Test
 	public void isNewChildShouldReturnTrueIfChildHaveNullUniqueIdentifier() {
 		Child joy = ChildFactory.newChild();
 		joy.setField("name", "joy");
 		assertTrue(joy.isNewChild());
 	}
-
+	
 	@Test
 	public void isNewChildShouldReturnFalseIfChildHaveSomeUniqueIdentifier() {
 		Child joy = ChildFactory.newChild();
@@ -94,12 +89,12 @@ public class ChildTest {
 		assertFalse(joy.isNewChild());
 	}
 
-	@Test
-	public void isNewChildShouldReturnFalseEvenIfThereIsASynchFailure() {
-		Child child = ChildFactory.newChild();
-		child.syncFailed("Some synch failure");
-		assertTrue(child.isNewChild());
-	}
+    @Test
+    public void isNewChildShouldReturnFalseEvenIfThereIsASynchFailure(){
+        Child child = ChildFactory.newChild();
+        child.syncFailed("Some synch failure");
+        assertTrue(child.isNewChild());
+    }
 
 	@Test
 	public void shouldNotPutNullValuesInHashTable() {
@@ -107,30 +102,29 @@ public class ChildTest {
 		child.setField("name", null);
 	}
 
-	@Test
-	public void shouldSetCreatedAt() {
-		Child child = ChildFactory.newChild();
-		assertNotNull(child.getField(Child.CREATED_AT_KEY));
-	}
+    @Test
+    public void shouldSetCreatedAt() {
+       Child child = ChildFactory.newChild();
+       assertNotNull(child.getField(Child.CREATED_AT_KEY));
+    }
 
-	@Test
-	public void shouldGetPostData() {
-		Child child = ChildFactory.newChild();
-		PostData data = child.getPostData();
-		Part[] parts = data.getParts();
-		assertEquals(2, parts.length);
-		assertEquals("form-data; name=\"child[_id]\"", parts[0].getHeaders()[0]
-				.getValue());
-		assertEquals("form-data; name=\"child[created_at]\"", parts[1]
-				.getHeaders()[0].getValue());
-	}
-
-	@Test
-	public void shouldGetPostDataWithoutHistories() {
-		Child child = ChildFactory.newChild();
-		child.setField("histories", "[histories]");
-		PostData data = child.getPostData();
-		Part[] parts = data.getParts();
-		assertEquals(2, parts.length);
-	}
+    @Test
+    public void shouldGetPostData() {
+        Child child = ChildFactory.newChild();
+        PostData data = child.getPostData();
+        Part[] parts = data.getParts();
+        // includes created_at, _id
+        assertEquals(2, parts.length);
+        assertEquals("form-data; name=\"child[_id]\"", parts[0].getHeaders()[0].getValue());
+        assertEquals("form-data; name=\"child[created_at]\"", parts[1].getHeaders()[0].getValue());
+    }
+    
+    @Test
+    public void shouldGetPostDataWithoutHistories() {
+        Child child = ChildFactory.newChild();
+        child.setHistories("[histories]");
+        PostData data = child.getPostData();
+        Part[] parts = data.getParts();
+        assertEquals(2, parts.length);
+    }
 }

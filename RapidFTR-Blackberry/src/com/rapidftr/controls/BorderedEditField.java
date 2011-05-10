@@ -1,12 +1,12 @@
 package com.rapidftr.controls;
 
+import com.rapidftr.utilities.Styles;
+
 import net.rim.device.api.system.Display;
 import net.rim.device.api.ui.Color;
 import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Graphics;
 import net.rim.device.api.ui.component.BasicEditField;
-
-import com.rapidftr.utilities.Styles;
 
 public class BorderedEditField extends BasicEditField {
 

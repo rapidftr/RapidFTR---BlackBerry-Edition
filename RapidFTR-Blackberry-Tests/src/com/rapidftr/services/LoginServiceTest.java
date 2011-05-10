@@ -1,16 +1,14 @@
 package com.rapidftr.services;
 
-import static org.mockito.Mockito.mock;
-
+import com.rapidftr.datastore.MockStore;
+import com.rapidftr.net.HttpService;
+import com.rapidftr.utilities.Settings;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.rapidftr.Key;
-import com.rapidftr.datastore.MockStore;
-import com.rapidftr.net.HttpService;
-import com.rapidftr.utilities.Settings;
+import static org.mockito.Mockito.mock;
 
 public class LoginServiceTest {
     private LoginSettings settings;
@@ -20,7 +18,7 @@ public class LoginServiceTest {
     @Before
     public void setUpStore(){
         service = mock(HttpService.class);
-        store = new MockStore(new Key("mock"));
+        store = new MockStore();
         settings = new LoginSettings(new Settings(store));
         settings.setLastUsedUserName("test");
         settings.setLastUsedPassword("pass");

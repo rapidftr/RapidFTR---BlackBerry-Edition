@@ -1,12 +1,11 @@
 package com.rapidftr.controllers;
 
-import net.rim.blackberry.api.browser.Browser;
-
 import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.utilities.Settings;
+import net.rim.blackberry.api.browser.Browser;
 
 public class HomeController extends Controller {
     private Settings settings;

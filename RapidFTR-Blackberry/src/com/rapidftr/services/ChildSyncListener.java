@@ -1,18 +1,16 @@
 package com.rapidftr.services;
 
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.microedition.io.HttpConnection;
-
-import org.json.me.JSONArray;
-import org.json.me.JSONObject;
-
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.net.RequestCallBack;
 import com.sun.me.web.request.RequestListener;
 import com.sun.me.web.request.Response;
+import org.json.me.JSONArray;
+import org.json.me.JSONObject;
+
+import javax.microedition.io.HttpConnection;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class ChildSyncListener implements RequestListener {
 

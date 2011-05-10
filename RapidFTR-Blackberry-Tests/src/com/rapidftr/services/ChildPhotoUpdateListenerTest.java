@@ -1,17 +1,5 @@
 package com.rapidftr.services;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
-import java.io.IOException;
-import java.util.Hashtable;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.rapidftr.Key;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.MockStore;
@@ -22,6 +10,16 @@ import com.rapidftr.net.RequestCallBack;
 import com.rapidftr.net.RequestFactory;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.request.Response;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.Hashtable;
+
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class ChildPhotoUpdateListenerTest {
     private RequestCallBack callback;
@@ -31,7 +29,7 @@ public class ChildPhotoUpdateListenerTest {
 
     @Before
     public void setup() {
-        store = new ChildrenRecordStore(new MockStore(new Key("childrenrecord")));
+        store = new ChildrenRecordStore(new MockStore());
         callback = mock(RequestCallBack.class);
         createListener(false);
     }

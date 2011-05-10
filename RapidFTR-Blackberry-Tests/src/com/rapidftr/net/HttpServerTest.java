@@ -1,22 +1,18 @@
 package com.rapidftr.net;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.rapidftr.Key;
 import com.rapidftr.datastore.MockStore;
 import com.rapidftr.utilities.HttpSettings;
 import com.rapidftr.utilities.Settings;
-import com.sun.me.web.request.Part;
-import com.sun.me.web.request.PostData;
-import com.sun.me.web.request.Request;
-import com.sun.me.web.request.Response;
+import com.sun.me.web.request.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class HttpServerTest {
 
@@ -26,7 +22,7 @@ public class HttpServerTest {
 
     @Before
     public void setup() {
-        Settings settings = new Settings(new MockStore(new Key("settings")));
+        Settings settings = new Settings(new MockStore());
         httpSettings = new HttpSettings(settings);
         httpSettings.setHost("http://www.google.com");
 

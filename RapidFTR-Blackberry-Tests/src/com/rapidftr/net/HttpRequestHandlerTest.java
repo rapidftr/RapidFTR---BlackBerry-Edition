@@ -1,17 +1,5 @@
 package com.rapidftr.net;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import javax.microedition.io.HttpConnection;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.rapidftr.Key;
 import com.rapidftr.datastore.MockStore;
 import com.rapidftr.utilities.HttpSettings;
 import com.rapidftr.utilities.Settings;
@@ -20,6 +8,13 @@ import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.Request;
 import com.sun.me.web.request.Response;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.microedition.io.HttpConnection;
+
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class HttpRequestHandlerTest {
 
@@ -33,7 +28,7 @@ public class HttpRequestHandlerTest {
     public void setUp() {
         context = mock(Object.class);
         requestCallBack = mock(RequestCallBack.class);
-        final Store settingsStore = new MockStore(new Key("settings"));
+        final Store settingsStore = new MockStore();
         settings = new Settings(settingsStore);
         HttpSettings httpSettings = new HttpSettings(settings);
         httpSettings.setHost("http://www.rapidftr.com");

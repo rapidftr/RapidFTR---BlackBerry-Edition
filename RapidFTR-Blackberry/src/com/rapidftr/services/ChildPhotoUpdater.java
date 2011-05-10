@@ -1,15 +1,15 @@
 package com.rapidftr.services;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.net.HttpService;
 import com.rapidftr.net.RequestCallBack;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.request.Arg;
+
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class ChildPhotoUpdater {
 

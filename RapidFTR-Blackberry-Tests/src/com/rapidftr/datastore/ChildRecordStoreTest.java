@@ -1,13 +1,15 @@
 package com.rapidftr.datastore;
 
+import static org.junit.Assert.assertEquals;
+
+import com.rapidftr.model.ChildFactory;
 import junit.framework.Assert;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import com.rapidftr.Key;
 import com.rapidftr.model.Child;
-import com.rapidftr.model.ChildFactory;
 
 public class ChildRecordStoreTest {
 
@@ -15,7 +17,7 @@ public class ChildRecordStoreTest {
 
 	@Before
 	public void setup() {
-		childrenStore = new ChildrenRecordStore(new MockStore(new Key("children")));
+		childrenStore = new ChildrenRecordStore(new MockStore());
 	}	
 
 	@Test

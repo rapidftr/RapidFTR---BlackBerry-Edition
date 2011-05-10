@@ -1,17 +1,16 @@
 package com.rapidftr.services;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Hashtable;
-
-import javax.microedition.io.Connector;
-import javax.microedition.io.file.FileConnection;
-
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
 import com.rapidftr.net.RequestCallBack;
 import com.sun.me.web.request.RequestListener;
 import com.sun.me.web.request.Response;
+
+import javax.microedition.io.Connector;
+import javax.microedition.io.file.FileConnection;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Hashtable;
 
 public class ChildPhotoUpdateListener implements RequestListener {
     private static final String FILE_STORE_HOME_USER = "file:///store/home/user";

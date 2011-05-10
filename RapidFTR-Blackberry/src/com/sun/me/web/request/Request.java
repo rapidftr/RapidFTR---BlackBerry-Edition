@@ -32,6 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sun.me.web.request;
 
+import com.rapidftr.net.HttpGateway;
+
 import javax.microedition.io.HttpConnection;
 
 import com.rapidftr.utilities.Arrays;

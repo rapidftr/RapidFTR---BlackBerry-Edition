@@ -1,59 +1,82 @@
 package com.rapidftr.datastore;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
+import com.rapidftr.model.Form;
+import com.rapidftr.model.FormField;
+import com.rapidftr.model.FormFieldFactory;
+import com.sun.me.web.path.ResultException;
 import org.junit.Test;
 
-import com.rapidftr.Key;
-import com.rapidftr.form.Forms;
-import com.sun.me.web.path.ResultException;
+import java.util.Vector;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class FormStoreTest {
 
-	private MockStore mockStore;
-	private FormStore store;
-
-	@Before
-	public void setUp() {
-		mockStore = new MockStore(new Key("forms"));
-		store = new FormStore(mockStore);
-	}
-
 	@SuppressWarnings("serial")
 	@Test
-	public void storeForms() throws ResultException {
-		store.storeForms("[{form:forms}]");
-		assertEquals("[{form:forms}]", mockStore.getString("forms"));
+	public void shouldReturnVectorOfForms() throws ResultException {
+
+		FormStore formStore = new FormStore(new FormJsonParser()) {
+			
+			void initializePersistentStore() {
+				persistentStore = mock(PersistentStore.class);
+				String sucessfulJsonResponse = stubSuccessfulResponse();
+				when(persistentStore.getContents()).thenReturn(
+						sucessfulJsonResponse);
+			}
+		};
+
+		final FormFieldFactory formFieldFactory = new FormFieldFactory();
+
+		final Vector<FormField> fields = new Vector<FormField>(){{
+			add(formFieldFactory.createFormField("age", "Age", "text_box", null, ""));
+			add(formFieldFactory.createFormField("age_is", "Age is", "select_box", new Vector<String>() {
+				{
+					add("Approximate");
+					add("Exact");
+
+				}
+			}, ""));
+			
+		}};
+
+		Vector<Form> forms = new Vector<Form>(){{
+			add(new Form("Basic_details", "basic_details", fields));			
+		}};		
+
+
+		assertEquals(formStore.getForms(), forms);
 
 	}
 
-	@Test
-	public void clearState() throws Exception {
-		store.storeForms("[{form:forms}]");
-		store.clearState();
-		assertEquals("", mockStore.getString("forms"));
-	}
-
-	@Test
-	public void getEmptyFormsForMalFormedJSONString() throws Exception {
-		store.storeForms("{");
-		Forms forms = store.getForms();
-		assertFalse(forms.isNotEmpty());
-	}
-
-	@Test
-	public void getForms() throws Exception {
-		store
-				.storeForms("[{'name':'Basic Details','unique_id':'basic_details', 'enabled':true , " +
-						"fields: " +
-						"[{'name':'name'," +
-						"'enabled':true," +
-						"'type':'text_field'," +
-						"'display_name':'Name'}]}]");
-		Forms forms = store.getForms();
-		assertTrue(forms.isNotEmpty());
+	private String stubSuccessfulResponse() {
+		String jsonFormString = String
+				.format("[" +
+							"{'name':'Basic_details'" +
+							",'unique_id':'basic_details'" +
+							",'fields':" +
+									"[" +
+										"{'name':'age'" +
+										",'display_name':'Age'" +
+										",'enabled':'true'" +
+										",'type':'text_box'}" +
+										",{'name':'age_is'" +
+										",'display_name':'Age is'" +
+										",'enabled':'true'" +
+										",'type':'select_box'" +
+										",'option_strings':" +
+											"['Approximate','Exact']" +
+											"}" +
+										",{'name':'donotshow'" +
+										",'display_name':'donotshow'" +
+										",'enabled':'false'" +
+										",'type':'text_box'" +
+										"}"+											
+									  "]" +
+							   "}" +
+						  "]");
+		return jsonFormString;
 	}
 }
