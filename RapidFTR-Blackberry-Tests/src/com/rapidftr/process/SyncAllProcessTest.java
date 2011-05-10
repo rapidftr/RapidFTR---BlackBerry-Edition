@@ -1,14 +1,16 @@
 package com.rapidftr.process;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
+import junit.framework.Assert;
 
-import com.rapidftr.services.FormService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.rapidftr.services.ChildSyncService;
+import com.rapidftr.services.FormService;
 
 public class SyncAllProcessTest {
 
@@ -16,11 +18,10 @@ public class SyncAllProcessTest {
 	private SyncAllProcess syncAllProcess;
 	@Mock
 	private ChildSyncService childService;
-    @Mock
-    private FormService formService;
+	@Mock
+	private FormService formService;
 
-
-    @Before
+	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		syncAllProcess = new SyncAllProcess(childService, formService);
@@ -30,6 +31,16 @@ public class SyncAllProcessTest {
 	public void startProcessShouldSyncAll() {
 		syncAllProcess.startProcess();
 		verify(childService).syncAllChildRecords();
+	}
+
+	@Test
+	public void getName() {
+		Assert.assertEquals("Synchronize", syncAllProcess.name());
+	}
+
+	@Test
+	public void isNotBackGround() throws Exception {
+		Assert.assertTrue(syncAllProcess.isNotBackGround());
 	}
 
 	@Test

@@ -1,5 +1,16 @@
 package com.rapidftr.services;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import java.util.Hashtable;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import com.rapidftr.Key;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.MockStore;
 import com.rapidftr.model.Child;
@@ -9,15 +20,6 @@ import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Hashtable;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class ChildSyncServiceTest {
     private HttpService httpService;
@@ -30,7 +32,7 @@ public class ChildSyncServiceTest {
         httpService = mock(HttpService.class);
         photoUpdater = mock(ChildPhotoUpdater.class);
         DateFormatter dateFormatter = mock(DateFormatter.class);
-        store = new ChildrenRecordStore(new MockStore());
+        store = new ChildrenRecordStore(new MockStore(new Key("childrenrecord")));
         childService = new ChildSyncService(httpService, store, photoUpdater, dateFormatter);
     }
 

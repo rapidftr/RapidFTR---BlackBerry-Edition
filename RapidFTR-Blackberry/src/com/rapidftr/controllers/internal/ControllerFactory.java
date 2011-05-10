@@ -5,6 +5,7 @@ import com.rapidftr.controllers.*;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormJsonParser;
 import com.rapidftr.datastore.FormStore;
+import com.rapidftr.model.ContactInformation;
 import com.rapidftr.net.ConnectionFactory;
 import com.rapidftr.net.HttpServer;
 import com.rapidftr.net.HttpService;
@@ -56,7 +57,7 @@ public class ControllerFactory {
     }
 
     public ManageChildController manageChildControllerWith(Dispatcher dispatcher) {
-        ManageChildScreen manageChildScreen = new ManageChildScreen(settings, dateFormatter);
+        ManageChildScreen manageChildScreen = new ManageChildScreen(dateFormatter);
         return new ManageChildController(manageChildScreen, uiStack, formStore, childrenRecordStore, dispatcher);
     }
 
@@ -87,7 +88,7 @@ public class ControllerFactory {
 
     public ViewChildController viewChildControllerWith(Dispatcher dispatcher) {
         ViewChildScreen viewChildScreen = new ViewChildScreen();
-        return new ViewChildController(viewChildScreen, uiStack, dispatcher);
+        return new ViewChildController(viewChildScreen, uiStack, dispatcher, formStore );
     }
 
     public SyncController syncControllerWith(Dispatcher dispatcher) {
