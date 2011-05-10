@@ -16,13 +16,15 @@ public class ContactInformationControllerTest {
     private UiStack uiStack;
     private ContactInformationSyncService service;
     private ContactInformationController controller;
+    private Dispatcher dispatcher;
 
     @Before
     public void setup() {
         screen = mock(ContactInformationScreen.class);
         uiStack = mock(UiStack.class);
         service = mock(ContactInformationSyncService.class);
-        controller = new ContactInformationController(screen, uiStack, service);
+        dispatcher = mock(Dispatcher.class);
+        controller = new ContactInformationController(screen, uiStack, service, dispatcher);
     }
 
     @Test
