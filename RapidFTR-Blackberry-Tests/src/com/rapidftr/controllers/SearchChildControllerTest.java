@@ -28,8 +28,7 @@ public class SearchChildControllerTest {
         recordStore = mock(ChildrenRecordStore.class);
         dispatcher = mock(Dispatcher.class);
 
-        controller = new SearchChildController(searchChildScreen, uiStack, recordStore);
-        controller.setDispatcher(dispatcher);
+        controller = new SearchChildController(searchChildScreen, uiStack, recordStore, dispatcher);
     }
 
     @Test

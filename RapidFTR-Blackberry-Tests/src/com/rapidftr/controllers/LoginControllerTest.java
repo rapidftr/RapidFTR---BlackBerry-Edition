@@ -19,16 +19,23 @@ public class LoginControllerTest {
     private LoginController loginController;
     private ScreenCallBack screenCallBack;
     private ConnectionFactory connectionFactory;
+    private Dispatcher dispatcher;
 
 
     @Before
     public void setup() {
-        this.loginService = mock(LoginService.class);
+        loginService = mock(LoginService.class);
         loginScreen = mock(LoginScreen.class);
         uiStack = mock(UiStack.class);
         connectionFactory = mock(ConnectionFactory.class);
-        loginController = new LoginController(loginScreen, uiStack,
-                loginService, connectionFactory);
+        dispatcher = mock(Dispatcher.class);
+
+        loginController = new LoginController(loginScreen,
+                uiStack,
+                loginService,
+                connectionFactory,
+                dispatcher);
+
         screenCallBack = loginController.getScreenCallBack();
     }
 
@@ -68,7 +75,7 @@ public class LoginControllerTest {
         String userName = "user";
         String password = "password";
 
-        WhenThereIsNoConnection();
+        whenThereIsNoConnection();
 
         loginController.login(userName, password);
 
@@ -77,10 +84,7 @@ public class LoginControllerTest {
 
     @Test
     public void shouldClearLoginScreenAndGoToHomeScreenOnSucessfullOfflineLogin() {
-        Dispatcher dispatcher = mock(Dispatcher.class);
-
-        loginController.setDispatcher(dispatcher);
-        WhenThereIsNoConnection();
+        whenThereIsNoConnection();
         when(loginService.offlineLogin(anyString(), anyString())).thenReturn(true);
 
         loginController.login("user", "password");
@@ -92,7 +96,7 @@ public class LoginControllerTest {
 
     @Test
     public void shouldShowOfflineLoginErrorMessageOnFailedOfflineLogin() {
-        WhenThereIsNoConnection();
+        whenThereIsNoConnection();
         when(loginService.offlineLogin(anyString(), anyString())).thenReturn(false);
 
         loginController.login("user", "password");
@@ -100,7 +104,7 @@ public class LoginControllerTest {
         verify(loginScreen).onProcessFail("You are working offline. You must authenticate with your credentials from the last successful online log in.");
     }
 
-    private void WhenThereIsNoConnection() {
+    private void whenThereIsNoConnection() {
         when(connectionFactory.isNotConnected()).thenReturn(true);
     }
 
