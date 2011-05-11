@@ -1,6 +1,7 @@
 package com.rapidftr.controllers;
 
 import com.rapidftr.controllers.internal.Controller;
+import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.StringField;
@@ -12,8 +13,9 @@ public class SearchChildController extends Controller {
 
 	private final ChildrenRecordStore store;
 
-	public SearchChildController(CustomScreen screen, UiStack uiStack, ChildrenRecordStore store) {
-		super(screen, uiStack);
+	public SearchChildController(CustomScreen screen, UiStack uiStack,
+			ChildrenRecordStore store, Dispatcher dispatcher) {
+		super(screen, uiStack, dispatcher);
 		this.store = store;
 	}
 
@@ -29,8 +31,8 @@ public class SearchChildController extends Controller {
 			getSearchChildScreen().showNoSearchResultsAlert();
 		}
 	}
-	
-	private SearchChildScreen getSearchChildScreen(){
-		return (SearchChildScreen)currentScreen;
+
+	private SearchChildScreen getSearchChildScreen() {
+		return (SearchChildScreen) currentScreen;
 	}
 }

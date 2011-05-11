@@ -1,6 +1,7 @@
 package com.rapidftr.controllers;
 
 import com.rapidftr.controllers.internal.Controller;
+import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.DateField;
@@ -17,8 +18,8 @@ public class ViewChildrenController extends Controller {
 	private final int SORT_UPDATED = 2;
 
 	public ViewChildrenController(ViewChildrenScreen screen, UiStack uiStack,
-			ChildrenRecordStore store) {
-		super(screen, uiStack);
+			ChildrenRecordStore store, Dispatcher dispatcher) {
+		super(screen, uiStack, dispatcher);
 		this.store = store;
 		this.sortState = SORT_NAME;
 	}
@@ -53,18 +54,17 @@ public class ViewChildrenController extends Controller {
 
 	public void sortByName() {
 		this.sortState = this.SORT_NAME;
-		viewChildren(store.getAll().sortBy(new StringField("name"), true));
+		viewChildren(store.getAllSortedByName());
 	}
 
 	public void sortByRecentlyAdded() {
 		this.sortState = this.SORT_ADDED;
-		viewChildren(store.getAll().sortBy(new DateField("created_at"), false));
+		viewChildren(store.getAllSortedByRecentlyAdded());
 	}
 
 	public void sortByRecentlyUpdated() {
 		this.sortState = this.SORT_UPDATED;
-		viewChildren(store.getAll().sortBy(new DateField("last_update_at"),
-				false));
+		viewChildren(store.getAllSortedByRecentlyUpdated());
 	}
 
 	public void popScreen() {

@@ -14,7 +14,6 @@ import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.DateFormatter;
 
 public class ChildHistoryScreen extends CustomScreen {
-
 	private Child child;
 	private DateFormatter dateFormatter;
 

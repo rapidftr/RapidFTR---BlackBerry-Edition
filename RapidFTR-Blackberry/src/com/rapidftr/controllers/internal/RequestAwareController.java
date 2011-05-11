@@ -8,29 +8,30 @@ import com.rapidftr.services.RequestAwareService;
 import com.rapidftr.services.RequestCallBackImpl;
 import com.rapidftr.services.ScreenCallBack;
 
-public abstract class  RequestAwareController extends Controller implements ControllerCallback {
-	protected HttpBatchRequestHandler requestHandler;
-	protected RequestAwareService service;
-	private ScreenCallBack screenCallBack;
-	public RequestAwareController(CustomScreen screen, UiStack uiStack ,RequestAwareService service) {
-		super(screen, uiStack);
-		this.service = service;
-		requestHandler = service.getRequestHandler();
-		if(requestHandler!=null){
-		((RequestCallBackImpl)requestHandler.getRequestCallBack()).setScreenCallback((ScreenCallBack)screen);
-		((RequestCallBackImpl)requestHandler.getRequestCallBack()).setControllerCallback(this);
-		}
-		screen.setController(this);	
-		screenCallBack = (ScreenCallBack) screen;
-	}
+public abstract class RequestAwareController extends Controller implements ControllerCallback {
+    protected HttpBatchRequestHandler requestHandler;
+    protected RequestAwareService service;
+    private ScreenCallBack screenCallBack;
+
+    public RequestAwareController(CustomScreen screen, UiStack uiStack, RequestAwareService service, Dispatcher dispatcher) {
+        super(screen, uiStack, dispatcher);
+        this.service = service;
+        requestHandler = service.getRequestHandler();
+        if (requestHandler != null) {
+            ((RequestCallBackImpl) requestHandler.getRequestCallBack()).setScreenCallback((ScreenCallBack) screen);
+            ((RequestCallBackImpl) requestHandler.getRequestCallBack()).setControllerCallback(this);
+        }
+        screen.setController(this);
+        screenCallBack = (ScreenCallBack) screen;
+    }
 
 
-	public ScreenCallBack getScreenCallBack() {
-		return screenCallBack;
-	}
+    public ScreenCallBack getScreenCallBack() {
+        return screenCallBack;
+    }
 
-	public void beforeProcessStart() {
-		
-	}
+    public void beforeProcessStart() {
+
+    }
 
 }

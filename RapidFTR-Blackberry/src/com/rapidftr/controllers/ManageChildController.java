@@ -1,6 +1,7 @@
 package com.rapidftr.controllers;
 
 import com.rapidftr.controllers.internal.Controller;
+import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
@@ -15,8 +16,8 @@ public class ManageChildController extends Controller {
 	private ChildrenRecordStore childRecordStore;
 
 	public ManageChildController(ManageChildScreen screen, UiStack uiStack,
-			FormStore store, ChildrenRecordStore childRecordStore) {
-		super(screen, uiStack);
+			FormStore store, ChildrenRecordStore childRecordStore, Dispatcher dispatcher) {
+		super(screen, uiStack, dispatcher);
 		this.store = store;
 		this.childRecordStore = childRecordStore;
 	}
@@ -39,9 +40,8 @@ public class ManageChildController extends Controller {
 			ImageCaptureListener imageCaptureListener) {
 
 		SnapshotController snapshotController = new SnapshotController(
-				new SnapshotScreen(), uiStack);
+				new SnapshotScreen(), uiStack, dispatcher, imageCaptureListener);
 		snapshotController.show();
-		snapshotController.setImageListener(imageCaptureListener);
 	}
 
 	public void saveChild(Child child) {
