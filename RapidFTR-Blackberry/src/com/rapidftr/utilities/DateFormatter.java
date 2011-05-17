@@ -1,10 +1,10 @@
 package com.rapidftr.utilities;
 
-import net.rim.device.api.i18n.SimpleDateFormat;
-
 import java.util.Calendar;
-import java.util.TimeZone;
 import java.util.Date;
+import java.util.TimeZone;
+
+import net.rim.device.api.i18n.SimpleDateFormat;
 
 public class DateFormatter {
 

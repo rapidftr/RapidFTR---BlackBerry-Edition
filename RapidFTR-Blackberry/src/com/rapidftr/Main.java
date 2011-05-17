@@ -1,12 +1,13 @@
 package com.rapidftr;
 
+import net.rim.device.api.applicationcontrol.ApplicationPermissions;
+import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
+import net.rim.device.api.ui.UiApplication;
+
 import com.rapidftr.controllers.internal.ControllerFactory;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.utilities.Logger;
-import net.rim.device.api.applicationcontrol.ApplicationPermissions;
-import net.rim.device.api.applicationcontrol.ApplicationPermissionsManager;
-import net.rim.device.api.ui.UiApplication;
 
 public class Main extends UiApplication {
     public boolean permissionsGranted = false;

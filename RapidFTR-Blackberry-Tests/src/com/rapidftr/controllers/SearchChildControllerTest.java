@@ -3,6 +3,7 @@ package com.rapidftr.controllers;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
+import com.rapidftr.datastore.StringField;
 import com.rapidftr.model.Child;
 import com.rapidftr.model.ChildBuilder;
 import com.rapidftr.screens.SearchChildScreen;
@@ -44,7 +45,7 @@ public class SearchChildControllerTest {
 
         when(recordStore.search(query)).thenReturn(children);
         when(children.count()).thenReturn(1);
-        when(children.sortByName()).thenReturn(childrenSortedByName);
+        when(children.sortBy(new StringField("name"))).thenReturn(childrenSortedByName);
 
         controller.searchAndDisplayChildren(query);
 

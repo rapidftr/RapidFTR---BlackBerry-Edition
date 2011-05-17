@@ -122,8 +122,8 @@ public class DispatcherTest {
         Child child = mock(Child.class);
 
         when(controllerFactory.manageChildControllerWith(anyDispatcher())).thenReturn(manageChildController);
-        new Dispatcher(controllerFactory).editChild(child);
-        verify(manageChildController).editChild(child);
+        new Dispatcher(controllerFactory).editChild(child,"tab");
+        verify(manageChildController).editChild(child, "tab");
     }
 
     @Test
