@@ -23,17 +23,15 @@ public class ChildHistoryTest {
         assertEquals(1, historyItems.size());
         ChildHistoryItem historyItem = (ChildHistoryItem) historyItems.get(0);
         assertEquals("01/02/2011 22:01", historyItem.getChangeDateTime());
-        assertEquals("date_of_separation", historyItem.getChangedFieldName());
-        assertEquals("1-2 weeks ago", historyItem.getNewValue());
         assertEquals("rapidftr", historyItem.getUsername());
     }
 
     @Test
     public void shouldReturnFieldChangeDescription() {
         final Vector historyItems = child.getHistory();
-        assertEquals("date_of_separation intialized to 1-2 weeks ago By rapidftr", 
+        assertEquals("rapidftr changed:\n  date_of_separation initialized to 1-2 weeks ago\n", 
                 ((ChildHistoryItem)historyItems.get(0)).getFieldChangeDescription());
-        assertEquals("01/02/2011 22:01 date_of_separation intialized to 1-2 weeks ago By rapidftr",
+        assertEquals("01/02/2011 22:01 rapidftr changed:\n  date_of_separation initialized to 1-2 weeks ago\n",
                 ((ChildHistoryItem)historyItems.get(0)).toString());
     }
 
