@@ -155,8 +155,7 @@ public class ManageChildScreen extends CustomScreen {
         if (childToEdit == null) {
             childToEdit = Child.create(forms, dateFormatter.getCurrentFormattedDateTime());
         } else {
-            childToEdit.update(settings.getCurrentlyLoggedIn(), forms);
-            childToEdit.setField(Child.LAST_UPDATED_KEY, dateFormatter.getCurrentFormattedDateTime());
+            childToEdit.update(settings.getCurrentlyLoggedIn(), forms, dateFormatter.getCurrentFormattedDateTime());
         }
 
         String invalidDataField;

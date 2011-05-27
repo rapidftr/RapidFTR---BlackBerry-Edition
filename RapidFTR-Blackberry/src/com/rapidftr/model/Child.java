@@ -180,6 +180,7 @@ public class Child implements Persistable {
     public static Child create(Vector forms, String currentFormattedDateTime) {
         Child child = new Child(currentFormattedDateTime);
         child.updateChildDetails(forms);
+        child.setField(LAST_UPDATED_KEY, currentFormattedDateTime);
         return child;
     }
 
@@ -204,11 +205,12 @@ public class Child implements Persistable {
         }
     }
 
-    public void update(String userName, Vector forms) {
+    public void update(String userName, Vector forms, String updatedTime) {
         this.updateChildDetails(forms);
         if (isUpdated()) {
             childStatus = ChildStatus.UPDATED;
         }
+        this.setField(Child.LAST_UPDATED_KEY, updatedTime);
     }
 
     public Vector getHistory() {

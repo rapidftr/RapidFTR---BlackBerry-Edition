@@ -61,7 +61,7 @@ public class ChildrenRecordStore {
 	}
 
 	public Children getAllSortedByRecentlyUpdated() {
-		return getChildren().sortBy(new DateField("last_update_at"), false);
+		return getChildren().sortBy(new DateField("last_updated_at"), false);
 	}
 
 	public Children getAllSortedByName() {
