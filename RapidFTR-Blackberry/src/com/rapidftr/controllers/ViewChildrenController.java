@@ -75,4 +75,8 @@ public class ViewChildrenController extends Controller {
         return store.getChildAt(selectedIndex);
     }
 
+	public void editChild(Child child) {
+		dispatcher.editChild(child);
+	}
+
 }

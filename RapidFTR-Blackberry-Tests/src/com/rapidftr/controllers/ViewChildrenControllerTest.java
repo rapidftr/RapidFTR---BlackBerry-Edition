@@ -30,6 +30,20 @@ public class ViewChildrenControllerTest {
     }
 
     @Test
+    public void shouldShowEditChildScreen() {
+    	Child child = new Child("10/10/2010");
+        controller.editChild(child);
+        verify(dispatcher).editChild(child);
+    }
+    
+    @Test
+    public void shouldShowViewChildScreen() {
+    	Child child = new Child("10/10/2010");
+        controller.viewChild(child);
+        verify(dispatcher).viewChild(child);
+    }
+    
+    @Test
     public void shouldShowChildrenSortedByName() {
         Children children = new Children(new Child[]{new Child("10/10/2010"), new Child("10/10/2011")});
 
