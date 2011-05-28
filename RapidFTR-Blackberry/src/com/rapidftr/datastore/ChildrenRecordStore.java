@@ -55,4 +55,16 @@ public class ChildrenRecordStore {
 		Vector vector = store.getVector(GET_ALL_CHILDREN_KEY);
 		return (Child) vector.elementAt(index);
 	}
+
+	public Children getAllSortedByName() {
+		return getAll().sortBy(new StringField("name"), true);
+	}
+
+	public Children getAllSortedByRecentlyAdded() {
+		return getAll().sortBy(new DateField("created_at"), false);
+	}
+
+	public Children getAllSortedByRecentlyUpdated() {
+		return getAll().sortBy(new DateField("last_update_at"), false);
+	}
 }

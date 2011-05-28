@@ -1,9 +1,5 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.model.Child;
-import com.rapidftr.model.ChildHistoryItem;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.utilities.DateFormatter;
 import net.rim.device.api.io.http.HttpDateParser;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.Dialog;
@@ -18,7 +14,6 @@ import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.DateFormatter;
 
 public class ChildHistoryScreen extends CustomScreen {
-
 	private Child child;
 	private DateFormatter dateFormatter;
 
@@ -65,10 +60,11 @@ public class ChildHistoryScreen extends CustomScreen {
 		});
 	}
 
-    private String getDescription(ChildHistoryItem childHistoryItem) {
-        String description = childHistoryItem.getFieldChangeDescription();
-        long changeTime = HttpDateParser.parse(childHistoryItem.getChangeDateTime());
-        return dateFormatter.format(changeTime) + " " + description;
-    }
+	private String getDescription(ChildHistoryItem childHistoryItem) {
+		String description = childHistoryItem.getFieldChangeDescription();
+		long changeTime = HttpDateParser.parse(childHistoryItem
+				.getChangeDateTime());
+		return dateFormatter.format(changeTime) + " " + description;
+	}
 
 }

@@ -3,7 +3,6 @@ package com.rapidftr.controllers.internal;
 import com.rapidftr.Key;
 import com.rapidftr.controllers.*;
 import com.rapidftr.datastore.ChildrenRecordStore;
-import com.rapidftr.datastore.FormJsonParser;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.ContactInformation;
 import com.rapidftr.net.ConnectionFactory;
@@ -37,7 +36,7 @@ public class ControllerFactory {
         childrenRecordStore = new ChildrenRecordStore(
                 new DefaultStore(new Key("com.rapidftr.utilities.childrenstore")));
 
-        formStore = new FormStore(new FormJsonParser());
+        formStore = new FormStore(new DefaultStore(new Key("com.rapidftr.utilities.formstore")));
         settings = new Settings(store);
         httpSettings = new HttpSettings(settings);
 
@@ -88,7 +87,7 @@ public class ControllerFactory {
 
     public ViewChildController viewChildControllerWith(Dispatcher dispatcher) {
         ViewChildScreen viewChildScreen = new ViewChildScreen();
-        return new ViewChildController(viewChildScreen, uiStack, dispatcher, formStore );
+        return new ViewChildController(viewChildScreen, uiStack, formStore, dispatcher);
     }
 
     public SyncController syncControllerWith(Dispatcher dispatcher) {

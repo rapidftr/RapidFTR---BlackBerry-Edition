@@ -13,10 +13,11 @@ public class SearchChildController extends Controller {
 
 	private final ChildrenRecordStore store;
 
-    public SearchChildController(CustomScreen screen, UiStack uiStack, ChildrenRecordStore store, Dispatcher dispatcher) {
-        super(screen, uiStack, dispatcher);
-        this.store = store;
-    }
+	public SearchChildController(CustomScreen screen, UiStack uiStack,
+			ChildrenRecordStore store, Dispatcher dispatcher) {
+		super(screen, uiStack, dispatcher);
+		this.store = store;
+	}
 
 	public void showChildSearchScreen() {
 		show();
@@ -30,8 +31,8 @@ public class SearchChildController extends Controller {
 			getSearchChildScreen().showNoSearchResultsAlert();
 		}
 	}
-	
-	private SearchChildScreen getSearchChildScreen(){
-		return (SearchChildScreen)currentScreen;
+
+	private SearchChildScreen getSearchChildScreen() {
+		return (SearchChildScreen) currentScreen;
 	}
 }

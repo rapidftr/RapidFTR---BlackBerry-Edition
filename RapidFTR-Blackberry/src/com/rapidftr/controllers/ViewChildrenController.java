@@ -11,37 +11,38 @@ import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.UiStack;
 
 public class ViewChildrenController extends Controller {
-    private final ChildrenRecordStore store;
-    private int sortState;
-    private final int SORT_NAME = 0;
-    private final int SORT_ADDED = 1;
-    private final int SORT_UPDATED = 2;
+	private final ChildrenRecordStore store;
+	private int sortState;
+	private final int SORT_NAME = 0;
+	private final int SORT_ADDED = 1;
+	private final int SORT_UPDATED = 2;
 
-    public ViewChildrenController(ViewChildrenScreen screen, UiStack uiStack, ChildrenRecordStore store, Dispatcher dispatcher) {
-        super(screen, uiStack, dispatcher);
-        this.store = store;
-        this.sortState = SORT_NAME;
-    }
+	public ViewChildrenController(ViewChildrenScreen screen, UiStack uiStack,
+			ChildrenRecordStore store, Dispatcher dispatcher) {
+		super(screen, uiStack, dispatcher);
+		this.store = store;
+		this.sortState = SORT_NAME;
+	}
 
-    public void viewAllChildren() {
-        uiStack.clear();
-        switch (sortState) {
-            case SORT_NAME:
-                sortByName();
-                break;
-            case SORT_ADDED:
-                sortByRecentlyAdded();
-                break;
-            case SORT_UPDATED:
-                sortByRecentlyUpdated();
-                break;
-        }
-    }
+	public void viewAllChildren() {
+		uiStack.clear();
+		switch (sortState) {
+		case SORT_NAME:
+			sortByName();
+			break;
+		case SORT_ADDED:
+			sortByRecentlyAdded();
+			break;
+		case SORT_UPDATED:
+			sortByRecentlyUpdated();
+			break;
+		}
+	}
 
-    public void viewChildren(Children children) {
-        getViewChildrenScreen().setChildren(children);
-        show();
-    }
+	public void viewChildren(Children children) {
+		getViewChildrenScreen().setChildren(children);
+		show();
+	}
 
 	private ViewChildrenScreen getViewChildrenScreen() {
 		return (ViewChildrenScreen) currentScreen;
@@ -53,18 +54,17 @@ public class ViewChildrenController extends Controller {
 
 	public void sortByName() {
 		this.sortState = this.SORT_NAME;
-		viewChildren(store.getAll().sortBy(new StringField("name"), true));
+		viewChildren(store.getAllSortedByName());
 	}
 
 	public void sortByRecentlyAdded() {
 		this.sortState = this.SORT_ADDED;
-		viewChildren(store.getAll().sortBy(new DateField("created_at"), false));
+		viewChildren(store.getAllSortedByRecentlyAdded());
 	}
 
 	public void sortByRecentlyUpdated() {
 		this.sortState = this.SORT_UPDATED;
-		viewChildren(store.getAll().sortBy(new DateField("last_update_at"),
-				false));
+		viewChildren(store.getAllSortedByRecentlyUpdated());
 	}
 
 	public void popScreen() {
