@@ -1,14 +1,13 @@
 package com.rapidftr.process;
 
 import static org.mockito.Mockito.verify;
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.rapidftr.model.Child;
-import com.rapidftr.services.ChildSyncService;
 import com.rapidftr.services.FormService;
 
 public class FormSyncProcessTest {
@@ -30,6 +29,15 @@ public class FormSyncProcessTest {
 		verify(service).downloadForms();
 	}
 
+	public void name() throws Exception {
+		Assert.assertEquals("Form Sync", formSyncProcess.name());
+	}
+
+	@Test
+	public void isBackGround() throws Exception {
+		Assert.assertFalse(formSyncProcess.isNotBackGround());
+	}
+	
 	@Test
 	public void stopProcessShouldStopSyncChild() {
 		formSyncProcess.stopProcess();

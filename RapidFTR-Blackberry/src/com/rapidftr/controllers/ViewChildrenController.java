@@ -4,6 +4,8 @@ import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
+import com.rapidftr.datastore.DateField;
+import com.rapidftr.datastore.StringField;
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.UiStack;
@@ -41,38 +43,33 @@ public class ViewChildrenController extends Controller {
         show();
     }
 
-    private ViewChildrenScreen getViewChildrenScreen() {
-        return (ViewChildrenScreen) currentScreen;
-    }
+	private ViewChildrenScreen getViewChildrenScreen() {
+		return (ViewChildrenScreen) currentScreen;
+	}
 
-    public void viewChild(Child child) {
-        dispatcher.viewChild(child);
-    }
+	public void viewChild(Child child) {
+		dispatcher.viewChild(child);
+	}
 
+	public void sortByName() {
+		this.sortState = this.SORT_NAME;
+		viewChildren(store.getAll().sortBy(new StringField("name"), true));
+	}
 
-    public void sortByName() {
-        this.sortState = this.SORT_NAME;
-        viewChildren(store.getAllSortedByName());
-    }
+	public void sortByRecentlyAdded() {
+		this.sortState = this.SORT_ADDED;
+		viewChildren(store.getAll().sortBy(new DateField("created_at"), false));
+	}
 
-    public void sortByRecentlyAdded() {
-        this.sortState = this.SORT_ADDED;
-        viewChildren(store.getAllSortedByRecentlyAdded());
-    }
+	public void sortByRecentlyUpdated() {
+		this.sortState = this.SORT_UPDATED;
+		viewChildren(store.getAll().sortBy(new DateField("last_update_at"),
+				false));
+	}
 
-    public void sortByRecentlyUpdated() {
-        this.sortState = this.SORT_UPDATED;
-        viewChildren(store.getAllSortedByRecentlyUpdated());
-    }
-
-    public void popScreen() {
-        this.sortState = SORT_NAME;
-        ((ViewChildrenScreen) currentScreen).refresh();
-        homeScreen();
-    }
-
-    public Child getChildAt(int selectedIndex) {
-        return store.getChildAt(selectedIndex);
-    }
-
+	public void popScreen() {
+		this.sortState = SORT_NAME;
+		((ViewChildrenScreen) currentScreen).refresh();
+		homeScreen();
+	}
 }

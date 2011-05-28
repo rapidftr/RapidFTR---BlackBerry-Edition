@@ -8,8 +8,8 @@ public class StringField extends Field {
 	}
 
 	public int compare(Child child1, Child child2) {
-		return stringIgnoreCaseComparator((String) child1.getField(attribute),
-				(String) child2.getField(attribute));
+		return stringIgnoreCaseComparator(child1.getField(attribute),
+				child2.getField(attribute));
 	}
 
 	private int stringIgnoreCaseComparator(String firstString,
