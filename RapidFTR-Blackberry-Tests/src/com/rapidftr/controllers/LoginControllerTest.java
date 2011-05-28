@@ -15,12 +15,8 @@ import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.LoginService;
 import com.rapidftr.services.ScreenCallBack;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.io.IOException;
-
-import static org.mockito.Mockito.*;
 
 public class LoginControllerTest {
 	private LoginService loginService;
@@ -39,7 +35,7 @@ public class LoginControllerTest {
 		uiStack = mock(UiStack.class);
         connectionFactory = mock(ConnectionFactory.class);
         dispatcher = mock(Dispatcher.class);
-        ConnectionFactory connectionFactory = mock(ConnectionFactory.class);
+        connectionFactory = mock(ConnectionFactory.class);
         when(connectionFactory.isNotConnected()).thenReturn(false);
 		loginController = new LoginController(loginScreen, uiStack,
 				loginService, connectionFactory, dispatcher);
@@ -58,14 +54,14 @@ public class LoginControllerTest {
 		String userName = "zskjh";
 		String password = "ksdhfkl";
 
-        WhenUserIsConnected();
+        whenUserIsConnected();
 		loginController.login(userName, password);
 		verify(loginService).login(userName, password);
 	}
 
 	@Test
 	public void shouldUpdateTheScreenWithConnectionProblemErrorMessage() {
-        WhenUserIsConnected();
+        whenUserIsConnected();
 
 		loginController.login("abcd", "abcd");
 		screenCallBack.onConnectionProblem();
@@ -74,7 +70,7 @@ public class LoginControllerTest {
 
     @Test
 	public void shouldUpdateTheScreenWithLoginFailedErrorMessage() {
-        WhenUserIsConnected();
+        whenUserIsConnected();
 
 		loginController.login("abcd", "abcd");
 		screenCallBack.onAuthenticationFailure();
@@ -119,7 +115,7 @@ public class LoginControllerTest {
         when(connectionFactory.isNotConnected()).thenReturn(true);
     }
 
-    private void WhenUserIsConnected() {
+    private void whenUserIsConnected() {
         when(connectionFactory.isNotConnected()).thenReturn(false);
     }
 }
