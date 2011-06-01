@@ -2,8 +2,8 @@ package com.rapidftr.services;
 
 import org.json.me.JSONObject;
 
+import com.rapidftr.model.ContactInformation;
 import com.rapidftr.net.HttpService;
-import com.rapidftr.screens.ContactInformation;
 import com.rapidftr.screens.ContactInformationScreen;
 import com.rapidftr.utilities.HttpUtility;
 import com.sun.me.web.request.Response;

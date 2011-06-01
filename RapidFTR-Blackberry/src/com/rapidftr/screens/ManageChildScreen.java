@@ -1,9 +1,5 @@
 package com.rapidftr.screens;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
-import com.rapidftr.utilities.DateFormatter;
 import net.rim.device.api.system.Characters;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
@@ -15,157 +11,133 @@ import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.ObjectChoiceField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.container.PopupScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controllers.ManageChildController;
 import com.rapidftr.controls.BlankSeparatorField;
+import com.rapidftr.controls.FormFieldFactory;
+import com.rapidftr.controls.UIForms;
+import com.rapidftr.form.Forms;
 import com.rapidftr.model.Child;
-import com.rapidftr.model.Form;
+import com.rapidftr.model.ChildStatus;
 import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.ImageCaptureListener;
-import com.rapidftr.utilities.Settings;
 
 public class ManageChildScreen extends CustomScreen {
 
-    private Vector forms;
-    private Manager screenManager;
-    Settings settings;
-    private final DateFormatter dateFormatter;
-    private Child childToEdit;
+	private Forms forms;
+	private Manager screenManager;
+	private final DateFormatter dateFormatter;
+	private Child childToEdit;
 
-    private static String[] REQUIRED_FIELDS = { };
+	private static String[] REQUIRED_FIELDS = {};
+	private String selectedTab;
 
-    public ManageChildScreen(Settings settings, DateFormatter dateFormatter) {
-        this.settings = settings;
-        this.dateFormatter = dateFormatter;
-    }
+	public ManageChildScreen(DateFormatter dateFormatter) {
+		this.dateFormatter = dateFormatter;
+	}
 
-    public void setUp() {
-        createScreenLayout();
-    }
+	public void setUp() {
+		createScreenLayout();
+	}
 
-    public void setForms(Vector forms) {
-    	 childToEdit = null;
-        this.forms = forms;
-        for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-            ((Form) list.nextElement()).initializeLayout(this);
-        }
-    }
+	public void setForms(Forms forms) {
+		setForms(forms, null, null);
+	}
 
-    public void setEditForms(Vector forms, Child childToEdit) {
-        this.childToEdit = childToEdit;
-        this.forms = forms;
-        for (Enumeration list = forms.elements(); list.hasMoreElements();) {
-            ((Form) list.nextElement()).initializeLayoutWithChild(this, childToEdit);
-        }
-    }
+	public void setForms(Forms forms, Child childToEdit, String selectedTab) {
+		this.childToEdit = childToEdit;
+		this.forms = forms;
+		this.selectedTab = selectedTab;
+	}
 
-	private boolean formsEmpty() {
-        for (Enumeration e = forms.elements(); e.hasMoreElements();) {
-            Object nextElement = e.nextElement();
-            if (nextElement != null) {
-                Form form = (Form) nextElement;
-                if (!form.isEmpty()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+	private void createScreenLayout() {
+		deleteScreenManager();
 
-    private void createScreenLayout() {
-        deleteScreenManager();
+		screenManager = new VerticalFieldManager();
+		screenManager.add(prepareTitleManager());
+		screenManager.add(new SeparatorField());
+		add(screenManager);
 
-        screenManager = new VerticalFieldManager();
-        screenManager.add(prepareTitleManager());
-        screenManager.add(new SeparatorField());
-        add(screenManager);
+		final UIForms uiForms = new UIForms(forms, new FormFieldFactory(), childToEdit);
+		
+		final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
+		formManager.add(uiForms.getDefaultForm());
 
-        final Object[] formArray = formsInArray();
-
-        final Manager formManager = new HorizontalFieldManager(FIELD_LEFT);
-        formManager.add(((Form) formArray[0]).getLayout());
-
-
-        final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
-        final ObjectChoiceField availableForms = new ObjectChoiceField("Choose form: ", formArray);
+		final Manager formsManager = new HorizontalFieldManager(FIELD_HCENTER);
+		final ObjectChoiceField availableForms = new ObjectChoiceField(
+				"Choose form: ", uiForms.getFormNames());
 		formsManager.add(availableForms);
-        screenManager.add(formsManager);
-        screenManager.add(new SeparatorField());
-        screenManager.add(formManager);
+		screenManager.add(formsManager);
+		screenManager.add(new SeparatorField());
+		screenManager.add(formManager);
 
-        availableForms.setChangeListener(new FieldChangeListener() {
-            public void fieldChanged(Field field, int context) {
-                formManager.deleteAll();
-                formManager.add(((Form) formArray[availableForms.getSelectedIndex()]).getLayout());
-            }
-        });
+		availableForms.setChangeListener(new FieldChangeListener() {
+			public void fieldChanged(Field field, int context) {
+				formManager.deleteAll();
+				formManager.add(uiForms.formAt(availableForms.getSelectedIndex()));
+			}
+		});
 
-        screenManager.add(new BlankSeparatorField(15));
+		availableForms.setSelectedIndex(uiForms.getIndexByName(selectedTab));
+		screenManager.add(new BlankSeparatorField(15));
 
-    }
-
-    private Object[] formsInArray() {
-		final Object[] formArray = new Object[forms.size()];
-        forms.copyInto(formArray);
-		return formArray;
 	}
 
 	private Manager prepareTitleManager() {
 		Manager titleManager = new HorizontalFieldManager(FIELD_HCENTER);
-        titleManager.add(new LabelField(getScreenTitle()));
+		titleManager.add(new LabelField(getScreenTitle()));
 		return titleManager;
 	}
 
-    private String getScreenTitle() {
-        if (childToEdit != null) {
-            return "Edit Child Record";
-        }
-        return "Register Child";
-    }
-
-    private void deleteScreenManager() {
-		try {
-            delete(screenManager);
-        } catch (Exception ignored) {
-
-        }
+	private String getScreenTitle() {
+		if (childToEdit != null) {
+			return "Edit Child Record";
+		}
+		return "Register Child";
 	}
 
-    public boolean confirmOverWriteAudio() {
-            return Dialog.ask(Dialog.D_YES_NO,
-                    "This will overwrite previously recorded audio. Are you sure?") == Dialog.YES;
-        }
+	private void deleteScreenManager() {
+		try {
+			delete(screenManager);
+		} catch (Exception ignored) {
 
+		}
+	}
 
-    public void takePhoto(ImageCaptureListener imageCaptureListener) {
-        getController().takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
-    }
+	public void takePhoto(ImageCaptureListener imageCaptureListener) {
+		getController().takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
+	}
 
 	private boolean validateOnSave() {
-        String invalidDataField = onSaveChildClicked();
-        if (invalidDataField != null) {
-            Dialog.alert("Please input the following mandatory field(s)" + invalidDataField + " .");
-            return false;
-        }
-        return true;
-    }
+		String invalidDataField = onSaveChildClicked();
+		if (invalidDataField != null) {
+			Dialog.alert("Please input the following mandatory field(s)"
+					+ invalidDataField + " .");
+			return false;
+		}
+		return true;
+	}
 
-    private String onSaveChildClicked() {
-        if (childToEdit == null) {
-            childToEdit = Child.create(forms, dateFormatter.getCurrentFormattedDateTime());
-        } else {
-            childToEdit.update(settings.getCurrentlyLoggedIn(), forms);
-            childToEdit.setField(Child.LAST_UPDATED_KEY, dateFormatter.getCurrentFormattedDateTime());
-        }
+	private String onSaveChildClicked() {
+		if (childToEdit == null) {
+			childToEdit = Child.create(forms, dateFormatter
+					.getCurrentFormattedDateTime());
+		} else {
+			childToEdit.update(forms);
+			childToEdit.setField(Child.LAST_UPDATED_KEY, dateFormatter
+					.getCurrentFormattedDateTime());
+		}
 
-        String invalidDataField;
-        if ((invalidDataField = validateRequiredFields()) != "") {
-            return invalidDataField;
-        }
-        getController().saveChild(childToEdit);
-        return null;
-    }
+		String invalidDataField;
+		if ((invalidDataField = validateRequiredFields()) != "") {
+			return invalidDataField;
+		}
+		getController().saveChild(childToEdit);
+		return null;
+	}
 
 	public boolean onClose() {
 		return displayConfirmation(new ControllerAction() {
@@ -174,7 +146,7 @@ public class ManageChildScreen extends CustomScreen {
 			}
 		});
 	}
-    
+
 	protected void onMainMenuClick() {
 		displayConfirmation(new ControllerAction() {
 
@@ -186,7 +158,7 @@ public class ManageChildScreen extends CustomScreen {
 	}
 
 	private boolean displayConfirmation(ControllerAction action) {
-		if (!formsEmpty()) {
+		if (forms.isNotEmpty()) {
 			String menuMessage = "The current record has been changed. What do you want to do with these changes?";
 			String[] menuChoices = { "Save", "Discard", "Cancel" };
 			int defaultChoice = 0;
@@ -218,72 +190,87 @@ public class ManageChildScreen extends CustomScreen {
 	abstract class ControllerAction {
 		abstract void execute();
 	}
-	
+
 	private ManageChildController getController() {
 		return ((ManageChildController) controller);
 	}
 
-    private String validateRequiredFields() {
-    	StringBuffer invalidFields= new StringBuffer("");
-        for (int i = 0; i < REQUIRED_FIELDS.length; i++) {
-            if (childToEdit.getField(REQUIRED_FIELDS[i]) == null || childToEdit.getField(REQUIRED_FIELDS[i]).toString().equals("")) {
-                invalidFields.append(" ," + REQUIRED_FIELDS[i]);
-            }
-        }
-        return invalidFields.toString();
-    }
-
-    protected void makeMenu(Menu menu, int instance) {
-        if (!formsEmpty()) {
-            MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
-                public void run() {
-                    if (!validateOnSave()) {
-                        return;
-                    }
-                    getController().viewChild(childToEdit);
-                    childToEdit = null;
-                }
-            };
-            menu.add(saveChildMenu);
-        }
-
-        addSyncFailedErrorMenuItem(menu);
-
-        super.makeMenu(menu, instance);
-    }
-
-	private void addSyncFailedErrorMenuItem(Menu menu) {
-		if(childToEdit!=null && childToEdit.isSyncFailed()){
-       	 MenuItem syncFailesErrorMenu = new MenuItem("Sync Error ", 2, 2) {
-                public void run() {
-                    Dialog.alert(childToEdit.childStatus().getSyncError());
-                }
-            };
-            menu.add(syncFailesErrorMenu);
-        }
+	private String validateRequiredFields() {
+		StringBuffer invalidFields = new StringBuffer("");
+		for (int i = 0; i < REQUIRED_FIELDS.length; i++) {
+			if (childToEdit.getField(REQUIRED_FIELDS[i]) == null
+					|| childToEdit.getField(REQUIRED_FIELDS[i]).equals("")) {
+				invalidFields.append(" ," + REQUIRED_FIELDS[i]);
+			}
+		}
+		return invalidFields.toString();
 	}
 
-    public Child getChild() {
-        return childToEdit;
-    }
-    
-	public boolean keyChar( char key, int status, int time ) 
-    {
-        if ( key == Characters.ESCAPE ) 
-        {
-        	return onClose();
-        }
-        
-        return super.keyChar(key, status, time);
-    }
+	protected void makeMenu(Menu menu, int instance) {
+		if (forms.isNotEmpty()) {
+			MenuItem saveChildMenu = new MenuItem("Save Child ", 1, 1) {
+				public void run() {
+					if (!validateOnSave()) {
+						return;
+					}
+					getController().viewChild(childToEdit);
+					childToEdit = null;
+				}
+			};
+			menu.add(saveChildMenu);
+			
+			MenuItem flagRecordAsSuspectMenu;
+	        if(getChild().childStatus() == ChildStatus.FLAGGED){
+	        	flagRecordAsSuspectMenu = new MenuItem("Flag Information", 2, 1) {
+	    			public void run() {
+	    				Dialog.alert(getChild().flagInformation());
+	    			}
+	    		};
+	        }else{
+	        	flagRecordAsSuspectMenu = new MenuItem("Flag Record As Suspect", 2, 1) {
+	    			public void run() {
+	    				PopupScreen popup = new PopupScreen(new VerticalFieldManager());
+	    				popup.add(new LabelField("Enter reason for flagging the record"));
+	    				getChild().flagRecord();
+	    			}
+	    		};
+	        }
+	        menu.add(flagRecordAsSuspectMenu);
+		}
 
-    
-    public boolean keyDown(int keycode, int time) 
-    {
+		addSyncFailedErrorMenuItem(menu);
+
+		super.makeMenu(menu, instance);
+	}
+
+	private void addSyncFailedErrorMenuItem(Menu menu) {
+		if (childToEdit != null && childToEdit.isSyncFailed()) {
+			MenuItem syncFailesErrorMenu = new MenuItem("Sync Error ", 2, 2) {
+				public void run() {
+					Dialog.alert(childToEdit.childStatus().getSyncError());
+				}
+			};
+			menu.add(syncFailesErrorMenu);
+		}
+	}
+
+	public Child getChild() {
+		return childToEdit;
+	}
+
+	public boolean keyChar(char key, int status, int time) {
+		if (key == Characters.ESCAPE) {
+			return onClose();
+		}
+
+		return super.keyChar(key, status, time);
+	}
+
+	public boolean keyDown(int keycode, int time) {
 		if (keycode == Characters.ESCAPE) {
 			return onClose();
 		}
 		return super.keyDown(keycode, time);
-    }
+	}
 
 }
