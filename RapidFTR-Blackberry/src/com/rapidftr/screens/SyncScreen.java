@@ -1,12 +1,5 @@
 package com.rapidftr.screens;
 
-import com.rapidftr.controllers.SyncController;
-import com.rapidftr.controls.Button;
-import com.rapidftr.process.Process;
-import com.rapidftr.screens.internal.CustomScreen;
-import com.rapidftr.services.ScreenCallBack;
-
-import com.rapidftr.utilities.Settings;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.Manager;
@@ -18,6 +11,13 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.decor.BorderFactory;
+
+import com.rapidftr.controllers.SyncController;
+import com.rapidftr.controls.Button;
+import com.rapidftr.process.Process;
+import com.rapidftr.screens.internal.CustomScreen;
+import com.rapidftr.services.ScreenCallBack;
+import com.rapidftr.utilities.Settings;
 
 public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		ScreenCallBack {

@@ -76,7 +76,6 @@ public class ViewChildrenController extends Controller {
     }
 
 	public void editChild(Child child) {
-		dispatcher.editChild(child);
+		dispatcher.editChild(child, "");
 	}
-
 }

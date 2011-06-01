@@ -1,8 +1,9 @@
 package com.rapidftr.services;
 
+import com.rapidftr.Key;
 import com.rapidftr.datastore.MockStore;
+import com.rapidftr.model.ContactInformation;
 import com.rapidftr.net.HttpService;
-import com.rapidftr.screens.ContactInformation;
 import com.sun.me.web.path.Result;
 import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Response;
@@ -23,7 +24,7 @@ public class ContactInformationSyncServiceTest {
     @Before
     public void setUp() throws Exception {
         httpService = mock(HttpService.class);
-        contactInformation = new ContactInformation(new MockStore());
+        contactInformation = new ContactInformation(new MockStore(new Key("mock")));
         service = new ContactInformationSyncService(httpService, contactInformation);
     }
 

@@ -1,5 +1,6 @@
 package com.rapidftr.process;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Before;
@@ -18,7 +19,6 @@ public class ChildSyncProcessTest {
 	private ChildSyncService service;
 	@Mock
 	private Child child;
-	
 
 	@Before
 	public void setUp() {
@@ -26,6 +26,16 @@ public class ChildSyncProcessTest {
 		childSyncProcess = new ChildSyncProcess(service);
 		childSyncProcess.setChild(child);
 
+	}
+
+	@Test
+	public void name() throws Exception {
+		assertEquals("Child Sync", childSyncProcess.name());
+	}
+
+	@Test
+	public void isBackGround() throws Exception {
+		assertTrue(childSyncProcess.isNotBackGround());
 	}
 
 	@Test

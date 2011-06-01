@@ -33,7 +33,7 @@ public class ViewChildrenControllerTest {
     public void shouldShowEditChildScreen() {
     	Child child = new Child("10/10/2010");
         controller.editChild(child);
-        verify(dispatcher).editChild(child);
+        verify(dispatcher).editChild(child,"");
     }
     
     @Test

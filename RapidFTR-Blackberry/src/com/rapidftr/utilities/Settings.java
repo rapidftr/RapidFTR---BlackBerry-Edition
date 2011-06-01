@@ -1,9 +1,9 @@
 package com.rapidftr.utilities;
 
+import java.util.Calendar;
+
 import net.rim.device.api.i18n.Locale;
 import net.rim.device.api.i18n.SimpleDateFormat;
-
-import java.util.Calendar;
 
 public class Settings {
 
