@@ -6,6 +6,7 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.SeparatorField;
 
 import com.rapidftr.controllers.ContactInformationController;
+import com.rapidftr.model.ContactInformation;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.services.ScreenCallBack;
 

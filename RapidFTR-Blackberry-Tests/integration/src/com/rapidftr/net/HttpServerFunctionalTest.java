@@ -1,5 +1,6 @@
 package com.rapidftr.net;
 
+import com.rapidftr.Key;
 import com.rapidftr.datastore.MockStore;
 import com.rapidftr.utilities.HttpSettings;
 import com.rapidftr.utilities.Settings;
@@ -18,7 +19,7 @@ public class HttpServerFunctionalTest {
 
     @Test
     public void shouldGetHttpResponse() throws IOException {
-        Settings settings = new Settings(new MockStore());
+        Settings settings = new Settings(new MockStore(new Key("store")));
         HttpSettings httpSettings = new HttpSettings(settings);
         httpSettings.setHost("http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=hello%20world");
 

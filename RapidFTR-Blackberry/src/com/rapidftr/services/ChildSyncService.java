@@ -1,5 +1,12 @@
 package com.rapidftr.services;
 
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.json.me.JSONArray;
+import org.json.me.JSONObject;
+
 import com.rapidftr.datastore.ChildAction;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
@@ -12,12 +19,6 @@ import com.sun.me.web.path.Result;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.Response;
-import org.json.me.JSONArray;
-import org.json.me.JSONObject;
-
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
 
 public class ChildSyncService extends RequestAwareService {
 
@@ -177,10 +178,10 @@ public class ChildSyncService extends RequestAwareService {
 		childRecordStore.getAll().forEachChild(new ChildAction() {
 
 			public void execute(Child child) {
-				Object id = child.getField("_id");
-				Object rev = child.getField("_rev");
+				String id = child.getField("_id");
+				String rev = child.getField("_rev");
 				if (id != null && rev != null) {
-					mapping.put(id.toString(), rev.toString());
+					mapping.put(id, rev);
 				}
 
 			}

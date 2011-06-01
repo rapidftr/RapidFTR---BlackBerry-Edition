@@ -1,15 +1,18 @@
 package com.rapidftr.net;
 
-import com.sun.me.web.request.Request;
-import com.sun.me.web.request.RequestListener;
-import com.sun.me.web.request.Response;
-import org.junit.Before;
-import org.junit.Test;
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sun.me.web.request.Request;
+import com.sun.me.web.request.RequestListener;
+import com.sun.me.web.request.Response;
 
 public class RequestExecutorTest {
     private HttpGateway httpGateway;

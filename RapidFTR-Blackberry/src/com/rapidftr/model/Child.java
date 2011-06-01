@@ -1,20 +1,28 @@
 package com.rapidftr.model;
 
-import com.rapidftr.utilities.*;
-import com.sun.me.web.request.Arg;
-import com.sun.me.web.request.Part;
-import com.sun.me.web.request.PostData;
-import net.rim.device.api.util.Persistable;
-import org.json.me.JSONArray;
-import org.json.me.JSONException;
-import org.json.me.JSONObject;
-
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
-public class Child implements Persistable {
+import org.json.me.JSONArray;
+import org.json.me.JSONException;
+import org.json.me.JSONObject;
 
+import net.rim.device.api.util.Persistable;
+
+import com.rapidftr.form.Form;
+import com.rapidftr.form.FormField;
+import com.rapidftr.form.FormFieldAction;
+import com.rapidftr.form.Forms;
+import com.rapidftr.utilities.FileUtility;
+import com.rapidftr.utilities.HttpUtility;
+import com.rapidftr.utilities.RandomStringGenerator;
+import com.rapidftr.utilities.StringUtility;
+import com.sun.me.web.request.Arg;
+import com.sun.me.web.request.Part;
+import com.sun.me.web.request.PostData;
+
+public class Child implements Persistable {
     public static final String CREATED_AT_KEY = "created_at";
     public static final String LAST_UPDATED_KEY = "last_updated_at";
     private final Hashtable data;
@@ -127,8 +135,8 @@ public class Child implements Persistable {
         }
     }
 
-    public Object getField(String key) {
-        return data.get(key);
+    public String getField(String key) {
+        return (String) data.get(key);
     }
 
     public int hashCode() {
@@ -174,38 +182,24 @@ public class Child implements Persistable {
         if (!data.containsKey(name)) {
             put(name, "");
         }
-
     }
 
-    public static Child create(Vector forms, String currentFormattedDateTime) {
+    public static Child create(Forms forms, String currentFormattedDateTime) {
         Child child = new Child(currentFormattedDateTime);
         child.updateChildDetails(forms);
         child.setField(LAST_UPDATED_KEY, currentFormattedDateTime);
         return child;
     }
 
-    public void updateChildDetails(Vector forms) {
-        for (Enumeration list = forms.elements(); list.hasMoreElements();) {
+	public void updateChildDetails(Forms forms) {
+		forms.forEachField(new FormFieldAction() {
+			public void execute(com.rapidftr.form.FormField field) {
+				setField(field.getName(), field.getValue());
+			}
+		});
+	}
 
-            Object nextElement = list.nextElement();
-            if (nextElement != null) {
-                Form form = (Form) nextElement;
-                for (Enumeration fields = form.getFieldList().elements(); fields
-                        .hasMoreElements();) {
-
-                    Object nextFormfieldElement = fields.nextElement();
-                    if (nextFormfieldElement != null) {
-
-                        FormField field = (FormField) nextFormfieldElement;
-
-                        setField(field.getName(), field.getValue());
-                    }
-                }
-            }
-        }
-    }
-
-    public void update(String userName, Vector forms, String updatedTime) {
+    public void update(String userName, Forms forms, String updatedTime) {
         this.updateChildDetails(forms);
         if (isUpdated()) {
             childStatus = ChildStatus.UPDATED;
@@ -213,45 +207,20 @@ public class Child implements Persistable {
         this.setField(Child.LAST_UPDATED_KEY, updatedTime);
     }
 
-    public Vector getHistory() {
-        Vector historyLogs = new Vector();
-        try {
-            Object JsonHistories = getField("histories");
-            if (JsonHistories != null) {
-                JSONArray histories = new JSONArray(JsonHistories.toString());
-                for (int i = 0; i < histories.length(); i++) {
-                    JSONObject history = histories.getJSONObject(i);
-                    JSONObject changes = history.getJSONObject("changes");
-                    Enumeration changedFields = changes.keys();
-                    while (changedFields.hasMoreElements()) {
-                        String changedFieldName = (String) changedFields
-                                .nextElement();
-                        JSONObject changedFieldObject = changes
-                                .getJSONObject(changedFieldName);
+	public ChildHistories getHistory() {
+		return new ChildHistories(getField("histories"));
+	}
 
-                        historyLogs.addElement(new ChildHistoryItem(history.getString("user_name"), history.getString("datetime"),
-                                changedFieldName, changedFieldObject.getString("from"),
-                                changedFieldObject.getString("to")));
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            throw new RuntimeException("Invalid  History Format"
-                    + e.getMessage());
-        }
-
-        return historyLogs;
-    }
-
-    public boolean hasChangesByOtherThan(String username) {
-        Enumeration logs = getHistory().elements();
-        while (logs.hasMoreElements()) {
-            if (!username.equals(((ChildHistoryItem) logs.nextElement()).getUsername())) {
-                return true;
-            }
-        }
-        return false;
-    }
+	public boolean hasChangesByOtherThan(final String username) {
+		ChildHistories histories = getHistory();
+		final boolean[] result = { false };
+		histories.forEachHistory(new HistoryAction() {
+			public void execute(ChildHistoryItem historyItem) {
+				result[0] = !(historyItem.getUsername().equals(username));
+			}
+		});
+		return result[0];
+	}
 
     public boolean isNewChild() {
         return getField("unique_identifier") == null;
@@ -328,5 +297,15 @@ public class Child implements Persistable {
         return (String) getField("current_photo_key");
     }
 
+	public void update(Forms forms) {
+		forms.forEachField(new FormFieldAction() {
+			public void execute(com.rapidftr.form.FormField field) {
+				setField(field.getName(), field.getValue());
+			}
+		});
+		if (isUpdated()) {
+			childStatus = ChildStatus.UPDATED;
+		}
+	}
 
 }

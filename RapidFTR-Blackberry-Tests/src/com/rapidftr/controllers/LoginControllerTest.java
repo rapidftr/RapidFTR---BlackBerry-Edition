@@ -1,74 +1,81 @@
 package com.rapidftr.controllers;
 
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.net.ConnectionFactory;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.LoginService;
 import com.rapidftr.services.ScreenCallBack;
-import org.junit.Before;
-import org.junit.Test;
 
-import static org.mockito.Mockito.*;
+import java.io.IOException;
 
 public class LoginControllerTest {
-    private LoginService loginService;
-    private LoginScreen loginScreen;
-    private UiStack uiStack;
-    private LoginController loginController;
-    private ScreenCallBack screenCallBack;
+	private LoginService loginService;
+	private LoginScreen loginScreen;
+	private UiStack uiStack;
+	private LoginController loginController;
+	private ScreenCallBack screenCallBack;
     private ConnectionFactory connectionFactory;
     private Dispatcher dispatcher;
 
-
-    @Before
-    public void setup() {
-        loginService = mock(LoginService.class);
-        loginScreen = mock(LoginScreen.class);
-        uiStack = mock(UiStack.class);
+    
+	@Before
+	public void setup() {
+		this.loginService = mock(LoginService.class);
+		loginScreen = mock(LoginScreen.class);
+		uiStack = mock(UiStack.class);
         connectionFactory = mock(ConnectionFactory.class);
         dispatcher = mock(Dispatcher.class);
+        connectionFactory = mock(ConnectionFactory.class);
+        when(connectionFactory.isNotConnected()).thenReturn(false);
+		loginController = new LoginController(loginScreen, uiStack,
+				loginService, connectionFactory, dispatcher);
+		screenCallBack = loginController.getScreenCallBack();
+	}
 
-        loginController = new LoginController(loginScreen,
-                uiStack,
-                loginService,
-                connectionFactory,
-                dispatcher);
+	@Test
+	public void shouldLoginFromFormService() throws IOException {
+		loginController.login("rapidftr", "rapidftr");
+		verify(loginService).login("rapidftr", "rapidftr");
+	}
 
-        screenCallBack = loginController.getScreenCallBack();
-    }
+	@Test
+	public void shouldAttemptLoginOverHttpProviderWithGivenCredentials()
+			throws Exception {
+		String userName = "zskjh";
+		String password = "ksdhfkl";
+
+        whenUserIsConnected();
+		loginController.login(userName, password);
+		verify(loginService).login(userName, password);
+	}
+
+	@Test
+	public void shouldUpdateTheScreenWithConnectionProblemErrorMessage() {
+        whenUserIsConnected();
+
+		loginController.login("abcd", "abcd");
+		screenCallBack.onConnectionProblem();
+		verify(loginScreen).onConnectionProblem();
+	}
 
     @Test
-    public void shouldAttemptLoginOverHttpProviderWithGivenCredentials()
-            throws Exception {
-        String userName = "zskjh";
-        String password = "ksdhfkl";
+	public void shouldUpdateTheScreenWithLoginFailedErrorMessage() {
+        whenUserIsConnected();
 
-        WhenUserIsConnected();
-        loginController.login(userName, password);
-        verify(loginService).login(userName, password);
-    }
-
-    @Test
-    public void shouldUpdateTheScreenWithConnectionProblemErrorMessage() {
-        WhenUserIsConnected();
-
-        loginController.login("abcd", "abcd");
-        screenCallBack.onConnectionProblem();
-
-        verify(loginScreen).onConnectionProblem();
-    }
-
-    @Test
-    public void shouldUpdateTheScreenWithLoginFailedErrorMessage() {
-        WhenUserIsConnected();
-
-        loginController.login("abcd", "abcd");
-        screenCallBack.onAuthenticationFailure();
-
-        verify(loginScreen).onAuthenticationFailure();
-    }
+		loginController.login("abcd", "abcd");
+		screenCallBack.onAuthenticationFailure();
+		verify(loginScreen).onAuthenticationFailure();
+	}
 
     @Test
     public void shouldAttemptOfflineLoginWhenThereIsNoConnection() {
@@ -80,7 +87,7 @@ public class LoginControllerTest {
         loginController.login(userName, password);
 
         verify(loginService).offlineLogin(userName, password);
-    }
+}
 
     @Test
     public void shouldClearLoginScreenAndGoToHomeScreenOnSucessfullOfflineLogin() {
@@ -108,7 +115,7 @@ public class LoginControllerTest {
         when(connectionFactory.isNotConnected()).thenReturn(true);
     }
 
-    private void WhenUserIsConnected() {
+    private void whenUserIsConnected() {
         when(connectionFactory.isNotConnected()).thenReturn(false);
     }
 }

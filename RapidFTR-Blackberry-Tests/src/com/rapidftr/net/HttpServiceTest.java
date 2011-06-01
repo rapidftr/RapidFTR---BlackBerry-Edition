@@ -2,6 +2,7 @@ package com.rapidftr.net;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +13,6 @@ import com.rapidftr.utilities.Settings;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;
-import static org.mockito.Mockito.when;
 
 public class HttpServiceTest {
 
