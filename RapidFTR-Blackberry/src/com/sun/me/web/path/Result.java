@@ -32,11 +32,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sun.me.web.path;
 
+import java.util.Vector;
+
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
 import org.json.me.JSONObject;
-
-import java.util.Vector;
 
 //#if WithXML
 //# import org.json.me.util.XML;

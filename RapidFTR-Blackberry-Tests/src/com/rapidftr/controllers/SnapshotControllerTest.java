@@ -4,12 +4,18 @@ import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.screens.SnapshotScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.utilities.ImageCaptureListener;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import net.rim.device.api.system.EncodedImage;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import com.rapidftr.controllers.internal.Dispatcher;
+import com.rapidftr.screens.SnapshotScreen;
+import com.rapidftr.screens.internal.UiStack;
+import com.rapidftr.utilities.ImageCaptureListener;
 
 public class SnapshotControllerTest {
 

@@ -17,8 +17,8 @@ public class DateField extends Field {
 	}
 
 	public int compare(Child child, Child otherChild) {
-		Date date = new Date(parse((String)child.getField(attribute)));
-		Date otherDate = new Date(parse((String)otherChild.getField(attribute)));
+		Date date = new Date(parse(child.getField(attribute)));
+		Date otherDate = new Date(parse(otherChild.getField(attribute)));
 		
 		if (date.getTime() > otherDate.getTime()) {
 			return 1;

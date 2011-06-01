@@ -1,9 +1,7 @@
 package com.rapidftr.datastore;
 
-import com.rapidftr.model.Child;
-import com.rapidftr.model.ChildFactory;
-import org.junit.Before;
-import org.junit.Test;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,8 +10,11 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Locale;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.rapidftr.model.Child;
+import com.rapidftr.model.ChildFactory;
 
 public class ChildrenTest {
 	private final class MockDateField extends DateField {

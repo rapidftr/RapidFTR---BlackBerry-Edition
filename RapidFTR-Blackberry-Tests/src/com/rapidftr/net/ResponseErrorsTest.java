@@ -1,13 +1,14 @@
 package com.rapidftr.net;
 
-import com.sun.me.web.request.Response;
-import org.junit.Test;
-
-import javax.microedition.io.HttpConnection;
+import static junit.framework.Assert.assertEquals;
 
 import java.io.IOException;
 
-import static junit.framework.Assert.assertEquals;
+import javax.microedition.io.HttpConnection;
+
+import org.junit.Test;
+
+import com.sun.me.web.request.Response;
 
 public class ResponseErrorsTest {
 

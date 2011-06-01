@@ -32,10 +32,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sun.me.web.request;
 
-import com.sun.me.web.path.Result;
+import java.io.IOException;
 
 import javax.microedition.io.HttpConnection;
-import java.io.IOException;
+
+import com.sun.me.web.path.Result;
 
 public class Response {
 

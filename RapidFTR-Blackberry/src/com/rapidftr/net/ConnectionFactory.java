@@ -1,11 +1,12 @@
 package com.rapidftr.net;
 
-import net.rim.device.api.system.CoverageInfo;
-import net.rim.device.api.system.WLANInfo;
+import java.io.IOException;
 
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
-import java.io.IOException;
+
+import net.rim.device.api.system.CoverageInfo;
+import net.rim.device.api.system.WLANInfo;
 
 public class ConnectionFactory {
 
