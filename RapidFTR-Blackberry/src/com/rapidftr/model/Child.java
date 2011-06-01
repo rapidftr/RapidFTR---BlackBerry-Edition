@@ -21,6 +21,7 @@ public class Child implements Persistable {
     private final Hashtable changedFields;
 
     private ChildStatus childStatus;
+	public String flagInformation = "Info";
 
     public Child(String creationDate) {
         changedFields = new Hashtable();
@@ -326,5 +327,11 @@ public class Child implements Persistable {
         return (String) getField("current_photo_key");
     }
 
+	public void flagRecord() {
+		childStatus = ChildStatus.FLAGGED;
+	}
 
+	public String flagInformation() {
+		return flagInformation;
+	}
 }

@@ -7,6 +7,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.microedition.io.Connector;
+import javax.microedition.lcdui.TextBox;
 
 import com.rapidftr.controls.Button;
 import com.rapidftr.datastore.FormJsonParser;
@@ -15,6 +16,7 @@ import net.rim.device.api.system.EncodedImage;
 import net.rim.device.api.ui.*;
 import net.rim.device.api.ui.component.*;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.container.PopupScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.BackgroundFactory;
 import net.rim.device.api.ui.decor.Border;
@@ -27,6 +29,7 @@ import com.rapidftr.model.ChildStatus;
 import com.rapidftr.model.Form;
 import com.rapidftr.model.Tab;
 import com.rapidftr.model.TabControl;
+import com.rapidftr.model.TextAreaFormField;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.BoldRichTextField;
 import com.rapidftr.utilities.ImageUtility;
@@ -214,9 +217,28 @@ public class ViewChildScreen extends CustomScreen {
             }
         };
 
+        MenuItem flagRecordAsSuspectMenu;
+        if(child.childStatus() == ChildStatus.FLAGGED){
+        	flagRecordAsSuspectMenu = new MenuItem("Flag Information", 2, 1) {
+    			public void run() {
+    				Dialog.alert(child.flagInformation());
+    			}
+    		};
+        }else{
+        	flagRecordAsSuspectMenu = new MenuItem("Flag Record As Suspect", 2, 1) {
+    			public void run() {
+    				PopupScreen popup = new PopupScreen(new VerticalFieldManager());
+    				popup.add(new LabelField("Enter reason for flagging the record"));
+    				child.flagRecord();
+    			}
+    		};
+        }
+        
+
 		menu.add(editChildMenu);
 		menu.add(photoMenu);
 		menu.add(syncChildMenu);
+		menu.add(flagRecordAsSuspectMenu);
 
 		if (child.isSyncFailed()) {
 			MenuItem syncMenu = new MenuItem("Sync Errors", 2, 1) {
