@@ -21,11 +21,12 @@ import com.sun.me.web.request.PostData;
 public class Child implements Persistable {
     public static final String CREATED_AT_KEY = "created_at";
     public static final String LAST_UPDATED_KEY = "last_updated_at";
+    public static final String FLAG_MESSAGE_KEY = "flag_message";
+	public static final String FLAGGED_KEY = "flag";
     private final Hashtable data;
     private final Hashtable changedFields;
 
     private ChildStatus childStatus;
-	public String flagInformation = "Info";
 
     public Child(String creationDate) {
         changedFields = new Hashtable();
@@ -224,6 +225,10 @@ public class Child implements Persistable {
 
     public void syncSuccess() {
         changedFields.clear();
+        if("true".equals(getField(FLAGGED_KEY))){
+        	childStatus = ChildStatus.FLAGGED;	
+        	return;
+        }
         childStatus = ChildStatus.SYNCED;
     }
 
@@ -285,8 +290,12 @@ public class Child implements Persistable {
         return (String) getField("current_photo_key");
     }
 
-	public void flagRecord() {
+	public void flagRecord(String flagReason) {
 		childStatus = ChildStatus.FLAGGED;
+		put(FLAGGED_KEY, "true");
+		put(FLAG_MESSAGE_KEY, flagReason);
+		changedFields.put(FLAGGED_KEY, "true");
+		changedFields.put(FLAG_MESSAGE_KEY, flagReason);
 	}
 	
 	public static Child create(Forms forms, String currentFormattedDateTime) {
@@ -321,7 +330,21 @@ public class Child implements Persistable {
 		return result[0];
 	}
 	
+	public String flaggedByUserName() {
+		final String[] flaggedByUser = { null };
+		ChildHistories histories = getHistory();
+		histories.forEachHistory(new HistoryAction() {
+			public void execute(ChildHistoryItem historyItem) {
+				if("flag".equals(historyItem.getChangedFieldName())){
+					flaggedByUser[0] = historyItem.getUsername();
+					return;
+				}
+			}				
+		});
+		return flaggedByUser[0];
+	}
+	
 	public String flagInformation() {
-		return flagInformation;
+		return getField(FLAG_MESSAGE_KEY);
 	}
 }

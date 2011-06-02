@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.microedition.amms.control.imageeffect.OverlayControl;
 import javax.microedition.io.Connector;
-import javax.microedition.lcdui.TextBox;
 
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.EncodedImage;
@@ -24,7 +24,6 @@ import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
-import net.rim.device.api.ui.container.PopupScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 import net.rim.device.api.ui.decor.BackgroundFactory;
 import net.rim.device.api.ui.decor.Border;
@@ -66,12 +65,22 @@ public class ViewChildScreen extends CustomScreen {
 		renderChildFields(child);
 		renderFormFields(child);
 	}
-
+	
+	protected void onExposed() {
+		setUp();
+	}
+	
 	private HorizontalFieldManager renderTitleField() {
 		HorizontalFieldManager titleManager = new HorizontalFieldManager(
 				USE_ALL_WIDTH);
 		titleManager.setPadding(new XYEdges(2, 2, 2, 0));
 		titleManager.add(new LabelField("Child Details"));
+		VerticalFieldManager titleSyncStatusManager = setSyncStatusManager();
+		titleManager.add(titleSyncStatusManager);
+		return titleManager;
+	}
+
+	private VerticalFieldManager setSyncStatusManager() {
 		VerticalFieldManager titleSyncStatusManager = new VerticalFieldManager(
 				USE_ALL_WIDTH);
 		ChildStatus childSyncStatus = child.childStatus();
@@ -87,8 +96,7 @@ public class ViewChildScreen extends CustomScreen {
 		syncStatus.setBackground(BackgroundFactory
 				.createSolidBackground(childSyncStatus.getStatusColor()));
 		titleSyncStatusManager.add(syncStatus);
-		titleManager.add(titleSyncStatusManager);
-		return titleManager;
+		return titleSyncStatusManager;
 	}
 
 	private void renderChildFields(final Child child) {
@@ -112,7 +120,7 @@ public class ViewChildScreen extends CustomScreen {
 		emptyLineAfterUID.select(false);
 		add(emptyLineAfterUID);
 		
-		if (child.childStatus() == ChildStatus.FLAGGED) {
+		if ("true".equals(child.getField(Child.FLAGGED_KEY))) {
 			verticalFieldManager.add(getFlaggedByControl());
 		}
 		horizontalFieldManager.add(verticalFieldManager);
@@ -121,7 +129,7 @@ public class ViewChildScreen extends CustomScreen {
 	}
 
 	private Field getFlaggedByControl() {
-		LabelField label = new LabelField("Flagged by "	+ child.getCreatedBy());
+		LabelField label = new LabelField("Record flagged as possibly suspect or duplicate by "	+ child.flaggedByUserName() + ": " + child.flagInformation());
 		return label;
 	}
 
@@ -231,7 +239,7 @@ public class ViewChildScreen extends CustomScreen {
 		};
 
         MenuItem flagRecordAsSuspectMenu;
-        if(child.childStatus() == ChildStatus.FLAGGED){
+        if("true".equals(child.getField(Child.FLAGGED_KEY))){
         	flagRecordAsSuspectMenu = new MenuItem("Flag Information", 2, 1) {
     			public void run() {
     				Dialog.alert(child.flagInformation());
@@ -240,9 +248,7 @@ public class ViewChildScreen extends CustomScreen {
         }else{
         	flagRecordAsSuspectMenu = new MenuItem("Flag Record As Suspect", 2, 1) {
     			public void run() {
-    				PopupScreen popup = new PopupScreen(new VerticalFieldManager());
-    				popup.add(new LabelField("Enter reason for flagging the record"));
-    				child.flagRecord();
+    				getViewChildController().flagRecord(child);
     			}
     		};
         }

@@ -219,23 +219,6 @@ public class ManageChildScreen extends CustomScreen {
 			};
 			menu.add(saveChildMenu);
 			
-			MenuItem flagRecordAsSuspectMenu;
-	        if(getChild().childStatus() == ChildStatus.FLAGGED){
-	        	flagRecordAsSuspectMenu = new MenuItem("Flag Information", 2, 1) {
-	    			public void run() {
-	    				Dialog.alert(getChild().flagInformation());
-	    			}
-	    		};
-	        }else{
-	        	flagRecordAsSuspectMenu = new MenuItem("Flag Record As Suspect", 2, 1) {
-	    			public void run() {
-	    				PopupScreen popup = new PopupScreen(new VerticalFieldManager());
-	    				popup.add(new LabelField("Enter reason for flagging the record"));
-	    				getChild().flagRecord();
-	    			}
-	    		};
-	        }
-	        menu.add(flagRecordAsSuspectMenu);
 		}
 
 		addSyncFailedErrorMenuItem(menu);
