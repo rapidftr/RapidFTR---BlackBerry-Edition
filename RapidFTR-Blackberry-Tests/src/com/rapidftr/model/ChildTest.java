@@ -127,6 +127,15 @@ public class ChildTest {
 		child.flagRecord("Reason");
 		assertTrue(child.isUpdated());
 	}
+	
+	@Test
+	public void childStatusshouldBeFlaggedWhenFlaggedRecordIsUpdated() {
+		Child child = ChildFactory.newChild();
+		child.flagRecord("Reason");
+		assertTrue(child.isUpdated());
+		child.setField("name", "name");
+		assertEquals(ChildStatus.FLAGGED, child.childStatus());
+	}
 
 	@Test
 	public void shouldGetPostData() {

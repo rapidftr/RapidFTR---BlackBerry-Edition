@@ -129,7 +129,7 @@ public class ViewChildScreen extends CustomScreen {
 	}
 
 	private Field getFlaggedByControl() {
-		LabelField label = new LabelField("Record flagged as possibly suspect or duplicate by "	+ child.flaggedByUserName() + ": " + child.flagInformation());
+		LabelField label = new LabelField("Record flagged as possibly suspect or duplicate by "	+ child.flaggedBy() + ": " + child.flagInformation());
 		return label;
 	}
 

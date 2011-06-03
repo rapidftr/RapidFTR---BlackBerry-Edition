@@ -17,7 +17,7 @@ public class Dispatcher {
     private final ViewChildPhotoController childPhotoController;
     private final ChildHistoryController childHistoryController;
     private final SearchChildController searchChildController;
-    private final FlagChildController flagChildController;
+    private final FlagRecordController flagRecordController;
 
     public Dispatcher(ControllerFactory controllerFactory) {
         this.homeScreenController = controllerFactory.homeScreenControllerWith(this);
@@ -31,7 +31,7 @@ public class Dispatcher {
         this.syncController = controllerFactory.syncControllerWith(this);
         this.resetDeviceController = controllerFactory.resetDeviceController();
         this.contactScreenController = controllerFactory.contactScreenControllerWith(this);
-        this.flagChildController = controllerFactory.flagChildControllerWith(this);
+        this.flagRecordController = controllerFactory.flagRecordControllerWith(this);
     }
 
     public void homeScreen() {
@@ -97,7 +97,7 @@ public class Dispatcher {
     }
 
 	public void flagRecord(Child child) {
-		flagChildController.flagRecord(child);
+		flagRecordController.flagRecord(child);
 	}
 
 }

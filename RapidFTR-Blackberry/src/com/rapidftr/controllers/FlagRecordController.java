@@ -6,10 +6,10 @@ import com.rapidftr.model.Child;
 import com.rapidftr.screens.FlagReasonScreen;
 import com.rapidftr.screens.internal.UiStack;
 
-public class FlagChildController extends Controller {
+public class FlagRecordController extends Controller {
 	
 	FlagReasonScreen flagReasonScreen;
-	public FlagChildController(FlagReasonScreen flagReasonScreen, UiStack uiStack,
+	public FlagRecordController(FlagReasonScreen flagReasonScreen, UiStack uiStack,
 			Dispatcher dispatcher) {
 		super(flagReasonScreen, uiStack, dispatcher);
 		this.flagReasonScreen = flagReasonScreen;

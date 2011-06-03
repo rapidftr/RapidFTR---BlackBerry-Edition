@@ -7,11 +7,12 @@ import net.rim.device.api.ui.component.BasicEditField;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.component.SeparatorField;
+
+import com.rapidftr.controllers.FlagRecordController;
 import com.rapidftr.controls.Button;
 import com.rapidftr.model.Child;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.screens.internal.UiStack;
-import com.rapidftr.controllers.FlagChildController;
 
 
 public class FlagReasonScreen extends CustomScreen{
@@ -42,7 +43,7 @@ public class FlagReasonScreen extends CustomScreen{
 		flagButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
 				child.flagRecord(flagReasonField.getText());
-				((FlagChildController)controller).popScreen();
+				((FlagRecordController)controller).popScreen();
 			}
 		});
 		HorizontalFieldManager buttonManager = new HorizontalFieldManager(FIELD_HCENTER);
@@ -63,6 +64,5 @@ public class FlagReasonScreen extends CustomScreen{
 		this.add(titleManager);
 		this.add(new SeparatorField());
 	}
-	
 	
 }

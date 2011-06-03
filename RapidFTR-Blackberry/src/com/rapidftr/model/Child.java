@@ -310,7 +310,7 @@ public class Child implements Persistable {
 				setField(field.getName(), field.getValue());
 			}
 		});
-		if (isUpdated()) {
+		if (isUpdated() && !("true".equals(this.getField(Child.FLAGGED_KEY)))){
 			childStatus = ChildStatus.UPDATED;
 		}
 	}
@@ -330,18 +330,18 @@ public class Child implements Persistable {
 		return result[0];
 	}
 	
-	public String flaggedByUserName() {
-		final String[] flaggedByUser = { null };
+	public String flaggedBy() {
+		final StringBuffer flaggedByUser = new StringBuffer();
 		ChildHistories histories = getHistory();
 		histories.forEachHistory(new HistoryAction() {
 			public void execute(ChildHistoryItem historyItem) {
 				if("flag".equals(historyItem.getChangedFieldName())){
-					flaggedByUser[0] = historyItem.getUsername();
+					flaggedByUser.append(historyItem.getUsername());
 					return;
 				}
 			}				
 		});
-		return flaggedByUser[0];
+		return flaggedByUser.toString();
 	}
 	
 	public String flagInformation() {
