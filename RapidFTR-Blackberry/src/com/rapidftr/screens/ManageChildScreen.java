@@ -216,11 +216,46 @@ public class ManageChildScreen extends CustomScreen {
 				}
 			};
 			menu.add(saveChildMenu);
+			
+			MenuItem discardChangesMenu = new MenuItem("Discard Changes ", 1, 1) {
+				public void run() {
+					onDiscardChangesClicked(new ControllerAction() {
+
+						void execute() {
+							controller.popScreen();
+
+						}
+					});
+				}
+			};
+			menu.add(discardChangesMenu);
+			
 		}
 
 		addSyncFailedErrorMenuItem(menu);
 
 		super.makeMenu(menu, instance);
+	}
+
+	protected void onDiscardChangesClicked(ControllerAction controllerAction) {
+		if (forms.isNotEmpty()) {
+			String menuMessage = "Are you sure you want to discard the changes?";
+			String[] menuChoices = { "Yes", "No" };
+			int defaultChoice = 0;
+			int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
+
+			switch (result) {
+			case 0: {
+				controllerAction.execute();
+				break;
+			}
+			case 1: {
+				break;
+			}
+		}
+		}else {
+			controllerAction.execute();
+		}
 	}
 
 	private void addSyncFailedErrorMenuItem(Menu menu) {
