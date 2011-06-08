@@ -141,8 +141,7 @@ public abstract class ChildrenListField extends ObjectListField{
 	private void drawCreatedTimeStamp(Child child, Graphics graphics, int boxX,
 			int boxY, int width) {
 		
-		String createdTimeStamp = child.getCreatedTimeStampValue();
-		graphics.drawText(createdTimeStamp, boxX, boxY, (DrawStyle.LEFT
+		graphics.drawText(child.getCreatedTimeStampValue(), boxX, boxY, (DrawStyle.LEFT
 				| DrawStyle.ELLIPSIS | DrawStyle.TOP), width);
 		
 	}
@@ -150,8 +149,7 @@ public abstract class ChildrenListField extends ObjectListField{
 	private void drawUpdatedTimeStamp(Child child, Graphics graphics, int boxX,
 			int boxY, int width) {
 
-		String updatedTimeStamp = child.getUpdatedTimeStampValue();
-		graphics.drawText(updatedTimeStamp, boxX, boxY, (DrawStyle.LEFT
+		graphics.drawText(child.getUpdatedTimeStampValue(), boxX, boxY, (DrawStyle.LEFT
 				| DrawStyle.ELLIPSIS | DrawStyle.TOP), width);
 		
 	}
