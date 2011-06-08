@@ -1,9 +1,12 @@
 package com.rapidftr.model;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import net.rim.device.api.i18n.SimpleDateFormat;
+import net.rim.device.api.io.http.HttpDateParser;
 import net.rim.device.api.util.Persistable;
 
 import com.rapidftr.form.FormFieldAction;
@@ -269,6 +272,24 @@ public class Child implements Persistable {
 
 	public String getPhotoKey() {
 		return getField("current_photo_key");
+	}
+
+	public String getCreatedTimeStampValue() {
+		StringBuffer formattedTimeStampValue = new StringBuffer();
+		formattedTimeStampValue.append("Created : ");
+		formattedTimeStampValue.append(new SimpleDateFormat("MMM dd, yyyy")
+					.format(new Date(HttpDateParser.parse(getField(CREATED_AT_KEY)))));
+		return formattedTimeStampValue.toString();
+	}
+
+	public String getUpdatedTimeStampValue() {
+		StringBuffer formattedTimeStampValue = new StringBuffer();
+		if (getField(LAST_UPDATED_KEY) != null) {
+			formattedTimeStampValue.append("Updated: ");
+			formattedTimeStampValue.append(new SimpleDateFormat("MMM dd, yyyy")
+					.format(new Date(HttpDateParser.parse(getField(LAST_UPDATED_KEY)))));
+		}
+		return formattedTimeStampValue.toString();
 	}
 
 }
