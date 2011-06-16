@@ -154,7 +154,7 @@ public class ManageChildScreen extends CustomScreen {
 	}
 
 	private boolean displayConfirmation(ControllerAction action) {
-		if (forms.isNotEmpty()) {
+		if (this.isDirty()) {
 			String menuMessage = "The current record has been changed. What do you want to do with these changes?";
 			String[] menuChoices = { "Save", "Discard", "Cancel" };
 			int defaultChoice = 0;
