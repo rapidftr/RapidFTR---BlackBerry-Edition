@@ -1,5 +1,7 @@
 package com.rapidftr.controls;
 
+import java.util.Calendar;
+
 import net.rim.device.api.system.Bitmap;
 import net.rim.device.api.system.Display;
 import net.rim.device.api.ui.Color;
@@ -13,6 +15,7 @@ import net.rim.device.api.ui.component.ObjectListField;
 import com.rapidftr.controllers.ViewChildrenController;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.model.Child;
+import com.rapidftr.utilities.DateFormatter;
 
 public abstract class ChildrenListField extends ObjectListField{
 
@@ -21,6 +24,7 @@ public abstract class ChildrenListField extends ObjectListField{
 	private int secondRowPosition;
 	private Font titleFont;
 	private Font rowFont;
+	private Font timeStampFont;
 	private Children children;
 	private int selectedIndex = -1;
 
@@ -29,6 +33,7 @@ public abstract class ChildrenListField extends ObjectListField{
 		Font defaultFont = Font.getDefault();
 		titleFont = defaultFont.derive(Font.PLAIN, 3, Ui.UNITS_mm);
 		rowFont = defaultFont.derive(Font.PLAIN, 3, Ui.UNITS_mm);
+		timeStampFont = defaultFont.derive(Font.PLAIN, 2, Ui.UNITS_mm);
 
 		screenWidth = Display.getWidth();
 		firstRowPosition = (screenWidth)
@@ -106,10 +111,10 @@ public abstract class ChildrenListField extends ObjectListField{
 			int index, Child child) {
 
 		String childStatusString = child.childStatus().getStatusString();
-		int boxHeight = getFont().getHeight() + 4;
-		int boxWidth = getFont().getAdvance(childStatusString) + 4;
+		int boxHeight = getFont().getHeight() + 2;
+		int boxWidth = getFont().getAdvance(childStatusString) + 2;
 		int boxX = screenWidth - 10 - boxWidth;
-		int boxY = ((index) * listField.getRowHeight()) + getFont().getHeight() + 2;
+		int boxY = ((index) * listField.getRowHeight()) + 2;
 
 		graphics.setColor(child.childStatus().getStatusColor());
 		graphics.drawRoundRect(boxX, boxY, boxWidth, boxHeight, 10, 10);
@@ -117,8 +122,36 @@ public abstract class ChildrenListField extends ObjectListField{
 
 		graphics.setColor(16777215);
 		graphics.setFont(rowFont);
-		graphics.drawText(childStatusString, boxX, boxY + 2, (DrawStyle.HCENTER
+		graphics.drawText(childStatusString, boxX, boxY + 1, (DrawStyle.HCENTER
 				| DrawStyle.ELLIPSIS | DrawStyle.TOP), boxWidth);
+
+		drawTimeStamps(graphics, child, boxY, boxHeight);
+	}
+
+	private void drawTimeStamps(Graphics graphics, Child child, int boxY,
+			int boxHeight) {
+		graphics.setFont(timeStampFont);
+		graphics.setColor(Color.BLACK);
+		int width = getFont().getAdvance("Created: Jun 4 2011");
+		int boxX = screenWidth - width + 30;
+		drawCreatedTimeStamp(child, graphics, boxX, boxY + boxHeight + 4, width);
+		drawUpdatedTimeStamp(child, graphics, boxX, boxY + 2*boxHeight + 4, width);
+	}
+
+	private void drawCreatedTimeStamp(Child child, Graphics graphics, int boxX,
+			int boxY, int width) {
+		
+		graphics.drawText(child.getCreatedTimeStampValue(), boxX, boxY, (DrawStyle.LEFT
+				| DrawStyle.ELLIPSIS | DrawStyle.TOP), width);
+		
+	}
+
+	private void drawUpdatedTimeStamp(Child child, Graphics graphics, int boxX,
+			int boxY, int width) {
+
+		graphics.drawText(child.getUpdatedTimeStampValue(), boxX, boxY, (DrawStyle.LEFT
+				| DrawStyle.ELLIPSIS | DrawStyle.TOP), width);
+		
 	}
 
 	public Child getSelectedChild() {
