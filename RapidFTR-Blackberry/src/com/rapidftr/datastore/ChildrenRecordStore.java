@@ -56,6 +56,10 @@ public class ChildrenRecordStore {
 		return (Child) vector.elementAt(index);
 	}
 
+	public Children getAllSortedByRecentlyUpdated() {
+		return getAll().sortBy(new DateField("last_updated_at"), false);
+	}
+	
 	public Children getAllSortedByName() {
 		return getAll().sortBy(new StringField("name"), true);
 	}
@@ -64,7 +68,4 @@ public class ChildrenRecordStore {
 		return getAll().sortBy(new DateField("created_at"), false);
 	}
 
-	public Children getAllSortedByRecentlyUpdated() {
-		return getAll().sortBy(new DateField("last_update_at"), false);
-	}
 }

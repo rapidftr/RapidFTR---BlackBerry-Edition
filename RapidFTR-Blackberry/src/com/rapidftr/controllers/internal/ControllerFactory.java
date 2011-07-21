@@ -56,7 +56,7 @@ public class ControllerFactory {
     }
 
     public ManageChildController manageChildControllerWith(Dispatcher dispatcher) {
-        ManageChildScreen manageChildScreen = new ManageChildScreen(dateFormatter);
+        ManageChildScreen manageChildScreen = new ManageChildScreen(settings, dateFormatter);
         return new ManageChildController(manageChildScreen, uiStack, formStore, childrenRecordStore, dispatcher);
     }
 

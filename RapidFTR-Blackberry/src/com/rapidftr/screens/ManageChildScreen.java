@@ -22,6 +22,7 @@ import com.rapidftr.model.Child;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.ImageCaptureListener;
+import com.rapidftr.utilities.Settings;
 
 public class ManageChildScreen extends CustomScreen {
 
@@ -32,10 +33,12 @@ public class ManageChildScreen extends CustomScreen {
 
 	private static String[] REQUIRED_FIELDS = {};
 	private String selectedTab;
+	private Settings settings;
 
-	public ManageChildScreen(DateFormatter dateFormatter) {
-		this.dateFormatter = dateFormatter;
-	}
+	public ManageChildScreen(Settings settings, DateFormatter dateFormatter) {
+        this.settings = settings;
+        this.dateFormatter = dateFormatter;
+    }
 
 	public void setUp() {
 		createScreenLayout();
@@ -109,33 +112,30 @@ public class ManageChildScreen extends CustomScreen {
 		getController().takeSnapshotAndUpdateWithNewImage(imageCaptureListener);
 	}
 
+
 	private boolean validateOnSave() {
-		String invalidDataField = onSaveChildClicked();
-		if (invalidDataField != null) {
-			Dialog.alert("Please input the following mandatory field(s)"
-					+ invalidDataField + " .");
-			return false;
-		}
-		return true;
-	}
+        String invalidDataField = onSaveChildClicked();
+        if (invalidDataField != null) {
+            Dialog.alert("Please input the following mandatory field(s)" + invalidDataField + " .");
+            return false;
+        }
+        return true;
+    }
 
-	private String onSaveChildClicked() {
-		if (childToEdit == null) {
-			childToEdit = Child.create(forms, dateFormatter
-					.getCurrentFormattedDateTime());
-		} else {
-			childToEdit.update(forms);
-			childToEdit.setField(Child.LAST_UPDATED_KEY, dateFormatter
-					.getCurrentFormattedDateTime());
-		}
+    private String onSaveChildClicked() {
+        if (childToEdit == null) {
+            childToEdit = Child.create(forms, dateFormatter.getCurrentFormattedDateTime());
+        } else {
+            childToEdit.update(settings.getCurrentlyLoggedIn(), forms, dateFormatter.getCurrentFormattedDateTime());
+        }
 
-		String invalidDataField;
-		if ((invalidDataField = validateRequiredFields()) != "") {
-			return invalidDataField;
-		}
-		getController().saveChild(childToEdit);
-		return null;
-	}
+        String invalidDataField;
+        if ((invalidDataField = validateRequiredFields()) != "") {
+            return invalidDataField;
+        }
+        getController().saveChild(childToEdit);
+        return null;
+    }
 
 	public boolean onClose() {
 		return displayConfirmation(new ControllerAction() {
