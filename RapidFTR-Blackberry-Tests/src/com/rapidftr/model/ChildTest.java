@@ -112,6 +112,30 @@ public class ChildTest {
 		Child child = ChildFactory.newChild();
 		assertNotNull(child.getField(Child.CREATED_AT_KEY));
 	}
+	
+	@Test
+	public void shouldSetFlaggedKey() {
+		Child child = ChildFactory.newChild();
+		child.flagRecord("Reason");
+		assertNotNull(child.getField(Child.FLAGGED_KEY));
+		assertTrue("true".equals(child.getField(Child.FLAGGED_KEY)));
+	}
+	
+	@Test
+	public void isUpdatedshouldReturnTrueWhenRecordIsFlagged() {
+		Child child = ChildFactory.newChild();
+		child.flagRecord("Reason");
+		assertTrue(child.isUpdated());
+	}
+	
+	@Test
+	public void childStatusshouldBeFlaggedWhenFlaggedRecordIsUpdated() {
+		Child child = ChildFactory.newChild();
+		child.flagRecord("Reason");
+		assertTrue(child.isUpdated());
+		child.setField("name", "name");
+		assertEquals(ChildStatus.FLAGGED, child.childStatus());
+	}
 
 	@Test
 	public void shouldGetPostData() {

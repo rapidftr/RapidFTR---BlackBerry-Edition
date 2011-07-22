@@ -4,6 +4,7 @@ import com.rapidftr.controllers.internal.Controller;
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.FormStore;
 import com.rapidftr.model.Child;
+import com.rapidftr.screens.FlagReasonScreen;
 import com.rapidftr.screens.ViewChildScreen;
 import com.rapidftr.screens.internal.UiStack;
 
@@ -44,4 +45,9 @@ public class ViewChildController extends Controller {
 	public void popScreen() {
 		dispatcher.viewChildren();
 	}
+
+	public void flagRecord(Child child) {
+		dispatcher.flagRecord(child);
+	}
+
 }

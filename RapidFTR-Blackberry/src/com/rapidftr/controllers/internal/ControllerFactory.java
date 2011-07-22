@@ -103,4 +103,9 @@ public class ControllerFactory {
         ContactInformationScreen contactScreen = new ContactInformationScreen(new ContactInformation(store));
         return new ContactInformationController(contactScreen, uiStack, contactInformationSyncService, dispatcher);
     }
+
+    public FlagRecordController flagRecordControllerWith(Dispatcher dispatcher) {
+        FlagReasonScreen flagReasonScreen = new FlagReasonScreen();
+        return new FlagRecordController(flagReasonScreen, uiStack, dispatcher);
+    }
 }

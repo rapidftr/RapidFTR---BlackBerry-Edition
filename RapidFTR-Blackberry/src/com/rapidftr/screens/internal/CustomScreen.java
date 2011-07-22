@@ -80,6 +80,10 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 		controller.homeScreen();
 	}
 	
+	protected void onExposed() {
+		super.onExposed();
+	}
+
 	public boolean keyChar(char key, int status, int time) {
 		if (key == Characters.ESCAPE) {
 			if (controller != null)

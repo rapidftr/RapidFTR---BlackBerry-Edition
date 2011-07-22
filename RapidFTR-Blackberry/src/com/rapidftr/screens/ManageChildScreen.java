@@ -11,6 +11,7 @@ import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.ObjectChoiceField;
 import net.rim.device.api.ui.component.SeparatorField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
+import net.rim.device.api.ui.container.PopupScreen;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
 import com.rapidftr.controllers.ManageChildController;
@@ -19,6 +20,7 @@ import com.rapidftr.controls.FormFieldFactory;
 import com.rapidftr.controls.UIForms;
 import com.rapidftr.form.Forms;
 import com.rapidftr.model.Child;
+import com.rapidftr.model.ChildStatus;
 import com.rapidftr.screens.internal.CustomScreen;
 import com.rapidftr.utilities.DateFormatter;
 import com.rapidftr.utilities.ImageCaptureListener;
@@ -216,6 +218,7 @@ public class ManageChildScreen extends CustomScreen {
 				}
 			};
 			menu.add(saveChildMenu);
+			
 		}
 
 		addSyncFailedErrorMenuItem(menu);

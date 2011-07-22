@@ -114,6 +114,17 @@ public class DispatcherTest {
         new Dispatcher(controllerFactory).showcontact();
         verify(contactScreenController).show();
     }
+    
+    @Test
+    public void shouldFlagRecord() {
+        FlagRecordController flagRecordController = mock(FlagRecordController.class);
+        ControllerFactory controllerFactory = mock(ControllerFactory.class);
+        Child child = mock(Child.class);
+
+        when(controllerFactory.flagRecordControllerWith(anyDispatcher())).thenReturn(flagRecordController);
+        new Dispatcher(controllerFactory).flagRecord(child);
+        verify(flagRecordController).flagRecord(child);
+    }
 
     @Test
     public void shouldShowEditChildScreenForGivenChild() {

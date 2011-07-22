@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.microedition.amms.control.imageeffect.OverlayControl;
 import javax.microedition.io.Connector;
 
 import net.rim.device.api.system.Bitmap;
@@ -64,12 +65,22 @@ public class ViewChildScreen extends CustomScreen {
 		renderChildFields(child);
 		renderFormFields(child);
 	}
-
+	
+	protected void onExposed() {
+		setUp();
+	}
+	
 	private HorizontalFieldManager renderTitleField() {
 		HorizontalFieldManager titleManager = new HorizontalFieldManager(
 				USE_ALL_WIDTH);
 		titleManager.setPadding(new XYEdges(2, 2, 2, 0));
 		titleManager.add(new LabelField("Child Details"));
+		VerticalFieldManager titleSyncStatusManager = setSyncStatusManager();
+		titleManager.add(titleSyncStatusManager);
+		return titleManager;
+	}
+
+	private VerticalFieldManager setSyncStatusManager() {
 		VerticalFieldManager titleSyncStatusManager = new VerticalFieldManager(
 				USE_ALL_WIDTH);
 		ChildStatus childSyncStatus = child.childStatus();
@@ -85,8 +96,7 @@ public class ViewChildScreen extends CustomScreen {
 		syncStatus.setBackground(BackgroundFactory
 				.createSolidBackground(childSyncStatus.getStatusColor()));
 		titleSyncStatusManager.add(syncStatus);
-		titleManager.add(titleSyncStatusManager);
-		return titleManager;
+		return titleSyncStatusManager;
 	}
 
 	private void renderChildFields(final Child child) {
@@ -105,12 +115,22 @@ public class ViewChildScreen extends CustomScreen {
 		if (child.getCreatedBy() != null) {
 			verticalFieldManager.add(getRegisteredByControl());
 		}
-		horizontalFieldManager.add(verticalFieldManager);
-		add(horizontalFieldManager);
-
+		
 		LabelField emptyLineAfterUID = new LabelField("");
 		emptyLineAfterUID.select(false);
 		add(emptyLineAfterUID);
+		
+		if ("true".equals(child.getField(Child.FLAGGED_KEY))) {
+			verticalFieldManager.add(getFlaggedByControl());
+		}
+		horizontalFieldManager.add(verticalFieldManager);
+		add(horizontalFieldManager);
+		
+	}
+
+	private Field getFlaggedByControl() {
+		LabelField label = new LabelField("Record flagged as possibly suspect or duplicate by "	+ child.flaggedBy() + ": " + child.flagInformation());
+		return label;
 	}
 
 	private Field getRegisteredByControl() {
@@ -218,9 +238,26 @@ public class ViewChildScreen extends CustomScreen {
 			}
 		};
 
+        MenuItem flagRecordAsSuspectMenu;
+        if("true".equals(child.getField(Child.FLAGGED_KEY))){
+        	flagRecordAsSuspectMenu = new MenuItem("Flag Information", 2, 1) {
+    			public void run() {
+    				Dialog.alert(child.flagInformation());
+    			}
+    		};
+        }else{
+        	flagRecordAsSuspectMenu = new MenuItem("Flag Record As Suspect", 2, 1) {
+    			public void run() {
+    				getViewChildController().flagRecord(child);
+    			}
+    		};
+        }
+        
+
 		menu.add(editChildMenu);
 		menu.add(photoMenu);
 		menu.add(syncChildMenu);
+		menu.add(flagRecordAsSuspectMenu);
 
 		if (child.isSyncFailed()) {
 			MenuItem syncMenu = new MenuItem("Sync Errors", 2, 1) {
