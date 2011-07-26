@@ -145,4 +145,28 @@ public class ChildTest {
         Part[] parts = data.getParts();
         assertEquals(2, parts.length);
     }
+
+    @Test
+    public void shouldSetFlaggedKey() {
+        Child child = ChildFactory.newChild();
+        child.flagRecord("Reason");
+        assertNotNull(child.getField(Child.FLAGGED_KEY));
+        assertTrue("true".equals(child.getField(Child.FLAGGED_KEY)));
+    }
+
+    @Test
+    public void isUpdatedshouldReturnTrueWhenRecordIsFlagged() {
+        Child child = ChildFactory.newChild();
+        child.flagRecord("Reason");
+        assertTrue(child.isUpdated());
+    }
+
+    @Test
+    public void shouldReturnFlaggedByUserName() {
+        Child child = ChildFactory.newChild();
+        String histories = "[{\"changes\":{\"flag\":{\"from\":\"\",\"to\":\"true\"}},\"datetime\":\"01/02/2011 22:01\",\"user_name\":\"rapidftr\"}]";
+        child.setField("histories", histories);
+        assertEquals("rapidftr", child.flaggedByUserName());
+    }
+
 }

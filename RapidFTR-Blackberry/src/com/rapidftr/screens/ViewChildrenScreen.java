@@ -3,6 +3,7 @@ package com.rapidftr.screens;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.MenuItem;
 import net.rim.device.api.ui.ScrollChangeListener;
+import net.rim.device.api.ui.component.Dialog;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.component.Menu;
 import net.rim.device.api.ui.component.SeparatorField;
@@ -52,6 +53,7 @@ public class ViewChildrenScreen extends CustomScreen {
 
 	protected void makeMenu(Menu menu, int instance) {
 		if (!childrenList.isEmpty()) {
+            final Child child = childrenList.getSelectedChild();
 			MenuItem viewChildMenu = new MenuItem("Open Record", 1, 1) {
 				public void run() {
 					Child child = childrenList.getSelectedChild();
@@ -92,7 +94,18 @@ public class ViewChildrenScreen extends CustomScreen {
 				}
 			};
 			menu.add(sortByRecentlyModified);
-		}
+
+            MenuItem flagRecordAsSuspectMenu = null;
+            if ("true".equals(child.getField(Child.FLAGGED_KEY))) {
+                flagRecordAsSuspectMenu = new MenuItem("Flag Information", 1, 1) {
+                    public void run() {
+                        Dialog.alert(child.flagInformation());
+                    }
+                };
+            }
+            if (flagRecordAsSuspectMenu != null)
+                menu.add(flagRecordAsSuspectMenu);
+        }
 		super.makeMenu(menu, instance);
 	}
 

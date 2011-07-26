@@ -57,6 +57,10 @@ public class ViewChildScreen extends CustomScreen {
 		this.forms = forms;
 	}
 
+    protected void onExposed() {
+        setUp();
+    }
+
 	public void setUp() {
 		clearFields();
 		this.add(renderTitleField());
@@ -105,13 +109,23 @@ public class ViewChildScreen extends CustomScreen {
 		if (child.getCreatedBy() != null) {
 			verticalFieldManager.add(getRegisteredByControl());
 		}
-		horizontalFieldManager.add(verticalFieldManager);
-		add(horizontalFieldManager);
 
 		LabelField emptyLineAfterUID = new LabelField("");
 		emptyLineAfterUID.select(false);
 		add(emptyLineAfterUID);
+
+        if ("true".equals(child.getField(Child.FLAGGED_KEY))) {
+            verticalFieldManager.add(getFlaggedByControl());
+        }
+        horizontalFieldManager.add(verticalFieldManager);
+        add(horizontalFieldManager);
 	}
+
+    private Field getFlaggedByControl() {
+        LabelField label = new LabelField("Record flagged as possibly suspect or duplicate by " + child.flaggedByUserName() + ": " + child.flagInformation());
+        return label;
+    }
+
 
 	private Field getRegisteredByControl() {
 		LabelField label = new LabelField("Registered by "
@@ -218,9 +232,25 @@ public class ViewChildScreen extends CustomScreen {
 			}
 		};
 
+        MenuItem flagRecordAsSuspectMenu;
+        if ("true".equals(child.getField(Child.FLAGGED_KEY))) {
+            flagRecordAsSuspectMenu = new MenuItem("Flag Information", 2, 1) {
+                public void run() {
+                    Dialog.alert(child.flagInformation());
+                }
+            };
+        } else {
+            flagRecordAsSuspectMenu = new MenuItem("Flag Record As Suspect", 2, 1) {
+                public void run() {
+                    getViewChildController().flagRecord(child);
+                }
+            };
+        }
+
 		menu.add(editChildMenu);
 		menu.add(photoMenu);
 		menu.add(syncChildMenu);
+        menu.add(flagRecordAsSuspectMenu);
 
 		if (child.isSyncFailed()) {
 			MenuItem syncMenu = new MenuItem("Sync Errors", 2, 1) {

@@ -21,6 +21,9 @@ public class Child implements Persistable {
 	public static final String CREATED_AT_KEY = "created_at";
 	public static final String LAST_UPDATED_KEY = "last_updated_at";
     private static final String UNIQUE_IDENTIFIER = "unique_identifier";
+    public static final String FLAG_MESSAGE_KEY = "flag_message";
+    public static final String FLAGGED_KEY = "flag";
+
     private final Hashtable data;
 	private final Hashtable changedFields;
 
@@ -212,8 +215,12 @@ public class Child implements Persistable {
 	}
 
 	public void syncSuccess() {
-		changedFields.clear();
-		childStatus = ChildStatus.SYNCED;
+        changedFields.clear();
+        if ("true".equals(getField(FLAGGED_KEY))) {
+            childStatus = ChildStatus.FLAGGED;
+            return;
+        }
+        childStatus = ChildStatus.SYNCED;
 	}
 
 	public void syncFailed(String message) {
@@ -273,5 +280,31 @@ public class Child implements Persistable {
 	public String getPhotoKey() {
 		return getField("current_photo_key");
 	}
+
+    public void flagRecord(String flagReason) {
+        childStatus = ChildStatus.FLAGGED;
+        put(FLAGGED_KEY, "true");
+        put(FLAG_MESSAGE_KEY, flagReason);
+        changedFields.put(FLAGGED_KEY, "true");
+        changedFields.put(FLAG_MESSAGE_KEY, flagReason);
+    }
+
+    public String flaggedByUserName() {
+        final String[] flaggedByUser = {null};
+        ChildHistories histories = getHistory();
+        histories.forEachHistory(new HistoryAction() {
+            public void execute(ChildHistoryItem historyItem) {
+                if ("flag".equals(historyItem.getChangedFieldName())) {
+                    flaggedByUser[0] = historyItem.getUsername();
+                    return;
+                }
+            }
+        });
+        return flaggedByUser[0];
+    }
+
+    public String flagInformation() {
+        return getField(FLAG_MESSAGE_KEY);
+    }
 
 }
