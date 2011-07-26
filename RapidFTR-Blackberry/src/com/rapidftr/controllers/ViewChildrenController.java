@@ -72,4 +72,8 @@ public class ViewChildrenController extends Controller {
 		((ViewChildrenScreen) currentScreen).refresh();
 		homeScreen();
 	}
+
+    public void editChild(Child child) {
+        dispatcher.editChild(child, null);
+    }
 }
