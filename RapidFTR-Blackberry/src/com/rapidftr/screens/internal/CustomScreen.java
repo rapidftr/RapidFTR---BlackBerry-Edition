@@ -74,6 +74,14 @@ public abstract class CustomScreen extends MainScreen implements KeyListener {
 			}
 		});
 		super.makeMenu(menu, instance);
+
+        menu.add(new MenuItem("Create New Record", 0, 1) {
+
+            public void run() {
+                controller.createNewChildRecord();
+            }
+        });
+
 	}
 
 	protected void onMainMenuClick() {

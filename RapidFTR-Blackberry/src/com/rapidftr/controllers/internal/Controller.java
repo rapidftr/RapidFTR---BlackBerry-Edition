@@ -30,4 +30,8 @@ abstract public class Controller {
         uiStack.clear();
         dispatcher.homeScreen();
     }
+
+    public void createNewChildRecord() {
+        dispatcher.newChild();
+    }
 }
