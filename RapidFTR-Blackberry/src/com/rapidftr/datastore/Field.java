@@ -16,4 +16,19 @@ public abstract class Field {
 
 	public abstract int compare(Child child1, Child child2);
 
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Field field = (Field) o;
+
+        if (attribute != null ? !attribute.equals(field.attribute) : field.attribute != null) return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        return attribute != null ? attribute.hashCode() : 0;
+    }
 }

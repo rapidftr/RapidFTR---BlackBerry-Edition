@@ -20,12 +20,14 @@ public class Child implements Persistable {
 
 	public static final String CREATED_AT_KEY = "created_at";
 	public static final String LAST_UPDATED_KEY = "last_updated_at";
-	private final Hashtable data;
+    private static final String UNIQUE_IDENTIFIER = "unique_identifier";
+    private final Hashtable data;
 	private final Hashtable changedFields;
 
 	private ChildStatus childStatus;
+    public static final String NAME = "name";
 
-	public Child(String creationDate) {
+    public Child(String creationDate) {
 		changedFields = new Hashtable();
 		data = new Hashtable();
 		put("_id", RandomStringGenerator.generate(32));
@@ -146,10 +148,10 @@ public class Child implements Persistable {
 					&& data.get("_id").equals((other.data.get("_id")))) {
 				return true;
 			}
-			if (data.get("unique_identifier") != null
-					&& other.data.get("unique_identifier") != null
-					&& data.get("unique_identifier").equals(
-							(other.data.get("unique_identifier")))) {
+			if (data.get(UNIQUE_IDENTIFIER) != null
+					&& other.data.get(UNIQUE_IDENTIFIER) != null
+					&& data.get(UNIQUE_IDENTIFIER).equals(
+							(other.data.get(UNIQUE_IDENTIFIER)))) {
 				return true;
 			}
 		}
@@ -166,11 +168,11 @@ public class Child implements Persistable {
 
 	public static Child create(Forms forms, String currentFormattedDateTime) {
 		Child child = new Child(currentFormattedDateTime);
-		child.update(forms);
+		child.update(forms, currentFormattedDateTime);
 		return child;
 	}
 
-	public void update(Forms forms) {
+	public void update(Forms forms, String updatedDate) {
 		forms.forEachField(new FormFieldAction() {
 			public void execute(com.rapidftr.form.FormField field) {
 				setField(field.getName(), field.getValue());
@@ -179,6 +181,7 @@ public class Child implements Persistable {
 		if (isUpdated()) {
 			childStatus = ChildStatus.UPDATED;
 		}
+        setField(Child.LAST_UPDATED_KEY, updatedDate);
 	}
 
 	public ChildHistories getHistory() {
@@ -197,7 +200,7 @@ public class Child implements Persistable {
 	}
 
 	public boolean isNewChild() {
-		return getField("unique_identifier") == null;
+		return getField(UNIQUE_IDENTIFIER) == null;
 	}
 
 	public boolean isUpdated() {
@@ -224,7 +227,7 @@ public class Child implements Persistable {
 	}
 
 	public boolean matches(String queryString) {
-		String id = getField("unique_identifier");
+		String id = getField(UNIQUE_IDENTIFIER);
 		if (id == null) {
 			id = "";
 		}
@@ -248,7 +251,7 @@ public class Child implements Persistable {
 	}
 
 	public void setUniqueIdentifier(String uniqueId) {
-		setField("unique_identifier", uniqueId);
+		setField(UNIQUE_IDENTIFIER, uniqueId);
 	}
 
 	public void setId(String id) {

@@ -4,15 +4,22 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import com.rapidftr.model.Child;
+import com.rapidftr.utilities.ChildSorter;
 import com.rapidftr.utilities.ImageHelper;
 
 public class Children {
 
 	private final Vector vector;
+    private ChildSorter childSorter;
 
 	public Children(Vector vector) {
-		this.vector = vector;
+		this(vector, new ChildSorter());
 	}
+
+    public Children(Vector vector, ChildSorter sorter) {
+        this.vector = vector;
+        this.childSorter = sorter;
+    }
 
 	public Children(Child[] array) {
 		vector = new Vector();
@@ -42,14 +49,7 @@ public class Children {
 
 	public Children sortBy(final Field field, final boolean isAscending) {
 		Child[] children = toArray();
-		net.rim.device.api.util.Arrays.sort(children,
-				new net.rim.device.api.util.Comparator() {
-					public int compare(Object o1, Object o2) {
-						return !isAscending ? field.compare((Child) o2,
-								(Child) o1) : field.compare((Child) o1,
-								(Child) o2);
-					}
-				});
+		childSorter.sort(children, isAscending, field);
 		return new Children(children);
 	}
 

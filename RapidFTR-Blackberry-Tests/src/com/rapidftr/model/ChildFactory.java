@@ -5,6 +5,10 @@ public class ChildFactory {
     private ChildFactory() {
     }
 
+    public static Child newChild(String dateCreated) {
+       return new Child(dateCreated);
+    }
+
     public static Child newChild() {
         return new Child("2010-11-2 01:00:00GMT");
     }
