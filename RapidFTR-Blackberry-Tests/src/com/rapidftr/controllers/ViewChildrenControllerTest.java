@@ -4,6 +4,7 @@ import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.datastore.ChildrenRecordStore;
 import com.rapidftr.model.Child;
+import com.rapidftr.model.ChildFactory;
 import com.rapidftr.screens.ViewChildrenScreen;
 import com.rapidftr.screens.internal.UiStack;
 import org.junit.Before;
@@ -79,5 +80,12 @@ public class ViewChildrenControllerTest {
         verify(viewChildrenScreen).refresh();
         verify(uiStack).clear();
         verify(dispatcher).homeScreen();
+    }
+
+    @Test
+    public void shouldInvokeEditChild() {
+        Child child = ChildFactory.newChild();
+        controller.editChild(child);
+        verify(dispatcher).editChild(child, null);
     }
 }

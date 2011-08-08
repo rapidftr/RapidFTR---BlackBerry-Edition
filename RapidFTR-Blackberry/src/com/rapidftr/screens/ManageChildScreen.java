@@ -124,9 +124,7 @@ public class ManageChildScreen extends CustomScreen {
 			childToEdit = Child.create(forms, dateFormatter
 					.getCurrentFormattedDateTime());
 		} else {
-			childToEdit.update(forms);
-			childToEdit.setField(Child.LAST_UPDATED_KEY, dateFormatter
-					.getCurrentFormattedDateTime());
+			childToEdit.update(forms, dateFormatter.getCurrentFormattedDateTime());
 		}
 
 		String invalidDataField;

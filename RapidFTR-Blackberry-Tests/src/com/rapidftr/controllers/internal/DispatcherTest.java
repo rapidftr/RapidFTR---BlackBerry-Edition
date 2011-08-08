@@ -3,6 +3,7 @@ package com.rapidftr.controllers.internal;
 import com.rapidftr.controllers.*;
 import com.rapidftr.datastore.Children;
 import com.rapidftr.model.Child;
+import com.rapidftr.model.ChildFactory;
 import com.rapidftr.process.Process;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -168,6 +169,17 @@ public class DispatcherTest {
         when(controllerFactory.viewChildPhotoControllerWith(anyDispatcher())).thenReturn(viewChildPhotoController);
         new Dispatcher(controllerFactory).viewChildPhoto(child);
         verify(viewChildPhotoController).viewChildPhoto(child);
+    }
+
+    @Test
+    public void shouldShowFlagInformationScreenOnFlagRecord() {
+        ControllerFactory controllerFactory = mock(ControllerFactory.class);
+        FlagChildController flagController = mock(FlagChildController.class);
+        when(controllerFactory.flagChildControllerWith(anyDispatcher())).thenReturn(flagController);
+
+        Child child = ChildFactory.newChild();
+        new Dispatcher(controllerFactory).flagRecord(child);
+        verify(flagController).flagRecord(child);
     }
 
     private Dispatcher anyDispatcher() {

@@ -3,14 +3,23 @@ package com.rapidftr.datastore;
 import java.util.Vector;
 
 import com.rapidftr.model.Child;
+import com.rapidftr.utilities.ChildSorter;
 import com.rapidftr.utilities.Store;
 
 public class ChildrenRecordStore {
 
-	private static final String GET_ALL_CHILDREN_KEY = "children";
+	public static final String GET_ALL_CHILDREN_KEY = "children";
 	private final Store store;
+    private ChildSorter childSorter;
+
 	public ChildrenRecordStore(Store store) {
+		this(store, new ChildSorter());
+	}
+
+
+    public ChildrenRecordStore(Store store, ChildSorter childSorter) {
 		this.store = store;
+        this.childSorter = childSorter;
 	}
 
 	public synchronized void addOrUpdate(Child child) {
@@ -30,7 +39,7 @@ public class ChildrenRecordStore {
 	}
 
 	public Children getAll() {
-		return new Children(store.getVector(GET_ALL_CHILDREN_KEY));
+		return new Children(store.getVector(GET_ALL_CHILDREN_KEY), childSorter);
 	}
 
 	public void deleteAll() {
@@ -48,7 +57,7 @@ public class ChildrenRecordStore {
 			}
 		});
 
-		return new Children(results);
+		return new Children(results, childSorter);
 	}
 
 	public Child getChildAt(int index) {
@@ -57,14 +66,14 @@ public class ChildrenRecordStore {
 	}
 
 	public Children getAllSortedByName() {
-		return getAll().sortBy(new StringField("name"), true);
+		return getAll().sortBy(new StringField(Child.NAME), true);
 	}
 
 	public Children getAllSortedByRecentlyAdded() {
-		return getAll().sortBy(new DateField("created_at"), false);
+		return getAll().sortBy(new DateField(Child.CREATED_AT_KEY), false);
 	}
 
 	public Children getAllSortedByRecentlyUpdated() {
-		return getAll().sortBy(new DateField("last_update_at"), false);
+		return getAll().sortBy(new DateField(Child.LAST_UPDATED_KEY), false);
 	}
 }

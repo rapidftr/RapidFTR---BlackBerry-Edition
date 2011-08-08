@@ -56,6 +56,12 @@ public class ControllerTest {
         verify(dispatcher).homeScreen();
     }
 
+    @Test
+    public void shouldInvokeNewChildOnCreateNewChildRecord() {
+        controller.createNewChildRecord();
+        verify(dispatcher).newChild();
+    }
+
     private class TestController extends Controller {
         public TestController(CustomScreen screen, UiStack uiStack, Dispatcher dispatcher) {
             super(screen, uiStack, dispatcher);

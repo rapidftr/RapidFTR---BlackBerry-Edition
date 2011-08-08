@@ -44,4 +44,8 @@ public class ViewChildController extends Controller {
 	public void popScreen() {
 		dispatcher.viewChildren();
 	}
+
+    public void flagRecord(Child child) {
+        dispatcher.flagRecord(child);
+    }
 }
