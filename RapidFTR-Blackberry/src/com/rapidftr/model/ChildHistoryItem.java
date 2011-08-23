@@ -1,62 +1,54 @@
 package com.rapidftr.model;
 
+import java.util.Vector;
+
 public class ChildHistoryItem {
     private String username;
-    private String oldValue;
-    private String newValue;
-    private String changedFieldName;
-    private String changeDateTime;
+    private Vector data;
+	private String changeDateTime;
 
-    public String getOldValue() {
-        return oldValue;
-    }
-
-    public String getNewValue() {
-        return newValue;
-    }
-
-    public String getChangedFieldName() {
-        return changedFieldName;
-    }
-
-    public String getChangeDateTime() {
-        return changeDateTime;
-    }
-
-    public ChildHistoryItem(String username, String changeDateTime, 
-                            String changedFieldName,
-                            String oldValue, String newValue) {
+	public ChildHistoryItem(String username, String changeDateTime, 
+                            Vector data) {
         this.username = username;
-        this.changedFieldName = changedFieldName;
         this.changeDateTime = changeDateTime;
-        this.oldValue = oldValue;
-        this.newValue = newValue;
+        this.data = data;
     }
 
-    public String toString() {
+	public String toString() {
         return description();
     }
 
     private String description() {
-
-        return changeDateTime + " " + getFieldChangeDescription();
+        return changeDateTime + getFieldChangesDescription();
     }
 
     public String getUsername() {
         return username;
     }
 
-    public String getFieldChangeDescription() {
-       String description = "";
-        if (oldValue.equals("")) {
-            description = changedFieldName + " intialized to "
-                    + newValue + " By "
-                    + username;
-        } else {
-            description = changedFieldName + " changed from "
-                    + oldValue + " to " + newValue + " By "
-                    + username;
-        }
-        return description;
+    public String getFieldChangesDescription() {
+    	String description = "";
+    	for(int i=0; i< getData().size(); i++){
+    		ChildHistoryChangeEntry childHistoryChangeEntry = ((ChildHistoryChangeEntry) getData().elementAt(i)); 
+    		description = description + "  " + childHistoryChangeEntry.getChangeDescription() + "\n";
+    	}
+    	return description + "By " + username;
     }
+
+	public String getChangeDateTime() {
+		return changeDateTime;
+	}
+	
+	public Vector getChangedFieldsNames(){
+		Vector fieldNames = new Vector();
+		for(int i=0; i< data.size(); i++){
+    		ChildHistoryChangeEntry childHistoryChangeEntry = ((ChildHistoryChangeEntry) getData().elementAt(i)); 
+    		fieldNames.addElement(((ChildHistoryChangeEntry)data.elementAt(i)).getChangedFieldName());
+    	}
+		return fieldNames;
+	}
+
+	public Vector getData() {
+		return data;
+	}
 }

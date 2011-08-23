@@ -290,17 +290,16 @@ public class Child implements Persistable {
     }
 
     public String flaggedByUserName() {
-        final String[] flaggedByUser = {null};
+        final String[] username = {null};
         ChildHistories histories = getHistory();
         histories.forEachHistory(new HistoryAction() {
             public void execute(ChildHistoryItem historyItem) {
-                if ("flag".equals(historyItem.getChangedFieldName())) {
-                    flaggedByUser[0] = historyItem.getUsername();
-                    return;
+                if (historyItem.getChangedFieldsNames().contains("flag")) {
+                    username[0] = historyItem.getUsername();                    
                 }
             }
         });
-        return flaggedByUser[0];
+        return username[0];
     }
 
     public String flagInformation() {

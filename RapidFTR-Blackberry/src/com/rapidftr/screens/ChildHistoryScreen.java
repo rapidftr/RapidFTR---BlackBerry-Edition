@@ -61,10 +61,10 @@ public class ChildHistoryScreen extends CustomScreen {
 	}
 
 	private String getDescription(ChildHistoryItem childHistoryItem) {
-		String description = childHistoryItem.getFieldChangeDescription();
+		String description = childHistoryItem.getFieldChangesDescription();
 		long changeTime = HttpDateParser.parse(childHistoryItem
 				.getChangeDateTime());
-		return dateFormatter.format(changeTime) + " " + description;
+		return dateFormatter.format(changeTime) + "\n" + description;
 	}
 
 }
