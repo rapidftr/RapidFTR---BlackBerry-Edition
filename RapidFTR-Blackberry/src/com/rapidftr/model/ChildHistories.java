@@ -1,7 +1,6 @@
 package com.rapidftr.model;
 
 import java.util.Enumeration;
-import java.util.Vector;
 
 import org.json.me.JSONArray;
 import org.json.me.JSONException;
@@ -43,22 +42,17 @@ public class ChildHistories {
 
 	private void forEachChangedField(HistoryAction action, JSONObject history) throws JSONException {
 		JSONObject changes = history.getJSONObject("changes");
-		action.execute(new ChildHistoryItem(history.getString("user_name"), 
-				history.getString("datetime"),
-				getFieldChanges(changes)
-		));
-	}
-
-	private Vector getFieldChanges(JSONObject changes)
-			throws JSONException {
-		Enumeration changedFields = changes.keys();		
-		Vector data = new Vector();
+		Enumeration changedFields = changes.keys();
 		while (changedFields.hasMoreElements()) {
 			String changedFieldName = (String) changedFields.nextElement();
 			JSONObject changedFieldObject = changes.getJSONObject(changedFieldName);
-			data.addElement(new ChildHistoryChangeEntry(changedFieldName,changedFieldObject.getString("from"),changedFieldObject.getString("to")));
+			action.execute(new ChildHistoryItem(history.getString("user_name"), 
+						   history.getString("datetime"),
+						   changedFieldName,
+						   changedFieldObject.getString("from"),
+						   changedFieldObject.getString("to")
+						   ));
 		}
-		return data;
 	}
 
 	public boolean isNotEmpty(){

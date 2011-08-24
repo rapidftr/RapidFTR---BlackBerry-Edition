@@ -1,45 +1,62 @@
 package com.rapidftr.model;
 
-import java.util.Vector;
-
 public class ChildHistoryItem {
     private String username;
-    private Vector data;
-	private String changeDateTime;
+    private String oldValue;
+    private String newValue;
+    private String changedFieldName;
+    private String changeDateTime;
 
-	public ChildHistoryItem(String username, String changeDateTime, 
-                            Vector data) {
-        this.username = username;
-        this.changeDateTime = changeDateTime;
-        this.data = data;
+    public String getOldValue() {
+        return oldValue;
     }
 
-	public String toString() {
+    public String getNewValue() {
+        return newValue;
+    }
+
+    public String getChangedFieldName() {
+        return changedFieldName;
+    }
+
+    public String getChangeDateTime() {
+        return changeDateTime;
+    }
+
+    public ChildHistoryItem(String username, String changeDateTime, 
+                            String changedFieldName,
+                            String oldValue, String newValue) {
+        this.username = username;
+        this.changedFieldName = changedFieldName;
+        this.changeDateTime = changeDateTime;
+        this.oldValue = oldValue;
+        this.newValue = newValue;
+    }
+
+    public String toString() {
         return description();
     }
 
     private String description() {
-        return changeDateTime + getFieldChangesDescription();
+
+        return changeDateTime + " " + getFieldChangeDescription();
     }
 
     public String getUsername() {
         return username;
     }
 
-    public String getFieldChangesDescription() {
-    	String description = "";
-    	for(int i=0; i< getData().size(); i++){
-    		ChildHistoryChangeEntry childHistoryChangeEntry = ((ChildHistoryChangeEntry) getData().elementAt(i)); 
-    		description = description + "  " + childHistoryChangeEntry.getChangeDescription() + "\n";
-    	}
-    	return description + "By " + username;
+    public String getFieldChangeDescription() {
+       String description = "";
+        if (oldValue.equals("")) {
+            description = changedFieldName + " intialized to "
+                    + newValue + " By "
+                    + username;
+        } else {
+            description = changedFieldName + " changed from "
+                    + oldValue + " to " + newValue + " By "
+                    + username;
+        }
+        return description;
     }
-
-	public String getChangeDateTime() {
-		return changeDateTime;
-	}
-
-	public Vector getData() {
-		return data;
-	}
 }
