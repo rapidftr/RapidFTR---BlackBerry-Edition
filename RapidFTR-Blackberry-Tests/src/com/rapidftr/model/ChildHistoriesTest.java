@@ -61,22 +61,25 @@ public class ChildHistoriesTest {
 			@Override
 			public void execute(ChildHistoryItem historyItem) {
 				assertEquals("01/02/2011 22:01", historyItem.getChangeDateTime());
-		        assertEquals("date_of_separation", historyItem.getChangedFieldName());
-		        assertEquals("1-2 weeks ago", historyItem.getNewValue());
-		        assertEquals("rapidftr", historyItem.getUsername());
+				assertEquals(new ChildHistoryChangeEntry("date_of_separation","","1-2 weeks ago")
+						, ((ChildHistoryChangeEntry) historyItem.getData().elementAt(0)));
+				assertEquals("rapidftr", historyItem.getUsername());
 			}
 		});
     }
 
     @Test
-    public void shouldReturnFieldChangeDescription() {
+    public void shouldReturnFieldChangeDescriptionWithGroupedChanges() {
+    	String histories = "[{\"changes\":{\"date_of_separation\":{\"from\":\"\",\"to\":\"1-2 weeks ago\"},\"age\":{\"from\":\"2\",\"to\":\"5\"}},\"datetime\":\"01/02/2011 22:01\",\"user_name\":\"rapidftr\"}]";
+    	child.setField("histories", histories);
         final ChildHistories historyItems = child.getHistory();
+        assertTrue(historyItems.isNotEmpty());
         historyItems.forEachHistory(new HistoryAction() {
 			@Override
 			public void execute(ChildHistoryItem historyItem) {
-				assertEquals("date_of_separation intialized to 1-2 weeks ago By rapidftr", 
-		                historyItem.getFieldChangeDescription());
-		        assertEquals("01/02/2011 22:01 date_of_separation intialized to 1-2 weeks ago By rapidftr",
+				assertEquals("  date_of_separation initialized to 1-2 weeks ago\n  age changed from 2 to 5\nBy rapidftr", 
+		                historyItem.getFieldChangesDescription());
+		        assertEquals("01/02/2011 22:01  date_of_separation initialized to 1-2 weeks ago\n  age changed from 2 to 5\nBy rapidftr",
 		                historyItem.toString());
 			}
 		});
