@@ -115,7 +115,7 @@ public class Response {
         }
         final Exception exception = getException();
         if (exception != null && exception instanceof IOException) {
-            return "Could not connect";
+            return "Cannot connect to this web address. Contact Admin for help.";
         }
         return "Error occurred";
     }
