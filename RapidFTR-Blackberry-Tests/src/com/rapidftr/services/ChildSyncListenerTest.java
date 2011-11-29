@@ -96,7 +96,7 @@ public class ChildSyncListenerTest {
 
         listener.done(requestContext, successfulResponse());
 
-        verify(requestCallback).onProcessSuccess();
+        verify(requestCallback).onProcessSuccess("");
     }
 
     @Test

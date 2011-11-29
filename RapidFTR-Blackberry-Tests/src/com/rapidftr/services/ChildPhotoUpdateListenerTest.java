@@ -68,7 +68,7 @@ public class ChildPhotoUpdateListenerTest {
         Response response = new Response(result, 200);
 
         listener.done(requestContext, response);
-        verify(callback).onProcessSuccess();
+        verify(callback).onProcessSuccess("");
     }
 
     @Test

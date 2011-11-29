@@ -71,7 +71,7 @@ public class ChildSyncListener implements RequestListener {
                 if (hasError) {
                     requestCallBack.onProcessFail("Errors have occurred");
                 } else {
-                    requestCallBack.onProcessSuccess();
+                    requestCallBack.onProcessSuccess("");
                 }
             } else {
                 photoUpdater.doUpdates(childrenRequiringPhotoUpdate, requestCallBack, hasError);

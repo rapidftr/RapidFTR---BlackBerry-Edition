@@ -117,7 +117,7 @@ public class SyncScreen extends CustomScreen implements FieldChangeListener,
 		});
 	}
 
-	public void onProcessSuccess() {
+	public void onProcessSuccess(String message) {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 				downloadProgressBar.setLabel("Complete");

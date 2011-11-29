@@ -35,6 +35,9 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
 	private Button loginButton;
 	private Manager buttonManager;
 	private Button cancelButton;
+	private Button passwordRecoveryButton;
+	private boolean isLoginClicked = false;
+	private boolean isPasswordRecoveryClicked = false;
 
 	public LoginScreen(HttpSettings httpSettings) {
 		super();
@@ -85,7 +88,13 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
 				onLoginButtonClicked();
 			}
 		});
-
+		
+		passwordRecoveryButton = new Button("Reset Password");
+		passwordRecoveryButton.setChangeListener(new FieldChangeListener(){
+			public void fieldChanged(Field field, int context){
+				onResetPasswordClicked();
+			}
+		});
 		cancelButton = new Button("Cancel");
 		cancelButton.setChangeListener(new FieldChangeListener() {
 			public void fieldChanged(Field field, int context) {
@@ -117,6 +126,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
 	}
 
 	private void onLoginButtonClicked() {
+		isLoginClicked = true;
 		httpSettings.setHost(urlField.getText());
 		
 		usernameField.setFocus();
@@ -125,12 +135,22 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
 		showCancelButton();
 	}
 
-    private LoginController getController() {
+
+	private void onResetPasswordClicked() {
+		isPasswordRecoveryClicked = true;
+		httpSettings.setHost(urlField.getText());
+		
+		usernameField.setFocus();
+		getController().requestPasswordRecovery(usernameField.getText());
+		showCancelButton();
+		
+	}
+	private LoginController getController() {
         return ((LoginController) controller);
     }
 
     private void onCancelButtonClicked() {
-    	showLoginButton();
+    	showLoginScreenButtons();
 	}
 
 	private void showCancelButton() {
@@ -139,13 +159,14 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
 	}
 
 	public void setUp() {
-		showLoginButton();
+		showLoginScreenButtons();
 		clearProgressMessage();
 	}
 
-	private void showLoginButton() {
+	private void showLoginScreenButtons() {
 		buttonManager.deleteAll();
 		buttonManager.add(loginButton);
+		buttonManager.add(passwordRecoveryButton);
 	}
 
 
@@ -157,7 +178,7 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
 				setProgressMessage("Connection Problem ");
-				showLoginButton();
+				showLoginScreenButtons();
 			}
 		});
 	}
@@ -166,17 +187,26 @@ public class LoginScreen extends CustomScreen implements ScreenCallBack {
 
 	}
 
-	public void onProcessSuccess() {
-		resetCredentials(true);
-        getController().synchronizeForms();
+	public void onProcessSuccess(final String message) {
+		if (isPasswordRecoveryClicked){
+			isPasswordRecoveryClicked = false;
+			showLoginScreenWithMessage(message);
+		}else {
+			resetCredentials(true);
+	        getController().synchronizeForms();
+		}
 	}
 
     public void onProcessFail(final String message) {
+		showLoginScreenWithMessage(message);
+	}
+
+	private void showLoginScreenWithMessage(final String message) {
 		UiApplication.getUiApplication().invokeLater(new Runnable() {
 			public void run() {
                 if (!(message == null || "".equals(message.trim())))
                     setProgressMessage(message);
-                showLoginButton();
+                showLoginScreenButtons();
                 resetCredentials(false);
 				passwordField.setFocus();
 			}

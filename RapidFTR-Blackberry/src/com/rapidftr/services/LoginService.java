@@ -17,6 +17,7 @@ public class LoginService extends RequestAwareService {
     private static final String PASSWORD = "password";
     private static final String IMEI = "imei";
     private static final String MOBILE_NUMBER = "mobile_number";
+    private static final String PASSWORD_RECOVERY = "password_recovery_requests";
 
     public LoginService(HttpService httpService, LoginSettings settings) {
         super(httpService);
@@ -42,6 +43,18 @@ public class LoginService extends RequestAwareService {
 
     }
 
+    public void recoverPassword(String user, String imei){
+        Arg[] postArgs = new Arg[]{new Arg("password_recovery_request["+USER_NAME+"]", user),
+                new Arg("password_recovery_request["+IMEI+"]", imei)};
+
+        Hashtable context = new Hashtable();
+        context.put(USER_NAME, user);
+        context.put(PASSWORD_RECOVERY, "true");
+
+        requestHandler.startNewProcess();
+        requestHandler.post("password_recovery_requests", postArgs, HttpUtility.makeJSONHeader(),
+                null, context);	
+    }
     private String parseAuthorizationToken(Response response) {
         try {
             return response.getResult().getAsString("session.token");
@@ -56,10 +69,10 @@ public class LoginService extends RequestAwareService {
     }
 
     public void onRequestSuccess(Object context, Response result) {
-        String user = getUserFromContext((Hashtable) context);
-        settings.authenticate(user, parseAuthorizationToken(result));
-        settings.setLastUsedUserName(user);
-        settings.setLastUsedPassword(getPasswordFromContext((Hashtable) context));
+    		String user = getUserFromContext((Hashtable) context);
+            settings.authenticate(user, parseAuthorizationToken(result));
+            settings.setLastUsedUserName(user);
+            settings.setLastUsedPassword(getPasswordFromContext((Hashtable) context));	
     }
 
     public void onRequestFailure(Object context, Exception exception) {

@@ -18,7 +18,7 @@ public interface RequestCallBack {
 
 	void onProcessStart();
 
-	void onProcessSuccess();
+	void onProcessSuccess(String successMessage);
 	
 	void onProcessFail(String failureMessage);
 
