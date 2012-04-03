@@ -311,17 +311,20 @@ public class Child implements Persistable {
 	public String getCreatedTimeStampValue() {
 		StringBuffer formattedTimeStampValue = new StringBuffer();
 		formattedTimeStampValue.append("Created : ");
-		formattedTimeStampValue.append(new SimpleDateFormat("MMM dd, yyyy")
-					.format(new Date(HttpDateParser.parse(getField(CREATED_AT_KEY)))));
-		return formattedTimeStampValue.toString();
+		return formatTimeStamp(formattedTimeStampValue,CREATED_AT_KEY);
+	}
+
+	private String formatTimeStamp(StringBuffer timeStampValue, String fieldKey) {
+		timeStampValue.append(new SimpleDateFormat("MMM dd, yyyy")
+					.format(new Date(HttpDateParser.parse(getField(fieldKey)))));
+		return timeStampValue.toString();
 	}
 
 	public String getUpdatedTimeStampValue() {
 		StringBuffer formattedTimeStampValue = new StringBuffer();
 		if (getField(LAST_UPDATED_KEY) != null) {
 			formattedTimeStampValue.append("Updated: ");
-			formattedTimeStampValue.append(new SimpleDateFormat("MMM dd, yyyy")
-					.format(new Date(HttpDateParser.parse(getField(LAST_UPDATED_KEY)))));
+			formatTimeStamp(formattedTimeStampValue,LAST_UPDATED_KEY);
 		}
 		return formattedTimeStampValue.toString();
 	}
