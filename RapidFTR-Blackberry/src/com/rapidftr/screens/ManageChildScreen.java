@@ -155,10 +155,10 @@ public class ManageChildScreen extends CustomScreen {
 
 	private boolean displayConfirmation(ControllerAction action) {
 		if (forms.isNotEmpty()) {
-			String menuMessage = "The current record has been changed. What do you want to do with these changes?";
-			String[] menuChoices = { "Save", "Discard", "Cancel" };
-			int defaultChoice = 0;
-			int result = Dialog.ask(menuMessage, menuChoices, defaultChoice);
+			int result = Dialog
+					.ask(
+							"The current record has been changed. What do you want to do with these changes?",
+							new String[] { "Save", "Discard", "Cancel" }, 0);
 
 			switch (result) {
 			case 0: {
@@ -214,11 +214,38 @@ public class ManageChildScreen extends CustomScreen {
 				}
 			};
 			menu.add(saveChildMenu);
+			
+			MenuItem discardChangesMenu = new MenuItem("Discard Changes ", 1, 1) {
+				public void run() {
+					onDiscardChangesClicked(new ControllerAction() {
+						void execute() {
+							controller.popScreen();
+						}
+					});
+				}
+			};
+			menu.add(discardChangesMenu);
 		}
-
 		addSyncFailedErrorMenuItem(menu);
-
 		super.makeMenu(menu, instance);
+	}
+
+	protected void onDiscardChangesClicked(ControllerAction controllerAction) {
+		if (forms.isNotEmpty()) {
+			int result = Dialog.ask("Are you sure you want to discard the changes?", new String[] { "Yes", "No" }, 0);
+
+			switch (result) {
+			case 0: {
+				controllerAction.execute();
+				break;
+			}
+			case 1: {
+				break;
+			}
+		}
+		}else {
+			controllerAction.execute();
+		}
 	}
 
 	private void addSyncFailedErrorMenuItem(Menu menu) {
