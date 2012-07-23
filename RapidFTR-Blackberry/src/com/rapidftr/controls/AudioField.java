@@ -98,7 +98,7 @@ public class AudioField extends CustomField implements AudioRecordListener{
     }
 
 	private Child getChild() {
-		return ((ManageChildScreen)getScreen()).getChild();
+		return ((ManageChildScreen)getScreen()).getController().getChild();
 	}
 
 }
