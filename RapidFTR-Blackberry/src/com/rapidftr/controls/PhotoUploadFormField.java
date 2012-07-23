@@ -53,7 +53,7 @@ public class PhotoUploadFormField extends CustomField implements
 	}
 
 	private void drawChildImage() {
-		Child child = getChildScreen().getChild();
+		Child child = getChildScreen().getController().getChild();
 		if (child != null) {
 			setButtonBackground(getChildImage(child));
 		}
