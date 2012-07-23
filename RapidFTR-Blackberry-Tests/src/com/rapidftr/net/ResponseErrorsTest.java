@@ -45,7 +45,7 @@ public class ResponseErrorsTest {
         response.setException(new IOException());
         final ResponseErrors responseErrors = new ResponseErrors();
         responseErrors.add(response);
-        assertEquals("Could not connect", responseErrors.getMessage());
+        assertEquals("Cannot connect to this web address. Contact Admin for help.", responseErrors.getMessage());
     }
 
 
