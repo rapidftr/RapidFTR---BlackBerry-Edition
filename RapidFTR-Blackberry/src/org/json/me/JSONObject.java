@@ -532,7 +532,8 @@ public class JSONObject {
      * @throws   JSONException if the key is not found.
      */
     public String getString(String key) throws JSONException {
-        return get(key).toString();
+        Object object =  opt(key);
+    	return object == null? "": object.toString();
     }
 
     /**
