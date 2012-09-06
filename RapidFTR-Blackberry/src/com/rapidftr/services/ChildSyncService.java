@@ -64,7 +64,7 @@ public class ChildSyncService extends RequestAwareService {
 				if (child.isNewChild()) {
 					httpService.post("children", null, httpArgs, listener, postData,
 							context);
-				} else if (child.isUpdated()) {
+				} else if (child.isUpdated() || child.isSyncFailed()) {
 					httpService.put("children/" + child.getField("_id"),
 							null, httpArgs, listener, postData, context);
 				}

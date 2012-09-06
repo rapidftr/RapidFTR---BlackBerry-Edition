@@ -85,4 +85,28 @@ public class ChildSyncServiceTest {
                 eq(postData), eq(requestContext));
     }
 
+    @Test
+    public void shouldUploadFalggedRecordUsingPut() {
+        Child child = ChildFactory.existingChild("id");
+        child.setField("somefield", "original value");
+        child.syncFailed("Network Failure");
+        PostData postData = child.getPostData();
+
+        Arg multiPart = new Arg("Content-Type",
+                "multipart/form-data;boundary=" + postData.getBoundary());
+
+        Arg json = HttpUtility.HEADER_ACCEPT_JSON;
+
+        Arg[] httpArgs = {multiPart, json};
+
+        Hashtable requestContext = new Hashtable();
+        requestContext.put(childService.PROCESS_STATE, "Uploading [" + 1 + "/" + 1 + "]");
+        requestContext.put(childService.CHILD_TO_SYNC, child);
+
+        childService.syncChildRecord(child);
+        verify(httpService).put(eq("children/id"), eq((Arg[]) null), eq(httpArgs),
+                (ChildSyncListener) any(),
+                eq(postData), eq(requestContext));
+    }    
+    
 }
