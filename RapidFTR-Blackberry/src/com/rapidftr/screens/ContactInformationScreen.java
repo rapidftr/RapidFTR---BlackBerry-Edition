@@ -64,7 +64,7 @@ public class ContactInformationScreen extends CustomScreen implements
 		showInformation();
 	}
 
-	public void onProcessSuccess() {
+	public void onProcessSuccess(String message) {
 		showInformation();
 	}
 

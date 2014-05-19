@@ -1,5 +1,7 @@
 package com.rapidftr.controllers;
 
+import net.rim.device.api.system.GPRSInfo;
+
 import com.rapidftr.controllers.internal.Dispatcher;
 import com.rapidftr.controllers.internal.RequestAwareController;
 import com.rapidftr.net.ConnectionFactory;
@@ -7,13 +9,15 @@ import com.rapidftr.process.Process;
 import com.rapidftr.screens.LoginScreen;
 import com.rapidftr.screens.internal.UiStack;
 import com.rapidftr.services.LoginService;
+import com.rapidftr.utilities.Constants;
 
 public class LoginController extends RequestAwareController {
 
     Process callingProcess;
     private ConnectionFactory connectionFactory;
     private final String OFFLINE_LOGIN_ERROR_MESSAGE = "You are working offline. You must authenticate with your credentials from the last successful online log in.";
-
+    private boolean isPasswordRecoveryClicked = false;
+    
     public LoginController(LoginScreen screen, UiStack uiStack,
                            LoginService loginService,
                            ConnectionFactory connectionFactory,
@@ -38,13 +42,21 @@ public class LoginController extends RequestAwareController {
         }
     }
 
+    public void requestPasswordRecovery(String userName){
+    	isPasswordRecoveryClicked = true;
+    	getScreenCallBack().setProgressMessage("Requesting Password recovery ...");
+    	LoginService loginService = (LoginService)service;
+    	loginService.recoverPassword(userName, GPRSInfo.imeiToString(GPRSInfo.getIMEI()));
+    	
+    }
     public void onProcessComplete(boolean status) {
-        if (status) {
+        if (!isPasswordRecoveryClicked && status) {
             popScreen();
             if (callingProcess != null) {
                 callingProcess.startProcess();
             }
         }
+        isPasswordRecoveryClicked = false;
     }
 
     public void showLoginScreen(Process callingProcess) {

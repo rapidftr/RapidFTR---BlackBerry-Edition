@@ -1,9 +1,12 @@
 package com.rapidftr.net;
 
 import java.io.IOException;
+import java.util.Hashtable;
 
 import javax.microedition.io.HttpConnection;
 
+import com.rapidftr.services.ServiceException;
+import com.sun.me.web.path.ResultException;
 import com.sun.me.web.request.Arg;
 import com.sun.me.web.request.PostData;
 import com.sun.me.web.request.RequestListener;
@@ -18,6 +21,7 @@ public class HttpBatchRequestHandler implements RequestListener {
 	private boolean processCompleted = false;
 	private HttpService service;
     private ResponseErrors errors;
+    private static final String PASSWORD_RECOVERY = "password_recovery_requests";
 
     public HttpBatchRequestHandler(HttpService httpService) {
 		service = httpService;
@@ -87,9 +91,21 @@ public class HttpBatchRequestHandler implements RequestListener {
 		// requestCallBack.writeProgress(context, bytes, total);
 	}
 
-	public void markProcessComplete() {
+	public void markProcessComplete(Object context, Response response) {
+		markRequestsAsCompleted();
+		String responseMessage = null;
+		try {
+			if(response != null && context !=null && ((Hashtable) context).get(PASSWORD_RECOVERY) != null)
+				responseMessage = response.getResult().getAsString("response");
+		} catch (ResultException e) {
+			throw new ServiceException("JSON returned from password recovery do not have key 'result'");
+		}
+		String message = (response != null && responseMessage!=null)? responseMessage: ""; 
+		requestCallBack.onProcessSuccess(message);
+	}
+
+	private void markRequestsAsCompleted() {
 		unprocessedRequests = totalRequests = 0;
-		requestCallBack.onProcessSuccess();
 	}
 
 	public void markProcessFailed() {
@@ -104,7 +120,10 @@ public class HttpBatchRequestHandler implements RequestListener {
 		terminateProcess();
 		requestCallBack.onProcessFail(failureMessage);
 	}
-
+    
+    public void markProcessSuccess(String successMessage){
+    	requestCallBack.onProcessSuccess(successMessage);
+    }
 	public void terminateProcess() {
 		service.cancelRequest();
 		totalRequests = 0;
@@ -135,24 +154,24 @@ public class HttpBatchRequestHandler implements RequestListener {
 		} else {
 			handleResponseErrors(context, response);
 		}
-		cleanUp();
+		cleanUp(context, response);
 
 	}
 
-	private synchronized void cleanUp() {
+	private synchronized void cleanUp(Object context, Response response) {
 		if (unprocessedRequests > 0) {
 			unprocessedRequests--;
 		}
-		checkForProcessCompletion();
+		checkForProcessCompletion(context, response);
 	}
 
-	public synchronized void checkForProcessCompletion() {
+	public synchronized void checkForProcessCompletion(Object context, Response response) {
 		if (unprocessedRequests == 0 && ! processCompleted) {
 			processCompleted = true;
 			if (failedRequest) {
 				markProcessFailed();
 			} else {
-				markProcessComplete();
+				markProcessComplete(context, response);
 			}
 		}
 	}

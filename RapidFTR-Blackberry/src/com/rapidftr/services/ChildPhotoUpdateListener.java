@@ -65,7 +65,7 @@ public class ChildPhotoUpdateListener implements RequestListener {
             if (hasError) {
                 requestCallBack.onProcessFail("Errors have occurred");
             } else {
-                requestCallBack.onProcessSuccess();
+                requestCallBack.onProcessSuccess("");
             }
         }
     }

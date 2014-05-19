@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 
+import com.rapidftr.utilities.Constants;
+
 import net.rim.device.api.system.CoverageInfo;
 import net.rim.device.api.system.WLANInfo;
 
@@ -12,7 +14,7 @@ public class ConnectionFactory {
 
     public HttpConnection openConnection(String url) throws IOException {
         if (isNotConnected()) {
-            throw new IOException("Could not establish connection with host because all connectors are offline");
+            throw new IOException(Constants.CONNECTIONS_ARE_OFFLINE);
         }
         if (isWIFIAvailable()) {
             url = url + ";interface=wifi";

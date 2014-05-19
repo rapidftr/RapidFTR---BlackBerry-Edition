@@ -27,7 +27,7 @@ public class FormService extends RequestAwareService {
             sendFailedMsg();
             return;
         }
-        requestHandler.markProcessComplete();
+        requestHandler.markProcessComplete(null,null);
     }
 
     private void sendFailedMsg() {
